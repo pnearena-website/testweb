@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PNE Arena | Premium School Supplies</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700&display=swap');
         
@@ -1292,6 +1293,11 @@
                     </div>
                     
                     <div class="form-group">
+                        <label for="phone">Phone:</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    
+                    <div class="form-group">
                         <label for="subject">Subject:</label>
                         <input type="text" id="subject" name="subject" required>
                     </div>
@@ -1306,733 +1312,10 @@
                     </div>
                 </form>
                 
-                <div id="form-notice" class="notice" style="display: none; margin-top: 20px;">
+                <div id="form-notice" class="notice" style="display: none;">
                     <i class="fas fa-check-circle"></i>
                     <p>Thank you for your message! We'll get back to you soon.</p>
                 </div>
-            </div>
-        </section>
-        
-        <!-- Footer -->
-        <footer>
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h4>About PNE Arena</h4>
-                    <p>Established in 2005, PNE ARENA has grown to become a trusted name in custom products and school supplies. With nearly 20 years of experience, we remain active in both online and offline markets.</p>
-                    <div class="social-links">
-                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
-                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
-                        <a href="https://pinterest.com" target="_blank"><i class="fab fa-pinterest"></i></a>
-                    </div>
-                </div>
-                <div class="footer-column">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="#" data-page="about">About</a></li>
-                        <li><a href="#" data-page="shop">Shop All</a></li>
-                        <li><a href="#" data-page="new-arrivals">New Arrivals</a></li>
-                        <li><a href="#" data-page="best-sellers">Best Sellers</a></li>
-                        <li><a href="#" data-page="sale-items">Sale Items</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Customer Service</h4>
-                    <ul>
-                        <li><a href="#" data-page="contact">Contact Us</a></li>
-                        <li><a href="#" data-page="faqs">FAQs</a></li>
-                        <li><a href="#" data-page="shipping">Shipping Policy</a></li>
-                        <li><a href="#" data-page="returns">Returns & Exchanges</a></li>
-                        <li><a href="#" data-page="privacy">Privacy Policy</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Contact Info</h4>
-                    <ul>
-                        <li><i class="fas fa-map-marker-alt"></i> Bandar Laguna Merbok, Sungai Petani, Kedah</li>
-                        <li><i class="fas fa-phone"></i> +6013-4036123</li>
-                        <li><i class="fas fa-envelope"></i> pnearena@outlook.com</li>
-                        <li><i class="fas fa-clock"></i> Mon–Fri: 9am–6pm</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2023 PNE Arena. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for students</p>
-            </div>
-        </footer>
-    </div>
-    
-    <!-- New Arrivals Page -->
-    <div class="page" id="new-arrivals-page">
-        <section class="categories">
-            <div class="section-header">
-                <h2 class="section-title">New Arrivals</h2>
-                <p class="section-subtitle">Check out our latest products and additions</p>
-            </div>
-            <div class="categories-grid">
-                <div class="category-card" data-page="corporate-shirt">
-                    <div class="category-image">
-                        <i class="fas fa-user-tie"></i>
-                    </div>
-                    <div class="category-info">
-                        <h3>Custom Made Corporate Shirt</h3>
-                        <p>Professional corporate shirts with custom designs</p>
-                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
-                    </div>
-                </div>
-                <div class="category-card" data-page="t-shirt-printing">
-                    <div class="category-image">
-                        <i class="fas fa-tshirt"></i>
-                    </div>
-                    <div class="category-info">
-                        <h3>T-Shirt Printing</h3>
-                        <p>Custom t-shirt printing for all occasions</p>
-                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
-                    </div>
-                </div>
-                <div class="category-card" data-page="keychain">
-                    <div class="category-image">
-                        <i class="fas fa-key"></i>
-                    </div>
-                    <div class="category-info">
-                        <h3>Custom Made Keychain</h3>
-                        <p>Personalized keychains in various designs</p>
-                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Footer -->
-        <footer>
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h4>About PNE Arena</h4>
-                    <p>Established in 2005, PNE ARENA has grown to become a trusted name in custom products and school supplies. With nearly 20 years of experience, we remain active in both online and offline markets.</p>
-                    <div class="social-links">
-                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
-                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
-                        <a href="https://pinterest.com" target="_blank"><i class="fab fa-pinterest"></i></a>
-                    </div>
-                </div>
-                <div class="footer-column">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="#" data-page="about">About</a></li>
-                        <li><a href="#" data-page="shop">Shop All</a></li>
-                        <li><a href="#" data-page="new-arrivals">New Arrivals</a></li>
-                        <li><a href="#" data-page="best-sellers">Best Sellers</a></li>
-                        <li><a href="#" data-page="sale-items">Sale Items</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Customer Service</h4>
-                    <ul>
-                        <li><a href="#" data-page="contact">Contact Us</a></li>
-                        <li><a href="#" data-page="faqs">FAQs</a></li>
-                        <li><a href="#" data-page="shipping">Shipping Policy</a></li>
-                        <li><a href="#" data-page="returns">Returns & Exchanges</a></li>
-                        <li><a href="#" data-page="privacy">Privacy Policy</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Contact Info</h4>
-                    <ul>
-                        <li><i class="fas fa-map-marker-alt"></i> Bandar Laguna Merbok, Sungai Petani, Kedah</li>
-                        <li><i class="fas fa-phone"></i> +6013-4036123</li>
-                        <li><i class="fas fa-envelope"></i> pnearena@outlook.com</li>
-                        <li><i class="fas fa-clock"></i> Mon–Fri: 9am–6pm</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2023 PNE Arena. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for students</p>
-            </div>
-        </footer>
-    </div>
-    
-    <!-- Best Sellers Page -->
-    <div class="page" id="best-sellers-page">
-        <section class="categories">
-            <div class="section-header">
-                <h2 class="section-title">Best Sellers</h2>
-                <p class="section-subtitle">Our most popular products loved by customers</p>
-            </div>
-            <div class="categories-grid">
-                <div class="category-card" data-page="convocation-robe">
-                    <div class="category-image">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <div class="category-info">
-                        <h3>Custom Made Convocation Robe</h3>
-                        <p>Premium quality convocation robes in various colors</p>
-                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
-                    </div>
-                </div>
-                <div class="category-card" data-page="towel">
-                    <div class="category-image">
-                        <i class="fas fa-hand-paper"></i>
-                    </div>
-                    <div class="category-info">
-                        <h3>Towel</h3>
-                        <p>Quality towels with optional embroidery</p>
-                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
-                    </div>
-                </div>
-                <div class="category-card" data-page="nametag">
-                    <div class="category-image">
-                        <i class="fas fa-id-card"></i>
-                    </div>
-                    <div class="category-info">
-                        <h3>Custom Made Nametag</h3>
-                        <p>Professional nametags for corporate and events</p>
-                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Footer -->
-        <footer>
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h4>About PNE Arena</h4>
-                    <p>Established in 2005, PNE ARENA has grown to become a trusted name in custom products and school supplies. With nearly 20 years of experience, we remain active in both online and offline markets.</p>
-                    <div class="social-links">
-                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
-                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
-                        <a href="https://pinterest.com" target="_blank"><i class="fab fa-pinterest"></i></a>
-                    </div>
-                </div>
-                <div class="footer-column">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="#" data-page="about">About</a></li>
-                        <li><a href="#" data-page="shop">Shop All</a></li>
-                        <li><a href="#" data-page="new-arrivals">New Arrivals</a></li>
-                        <li><a href="#" data-page="best-sellers">Best Sellers</a></li>
-                        <li><a href="#" data-page="sale-items">Sale Items</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Customer Service</h4>
-                    <ul>
-                        <li><a href="#" data-page="contact">Contact Us</a></li>
-                        <li><a href="#" data-page="faqs">FAQs</a></li>
-                        <li><a href="#" data-page="shipping">Shipping Policy</a></li>
-                        <li><a href="#" data-page="returns">Returns & Exchanges</a></li>
-                        <li><a href="#" data-page="privacy">Privacy Policy</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Contact Info</h4>
-                    <ul>
-                        <li><i class="fas fa-map-marker-alt"></i> Bandar Laguna Merbok, Sungai Petani, Kedah</li>
-                        <li><i class="fas fa-phone"></i> +6013-4036123</li>
-                        <li><i class="fas fa-envelope"></i> pnearena@outlook.com</li>
-                        <li><i class="fas fa-clock"></i> Mon–Fri: 9am–6pm</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2023 PNE Arena. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for students</p>
-            </div>
-        </footer>
-    </div>
-    
-    <!-- Sale Items Page -->
-    <div class="page" id="sale-items-page">
-        <section class="categories">
-            <div class="section-header">
-                <h2 class="section-title">Sale Items</h2>
-                <p class="section-subtitle">Special offers and discounted products</p>
-            </div>
-            <div class="categories-grid">
-                <div class="category-card" data-page="medal-trophy">
-                    <div class="category-image">
-                        <i class="fas fa-medal"></i>
-                    </div>
-                    <div class="category-info">
-                        <h3>Medal / Trophy</h3>
-                        <p>Custom medals and trophies for events</p>
-                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
-                    </div>
-                </div>
-                <div class="category-card" data-page="keychain">
-                    <div class="category-image">
-                        <i class="fas fa-key"></i>
-                    </div>
-                    <div class="category-info">
-                        <h3>Custom Made Keychain</h3>
-                        <p>Personalized keychains in various designs</p>
-                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Footer -->
-        <footer>
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h4>About PNE Arena</h4>
-                    <p>Established in 2005, PNE ARENA has grown to become a trusted name in custom products and school supplies. With nearly 20 years of experience, we remain active in both online and offline markets.</p>
-                    <div class="social-links">
-                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
-                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
-                        <a href="https://pinterest.com" target="_blank"><i class="fab fa-pinterest"></i></a>
-                    </div>
-                </div>
-                <div class="footer-column">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="#" data-page="about">About</a></li>
-                        <li><a href="#" data-page="shop">Shop All</a></li>
-                        <li><a href="#" data-page="new-arrivals">New Arrivals</a></li>
-                        <li><a href="#" data-page="best-sellers">Best Sellers</a></li>
-                        <li><a href="#" data-page="sale-items">Sale Items</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Customer Service</h4>
-                    <ul>
-                        <li><a href="#" data-page="contact">Contact Us</a></li>
-                        <li><a href="#" data-page="faqs">FAQs</a></li>
-                        <li><a href="#" data-page="shipping">Shipping Policy</a></li>
-                        <li><a href="#" data-page="returns">Returns & Exchanges</a></li>
-                        <li><a href="#" data-page="privacy">Privacy Policy</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Contact Info</h4>
-                    <ul>
-                        <li><i class="fas fa-map-marker-alt"></i> Bandar Laguna Merbok, Sungai Petani, Kedah</li>
-                        <li><i class="fas fa-phone"></i> +6013-4036123</li>
-                        <li><i class="fas fa-envelope"></i> pnearena@outlook.com</li>
-                        <li><i class="fas fa-clock"></i> Mon–Fri: 9am–6pm</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2023 PNE Arena. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for students</p>
-            </div>
-        </footer>
-    </div>
-    
-    <!-- FAQs Page -->
-    <div class="page" id="faqs-page">
-        <section class="content-page">
-            <div class="content-container">
-                <h1>Frequently Asked Questions</h1>
-                
-                <h2>General Questions</h2>
-                <p><strong>Q: How long has PNE Arena been in business?</strong></p>
-                <p>A: PNE Arena was established in 2005, bringing nearly 20 years of experience in custom products and school supplies.</p>
-                
-                <p><strong>Q: Where is your showroom located?</strong></p>
-                <p>A: Our official showroom is located in Bandar Laguna Merbok, Sungai Petani, Kedah.</p>
-                
-                <p><strong>Q: What are your business hours?</strong></p>
-                <p>A: We are open Monday to Friday, from 9am to 6pm.</p>
-                
-                <h2>Products & Services</h2>
-                <p><strong>Q: What types of custom products do you offer?</strong></p>
-                <p>A: We offer a wide range of custom products including convocation robes, t-shirt printing, medals/trophies, towels with embroidery, keychains, nametags, and corporate shirts.</p>
-                
-                <p><strong>Q: How do I place an order?</strong></p>
-                <p>A: You can place an order by visiting our product pages, filling in your requirements, and clicking the "Checkout via WhatsApp" button to send your order details directly to us.</p>
-                
-                <p><strong>Q: Can I see samples before placing a bulk order?</strong></p>
-                <p>A: Yes, we can provide samples for bulk orders. Please contact us via WhatsApp to discuss sample requests.</p>
-                
-                <h2>Payment & Pricing</h2>
-                <p><strong>Q: How is pricing determined for custom products?</strong></p>
-                <p>A: Pricing varies based on product type, quantity, customization requirements, and materials used. We provide quotes after reviewing your specific requirements.</p>
-                
-                <p><strong>Q: What payment methods do you accept?</strong></p>
-                <p>A: We accept various payment methods including bank transfers, cash payments at our showroom, and online payment options. Details will be provided when you contact us.</p>
-                
-                <h2>Shipping & Delivery</h2>
-                <p><strong>Q: Do you offer shipping?</strong></p>
-                <p>A: Yes, we offer shipping throughout Malaysia. Shipping costs and delivery times vary based on location and order size.</p>
-                
-                <p><strong>Q: How long does it take to complete custom orders?</strong></p>
-                <p>A: Production time varies depending on the product and order quantity. Typically, custom orders take 7-14 business days to complete. We'll provide a specific timeline when you place your order.</p>
-                
-                <h2>Returns & Exchanges</h2>
-                <p><strong>Q: What is your return policy?</strong></p>
-                <p>A: Due to the custom nature of our products, we generally do not accept returns or exchanges. However, if there's an issue with your order, please contact us immediately, and we'll work to resolve it.</p>
-                
-                <p><strong>Q: What if my order is damaged or incorrect?</strong></p>
-                <p>A: If your order arrives damaged or incorrect, please contact us within 48 hours of receipt. We'll arrange for a replacement or correction at no additional cost.</p>
-                
-                <h2>Still Have Questions?</h2>
-                <p>If you didn't find the answer to your question, please don't hesitate to <a href="#" data-page="contact">contact us</a> directly. We're here to help!</p>
-            </div>
-        </section>
-        
-        <!-- Footer -->
-        <footer>
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h4>About PNE Arena</h4>
-                    <p>Established in 2005, PNE ARENA has grown to become a trusted name in custom products and school supplies. With nearly 20 years of experience, we remain active in both online and offline markets.</p>
-                    <div class="social-links">
-                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
-                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
-                        <a href="https://pinterest.com" target="_blank"><i class="fab fa-pinterest"></i></a>
-                    </div>
-                </div>
-                <div class="footer-column">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="#" data-page="about">About</a></li>
-                        <li><a href="#" data-page="shop">Shop All</a></li>
-                        <li><a href="#" data-page="new-arrivals">New Arrivals</a></li>
-                        <li><a href="#" data-page="best-sellers">Best Sellers</a></li>
-                        <li><a href="#" data-page="sale-items">Sale Items</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Customer Service</h4>
-                    <ul>
-                        <li><a href="#" data-page="contact">Contact Us</a></li>
-                        <li><a href="#" data-page="faqs">FAQs</a></li>
-                        <li><a href="#" data-page="shipping">Shipping Policy</a></li>
-                        <li><a href="#" data-page="returns">Returns & Exchanges</a></li>
-                        <li><a href="#" data-page="privacy">Privacy Policy</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Contact Info</h4>
-                    <ul>
-                        <li><i class="fas fa-map-marker-alt"></i> Bandar Laguna Merbok, Sungai Petani, Kedah</li>
-                        <li><i class="fas fa-phone"></i> +6013-4036123</li>
-                        <li><i class="fas fa-envelope"></i> pnearena@outlook.com</li>
-                        <li><i class="fas fa-clock"></i> Mon–Fri: 9am–6pm</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2023 PNE Arena. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for students</p>
-            </div>
-        </footer>
-    </div>
-    
-    <!-- Shipping Policy Page -->
-    <div class="page" id="shipping-page">
-        <section class="content-page">
-            <div class="content-container">
-                <h1>Shipping Policy</h1>
-                
-                <h2>Shipping Methods</h2>
-                <p>We offer several shipping options to meet your needs:</p>
-                <ul>
-                    <li><strong>Standard Shipping:</strong> 5-7 business days</li>
-                    <li><strong>Express Shipping:</strong> 2-3 business days</li>
-                    <li><strong>Same Day Delivery:</strong> Available for Sungai Petani area only (additional charges apply)</li>
-                </ul>
-                
-                <h2>Shipping Rates</h2>
-                <p>Shipping rates are calculated based on:</p>
-                <ul>
-                    <li>Order weight and dimensions</li>
-                    <li>Delivery location</li>
-                    <li>Selected shipping method</li>
-                </ul>
-                <p>Free shipping is available for orders over RM200 within Peninsular Malaysia.</p>
-                
-                <h2>Processing Time</h2>
-                <p>Please note that processing time is separate from shipping time:</p>
-                <ul>
-                    <li><strong>Standard Products:</strong> 1-2 business days</li>
-                    <li><strong>Custom Products:</strong> 7-14 business days (depending on complexity)</li>
-                </ul>
-                <p>Custom products require additional time for production before they can be shipped.</p>
-                
-                <h2>Order Tracking</h2>
-                <p>Once your order is shipped, you will receive a tracking number via email or WhatsApp. You can use this number to track your package on the courier's website.</p>
-                
-                <h2>Delivery Areas</h2>
-                <p>We ship to all locations within Malaysia, including:</p>
-                <ul>
-                    <li>Peninsular Malaysia</li>
-                    <li>Sabah & Sarawak</li>
-                    <li>Labuan</li>
-                </ul>
-                <p>International shipping is not available at this time.</p>
-                
-                <h2>Delivery Issues</h2>
-                <p>If you experience any issues with your delivery, please contact us immediately:</p>
-                <ul>
-                    <li><strong>Wrong Address:</strong> Please double-check your shipping address before confirming your order. We are not responsible for deliveries to incorrect addresses provided by customers.</li>
-                    <li><strong>Failed Delivery Attempts:</strong> If delivery fails due to customer unavailability, additional charges may apply for redelivery.</li>
-                    <li><strong>Lost Packages:</strong> In the rare event that your package is lost in transit, we will work with the courier to locate it or arrange for a replacement.</li>
-                </ul>
-                
-                <h2>Special Instructions</h2>
-                <p>If you have special delivery instructions, please include them when placing your order. While we'll do our best to accommodate requests, we cannot guarantee that all special instructions will be fulfilled by the courier.</p>
-                
-                <h2>Questions?</h2>
-                <p>If you have any questions about our shipping policy, please don't hesitate to <a href="#" data-page="contact">contact us</a>.</p>
-            </div>
-        </section>
-        
-        <!-- Footer -->
-        <footer>
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h4>About PNE Arena</h4>
-                    <p>Established in 2005, PNE ARENA has grown to become a trusted name in custom products and school supplies. With nearly 20 years of experience, we remain active in both online and offline markets.</p>
-                    <div class="social-links">
-                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
-                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
-                        <a href="https://pinterest.com" target="_blank"><i class="fab fa-pinterest"></i></a>
-                    </div>
-                </div>
-                <div class="footer-column">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="#" data-page="about">About</a></li>
-                        <li><a href="#" data-page="shop">Shop All</a></li>
-                        <li><a href="#" data-page="new-arrivals">New Arrivals</a></li>
-                        <li><a href="#" data-page="best-sellers">Best Sellers</a></li>
-                        <li><a href="#" data-page="sale-items">Sale Items</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Customer Service</h4>
-                    <ul>
-                        <li><a href="#" data-page="contact">Contact Us</a></li>
-                        <li><a href="#" data-page="faqs">FAQs</a></li>
-                        <li><a href="#" data-page="shipping">Shipping Policy</a></li>
-                        <li><a href="#" data-page="returns">Returns & Exchanges</a></li>
-                        <li><a href="#" data-page="privacy">Privacy Policy</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Contact Info</h4>
-                    <ul>
-                        <li><i class="fas fa-map-marker-alt"></i> Bandar Laguna Merbok, Sungai Petani, Kedah</li>
-                        <li><i class="fas fa-phone"></i> +6013-4036123</li>
-                        <li><i class="fas fa-envelope"></i> pnearena@outlook.com</li>
-                        <li><i class="fas fa-clock"></i> Mon–Fri: 9am–6pm</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2023 PNE Arena. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for students</p>
-            </div>
-        </footer>
-    </div>
-    
-    <!-- Returns & Exchanges Page -->
-    <div class="page" id="returns-page">
-        <section class="content-page">
-            <div class="content-container">
-                <h1>Returns & Exchanges</h1>
-                
-                <h2>General Policy</h2>
-                <p>At PNE Arena, we strive to provide high-quality custom products that meet your expectations. However, we understand that sometimes issues may arise. Please review our return and exchange policy below.</p>
-                
-                <h2>Custom Products</h2>
-                <p>Due to the personalized nature of custom products, we generally do not accept returns or exchanges unless:</p>
-                <ul>
-                    <li>The product is defective or damaged upon arrival</li>
-                    <li>There is an error in the customization (e.g., wrong name, spelling mistake) that was made by us</li>
-                    <li>The product does not match the specifications provided in your order</li>
-                </ul>
-                
-                <h2>Standard Products</h2>
-                <p>For non-customized standard products, we accept returns or exchanges within 7 days of delivery, provided that:</p>
-                <ul>
-                    <li>The product is unused and in its original condition</li>
-                    <li>All original packaging and tags are intact</li>
-                    <li>You provide proof of purchase</li>
-                </ul>
-                
-                <h2>How to Initiate a Return or Exchange</h2>
-                <p>If you believe your order qualifies for a return or exchange, please follow these steps:</p>
-                <ol>
-                    <li>Contact us via WhatsApp at +6013-4036123 within 48 hours of receiving your order</li>
-                    <li>Provide your order number and a clear description of the issue</li>
-                    <li>Include photos or videos showing the problem (if applicable)</li>
-                    <li>Wait for our response and further instructions</li>
-                </ol>
-                
-                <h2>Refund Process</h2>
-                <p>If your return is approved, we will process your refund within 5-7 business days. Refunds will be issued to the original payment method used for the purchase.</p>
-                
-                <h2>Exchange Process</h2>
-                <p>For approved exchanges, we will send you a replacement product as soon as possible. In some cases, we may ask you to return the original product first.</p>
-                
-                <h2>Shipping Costs</h2>
-                <ul>
-                    <li>If the return or exchange is due to our error, we will cover all shipping costs</li>
-                    <li>If the return or exchange is due to customer error or preference, the customer is responsible for return shipping costs</li>
-                </ul>
-                
-                <h2>Exceptions</h2>
-                <p>The following items cannot be returned or exchanged:</p>
-                <ul>
-                    <li>Custom products that have been correctly produced according to customer specifications</li>
-                    <li>Products that have been used, altered, or damaged by the customer</li>
-                    <li>Products returned after the 7-day window</li>
-                    <li>Products without proof of purchase</li>
-                </ul>
-                
-                <h2>Contact Information</h2>
-                <p>If you have any questions about our return and exchange policy, please contact us:</p>
-                <p><i class="fas fa-phone"></i> +6013-4036123<br>
-                <i class="fas fa-envelope"></i> pnearena@outlook.com</p>
-                
-                <h2>Policy Updates</h2>
-                <p>PNE Arena reserves the right to update this return and exchange policy at any time. Any changes will be posted on this page with an updated revision date.</p>
-            </div>
-        </section>
-        
-        <!-- Footer -->
-        <footer>
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h4>About PNE Arena</h4>
-                    <p>Established in 2005, PNE ARENA has grown to become a trusted name in custom products and school supplies. With nearly 20 years of experience, we remain active in both online and offline markets.</p>
-                    <div class="social-links">
-                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
-                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
-                        <a href="https://pinterest.com" target="_blank"><i class="fab fa-pinterest"></i></a>
-                    </div>
-                </div>
-                <div class="footer-column">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="#" data-page="about">About</a></li>
-                        <li><a href="#" data-page="shop">Shop All</a></li>
-                        <li><a href="#" data-page="new-arrivals">New Arrivals</a></li>
-                        <li><a href="#" data-page="best-sellers">Best Sellers</a></li>
-                        <li><a href="#" data-page="sale-items">Sale Items</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Customer Service</h4>
-                    <ul>
-                        <li><a href="#" data-page="contact">Contact Us</a></li>
-                        <li><a href="#" data-page="faqs">FAQs</a></li>
-                        <li><a href="#" data-page="shipping">Shipping Policy</a></li>
-                        <li><a href="#" data-page="returns">Returns & Exchanges</a></li>
-                        <li><a href="#" data-page="privacy">Privacy Policy</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h4>Contact Info</h4>
-                    <ul>
-                        <li><i class="fas fa-map-marker-alt"></i> Bandar Laguna Merbok, Sungai Petani, Kedah</li>
-                        <li><i class="fas fa-phone"></i> +6013-4036123</li>
-                        <li><i class="fas fa-envelope"></i> pnearena@outlook.com</li>
-                        <li><i class="fas fa-clock"></i> Mon–Fri: 9am–6pm</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2023 PNE Arena. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for students</p>
-            </div>
-        </footer>
-    </div>
-    
-    <!-- Privacy Policy Page -->
-    <div class="page" id="privacy-page">
-        <section class="content-page">
-            <div class="content-container">
-                <h1>Privacy Policy</h1>
-                
-                <h2>Introduction</h2>
-                <p>At PNE Arena, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy outlines how we collect, use, disclose, and safeguard your information when you visit our website or use our services.</p>
-                
-                <h2>Information We Collect</h2>
-                <p>We may collect the following types of information:</p>
-                
-                <h3>Personal Information</h3>
-                <ul>
-                    <li>Name and contact information (phone number, email address)</li>
-                    <li>Shipping and billing address</li>
-                    <li>Order information and customization details</li>
-                    <li>Payment information (processed securely through third-party providers)</li>
-                </ul>
-                
-                <h3>Automatically Collected Information</h3>
-                <ul>
-                    <li>IP address and browser information</li>
-                    <li>Device information and operating system</li>
-                    <li>Pages visited and time spent on our website</li>
-                    <li>Referring websites</li>
-                </ul>
-                
-                <h2>How We Use Your Information</h2>
-                <p>We use the collected information for the following purposes:</p>
-                <ul>
-                    <li>To process and fulfill your orders</li>
-                    <li>To communicate with you about your orders</li>
-                    <li>To provide customer support</li>
-                    <li>To improve our products and services</li>
-                    <li>To send promotional communications (with your consent)</li>
-                    <li>To comply with legal obligations</li>
-                </ul>
-                
-                <h2>Information Sharing</h2>
-                <p>We do not sell, rent, or trade your personal information. We may share your information only in the following circumstances:</p>
-                <ul>
-                    <li>With service providers who assist in order processing and fulfillment</li>
-                    <li>With payment processors to complete transactions</li>
-                    <li>As required by law or to protect our rights</li>
-                    <li>With your explicit consent</li>
-                </ul>
-                
-                <h2>Data Security</h2>
-                <p>We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. These include:</p>
-                <ul>
-                    <li>Secure servers and encryption technologies</li>
-                    <li>Restricted access to personal information</li>
-                    <li>Regular security assessments</li>
-                    <li>Employee training on data protection</li>
-                </ul>
-                
-                <h2>Cookies and Tracking Technologies</h2>
-                <p>Our website uses cookies and similar tracking technologies to enhance your browsing experience and analyze website traffic. You can manage your cookie preferences through your browser settings.</p>
-                
-                <h2>Third-Party Links</h2>
-                <p>Our website may contain links to third-party websites. We are not responsible for the privacy practices of these external sites. We encourage you to review the privacy policies of any third-party websites you visit.</p>
-                
-                <h2>Your Rights</h2>
-                <p>You have the following rights regarding your personal information:</p>
-                <ul>
-                    <li>Access to your personal information</li>
-                    <li>Correction of inaccurate information</li>
-                    <li>Deletion of your personal information (subject to legal requirements)</li>
-                    <li>Opt-out of marketing communications</li>
-                    <li>File a complaint with a supervisory authority</li>
-                </ul>
-                
-                <h2>Children's Privacy</h2>
-                <p>Our services are not intended for individuals under the age of 18. We do not knowingly collect personal information from children. If you believe we have collected information from a child, please contact us immediately.</p>
-                
-                <h2>International Data Transfers</h2>
-                <p>Your information may be transferred to and processed in countries other than your country of residence. We ensure that appropriate safeguards are in place to protect your information during such transfers.</p>
-                
-                <h2>Changes to This Policy</h2>
-                <p>We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated revision date. We encourage you to review this policy periodically.</p>
-                
-                <h2>Contact Us</h2>
-                <p>If you have any questions or concerns about this Privacy Policy, please contact us:</p>
-                <p><i class="fas fa-envelope"></i> pnearena@outlook.com<br>
-                <i class="fas fa-phone"></i> +6013-4036123</p>
-                
-                <p><strong>Last Updated:</strong> January 2024</p>
             </div>
         </section>
         
@@ -2116,12 +1399,49 @@
                             <label for="remarks">Remarks:</label>
                             <textarea id="remarks" name="remarks" rows="4" placeholder="Please provide your name, batch, measurements, and any other special requirements"></textarea>
                         </div>
+
+                        <!-- Customer Details Section -->
+                        <div class="form-group">
+                            <label for="customer-name">Your Name:</label>
+                            <input type="text" id="customer-name" name="customer-name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customer-email">Your Email:</label>
+                            <input type="email" id="customer-email" name="customer-email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customer-phone">Your Phone:</label>
+                            <input type="tel" id="customer-phone" name="customer-phone" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="customer-address">Delivery Address:</label>
+                            <textarea id="customer-address" name="customer-address" rows="3" placeholder="Enter your complete delivery address" required></textarea>
+                        </div>
                         
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-primary">Submit Remarks</button>
-                            <button type="button" class="btn btn-secondary" id="checkout-convocation-robe">Checkout via WhatsApp</button>
+                            <button type="submit" class="btn btn-primary">Place Order</button>
                         </div>
                     </form>
+                    
+                    <div id="order-options" style="display: none; margin-top: 20px;">
+                        <h3>Choose how to send your order:</h3>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-primary" id="send-email">
+                                <i class="fas fa-envelope"></i> Send via Email
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="send-whatsapp">
+                                <i class="fab fa-whatsapp"></i> Send via WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="order-summary" style="display: none; margin-top: 20px; padding: 15px; background-color: #f5f5f7; border-radius: 8px;">
+                        <h3>Order Summary</h3>
+                        <div id="summary-content"></div>
+                    </div>
                     
                     <div id="notice-convocation-robe" class="notice" style="display: none;">
                         <i class="fas fa-info-circle"></i>
@@ -2196,12 +1516,49 @@
                             <label for="remarks">Remarks:</label>
                             <textarea id="remarks" name="remarks" rows="4" placeholder="Please provide design details, quantity, type of print, and any other requirements"></textarea>
                         </div>
+
+                        <!-- Customer Details Section -->
+                        <div class="form-group">
+                            <label for="customer-name">Your Name:</label>
+                            <input type="text" id="customer-name" name="customer-name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customer-email">Your Email:</label>
+                            <input type="email" id="customer-email" name="customer-email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customer-phone">Your Phone:</label>
+                            <input type="tel" id="customer-phone" name="customer-phone" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="customer-address">Delivery Address:</label>
+                            <textarea id="customer-address" name="customer-address" rows="3" placeholder="Enter your complete delivery address" required></textarea>
+                        </div>
                         
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-primary">Submit Remarks</button>
-                            <button type="button" class="btn btn-secondary" id="checkout-t-shirt-printing">Checkout via WhatsApp</button>
+                            <button type="submit" class="btn btn-primary">Place Order</button>
                         </div>
                     </form>
+                    
+                    <div id="order-options" style="display: none; margin-top: 20px;">
+                        <h3>Choose how to send your order:</h3>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-primary" id="send-email">
+                                <i class="fas fa-envelope"></i> Send via Email
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="send-whatsapp">
+                                <i class="fab fa-whatsapp"></i> Send via WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="order-summary" style="display: none; margin-top: 20px; padding: 15px; background-color: #f5f5f7; border-radius: 8px;">
+                        <h3>Order Summary</h3>
+                        <div id="summary-content"></div>
+                    </div>
                     
                     <div id="notice-t-shirt-printing" class="notice" style="display: none;">
                         <i class="fas fa-info-circle"></i>
@@ -2281,12 +1638,49 @@
                             <label for="remarks">Remarks:</label>
                             <textarea id="remarks" name="remarks" rows="4" placeholder="Please provide event name, custom text, quantity, and any other requirements"></textarea>
                         </div>
+
+                        <!-- Customer Details Section -->
+                        <div class="form-group">
+                            <label for="customer-name">Your Name:</label>
+                            <input type="text" id="customer-name" name="customer-name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customer-email">Your Email:</label>
+                            <input type="email" id="customer-email" name="customer-email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customer-phone">Your Phone:</label>
+                            <input type="tel" id="customer-phone" name="customer-phone" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="customer-address">Delivery Address:</label>
+                            <textarea id="customer-address" name="customer-address" rows="3" placeholder="Enter your complete delivery address" required></textarea>
+                        </div>
                         
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-primary">Submit Remarks</button>
-                            <button type="button" class="btn btn-secondary" id="checkout-medal-trophy">Checkout via WhatsApp</button>
+                            <button type="submit" class="btn btn-primary">Place Order</button>
                         </div>
                     </form>
+                    
+                    <div id="order-options" style="display: none; margin-top: 20px;">
+                        <h3>Choose how to send your order:</h3>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-primary" id="send-email">
+                                <i class="fas fa-envelope"></i> Send via Email
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="send-whatsapp">
+                                <i class="fab fa-whatsapp"></i> Send via WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="order-summary" style="display: none; margin-top: 20px; padding: 15px; background-color: #f5f5f7; border-radius: 8px;">
+                        <h3>Order Summary</h3>
+                        <div id="summary-content"></div>
+                    </div>
                     
                     <div id="notice-medal-trophy" class="notice" style="display: none;">
                         <i class="fas fa-info-circle"></i>
@@ -2373,12 +1767,49 @@
                             <label for="remarks">Remarks:</label>
                             <textarea id="remarks" name="remarks" rows="4" placeholder="Please provide name to embroider, quantity, and any other requirements"></textarea>
                         </div>
+
+                        <!-- Customer Details Section -->
+                        <div class="form-group">
+                            <label for="customer-name">Your Name:</label>
+                            <input type="text" id="customer-name" name="customer-name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customer-email">Your Email:</label>
+                            <input type="email" id="customer-email" name="customer-email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customer-phone">Your Phone:</label>
+                            <input type="tel" id="customer-phone" name="customer-phone" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="customer-address">Delivery Address:</label>
+                            <textarea id="customer-address" name="customer-address" rows="3" placeholder="Enter your complete delivery address" required></textarea>
+                        </div>
                         
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-primary">Submit Remarks</button>
-                            <button type="button" class="btn btn-secondary" id="checkout-towel">Checkout via WhatsApp</button>
+                            <button type="submit" class="btn btn-primary">Place Order</button>
                         </div>
                     </form>
+                    
+                    <div id="order-options" style="display: none; margin-top: 20px;">
+                        <h3>Choose how to send your order:</h3>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-primary" id="send-email">
+                                <i class="fas fa-envelope"></i> Send via Email
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="send-whatsapp">
+                                <i class="fab fa-whatsapp"></i> Send via WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="order-summary" style="display: none; margin-top: 20px; padding: 15px; background-color: #f5f5f7; border-radius: 8px;">
+                        <h3>Order Summary</h3>
+                        <div id="summary-content"></div>
+                    </div>
                     
                     <div id="notice-towel" class="notice" style="display: none;">
                         <i class="fas fa-info-circle"></i>
@@ -2453,12 +1884,49 @@
                             <label for="remarks">Remarks:</label>
                             <textarea id="remarks" name="remarks" rows="4" placeholder="Please provide name, shape, material, quantity, and any other requirements"></textarea>
                         </div>
+
+                        <!-- Customer Details Section -->
+                        <div class="form-group">
+                            <label for="customer-name">Your Name:</label>
+                            <input type="text" id="customer-name" name="customer-name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customer-email">Your Email:</label>
+                            <input type="email" id="customer-email" name="customer-email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customer-phone">Your Phone:</label>
+                            <input type="tel" id="customer-phone" name="customer-phone" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="customer-address">Delivery Address:</label>
+                            <textarea id="customer-address" name="customer-address" rows="3" placeholder="Enter your complete delivery address" required></textarea>
+                        </div>
                         
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-primary">Submit Remarks</button>
-                            <button type="button" class="btn btn-secondary" id="checkout-keychain">Checkout via WhatsApp</button>
+                            <button type="submit" class="btn btn-primary">Place Order</button>
                         </div>
                     </form>
+                    
+                    <div id="order-options" style="display: none; margin-top: 20px;">
+                        <h3>Choose how to send your order:</h3>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-primary" id="send-email">
+                                <i class="fas fa-envelope"></i> Send via Email
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="send-whatsapp">
+                                <i class="fab fa-whatsapp"></i> Send via WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="order-summary" style="display: none; margin-top: 20px; padding: 15px; background-color: #f5f5f7; border-radius: 8px;">
+                        <h3>Order Summary</h3>
+                        <div id="summary-content"></div>
+                    </div>
                     
                     <div id="notice-keychain" class="notice" style="display: none;">
                         <i class="fas fa-info-circle"></i>
@@ -2533,12 +2001,49 @@
                             <label for="remarks">Remarks:</label>
                             <textarea id="remarks" name="remarks" rows="4" placeholder="Please provide name, colour, tag style, quantity, and any other requirements"></textarea>
                         </div>
+
+                        <!-- Customer Details Section -->
+                        <div class="form-group">
+                            <label for="customer-name">Your Name:</label>
+                            <input type="text" id="customer-name" name="customer-name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customer-email">Your Email:</label>
+                            <input type="email" id="customer-email" name="customer-email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customer-phone">Your Phone:</label>
+                            <input type="tel" id="customer-phone" name="customer-phone" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="customer-address">Delivery Address:</label>
+                            <textarea id="customer-address" name="customer-address" rows="3" placeholder="Enter your complete delivery address" required></textarea>
+                        </div>
                         
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-primary">Submit Remarks</button>
-                            <button type="button" class="btn btn-secondary" id="checkout-nametag">Checkout via WhatsApp</button>
+                            <button type="submit" class="btn btn-primary">Place Order</button>
                         </div>
                     </form>
+                    
+                    <div id="order-options" style="display: none; margin-top: 20px;">
+                        <h3>Choose how to send your order:</h3>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-primary" id="send-email">
+                                <i class="fas fa-envelope"></i> Send via Email
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="send-whatsapp">
+                                <i class="fab fa-whatsapp"></i> Send via WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="order-summary" style="display: none; margin-top: 20px; padding: 15px; background-color: #f5f5f7; border-radius: 8px;">
+                        <h3>Order Summary</h3>
+                        <div id="summary-content"></div>
+                    </div>
                     
                     <div id="notice-nametag" class="notice" style="display: none;">
                         <i class="fas fa-info-circle"></i>
@@ -2639,12 +2144,49 @@
                             <label for="remarks">Remarks:</label>
                             <textarea id="remarks" name="remarks" rows="4" placeholder="Please provide logo printing details, sleeve type, quantity, and any other requirements"></textarea>
                         </div>
+
+                        <!-- Customer Details Section -->
+                        <div class="form-group">
+                            <label for="customer-name">Your Name:</label>
+                            <input type="text" id="customer-name" name="customer-name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customer-email">Your Email:</label>
+                            <input type="email" id="customer-email" name="customer-email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customer-phone">Your Phone:</label>
+                            <input type="tel" id="customer-phone" name="customer-phone" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="customer-address">Delivery Address:</label>
+                            <textarea id="customer-address" name="customer-address" rows="3" placeholder="Enter your complete delivery address" required></textarea>
+                        </div>
                         
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-primary">Submit Remarks</button>
-                            <button type="button" class="btn btn-secondary" id="checkout-corporate-shirt">Checkout via WhatsApp</button>
+                            <button type="submit" class="btn btn-primary">Place Order</button>
                         </div>
                     </form>
+                    
+                    <div id="order-options" style="display: none; margin-top: 20px;">
+                        <h3>Choose how to send your order:</h3>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-primary" id="send-email">
+                                <i class="fas fa-envelope"></i> Send via Email
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="send-whatsapp">
+                                <i class="fab fa-whatsapp"></i> Send via WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="order-summary" style="display: none; margin-top: 20px; padding: 15px; background-color: #f5f5f7; border-radius: 8px;">
+                        <h3>Order Summary</h3>
+                        <div id="summary-content"></div>
+                    </div>
                     
                     <div id="notice-corporate-shirt" class="notice" style="display: none;">
                         <i class="fas fa-info-circle"></i>
@@ -2710,11 +2252,286 @@
     </div>
     
     <script>
+        // Initialize EmailJS with your User ID
+        document.addEventListener('DOMContentLoaded', function() {
+            // Your EmailJS User ID (Public Key)
+            emailjs.init("xIOcCYapi0Wg7ZIwi");
+            
+            // Then call your init function
+            init();
+        });
+
+        // Generate a unique order ID
+        function generateOrderId() {
+            return 'PNE-' + Date.now().toString(36).toUpperCase();
+        }
+
+        // Setup contact form
+        function setupContactForm() {
+            const contactForm = document.getElementById('contact-form');
+            const formNotice = document.getElementById('form-notice');
+            
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                showLoading();
+                
+                // Collect form data
+                const formData = {
+                    name: document.querySelector('#contact-page #name').value,
+                    email: document.querySelector('#contact-page #email').value,
+                    phone: document.querySelector('#contact-page #phone')?.value || 'Not provided',
+                    subject: document.querySelector('#contact-page #subject').value,
+                    message: document.querySelector('#contact-page #message').value,
+                    date: new Date().toLocaleDateString()
+                };
+                
+                // Send email using EmailJS with your specific Service ID and Template ID
+                emailjs.send('service_onlineorder', 'template_bhlmtvl', formData)
+                    .then(function(response) {
+                        hideLoading();
+                        formNotice.style.display = 'block';
+                        contactForm.reset();
+                        
+                        // Scroll to notice
+                        formNotice.scrollIntoView({ behavior: 'smooth' });
+                        
+                        console.log('Contact form submitted:', response.status);
+                        showNotification('Message sent successfully!');
+                    })
+                    .catch(function(error) {
+                        hideLoading();
+                        showNotification('Failed to send message. Please try again.');
+                        console.error('Contact form error:', error);
+                    });
+            });
+        }
+
+        // Setup product forms with EmailJS integration
+        function setupProductForms() {
+            // Convocation Robe Form
+            const convocationRobeForm = document.getElementById('convocation-robe-form');
+            const orderOptions = document.getElementById('order-options');
+            const orderSummary = document.getElementById('order-summary');
+            const summaryContent = document.getElementById('summary-content');
+            const sendEmailBtn = document.getElementById('send-email');
+            const sendWhatsappBtn = document.getElementById('send-whatsapp');
+            
+            let orderData = {};
+            
+            convocationRobeForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // Generate order ID
+                const orderId = generateOrderId();
+                
+                // Collect form data
+                orderData = {
+                    orderId: orderId,
+                    orderDate: new Date().toLocaleDateString(),
+                    product: 'Custom Made Convocation Robe',
+                    color: document.querySelector('#convocation-robe-page #color').value,
+                    remarks: document.querySelector('#convocation-robe-page #remarks').value,
+                    customerName: document.querySelector('#convocation-robe-page #customer-name').value,
+                    customerEmail: document.querySelector('#convocation-robe-page #customer-email').value,
+                    customerPhone: document.querySelector('#convocation-robe-page #customer-phone').value,
+                    customerAddress: document.querySelector('#convocation-robe-page #customer-address').value
+                };
+                
+                // Display order summary
+                displayOrderSummary(orderData);
+                
+                // Show order options
+                orderOptions.style.display = 'block';
+                orderSummary.style.display = 'block';
+                
+                // Scroll to order options
+                orderOptions.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            sendEmailBtn.addEventListener('click', () => {
+                sendOrderEmail(orderData);
+            });
+            
+            sendWhatsappBtn.addEventListener('click', () => {
+                sendOrderWhatsApp(orderData);
+            });
+            
+            // T-Shirt Printing Form
+            const tShirtPrintingForm = document.getElementById('t-shirt-printing-form');
+            const tShirtOrderOptions = document.querySelector('#t-shirt-printing-page #order-options');
+            const tShirtOrderSummary = document.querySelector('#t-shirt-printing-page #order-summary');
+            const tShirtSummaryContent = document.querySelector('#t-shirt-printing-page #summary-content');
+            const tShirtSendEmailBtn = document.querySelector('#t-shirt-printing-page #send-email');
+            const tShirtSendWhatsappBtn = document.querySelector('#t-shirt-printing-page #send-whatsapp');
+            
+            let tShirtOrderData = {};
+            
+            tShirtPrintingForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // Generate order ID
+                const orderId = generateOrderId();
+                
+                // Collect form data
+                tShirtOrderData = {
+                    orderId: orderId,
+                    orderDate: new Date().toLocaleDateString(),
+                    product: 'T-Shirt Printing',
+                    remarks: document.querySelector('#t-shirt-printing-page #remarks').value,
+                    customerName: document.querySelector('#t-shirt-printing-page #customer-name').value,
+                    customerEmail: document.querySelector('#t-shirt-printing-page #customer-email').value,
+                    customerPhone: document.querySelector('#t-shirt-printing-page #customer-phone').value,
+                    customerAddress: document.querySelector('#t-shirt-printing-page #customer-address').value
+                };
+                
+                // Display order summary
+                displayOrderSummary(tShirtOrderData, tShirtSummaryContent);
+                
+                // Show order options
+                tShirtOrderOptions.style.display = 'block';
+                tShirtOrderSummary.style.display = 'block';
+                
+                // Scroll to order options
+                tShirtOrderOptions.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            tShirtSendEmailBtn.addEventListener('click', () => {
+                sendOrderEmail(tShirtOrderData);
+            });
+            
+            tShirtSendWhatsappBtn.addEventListener('click', () => {
+                sendOrderWhatsApp(tShirtOrderData);
+            });
+            
+            // Repeat similar setup for other products...
+        }
+
+        function displayOrderSummary(data, contentElement = null) {
+            const summaryContent = contentElement || document.getElementById('summary-content');
+            summaryContent.innerHTML = `
+                <p><strong>Product:</strong> ${data.product}</p>
+                ${data.color ? `<p><strong>Color:</strong> ${data.color}</p>` : ''}
+                ${data.size ? `<p><strong>Size:</strong> ${data.size}</p>` : ''}
+                ${data.item ? `<p><strong>Item:</strong> ${data.item}</p>` : ''}
+                ${data.embroidery ? `<p><strong>Embroidery:</strong> ${data.embroidery}</p>` : ''}
+                <p><strong>Remarks:</strong> ${data.remarks}</p>
+                <hr style="margin: 10px 0;">
+                <p><strong>Customer Name:</strong> ${data.customerName}</p>
+                <p><strong>Email:</strong> ${data.customerEmail}</p>
+                <p><strong>Phone:</strong> ${data.customerPhone}</p>
+                <p><strong>Delivery Address:</strong> ${data.customerAddress}</p>
+            `;
+        }
+
+        function sendOrderEmail(data) {
+            showLoading();
+            
+            // Prepare email parameters for customer order confirmation
+            const customerParams = {
+                orderId: data.orderId,
+                orderDate: data.orderDate,
+                product: data.product,
+                color: data.color || '',
+                size: data.size || '',
+                item: data.item || '',
+                embroidery: data.embroidery || '',
+                remarks: data.remarks,
+                customerName: data.customerName,
+                customerEmail: data.customerEmail,
+                customerPhone: data.customerPhone,
+                customerAddress: data.customerAddress
+            };
+            
+            // Send order confirmation to customer using your specific Template ID
+            emailjs.send('service_onlineorder', 'template_54ej86f', customerParams)
+                .then(function(response) {
+                    console.log('Order confirmation sent:', response.status);
+                    
+                    // Prepare business notification parameters
+                    const businessParams = {
+                        name: data.customerName,
+                        email: data.customerEmail,
+                        phone: data.customerPhone,
+                        subject: `New Order: ${data.product} (ID: ${data.orderId})`,
+                        message: `New order received:\n\nProduct: ${data.product}\nOrder ID: ${data.orderId}\nCustomer: ${data.customerName}\nEmail: ${data.customerEmail}\nPhone: ${data.customerPhone}\nAddress: ${data.customerAddress}\n\nRemarks: ${data.remarks}`,
+                        date: data.orderDate
+                    };
+                    
+                    // Send business notification using your contact template ID
+                    return emailjs.send('service_onlineorder', 'template_bhlmtvl', businessParams);
+                })
+                .then(function(response) {
+                    hideLoading();
+                    showNotification('Order placed successfully! Check your email for confirmation.');
+                    console.log('Business notification sent:', response.status);
+                })
+                .catch(function(error) {
+                    hideLoading();
+                    showNotification('Failed to send order. Please try again or use WhatsApp.');
+                    console.error('Email error:', error);
+                });
+        }
+
+        function sendOrderWhatsApp(data) {
+            const message = formatOrderMessage(data);
+            const whatsappUrl = `https://www.wasap.my/60134036123/${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+            showNotification('Opening WhatsApp to send your order...');
+        }
+
+        function formatOrderMessage(data) {
+            let message = `*NEW ORDER - PNE ARENA*\n\n`;
+            message += `*Order ID:* ${data.orderId}\n`;
+            message += `*Order Date:* ${data.orderDate}\n\n`;
+            message += `*PRODUCT DETAILS*\n`;
+            message += `*Product:* ${data.product}\n`;
+            
+            if (data.color) message += `*Color:* ${data.color}\n`;
+            if (data.size) message += `*Size:* ${data.size}\n`;
+            if (data.item) message += `*Item:* ${data.item}\n`;
+            if (data.embroidery) message += `*Embroidery:* ${data.embroidery}\n`;
+            
+            message += `*Remarks:* ${data.remarks}\n\n`;
+            message += `*CUSTOMER INFORMATION*\n`;
+            message += `*Name:* ${data.customerName}\n`;
+            message += `*Email:* ${data.customerEmail}\n`;
+            message += `*Phone:* ${data.customerPhone}\n`;
+            message += `*Delivery Address:* ${data.customerAddress}\n\n`;
+            message += `Please confirm this order and provide payment details.\n\n`;
+            message += `Thank you,\n${data.customerName}`;
+            
+            return message;
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notification-text');
+            notificationText.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Show loading spinner
+        function showLoading() {
+            const loading = document.getElementById('loading');
+            loading.classList.add('show');
+        }
+
+        // Hide loading spinner
+        function hideLoading() {
+            const loading = document.getElementById('loading');
+            loading.classList.remove('show');
+        }
+
         // DOM elements
         const loading = document.getElementById('loading');
         const notification = document.getElementById('notification');
         const notificationText = document.getElementById('notification-text');
-        
+
         // Initialize the page
         function init() {
             showLoading();
@@ -2725,17 +2542,7 @@
                 setupContactForm();
             }, 1500);
         }
-        
-        // Show loading spinner
-        function showLoading() {
-            loading.classList.add('show');
-        }
-        
-        // Hide loading spinner
-        function hideLoading() {
-            loading.classList.remove('show');
-        }
-        
+
         // Setup navigation between pages
         function setupNavigation() {
             // Get all navigation links
@@ -2761,7 +2568,7 @@
                 });
             });
         }
-        
+
         // Navigate to a specific page
         function navigateToPage(pageId) {
             // Hide all pages
@@ -2791,249 +2598,6 @@
                 });
             }
         }
-        
-        // Setup product forms
-        function setupProductForms() {
-            // Convocation Robe Form
-            const convocationRobeForm = document.getElementById('convocation-robe-form');
-            const checkoutConvocationRobe = document.getElementById('checkout-convocation-robe');
-            const noticeConvocationRobe = document.getElementById('notice-convocation-robe');
-            let remarksSubmittedConvocationRobe = false;
-            
-            convocationRobeForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                noticeConvocationRobe.style.display = 'block';
-                remarksSubmittedConvocationRobe = true;
-                
-                // Scroll to notice
-                noticeConvocationRobe.scrollIntoView({ behavior: 'smooth' });
-            });
-            
-            checkoutConvocationRobe.addEventListener('click', () => {
-                if (!remarksSubmittedConvocationRobe) {
-                    showNotification('Please submit your remarks first');
-                    return;
-                }
-                
-                const color = document.querySelector('#convocation-robe-page #color').value;
-                const remarks = document.querySelector('#convocation-robe-page #remarks').value;
-                
-                const message = `Custom Made Convocation Robe - Colour: ${color} - Remarks: ${remarks}`;
-                const whatsappUrl = `https://www.wasap.my/60134036123/${encodeURIComponent(message)}`;
-                
-                window.open(whatsappUrl, '_blank');
-            });
-            
-            // T-Shirt Printing Form
-            const tShirtPrintingForm = document.getElementById('t-shirt-printing-form');
-            const checkoutTShirtPrinting = document.getElementById('checkout-t-shirt-printing');
-            const noticeTShirtPrinting = document.getElementById('notice-t-shirt-printing');
-            let remarksSubmittedTShirtPrinting = false;
-            
-            tShirtPrintingForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                noticeTShirtPrinting.style.display = 'block';
-                remarksSubmittedTShirtPrinting = true;
-                
-                // Scroll to notice
-                noticeTShirtPrinting.scrollIntoView({ behavior: 'smooth' });
-            });
-            
-            checkoutTShirtPrinting.addEventListener('click', () => {
-                if (!remarksSubmittedTShirtPrinting) {
-                    showNotification('Please submit your remarks first');
-                    return;
-                }
-                
-                const remarks = document.querySelector('#t-shirt-printing-page #remarks').value;
-                
-                const message = `T-Shirt Printing - Remarks: ${remarks}`;
-                const whatsappUrl = `https://www.wasap.my/60134036123/${encodeURIComponent(message)}`;
-                
-                window.open(whatsappUrl, '_blank');
-            });
-            
-            // Medal/Trophy Form
-            const medalTrophyForm = document.getElementById('medal-trophy-form');
-            const checkoutMedalTrophy = document.getElementById('checkout-medal-trophy');
-            const noticeMedalTrophy = document.getElementById('notice-medal-trophy');
-            let remarksSubmittedMedalTrophy = false;
-            
-            medalTrophyForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                noticeMedalTrophy.style.display = 'block';
-                remarksSubmittedMedalTrophy = true;
-                
-                // Scroll to notice
-                noticeMedalTrophy.scrollIntoView({ behavior: 'smooth' });
-            });
-            
-            checkoutMedalTrophy.addEventListener('click', () => {
-                if (!remarksSubmittedMedalTrophy) {
-                    showNotification('Please submit your remarks first');
-                    return;
-                }
-                
-                const item = document.querySelector('#medal-trophy-page #item').value;
-                const remarks = document.querySelector('#medal-trophy-page #remarks').value;
-                
-                const message = `Medal/Trophy - Item: ${item} - Remarks: ${remarks}`;
-                const whatsappUrl = `https://www.wasap.my/60134036123/${encodeURIComponent(message)}`;
-                
-                window.open(whatsappUrl, '_blank');
-            });
-            
-            // Towel Form
-            const towelForm = document.getElementById('towel-form');
-            const checkoutTowel = document.getElementById('checkout-towel');
-            const noticeTowel = document.getElementById('notice-towel');
-            let remarksSubmittedTowel = false;
-            
-            towelForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                noticeTowel.style.display = 'block';
-                remarksSubmittedTowel = true;
-                
-                // Scroll to notice
-                noticeTowel.scrollIntoView({ behavior: 'smooth' });
-            });
-            
-            checkoutTowel.addEventListener('click', () => {
-                if (!remarksSubmittedTowel) {
-                    showNotification('Please submit your remarks first');
-                    return;
-                }
-                
-                const embroidery = document.querySelector('#towel-page input[name="embroidery"]:checked').value;
-                const remarks = document.querySelector('#towel-page #remarks').value;
-                
-                const message = `Towel - Embroidery: ${embroidery} - Remarks: ${remarks}`;
-                const whatsappUrl = `https://www.wasap.my/60134036123/${encodeURIComponent(message)}`;
-                
-                window.open(whatsappUrl, '_blank');
-            });
-            
-            // Keychain Form
-            const keychainForm = document.getElementById('keychain-form');
-            const checkoutKeychain = document.getElementById('checkout-keychain');
-            const noticeKeychain = document.getElementById('notice-keychain');
-            let remarksSubmittedKeychain = false;
-            
-            keychainForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                noticeKeychain.style.display = 'block';
-                remarksSubmittedKeychain = true;
-                
-                // Scroll to notice
-                noticeKeychain.scrollIntoView({ behavior: 'smooth' });
-            });
-            
-            checkoutKeychain.addEventListener('click', () => {
-                if (!remarksSubmittedKeychain) {
-                    showNotification('Please submit your remarks first');
-                    return;
-                }
-                
-                const remarks = document.querySelector('#keychain-page #remarks').value;
-                
-                const message = `Custom Made Keychain - Remarks: ${remarks}`;
-                const whatsappUrl = `https://www.wasap.my/60134036123/${encodeURIComponent(message)}`;
-                
-                window.open(whatsappUrl, '_blank');
-            });
-            
-            // Nametag Form
-            const nametagForm = document.getElementById('nametag-form');
-            const checkoutNametag = document.getElementById('checkout-nametag');
-            const noticeNametag = document.getElementById('notice-nametag');
-            let remarksSubmittedNametag = false;
-            
-            nametagForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                noticeNametag.style.display = 'block';
-                remarksSubmittedNametag = true;
-                
-                // Scroll to notice
-                noticeNametag.scrollIntoView({ behavior: 'smooth' });
-            });
-            
-            checkoutNametag.addEventListener('click', () => {
-                if (!remarksSubmittedNametag) {
-                    showNotification('Please submit your remarks first');
-                    return;
-                }
-                
-                const remarks = document.querySelector('#nametag-page #remarks').value;
-                
-                const message = `Custom Made Nametag - Remarks: ${remarks}`;
-                const whatsappUrl = `https://www.wasap.my/60134036123/${encodeURIComponent(message)}`;
-                
-                window.open(whatsappUrl, '_blank');
-            });
-            
-            // Corporate Shirt Form
-            const corporateShirtForm = document.getElementById('corporate-shirt-form');
-            const checkoutCorporateShirt = document.getElementById('checkout-corporate-shirt');
-            const noticeCorporateShirt = document.getElementById('notice-corporate-shirt');
-            let remarksSubmittedCorporateShirt = false;
-            
-            corporateShirtForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                noticeCorporateShirt.style.display = 'block';
-                remarksSubmittedCorporateShirt = true;
-                
-                // Scroll to notice
-                noticeCorporateShirt.scrollIntoView({ behavior: 'smooth' });
-            });
-            
-            checkoutCorporateShirt.addEventListener('click', () => {
-                if (!remarksSubmittedCorporateShirt) {
-                    showNotification('Please submit your remarks first');
-                    return;
-                }
-                
-                const size = document.querySelector('#corporate-shirt-page #size').value;
-                const color = document.querySelector('#corporate-shirt-page #color').value;
-                const remarks = document.querySelector('#corporate-shirt-page #remarks').value;
-                
-                const message = `Custom Made Corporate Shirt - Size: ${size} - Colour: ${color} - Remarks: ${remarks}`;
-                const whatsappUrl = `https://www.wasap.my/60134036123/${encodeURIComponent(message)}`;
-                
-                window.open(whatsappUrl, '_blank');
-            });
-        }
-        
-        // Setup contact form
-        function setupContactForm() {
-            const contactForm = document.getElementById('contact-form');
-            const formNotice = document.getElementById('form-notice');
-            
-            contactForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                
-                // In a real application, you would send the form data to a server here
-                // For this example, we'll just show a success message
-                
-                formNotice.style.display = 'block';
-                contactForm.reset();
-                
-                // Scroll to notice
-                formNotice.scrollIntoView({ behavior: 'smooth' });
-            });
-        }
-        
-        // Show notification
-        function showNotification(message) {
-            notificationText.textContent = message;
-            notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
-        
-        // Initialize the page when DOM is loaded
-        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
