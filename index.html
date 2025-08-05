@@ -139,6 +139,14 @@
             width: 100%;
         }
         
+        .nav-links a.active {
+            opacity: 1;
+        }
+        
+        .nav-links a.active::after {
+            width: 100%;
+        }
+        
         .nav-icons {
             display: flex;
             align-items: center;
@@ -158,33 +166,17 @@
             transform: scale(1.1);
         }
         
-        .cart-count {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background-color: var(--accent-color);
-            color: white;
-            font-size: 0.65rem;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            animation: pulse 2s infinite;
+        /* Page Container */
+        .page {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            min-height: calc(100vh - 48px);
         }
         
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.7);
-            }
-            70% {
-                box-shadow: 0 0 0 10px rgba(255, 59, 48, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(255, 59, 48, 0);
-            }
+        .page.active {
+            display: block;
+            opacity: 1;
         }
         
         /* Hero Section */
@@ -433,6 +425,7 @@
         .category-card:nth-child(4) { animation-delay: 0.4s; }
         .category-card:nth-child(5) { animation-delay: 0.5s; }
         .category-card:nth-child(6) { animation-delay: 0.6s; }
+        .category-card:nth-child(7) { animation-delay: 0.7s; }
         
         .category-card:hover {
             transform: translateY(-10px) rotateX(5deg);
@@ -529,180 +522,160 @@
             transform: translateX(5px);
         }
         
-        /* Featured Products */
-        .featured-products {
-            padding: 80px 0;
-            background-color: white;
-            position: relative;
+        /* Product Page Styles */
+        .product-page {
+            padding: 60px 0;
         }
         
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 30px;
+        .product-container {
             max-width: 1200px;
             margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
             padding: 0 22px;
         }
         
-        .product-card {
-            background-color: white;
-            border-radius: 18px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            transition: all 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
-            position: relative;
-            border: 1px solid var(--border-color);
-            transform-style: preserve-3d;
-            perspective: 1000px;
-            animation: fadeInUp 1s ease-out;
-        }
-        
-        .product-card:nth-child(1) { animation-delay: 0.1s; }
-        .product-card:nth-child(2) { animation-delay: 0.2s; }
-        .product-card:nth-child(3) { animation-delay: 0.3s; }
-        .product-card:nth-child(4) { animation-delay: 0.4s; }
-        .product-card:nth-child(5) { animation-delay: 0.5s; }
-        .product-card:nth-child(6) { animation-delay: 0.6s; }
-        .product-card:nth-child(7) { animation-delay: 0.7s; }
-        .product-card:nth-child(8) { animation-delay: 0.8s; }
-        
-        .product-card:hover {
-            transform: translateY(-10px) rotateX(5deg);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
-        
-        .product-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background-color: var(--accent-color);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 980px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            z-index: 2;
-            animation: pulse 2s infinite;
-        }
-        
         .product-image {
-            height: 220px;
+            flex: 1;
+            min-width: 300px;
+            height: 400px;
             background-color: var(--light-gray);
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 5rem;
+            font-size: 8rem;
             color: var(--dark-gray);
-            transition: all 0.5s ease;
-            position: relative;
-            overflow: hidden;
         }
         
-        .product-image::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(0, 113, 227, 0.3), transparent);
-            transform: rotate(45deg);
-            transition: all 0.5s;
-            opacity: 0;
+        .product-details {
+            flex: 1;
+            min-width: 300px;
         }
         
-        .product-card:hover .product-image::before {
-            animation: shine 0.5s ease-in-out;
-        }
-        
-        .product-card:hover .product-image i {
-            transform: scale(1.1) rotate(5deg);
-        }
-        
-        .product-info {
-            padding: 25px;
-        }
-        
-        .product-name {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 10px;
+        .product-details h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
             color: var(--primary-color);
         }
         
         .product-description {
+            font-size: 1.1rem;
             color: var(--dark-gray);
-            margin-bottom: 15px;
-            font-size: 0.95rem;
-            height: 45px;
-            overflow: hidden;
+            margin-bottom: 30px;
+            line-height: 1.6;
         }
         
-        .product-price {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--primary-color);
+        .form-group {
             margin-bottom: 20px;
         }
         
-        .add-to-cart {
-            width: 100%;
-            background-color: var(--secondary-color);
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 980px;
-            font-size: 1rem;
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
             font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            color: var(--primary-color);
+        }
+        
+        .form-group select,
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group select:focus,
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .notice {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: rgba(0, 113, 227, 0.1);
+            border-left: 4px solid var(--secondary-color);
+            border-radius: 4px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
         }
         
-        .add-to-cart::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
+        .notice i {
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+            margin-right: 15px;
         }
         
-        .add-to-cart:hover::before {
-            width: 300px;
-            height: 300px;
+        .notice p {
+            margin: 0;
+            color: var(--primary-color);
         }
         
-        .add-to-cart:hover {
-            background-color: #0077ed;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 113, 227, 0.3);
+        /* Content Pages */
+        .content-page {
+            padding: 60px 0;
         }
         
-        .add-to-cart.added {
-            background-color: var(--success-color);
-            animation: success 0.5s ease;
+        .content-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 22px;
         }
         
-        @keyframes success {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-            100% {
-                transform: scale(1);
-            }
+        .content-page h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+        
+        .content-page h2 {
+            font-size: 1.8rem;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        .content-page p {
+            margin-bottom: 20px;
+            line-height: 1.6;
+            color: var(--text-color);
+        }
+        
+        .content-page ul {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .content-page li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+            color: var(--text-color);
+        }
+        
+        /* Contact Form */
+        .contact-form {
+            margin-top: 30px;
+        }
+        
+        .contact-form .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .contact-form .form-actions {
+            margin-top: 20px;
         }
         
         /* Footer */
@@ -803,258 +776,6 @@
             background-color: rgba(0, 0, 0, 0.05);
         }
         
-        /* Cart Modal */
-        .cart-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            animation: fadeIn 0.3s ease;
-        }
-        
-        .cart-content {
-            background-color: white;
-            width: 100%;
-            max-width: 600px;
-            border-radius: 18px;
-            overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            max-height: 90vh;
-            display: flex;
-            flex-direction: column;
-            animation: slideUp 0.5s ease;
-        }
-        
-        .cart-header {
-            background-color: white;
-            color: var(--primary-color);
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        .cart-header h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-        }
-        
-        .close-cart {
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--dark-gray);
-            background: none;
-            border: none;
-            transition: all 0.3s ease;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .close-cart:hover {
-            color: var(--primary-color);
-            background-color: var(--light-gray);
-            transform: rotate(90deg);
-        }
-        
-        .cart-items-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-        }
-        
-        .cart-item {
-            display: flex;
-            padding: 15px 0;
-            border-bottom: 1px solid var(--border-color);
-            animation: fadeIn 0.5s ease;
-        }
-        
-        .cart-item:last-child {
-            border-bottom: none;
-        }
-        
-        .cart-item-image {
-            width: 80px;
-            height: 80px;
-            background-color: var(--light-gray);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            font-size: 2rem;
-            color: var(--dark-gray);
-            transition: all 0.3s ease;
-        }
-        
-        .cart-item:hover .cart-item-image {
-            transform: scale(1.05);
-        }
-        
-        .cart-item-details {
-            flex: 1;
-        }
-        
-        .cart-item-name {
-            font-weight: 600;
-            margin-bottom: 5px;
-            color: var(--primary-color);
-            font-size: 1rem;
-        }
-        
-        .cart-item-price {
-            color: var(--primary-color);
-            font-weight: 500;
-            margin-bottom: 10px;
-            font-size: 0.95rem;
-        }
-        
-        .quantity-control {
-            display: flex;
-            align-items: center;
-        }
-        
-        .quantity-btn {
-            width: 30px;
-            height: 30px;
-            border: 1px solid var(--border-color);
-            background-color: white;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-        
-        .quantity-btn:hover {
-            background-color: var(--light-gray);
-            transform: scale(1.1);
-        }
-        
-        .quantity-input {
-            width: 40px;
-            text-align: center;
-            border: none;
-            height: 30px;
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-        
-        .remove-item {
-            margin-left: 15px;
-            background: none;
-            border: none;
-            color: var(--dark-gray);
-            cursor: pointer;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .remove-item:hover {
-            color: var(--accent-color);
-            background-color: var(--light-gray);
-            transform: scale(1.1);
-        }
-        
-        .cart-summary {
-            padding: 20px;
-            background-color: var(--light-bg);
-            border-top: 1px solid var(--border-color);
-        }
-        
-        .cart-total {
-            display: flex;
-            justify-content: space-between;
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: var(--primary-color);
-        }
-        
-        .checkout-button {
-            width: 100%;
-            background-color: var(--secondary-color);
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 980px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .checkout-button::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-        
-        .checkout-button:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-        
-        .checkout-button:hover {
-            background-color: #0077ed;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 113, 227, 0.3);
-        }
-        
-        .empty-cart {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--dark-gray);
-        }
-        
-        .empty-cart i {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            color: var(--light-gray);
-            animation: bounce 2s infinite;
-        }
-        
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-20px);
-            }
-            60% {
-                transform: translateY(-10px);
-            }
-        }
-        
         /* Notification */
         .notification {
             position: fixed;
@@ -1151,10 +872,6 @@
                 grid-template-columns: repeat(2, 1fr);
             }
             
-            .products-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
             .footer-content {
                 grid-template-columns: 1fr;
             }
@@ -1162,10 +879,6 @@
         
         @media (max-width: 480px) {
             .categories-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .products-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -1176,193 +889,1818 @@
     <div class="loading" id="loading">
         <div class="spinner"></div>
     </div>
+    
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
-            <a href="#" class="logo" id="logo-link">
+            <a href="#" class="logo" data-page="home">
                 <i class="fas fa-store"></i>
                 PNE Arena
             </a>
             <ul class="nav-links">
-                <li><a href="#home" class="nav-link">Home</a></li>
-                <li><a href="#shop" class="nav-link">Shop</a></li>
-                <li><a href="#categories" class="nav-link">Categories</a></li>
-                <li><a href="#deals" class="nav-link">Deals</a></li>
-                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#" data-page="home" class="nav-link active">Home</a></li>
+                <li><a href="#" data-page="shop" class="nav-link">Shop</a></li>
+                <li><a href="#" data-page="about" class="nav-link">About</a></li>
+                <li><a href="#" data-page="contact" class="nav-link">Contact</a></li>
             </ul>
             <div class="nav-icons">
                 <a href="#" id="search-icon"><i class="fas fa-search"></i></a>
                 <a href="#" id="cart-icon">
                     <i class="fas fa-shopping-bag"></i>
-                    <span class="cart-count" id="cart-count">0</span>
                 </a>
             </div>
         </div>
     </nav>
     
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="hero-content">
-            <h1>Back to School Essentials</h1>
-            <p>Everything students need for a successful academic year</p>
-            <div class="hero-buttons">
-                <a href="#shop" class="btn btn-primary" id="shop-now-btn">Shop Now</a>
-                <a href="#deals" class="btn btn-secondary" id="view-deals-btn">View Deals</a>
+    <!-- Home Page -->
+    <div class="page active" id="home-page">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Custom Products & School Supplies</h1>
+                <p>Premium quality products tailored to your needs</p>
+                <div class="hero-buttons">
+                    <a href="#" data-page="shop" class="btn btn-primary">Shop Now</a>
+                    <a href="#" data-page="about" class="btn btn-secondary">About Us</a>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+        
+        <!-- Categories Section -->
+        <section class="categories">
+            <div class="section-header">
+                <h2 class="section-title">Our Products</h2>
+                <p class="section-subtitle">Browse our wide selection of custom products and school supplies</p>
+            </div>
+            <div class="categories-grid">
+                <div class="category-card" data-page="convocation-robe">
+                    <div class="category-image">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="category-info">
+                        <h3>Custom Made Convocation Robe</h3>
+                        <p>Premium quality convocation robes in various colors</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+                <div class="category-card" data-page="t-shirt-printing">
+                    <div class="category-image">
+                        <i class="fas fa-tshirt"></i>
+                    </div>
+                    <div class="category-info">
+                        <h3>T-Shirt Printing</h3>
+                        <p>Custom t-shirt printing for all occasions</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+                <div class="category-card" data-page="medal-trophy">
+                    <div class="category-image">
+                        <i class="fas fa-medal"></i>
+                    </div>
+                    <div class="category-info">
+                        <h3>Medal / Trophy</h3>
+                        <p>Custom medals and trophies for events</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+                <div class="category-card" data-page="towel">
+                    <div class="category-image">
+                        <i class="fas fa-hand-paper"></i>
+                    </div>
+                    <div class="category-info">
+                        <h3>Towel</h3>
+                        <p>Quality towels with optional embroidery</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+                <div class="category-card" data-page="keychain">
+                    <div class="category-image">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <div class="category-info">
+                        <h3>Custom Made Keychain</h3>
+                        <p>Personalized keychains in various designs</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+                <div class="category-card" data-page="nametag">
+                    <div class="category-image">
+                        <i class="fas fa-id-card"></i>
+                    </div>
+                    <div class="category-info">
+                        <h3>Custom Made Nametag</h3>
+                        <p>Professional nametags for corporate and events</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+                <div class="category-card" data-page="corporate-shirt">
+                    <div class="category-image">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="category-info">
+                        <h3>Custom Made Corporate Shirt</h3>
+                        <p>Professional corporate shirts with custom designs</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>About PNE Arena</h4>
+                    <p>Established in 2005, PNE ARENA has grown to become a trusted name in custom products and school supplies. With nearly 20 years of experience, we remain active in both online and offline markets.</p>
+                    <div class="social-links">
+                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://pinterest.com" target="_blank"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#" data-page="about">About</a></li>
+                        <li><a href="#" data-page="shop">Shop All</a></li>
+                        <li><a href="#" data-page="new-arrivals">New Arrivals</a></li>
+                        <li><a href="#" data-page="best-sellers">Best Sellers</a></li>
+                        <li><a href="#" data-page="sale-items">Sale Items</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="#" data-page="contact">Contact Us</a></li>
+                        <li><a href="#" data-page="faqs">FAQs</a></li>
+                        <li><a href="#" data-page="shipping">Shipping Policy</a></li>
+                        <li><a href="#" data-page="returns">Returns & Exchanges</a></li>
+                        <li><a href="#" data-page="privacy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Bandar Laguna Merbok, Sungai Petani, Kedah</li>
+                        <li><i class="fas fa-phone"></i> +6013-4036123</li>
+                        <li><i class="fas fa-envelope"></i> pnearena@outlook.com</li>
+                        <li><i class="fas fa-clock"></i> Mon–Fri: 9am–6pm</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 PNE Arena. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for students</p>
+            </div>
+        </footer>
+    </div>
     
-    <!-- Categories Section -->
-    <section class="categories" id="categories">
-        <div class="section-header">
-            <h2 class="section-title">Shop by Category</h2>
-            <p class="section-subtitle">Browse our wide selection of school supplies organized by category</p>
-        </div>
-        <div class="categories-grid">
-            <div class="category-card" data-category="writing">
-                <div class="category-image">
-                    <i class="fas fa-pen"></i>
+    <!-- Shop Page -->
+    <div class="page" id="shop-page">
+        <section class="categories">
+            <div class="section-header">
+                <h2 class="section-title">All Products</h2>
+                <p class="section-subtitle">Browse our complete collection of custom products and school supplies</p>
+            </div>
+            <div class="categories-grid">
+                <div class="category-card" data-page="convocation-robe">
+                    <div class="category-image">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="category-info">
+                        <h3>Custom Made Convocation Robe</h3>
+                        <p>Premium quality convocation robes in various colors</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
                 </div>
-                <div class="category-info">
-                    <h3>Writing Supplies</h3>
-                    <p>Pens, pencils, markers and more</p>
-                    <a href="#" class="category-link">Shop Now <i class="fas fa-arrow-right"></i></a>
+                <div class="category-card" data-page="t-shirt-printing">
+                    <div class="category-image">
+                        <i class="fas fa-tshirt"></i>
+                    </div>
+                    <div class="category-info">
+                        <h3>T-Shirt Printing</h3>
+                        <p>Custom t-shirt printing for all occasions</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+                <div class="category-card" data-page="medal-trophy">
+                    <div class="category-image">
+                        <i class="fas fa-medal"></i>
+                    </div>
+                    <div class="category-info">
+                        <h3>Medal / Trophy</h3>
+                        <p>Custom medals and trophies for events</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+                <div class="category-card" data-page="towel">
+                    <div class="category-image">
+                        <i class="fas fa-hand-paper"></i>
+                    </div>
+                    <div class="category-info">
+                        <h3>Towel</h3>
+                        <p>Quality towels with optional embroidery</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+                <div class="category-card" data-page="keychain">
+                    <div class="category-image">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <div class="category-info">
+                        <h3>Custom Made Keychain</h3>
+                        <p>Personalized keychains in various designs</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+                <div class="category-card" data-page="nametag">
+                    <div class="category-image">
+                        <i class="fas fa-id-card"></i>
+                    </div>
+                    <div class="category-info">
+                        <h3>Custom Made Nametag</h3>
+                        <p>Professional nametags for corporate and events</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+                <div class="category-card" data-page="corporate-shirt">
+                    <div class="category-image">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="category-info">
+                        <h3>Custom Made Corporate Shirt</h3>
+                        <p>Professional corporate shirts with custom designs</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
                 </div>
             </div>
-            <div class="category-card" data-category="notebooks">
-                <div class="category-image">
-                    <i class="fas fa-book-open"></i>
+        </section>
+        
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>About PNE Arena</h4>
+                    <p>Established in 2005, PNE ARENA has grown to become a trusted name in custom products and school supplies. With nearly 20 years of experience, we remain active in both online and offline markets.</p>
+                    <div class="social-links">
+                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://pinterest.com" target="_blank"><i class="fab fa-pinterest"></i></a>
+                    </div>
                 </div>
-                <div class="category-info">
-                    <h3>Notebooks & Paper</h3>
-                    <p>Binders, notebooks, and paper products</p>
-                    <a href="#" class="category-link">Shop Now <i class="fas fa-arrow-right"></i></a>
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#" data-page="about">About</a></li>
+                        <li><a href="#" data-page="shop">Shop All</a></li>
+                        <li><a href="#" data-page="new-arrivals">New Arrivals</a></li>
+                        <li><a href="#" data-page="best-sellers">Best Sellers</a></li>
+                        <li><a href="#" data-page="sale-items">Sale Items</a></li>
+                    </ul>
                 </div>
-            </div>
-            <div class="category-card" data-category="bags">
-                <div class="category-image">
-                    <i class="fas fa-backpack"></i>
+                <div class="footer-column">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="#" data-page="contact">Contact Us</a></li>
+                        <li><a href="#" data-page="faqs">FAQs</a></li>
+                        <li><a href="#" data-page="shipping">Shipping Policy</a></li>
+                        <li><a href="#" data-page="returns">Returns & Exchanges</a></li>
+                        <li><a href="#" data-page="privacy">Privacy Policy</a></li>
+                    </ul>
                 </div>
-                <div class="category-info">
-                    <h3>Bags & Cases</h3>
-                    <p>Backpacks, lunch bags, and pencil cases</p>
-                    <a href="#" class="category-link">Shop Now <i class="fas fa-arrow-right"></i></a>
-                </div>
-            </div>
-            <div class="category-card" data-category="math">
-                <div class="category-image">
-                    <i class="fas fa-calculator"></i>
-                </div>
-                <div class="category-info">
-                    <h3>Math & Science</h3>
-                    <p>Calculators, rulers, and lab equipment</p>
-                    <a href="#" class="category-link">Shop Now <i class="fas fa-arrow-right"></i></a>
-                </div>
-            </div>
-            <div class="category-card" data-category="art">
-                <div class="category-image">
-                    <i class="fas fa-palette"></i>
-                </div>
-                <div class="category-info">
-                    <h3>Art Supplies</h3>
-                    <p>Paints, brushes, and creative materials</p>
-                    <a href="#" class="category-link">Shop Now <i class="fas fa-arrow-right"></i></a>
-                </div>
-            </div>
-            <div class="category-card" data-category="electronics">
-                <div class="category-image">
-                    <i class="fas fa-laptop"></i>
-                </div>
-                <div class="category-info">
-                    <h3>Electronics</h3>
-                    <p>Tablets, headphones, and tech accessories</p>
-                    <a href="#" class="category-link">Shop Now <i class="fas fa-arrow-right"></i></a>
+                <div class="footer-column">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Bandar Laguna Merbok, Sungai Petani, Kedah</li>
+                        <li><i class="fas fa-phone"></i> +6013-4036123</li>
+                        <li><i class="fas fa-envelope"></i> pnearena@outlook.com</li>
+                        <li><i class="fas fa-clock"></i> Mon–Fri: 9am–6pm</li>
+                    </ul>
                 </div>
             </div>
-        </div>
-    </section>
+            <div class="footer-bottom">
+                <p>&copy; 2023 PNE Arena. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for students</p>
+            </div>
+        </footer>
+    </div>
     
-    <!-- Featured Products -->
-    <section class="featured-products" id="shop">
-        <div class="section-header">
-            <h2 class="section-title">Featured Products</h2>
-            <p class="section-subtitle">Check out our most popular school supplies</p>
-        </div>
-        <div class="products-grid" id="products-grid">
-            <!-- Products will be dynamically added here -->
-        </div>
-    </section>
-    
-    <!-- Footer -->
-    <footer id="about">
-        <div class="footer-content">
-            <div class="footer-column">
-                <h4>About PNE Arena</h4>
-                <p>Your trusted source for quality school supplies since 2010. We're committed to helping students succeed with premium products at affordable prices.</p>
-                <div class="social-links">
-                    <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
-                    <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
-                    <a href="https://pinterest.com" target="_blank"><i class="fab fa-pinterest"></i></a>
-                </div>
-            </div>
-            <div class="footer-column">
-                <h4>Quick Links</h4>
+    <!-- About Page -->
+    <div class="page" id="about-page">
+        <section class="content-page">
+            <div class="content-container">
+                <h1>About PNE Arena</h1>
+                <p>Established in 2005, PNE ARENA has grown to become a trusted name in custom products and school supplies. With nearly 20 years of experience, we remain active in both online and offline markets.</p>
+                <p>Our official showroom is located in Sungai Petani, Kedah, and in 2025, we're proud to expand further by being available on major online platforms — making it easier than ever for customers to connect with us.</p>
+                <p>We're committed to delivering quality, trust, and satisfaction to every customer. Thank you for supporting a local brand that's growing strong with you.</p>
+                
+                <h2>Our Mission</h2>
+                <p>To provide high-quality custom products and school supplies that meet the diverse needs of our customers while maintaining affordability and exceptional service.</p>
+                
+                <h2>Our Vision</h2>
+                <p>To be the leading provider of custom products and school supplies in Malaysia, known for our quality, innovation, and customer-centric approach.</p>
+                
+                <h2>Our Values</h2>
                 <ul>
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#shop">Shop All</a></li>
-                    <li><a href="#" id="new-arrivals">New Arrivals</a></li>
-                    <li><a href="#" id="best-sellers">Best Sellers</a></li>
-                    <li><a href="#deals">Sale Items</a></li>
+                    <li><strong>Quality:</strong> We never compromise on the quality of our products.</li>
+                    <li><strong>Customer Satisfaction:</strong> Our customers are at the heart of everything we do.</li>
+                    <li><strong>Innovation:</strong> We continuously seek new and better ways to serve our customers.</li>
+                    <li><strong>Integrity:</strong> We conduct our business with honesty and transparency.</li>
+                    <li><strong>Community:</strong> We support and contribute to the communities we serve.</li>
                 </ul>
+                
+                <h2>Our Location</h2>
+                <p><i class="fas fa-map-marker-alt"></i> Bandar Laguna Merbok, Sungai Petani, Kedah</p>
+                <p><i class="fas fa-phone"></i> +6013-4036123</p>
+                <p><i class="fas fa-envelope"></i> pnearena@outlook.com</p>
+                <p><i class="fas fa-clock"></i> Business Hours: Mon–Fri: 9am–6pm</p>
             </div>
-            <div class="footer-column">
-                <h4>Customer Service</h4>
-                <ul>
-                    <li><a href="#" id="contact-us">Contact Us</a></li>
-                    <li><a href="#" id="faqs">FAQs</a></li>
-                    <li><a href="#" id="shipping">Shipping Policy</a></li>
-                    <li><a href="#" id="returns">Returns & Exchanges</a></li>
-                    <li><a href="#" id="privacy">Privacy Policy</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h4>Contact Info</h4>
-                <ul>
-                    <li><i class="fas fa-map-marker-alt"></i> 123 Education St, Learning City</li>
-                    <li><i class="fas fa-phone"></i> (123) 456-7890</li>
-                    <li><i class="fas fa-envelope"></i> info@pnearna.com</li>
-                    <li><i class="fas fa-clock"></i> Mon-Fri: 9am-6pm</li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2023 PNE Arena. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for students</p>
-        </div>
-    </footer>
-    
-    <!-- Cart Modal -->
-    <div class="cart-modal" id="cart-modal">
-        <div class="cart-content">
-            <div class="cart-header">
-                <h2>Your Shopping Cart</h2>
-                <button class="close-cart" id="close-cart">&times;</button>
-            </div>
-            <div class="cart-items-container" id="cart-items">
-                <!-- Cart items will be dynamically added here -->
-            </div>
-            <div class="cart-summary" id="cart-summary" style="display: none;">
-                <div class="cart-total">
-                    <span>Total:</span>
-                    <span id="cart-total">$0.00</span>
+        </section>
+        
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>About PNE Arena</h4>
+                    <p>Established in 2005, PNE ARENA has grown to become a trusted name in custom products and school supplies. With nearly 20 years of experience, we remain active in both online and offline markets.</p>
+                    <div class="social-links">
+                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://pinterest.com" target="_blank"><i class="fab fa-pinterest"></i></a>
+                    </div>
                 </div>
-                <button class="checkout-button" id="checkout-button">Proceed to Checkout</button>
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#" data-page="about">About</a></li>
+                        <li><a href="#" data-page="shop">Shop All</a></li>
+                        <li><a href="#" data-page="new-arrivals">New Arrivals</a></li>
+                        <li><a href="#" data-page="best-sellers">Best Sellers</a></li>
+                        <li><a href="#" data-page="sale-items">Sale Items</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="#" data-page="contact">Contact Us</a></li>
+                        <li><a href="#" data-page="faqs">FAQs</a></li>
+                        <li><a href="#" data-page="shipping">Shipping Policy</a></li>
+                        <li><a href="#" data-page="returns">Returns & Exchanges</a></li>
+                        <li><a href="#" data-page="privacy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Bandar Laguna Merbok, Sungai Petani, Kedah</li>
+                        <li><i class="fas fa-phone"></i> +6013-4036123</li>
+                        <li><i class="fas fa-envelope"></i> pnearena@outlook.com</li>
+                        <li><i class="fas fa-clock"></i> Mon–Fri: 9am–6pm</li>
+                    </ul>
+                </div>
             </div>
-            <div class="empty-cart" id="empty-cart">
-                <i class="fas fa-shopping-cart"></i>
-                <p>Your cart is empty</p>
+            <div class="footer-bottom">
+                <p>&copy; 2023 PNE Arena. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for students</p>
             </div>
-        </div>
+        </footer>
+    </div>
+    
+    <!-- Contact Page -->
+    <div class="page" id="contact-page">
+        <section class="content-page">
+            <div class="content-container">
+                <h1>Contact Us</h1>
+                <p>We'd love to hear from you! Please feel free to reach out to us using the contact information below or by filling out the contact form.</p>
+                
+                <h2>Contact Information</h2>
+                <p><i class="fas fa-map-marker-alt"></i> <strong>Address:</strong> Bandar Laguna Merbok, Sungai Petani, Kedah</p>
+                <p><i class="fas fa-phone"></i> <strong>Phone:</strong> +6013-4036123</p>
+                <p><i class="fas fa-envelope"></i> <strong>Email:</strong> pnearena@outlook.com</p>
+                <p><i class="fas fa-clock"></i> <strong>Business Hours:</strong> Mon–Fri: 9am–6pm</p>
+                
+                <h2>Send Us a Message</h2>
+                <form class="contact-form" id="contact-form">
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">Subject:</label>
+                        <input type="text" id="subject" name="subject" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Message:</label>
+                        <textarea id="message" name="message" rows="5" required></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </div>
+                </form>
+                
+                <div id="form-notice" class="notice" style="display: none; margin-top: 20px;">
+                    <i class="fas fa-check-circle"></i>
+                    <p>Thank you for your message! We'll get back to you soon.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>About PNE Arena</h4>
+                    <p>Established in 2005, PNE ARENA has grown to become a trusted name in custom products and school supplies. With nearly 20 years of experience, we remain active in both online and offline markets.</p>
+                    <div class="social-links">
+                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://pinterest.com" target="_blank"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#" data-page="about">About</a></li>
+                        <li><a href="#" data-page="shop">Shop All</a></li>
+                        <li><a href="#" data-page="new-arrivals">New Arrivals</a></li>
+                        <li><a href="#" data-page="best-sellers">Best Sellers</a></li>
+                        <li><a href="#" data-page="sale-items">Sale Items</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="#" data-page="contact">Contact Us</a></li>
+                        <li><a href="#" data-page="faqs">FAQs</a></li>
+                        <li><a href="#" data-page="shipping">Shipping Policy</a></li>
+                        <li><a href="#" data-page="returns">Returns & Exchanges</a></li>
+                        <li><a href="#" data-page="privacy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Bandar Laguna Merbok, Sungai Petani, Kedah</li>
+                        <li><i class="fas fa-phone"></i> +6013-4036123</li>
+                        <li><i class="fas fa-envelope"></i> pnearena@outlook.com</li>
+                        <li><i class="fas fa-clock"></i> Mon–Fri: 9am–6pm</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 PNE Arena. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for students</p>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- New Arrivals Page -->
+    <div class="page" id="new-arrivals-page">
+        <section class="categories">
+            <div class="section-header">
+                <h2 class="section-title">New Arrivals</h2>
+                <p class="section-subtitle">Check out our latest products and additions</p>
+            </div>
+            <div class="categories-grid">
+                <div class="category-card" data-page="corporate-shirt">
+                    <div class="category-image">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="category-info">
+                        <h3>Custom Made Corporate Shirt</h3>
+                        <p>Professional corporate shirts with custom designs</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+                <div class="category-card" data-page="t-shirt-printing">
+                    <div class="category-image">
+                        <i class="fas fa-tshirt"></i>
+                    </div>
+                    <div class="category-info">
+                        <h3>T-Shirt Printing</h3>
+                        <p>Custom t-shirt printing for all occasions</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+                <div class="category-card" data-page="keychain">
+                    <div class="category-image">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <div class="category-info">
+                        <h3>Custom Made Keychain</h3>
+                        <p>Personalized keychains in various designs</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>About PNE Arena</h4>
+                    <p>Established in 2005, PNE ARENA has grown to become a trusted name in custom products and school supplies. With nearly 20 years of experience, we remain active in both online and offline markets.</p>
+                    <div class="social-links">
+                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://pinterest.com" target="_blank"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#" data-page="about">About</a></li>
+                        <li><a href="#" data-page="shop">Shop All</a></li>
+                        <li><a href="#" data-page="new-arrivals">New Arrivals</a></li>
+                        <li><a href="#" data-page="best-sellers">Best Sellers</a></li>
+                        <li><a href="#" data-page="sale-items">Sale Items</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="#" data-page="contact">Contact Us</a></li>
+                        <li><a href="#" data-page="faqs">FAQs</a></li>
+                        <li><a href="#" data-page="shipping">Shipping Policy</a></li>
+                        <li><a href="#" data-page="returns">Returns & Exchanges</a></li>
+                        <li><a href="#" data-page="privacy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Bandar Laguna Merbok, Sungai Petani, Kedah</li>
+                        <li><i class="fas fa-phone"></i> +6013-4036123</li>
+                        <li><i class="fas fa-envelope"></i> pnearena@outlook.com</li>
+                        <li><i class="fas fa-clock"></i> Mon–Fri: 9am–6pm</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 PNE Arena. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for students</p>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Best Sellers Page -->
+    <div class="page" id="best-sellers-page">
+        <section class="categories">
+            <div class="section-header">
+                <h2 class="section-title">Best Sellers</h2>
+                <p class="section-subtitle">Our most popular products loved by customers</p>
+            </div>
+            <div class="categories-grid">
+                <div class="category-card" data-page="convocation-robe">
+                    <div class="category-image">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="category-info">
+                        <h3>Custom Made Convocation Robe</h3>
+                        <p>Premium quality convocation robes in various colors</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+                <div class="category-card" data-page="towel">
+                    <div class="category-image">
+                        <i class="fas fa-hand-paper"></i>
+                    </div>
+                    <div class="category-info">
+                        <h3>Towel</h3>
+                        <p>Quality towels with optional embroidery</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+                <div class="category-card" data-page="nametag">
+                    <div class="category-image">
+                        <i class="fas fa-id-card"></i>
+                    </div>
+                    <div class="category-info">
+                        <h3>Custom Made Nametag</h3>
+                        <p>Professional nametags for corporate and events</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>About PNE Arena</h4>
+                    <p>Established in 2005, PNE ARENA has grown to become a trusted name in custom products and school supplies. With nearly 20 years of experience, we remain active in both online and offline markets.</p>
+                    <div class="social-links">
+                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://pinterest.com" target="_blank"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#" data-page="about">About</a></li>
+                        <li><a href="#" data-page="shop">Shop All</a></li>
+                        <li><a href="#" data-page="new-arrivals">New Arrivals</a></li>
+                        <li><a href="#" data-page="best-sellers">Best Sellers</a></li>
+                        <li><a href="#" data-page="sale-items">Sale Items</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="#" data-page="contact">Contact Us</a></li>
+                        <li><a href="#" data-page="faqs">FAQs</a></li>
+                        <li><a href="#" data-page="shipping">Shipping Policy</a></li>
+                        <li><a href="#" data-page="returns">Returns & Exchanges</a></li>
+                        <li><a href="#" data-page="privacy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Bandar Laguna Merbok, Sungai Petani, Kedah</li>
+                        <li><i class="fas fa-phone"></i> +6013-4036123</li>
+                        <li><i class="fas fa-envelope"></i> pnearena@outlook.com</li>
+                        <li><i class="fas fa-clock"></i> Mon–Fri: 9am–6pm</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 PNE Arena. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for students</p>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Sale Items Page -->
+    <div class="page" id="sale-items-page">
+        <section class="categories">
+            <div class="section-header">
+                <h2 class="section-title">Sale Items</h2>
+                <p class="section-subtitle">Special offers and discounted products</p>
+            </div>
+            <div class="categories-grid">
+                <div class="category-card" data-page="medal-trophy">
+                    <div class="category-image">
+                        <i class="fas fa-medal"></i>
+                    </div>
+                    <div class="category-info">
+                        <h3>Medal / Trophy</h3>
+                        <p>Custom medals and trophies for events</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+                <div class="category-card" data-page="keychain">
+                    <div class="category-image">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <div class="category-info">
+                        <h3>Custom Made Keychain</h3>
+                        <p>Personalized keychains in various designs</p>
+                        <span class="category-link">Shop Now <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>About PNE Arena</h4>
+                    <p>Established in 2005, PNE ARENA has grown to become a trusted name in custom products and school supplies. With nearly 20 years of experience, we remain active in both online and offline markets.</p>
+                    <div class="social-links">
+                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://pinterest.com" target="_blank"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#" data-page="about">About</a></li>
+                        <li><a href="#" data-page="shop">Shop All</a></li>
+                        <li><a href="#" data-page="new-arrivals">New Arrivals</a></li>
+                        <li><a href="#" data-page="best-sellers">Best Sellers</a></li>
+                        <li><a href="#" data-page="sale-items">Sale Items</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="#" data-page="contact">Contact Us</a></li>
+                        <li><a href="#" data-page="faqs">FAQs</a></li>
+                        <li><a href="#" data-page="shipping">Shipping Policy</a></li>
+                        <li><a href="#" data-page="returns">Returns & Exchanges</a></li>
+                        <li><a href="#" data-page="privacy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Bandar Laguna Merbok, Sungai Petani, Kedah</li>
+                        <li><i class="fas fa-phone"></i> +6013-4036123</li>
+                        <li><i class="fas fa-envelope"></i> pnearena@outlook.com</li>
+                        <li><i class="fas fa-clock"></i> Mon–Fri: 9am–6pm</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 PNE Arena. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for students</p>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- FAQs Page -->
+    <div class="page" id="faqs-page">
+        <section class="content-page">
+            <div class="content-container">
+                <h1>Frequently Asked Questions</h1>
+                
+                <h2>General Questions</h2>
+                <p><strong>Q: How long has PNE Arena been in business?</strong></p>
+                <p>A: PNE Arena was established in 2005, bringing nearly 20 years of experience in custom products and school supplies.</p>
+                
+                <p><strong>Q: Where is your showroom located?</strong></p>
+                <p>A: Our official showroom is located in Bandar Laguna Merbok, Sungai Petani, Kedah.</p>
+                
+                <p><strong>Q: What are your business hours?</strong></p>
+                <p>A: We are open Monday to Friday, from 9am to 6pm.</p>
+                
+                <h2>Products & Services</h2>
+                <p><strong>Q: What types of custom products do you offer?</strong></p>
+                <p>A: We offer a wide range of custom products including convocation robes, t-shirt printing, medals/trophies, towels with embroidery, keychains, nametags, and corporate shirts.</p>
+                
+                <p><strong>Q: How do I place an order?</strong></p>
+                <p>A: You can place an order by visiting our product pages, filling in your requirements, and clicking the "Checkout via WhatsApp" button to send your order details directly to us.</p>
+                
+                <p><strong>Q: Can I see samples before placing a bulk order?</strong></p>
+                <p>A: Yes, we can provide samples for bulk orders. Please contact us via WhatsApp to discuss sample requests.</p>
+                
+                <h2>Payment & Pricing</h2>
+                <p><strong>Q: How is pricing determined for custom products?</strong></p>
+                <p>A: Pricing varies based on product type, quantity, customization requirements, and materials used. We provide quotes after reviewing your specific requirements.</p>
+                
+                <p><strong>Q: What payment methods do you accept?</strong></p>
+                <p>A: We accept various payment methods including bank transfers, cash payments at our showroom, and online payment options. Details will be provided when you contact us.</p>
+                
+                <h2>Shipping & Delivery</h2>
+                <p><strong>Q: Do you offer shipping?</strong></p>
+                <p>A: Yes, we offer shipping throughout Malaysia. Shipping costs and delivery times vary based on location and order size.</p>
+                
+                <p><strong>Q: How long does it take to complete custom orders?</strong></p>
+                <p>A: Production time varies depending on the product and order quantity. Typically, custom orders take 7-14 business days to complete. We'll provide a specific timeline when you place your order.</p>
+                
+                <h2>Returns & Exchanges</h2>
+                <p><strong>Q: What is your return policy?</strong></p>
+                <p>A: Due to the custom nature of our products, we generally do not accept returns or exchanges. However, if there's an issue with your order, please contact us immediately, and we'll work to resolve it.</p>
+                
+                <p><strong>Q: What if my order is damaged or incorrect?</strong></p>
+                <p>A: If your order arrives damaged or incorrect, please contact us within 48 hours of receipt. We'll arrange for a replacement or correction at no additional cost.</p>
+                
+                <h2>Still Have Questions?</h2>
+                <p>If you didn't find the answer to your question, please don't hesitate to <a href="#" data-page="contact">contact us</a> directly. We're here to help!</p>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>About PNE Arena</h4>
+                    <p>Established in 2005, PNE ARENA has grown to become a trusted name in custom products and school supplies. With nearly 20 years of experience, we remain active in both online and offline markets.</p>
+                    <div class="social-links">
+                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://pinterest.com" target="_blank"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#" data-page="about">About</a></li>
+                        <li><a href="#" data-page="shop">Shop All</a></li>
+                        <li><a href="#" data-page="new-arrivals">New Arrivals</a></li>
+                        <li><a href="#" data-page="best-sellers">Best Sellers</a></li>
+                        <li><a href="#" data-page="sale-items">Sale Items</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="#" data-page="contact">Contact Us</a></li>
+                        <li><a href="#" data-page="faqs">FAQs</a></li>
+                        <li><a href="#" data-page="shipping">Shipping Policy</a></li>
+                        <li><a href="#" data-page="returns">Returns & Exchanges</a></li>
+                        <li><a href="#" data-page="privacy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Bandar Laguna Merbok, Sungai Petani, Kedah</li>
+                        <li><i class="fas fa-phone"></i> +6013-4036123</li>
+                        <li><i class="fas fa-envelope"></i> pnearena@outlook.com</li>
+                        <li><i class="fas fa-clock"></i> Mon–Fri: 9am–6pm</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 PNE Arena. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for students</p>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Shipping Policy Page -->
+    <div class="page" id="shipping-page">
+        <section class="content-page">
+            <div class="content-container">
+                <h1>Shipping Policy</h1>
+                
+                <h2>Shipping Methods</h2>
+                <p>We offer several shipping options to meet your needs:</p>
+                <ul>
+                    <li><strong>Standard Shipping:</strong> 5-7 business days</li>
+                    <li><strong>Express Shipping:</strong> 2-3 business days</li>
+                    <li><strong>Same Day Delivery:</strong> Available for Sungai Petani area only (additional charges apply)</li>
+                </ul>
+                
+                <h2>Shipping Rates</h2>
+                <p>Shipping rates are calculated based on:</p>
+                <ul>
+                    <li>Order weight and dimensions</li>
+                    <li>Delivery location</li>
+                    <li>Selected shipping method</li>
+                </ul>
+                <p>Free shipping is available for orders over RM200 within Peninsular Malaysia.</p>
+                
+                <h2>Processing Time</h2>
+                <p>Please note that processing time is separate from shipping time:</p>
+                <ul>
+                    <li><strong>Standard Products:</strong> 1-2 business days</li>
+                    <li><strong>Custom Products:</strong> 7-14 business days (depending on complexity)</li>
+                </ul>
+                <p>Custom products require additional time for production before they can be shipped.</p>
+                
+                <h2>Order Tracking</h2>
+                <p>Once your order is shipped, you will receive a tracking number via email or WhatsApp. You can use this number to track your package on the courier's website.</p>
+                
+                <h2>Delivery Areas</h2>
+                <p>We ship to all locations within Malaysia, including:</p>
+                <ul>
+                    <li>Peninsular Malaysia</li>
+                    <li>Sabah & Sarawak</li>
+                    <li>Labuan</li>
+                </ul>
+                <p>International shipping is not available at this time.</p>
+                
+                <h2>Delivery Issues</h2>
+                <p>If you experience any issues with your delivery, please contact us immediately:</p>
+                <ul>
+                    <li><strong>Wrong Address:</strong> Please double-check your shipping address before confirming your order. We are not responsible for deliveries to incorrect addresses provided by customers.</li>
+                    <li><strong>Failed Delivery Attempts:</strong> If delivery fails due to customer unavailability, additional charges may apply for redelivery.</li>
+                    <li><strong>Lost Packages:</strong> In the rare event that your package is lost in transit, we will work with the courier to locate it or arrange for a replacement.</li>
+                </ul>
+                
+                <h2>Special Instructions</h2>
+                <p>If you have special delivery instructions, please include them when placing your order. While we'll do our best to accommodate requests, we cannot guarantee that all special instructions will be fulfilled by the courier.</p>
+                
+                <h2>Questions?</h2>
+                <p>If you have any questions about our shipping policy, please don't hesitate to <a href="#" data-page="contact">contact us</a>.</p>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>About PNE Arena</h4>
+                    <p>Established in 2005, PNE ARENA has grown to become a trusted name in custom products and school supplies. With nearly 20 years of experience, we remain active in both online and offline markets.</p>
+                    <div class="social-links">
+                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://pinterest.com" target="_blank"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#" data-page="about">About</a></li>
+                        <li><a href="#" data-page="shop">Shop All</a></li>
+                        <li><a href="#" data-page="new-arrivals">New Arrivals</a></li>
+                        <li><a href="#" data-page="best-sellers">Best Sellers</a></li>
+                        <li><a href="#" data-page="sale-items">Sale Items</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="#" data-page="contact">Contact Us</a></li>
+                        <li><a href="#" data-page="faqs">FAQs</a></li>
+                        <li><a href="#" data-page="shipping">Shipping Policy</a></li>
+                        <li><a href="#" data-page="returns">Returns & Exchanges</a></li>
+                        <li><a href="#" data-page="privacy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Bandar Laguna Merbok, Sungai Petani, Kedah</li>
+                        <li><i class="fas fa-phone"></i> +6013-4036123</li>
+                        <li><i class="fas fa-envelope"></i> pnearena@outlook.com</li>
+                        <li><i class="fas fa-clock"></i> Mon–Fri: 9am–6pm</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 PNE Arena. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for students</p>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Returns & Exchanges Page -->
+    <div class="page" id="returns-page">
+        <section class="content-page">
+            <div class="content-container">
+                <h1>Returns & Exchanges</h1>
+                
+                <h2>General Policy</h2>
+                <p>At PNE Arena, we strive to provide high-quality custom products that meet your expectations. However, we understand that sometimes issues may arise. Please review our return and exchange policy below.</p>
+                
+                <h2>Custom Products</h2>
+                <p>Due to the personalized nature of custom products, we generally do not accept returns or exchanges unless:</p>
+                <ul>
+                    <li>The product is defective or damaged upon arrival</li>
+                    <li>There is an error in the customization (e.g., wrong name, spelling mistake) that was made by us</li>
+                    <li>The product does not match the specifications provided in your order</li>
+                </ul>
+                
+                <h2>Standard Products</h2>
+                <p>For non-customized standard products, we accept returns or exchanges within 7 days of delivery, provided that:</p>
+                <ul>
+                    <li>The product is unused and in its original condition</li>
+                    <li>All original packaging and tags are intact</li>
+                    <li>You provide proof of purchase</li>
+                </ul>
+                
+                <h2>How to Initiate a Return or Exchange</h2>
+                <p>If you believe your order qualifies for a return or exchange, please follow these steps:</p>
+                <ol>
+                    <li>Contact us via WhatsApp at +6013-4036123 within 48 hours of receiving your order</li>
+                    <li>Provide your order number and a clear description of the issue</li>
+                    <li>Include photos or videos showing the problem (if applicable)</li>
+                    <li>Wait for our response and further instructions</li>
+                </ol>
+                
+                <h2>Refund Process</h2>
+                <p>If your return is approved, we will process your refund within 5-7 business days. Refunds will be issued to the original payment method used for the purchase.</p>
+                
+                <h2>Exchange Process</h2>
+                <p>For approved exchanges, we will send you a replacement product as soon as possible. In some cases, we may ask you to return the original product first.</p>
+                
+                <h2>Shipping Costs</h2>
+                <ul>
+                    <li>If the return or exchange is due to our error, we will cover all shipping costs</li>
+                    <li>If the return or exchange is due to customer error or preference, the customer is responsible for return shipping costs</li>
+                </ul>
+                
+                <h2>Exceptions</h2>
+                <p>The following items cannot be returned or exchanged:</p>
+                <ul>
+                    <li>Custom products that have been correctly produced according to customer specifications</li>
+                    <li>Products that have been used, altered, or damaged by the customer</li>
+                    <li>Products returned after the 7-day window</li>
+                    <li>Products without proof of purchase</li>
+                </ul>
+                
+                <h2>Contact Information</h2>
+                <p>If you have any questions about our return and exchange policy, please contact us:</p>
+                <p><i class="fas fa-phone"></i> +6013-4036123<br>
+                <i class="fas fa-envelope"></i> pnearena@outlook.com</p>
+                
+                <h2>Policy Updates</h2>
+                <p>PNE Arena reserves the right to update this return and exchange policy at any time. Any changes will be posted on this page with an updated revision date.</p>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>About PNE Arena</h4>
+                    <p>Established in 2005, PNE ARENA has grown to become a trusted name in custom products and school supplies. With nearly 20 years of experience, we remain active in both online and offline markets.</p>
+                    <div class="social-links">
+                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://pinterest.com" target="_blank"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#" data-page="about">About</a></li>
+                        <li><a href="#" data-page="shop">Shop All</a></li>
+                        <li><a href="#" data-page="new-arrivals">New Arrivals</a></li>
+                        <li><a href="#" data-page="best-sellers">Best Sellers</a></li>
+                        <li><a href="#" data-page="sale-items">Sale Items</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="#" data-page="contact">Contact Us</a></li>
+                        <li><a href="#" data-page="faqs">FAQs</a></li>
+                        <li><a href="#" data-page="shipping">Shipping Policy</a></li>
+                        <li><a href="#" data-page="returns">Returns & Exchanges</a></li>
+                        <li><a href="#" data-page="privacy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Bandar Laguna Merbok, Sungai Petani, Kedah</li>
+                        <li><i class="fas fa-phone"></i> +6013-4036123</li>
+                        <li><i class="fas fa-envelope"></i> pnearena@outlook.com</li>
+                        <li><i class="fas fa-clock"></i> Mon–Fri: 9am–6pm</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 PNE Arena. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for students</p>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Privacy Policy Page -->
+    <div class="page" id="privacy-page">
+        <section class="content-page">
+            <div class="content-container">
+                <h1>Privacy Policy</h1>
+                
+                <h2>Introduction</h2>
+                <p>At PNE Arena, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy outlines how we collect, use, disclose, and safeguard your information when you visit our website or use our services.</p>
+                
+                <h2>Information We Collect</h2>
+                <p>We may collect the following types of information:</p>
+                
+                <h3>Personal Information</h3>
+                <ul>
+                    <li>Name and contact information (phone number, email address)</li>
+                    <li>Shipping and billing address</li>
+                    <li>Order information and customization details</li>
+                    <li>Payment information (processed securely through third-party providers)</li>
+                </ul>
+                
+                <h3>Automatically Collected Information</h3>
+                <ul>
+                    <li>IP address and browser information</li>
+                    <li>Device information and operating system</li>
+                    <li>Pages visited and time spent on our website</li>
+                    <li>Referring websites</li>
+                </ul>
+                
+                <h2>How We Use Your Information</h2>
+                <p>We use the collected information for the following purposes:</p>
+                <ul>
+                    <li>To process and fulfill your orders</li>
+                    <li>To communicate with you about your orders</li>
+                    <li>To provide customer support</li>
+                    <li>To improve our products and services</li>
+                    <li>To send promotional communications (with your consent)</li>
+                    <li>To comply with legal obligations</li>
+                </ul>
+                
+                <h2>Information Sharing</h2>
+                <p>We do not sell, rent, or trade your personal information. We may share your information only in the following circumstances:</p>
+                <ul>
+                    <li>With service providers who assist in order processing and fulfillment</li>
+                    <li>With payment processors to complete transactions</li>
+                    <li>As required by law or to protect our rights</li>
+                    <li>With your explicit consent</li>
+                </ul>
+                
+                <h2>Data Security</h2>
+                <p>We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. These include:</p>
+                <ul>
+                    <li>Secure servers and encryption technologies</li>
+                    <li>Restricted access to personal information</li>
+                    <li>Regular security assessments</li>
+                    <li>Employee training on data protection</li>
+                </ul>
+                
+                <h2>Cookies and Tracking Technologies</h2>
+                <p>Our website uses cookies and similar tracking technologies to enhance your browsing experience and analyze website traffic. You can manage your cookie preferences through your browser settings.</p>
+                
+                <h2>Third-Party Links</h2>
+                <p>Our website may contain links to third-party websites. We are not responsible for the privacy practices of these external sites. We encourage you to review the privacy policies of any third-party websites you visit.</p>
+                
+                <h2>Your Rights</h2>
+                <p>You have the following rights regarding your personal information:</p>
+                <ul>
+                    <li>Access to your personal information</li>
+                    <li>Correction of inaccurate information</li>
+                    <li>Deletion of your personal information (subject to legal requirements)</li>
+                    <li>Opt-out of marketing communications</li>
+                    <li>File a complaint with a supervisory authority</li>
+                </ul>
+                
+                <h2>Children's Privacy</h2>
+                <p>Our services are not intended for individuals under the age of 18. We do not knowingly collect personal information from children. If you believe we have collected information from a child, please contact us immediately.</p>
+                
+                <h2>International Data Transfers</h2>
+                <p>Your information may be transferred to and processed in countries other than your country of residence. We ensure that appropriate safeguards are in place to protect your information during such transfers.</p>
+                
+                <h2>Changes to This Policy</h2>
+                <p>We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated revision date. We encourage you to review this policy periodically.</p>
+                
+                <h2>Contact Us</h2>
+                <p>If you have any questions or concerns about this Privacy Policy, please contact us:</p>
+                <p><i class="fas fa-envelope"></i> pnearena@outlook.com<br>
+                <i class="fas fa-phone"></i> +6013-4036123</p>
+                
+                <p><strong>Last Updated:</strong> January 2024</p>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>About PNE Arena</h4>
+                    <p>Established in 2005, PNE ARENA has grown to become a trusted name in custom products and school supplies. With nearly 20 years of experience, we remain active in both online and offline markets.</p>
+                    <div class="social-links">
+                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://pinterest.com" target="_blank"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#" data-page="about">About</a></li>
+                        <li><a href="#" data-page="shop">Shop All</a></li>
+                        <li><a href="#" data-page="new-arrivals">New Arrivals</a></li>
+                        <li><a href="#" data-page="best-sellers">Best Sellers</a></li>
+                        <li><a href="#" data-page="sale-items">Sale Items</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="#" data-page="contact">Contact Us</a></li>
+                        <li><a href="#" data-page="faqs">FAQs</a></li>
+                        <li><a href="#" data-page="shipping">Shipping Policy</a></li>
+                        <li><a href="#" data-page="returns">Returns & Exchanges</a></li>
+                        <li><a href="#" data-page="privacy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Bandar Laguna Merbok, Sungai Petani, Kedah</li>
+                        <li><i class="fas fa-phone"></i> +6013-4036123</li>
+                        <li><i class="fas fa-envelope"></i> pnearena@outlook.com</li>
+                        <li><i class="fas fa-clock"></i> Mon–Fri: 9am–6pm</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 PNE Arena. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for students</p>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Product Pages -->
+    
+    <!-- Convocation Robe Page -->
+    <div class="page" id="convocation-robe-page">
+        <section class="product-page">
+            <div class="product-container">
+                <div class="product-image">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="product-details">
+                    <h1>Custom Made Convocation Robe</h1>
+                    <p class="product-description">Premium quality convocation robes tailored to your specifications. Available in various colors and sizes.</p>
+                    
+                    <form id="convocation-robe-form">
+                        <div class="form-group">
+                            <label for="color">Choose Colour:</label>
+                            <select id="color" name="color" required>
+                                <option value="">Select a color</option>
+                                <option value="Black">Black</option>
+                                <option value="Blue">Blue</option>
+                                <option value="Green">Green</option>
+                                <option value="Red">Red</option>
+                                <option value="Purple">Purple</option>
+                                <option value="Maroon">Maroon</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="remarks">Remarks:</label>
+                            <textarea id="remarks" name="remarks" rows="4" placeholder="Please provide your name, batch, measurements, and any other special requirements"></textarea>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Submit Remarks</button>
+                            <button type="button" class="btn btn-secondary" id="checkout-convocation-robe">Checkout via WhatsApp</button>
+                        </div>
+                    </form>
+                    
+                    <div id="notice-convocation-robe" class="notice" style="display: none;">
+                        <i class="fas fa-info-circle"></i>
+                        <p>Please contact via WhatsApp for more details.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>About PNE Arena</h4>
+                    <p>Established in 2005, PNE ARENA has grown to become a trusted name in custom products and school supplies. With nearly 20 years of experience, we remain active in both online and offline markets.</p>
+                    <div class="social-links">
+                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://pinterest.com" target="_blank"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#" data-page="about">About</a></li>
+                        <li><a href="#" data-page="shop">Shop All</a></li>
+                        <li><a href="#" data-page="new-arrivals">New Arrivals</a></li>
+                        <li><a href="#" data-page="best-sellers">Best Sellers</a></li>
+                        <li><a href="#" data-page="sale-items">Sale Items</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="#" data-page="contact">Contact Us</a></li>
+                        <li><a href="#" data-page="faqs">FAQs</a></li>
+                        <li><a href="#" data-page="shipping">Shipping Policy</a></li>
+                        <li><a href="#" data-page="returns">Returns & Exchanges</a></li>
+                        <li><a href="#" data-page="privacy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Bandar Laguna Merbok, Sungai Petani, Kedah</li>
+                        <li><i class="fas fa-phone"></i> +6013-4036123</li>
+                        <li><i class="fas fa-envelope"></i> pnearena@outlook.com</li>
+                        <li><i class="fas fa-clock"></i> Mon–Fri: 9am–6pm</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 PNE Arena. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for students</p>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- T-Shirt Printing Page -->
+    <div class="page" id="t-shirt-printing-page">
+        <section class="product-page">
+            <div class="product-container">
+                <div class="product-image">
+                    <i class="fas fa-tshirt"></i>
+                </div>
+                <div class="product-details">
+                    <h1>T-Shirt Printing</h1>
+                    <p class="product-description">Custom t-shirt printing for all occasions. High-quality prints with various design options available.</p>
+                    
+                    <form id="t-shirt-printing-form">
+                        <div class="form-group">
+                            <label for="remarks">Remarks:</label>
+                            <textarea id="remarks" name="remarks" rows="4" placeholder="Please provide design details, quantity, type of print, and any other requirements"></textarea>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Submit Remarks</button>
+                            <button type="button" class="btn btn-secondary" id="checkout-t-shirt-printing">Checkout via WhatsApp</button>
+                        </div>
+                    </form>
+                    
+                    <div id="notice-t-shirt-printing" class="notice" style="display: none;">
+                        <i class="fas fa-info-circle"></i>
+                        <p>Please contact via WhatsApp for more details.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>About PNE Arena</h4>
+                    <p>Established in 2005, PNE ARENA has grown to become a trusted name in custom products and school supplies. With nearly 20 years of experience, we remain active in both online and offline markets.</p>
+                    <div class="social-links">
+                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://pinterest.com" target="_blank"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#" data-page="about">About</a></li>
+                        <li><a href="#" data-page="shop">Shop All</a></li>
+                        <li><a href="#" data-page="new-arrivals">New Arrivals</a></li>
+                        <li><a href="#" data-page="best-sellers">Best Sellers</a></li>
+                        <li><a href="#" data-page="sale-items">Sale Items</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="#" data-page="contact">Contact Us</a></li>
+                        <li><a href="#" data-page="faqs">FAQs</a></li>
+                        <li><a href="#" data-page="shipping">Shipping Policy</a></li>
+                        <li><a href="#" data-page="returns">Returns & Exchanges</a></li>
+                        <li><a href="#" data-page="privacy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Bandar Laguna Merbok, Sungai Petani, Kedah</li>
+                        <li><i class="fas fa-phone"></i> +6013-4036123</li>
+                        <li><i class="fas fa-envelope"></i> pnearena@outlook.com</li>
+                        <li><i class="fas fa-clock"></i> Mon–Fri: 9am–6pm</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 PNE Arena. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for students</p>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Medal/Trophy Page -->
+    <div class="page" id="medal-trophy-page">
+        <section class="product-page">
+            <div class="product-container">
+                <div class="product-image">
+                    <i class="fas fa-medal"></i>
+                </div>
+                <div class="product-details">
+                    <h1>Medal / Trophy</h1>
+                    <p class="product-description">Custom medals and trophies for all events and competitions. High-quality materials with personalized engraving options.</p>
+                    
+                    <form id="medal-trophy-form">
+                        <div class="form-group">
+                            <label for="item">Type of Medal/Trophy:</label>
+                            <input type="text" id="item" name="item" placeholder="e.g., Gold medal, Glass trophy" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="remarks">Remarks:</label>
+                            <textarea id="remarks" name="remarks" rows="4" placeholder="Please provide event name, custom text, quantity, and any other requirements"></textarea>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Submit Remarks</button>
+                            <button type="button" class="btn btn-secondary" id="checkout-medal-trophy">Checkout via WhatsApp</button>
+                        </div>
+                    </form>
+                    
+                    <div id="notice-medal-trophy" class="notice" style="display: none;">
+                        <i class="fas fa-info-circle"></i>
+                        <p>Please contact via WhatsApp for more details.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>About PNE Arena</h4>
+                    <p>Established in 2005, PNE ARENA has grown to become a trusted name in custom products and school supplies. With nearly 20 years of experience, we remain active in both online and offline markets.</p>
+                    <div class="social-links">
+                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://pinterest.com" target="_blank"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#" data-page="about">About</a></li>
+                        <li><a href="#" data-page="shop">Shop All</a></li>
+                        <li><a href="#" data-page="new-arrivals">New Arrivals</a></li>
+                        <li><a href="#" data-page="best-sellers">Best Sellers</a></li>
+                        <li><a href="#" data-page="sale-items">Sale Items</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="#" data-page="contact">Contact Us</a></li>
+                        <li><a href="#" data-page="faqs">FAQs</a></li>
+                        <li><a href="#" data-page="shipping">Shipping Policy</a></li>
+                        <li><a href="#" data-page="returns">Returns & Exchanges</a></li>
+                        <li><a href="#" data-page="privacy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Bandar Laguna Merbok, Sungai Petani, Kedah</li>
+                        <li><i class="fas fa-phone"></i> +6013-4036123</li>
+                        <li><i class="fas fa-envelope"></i> pnearena@outlook.com</li>
+                        <li><i class="fas fa-clock"></i> Mon–Fri: 9am–6pm</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 PNE Arena. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for students</p>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Towel Page -->
+    <div class="page" id="towel-page">
+        <section class="product-page">
+            <div class="product-container">
+                <div class="product-image">
+                    <i class="fas fa-hand-paper"></i>
+                </div>
+                <div class="product-details">
+                    <h1>Towel</h1>
+                    <p class="product-description">High-quality towels with optional embroidery. Perfect for sports, schools, and corporate events.</p>
+                    
+                    <form id="towel-form">
+                        <div class="form-group">
+                            <label>Embroidery Option:</label>
+                            <div>
+                                <label style="display: inline-block; margin-right: 20px;">
+                                    <input type="radio" name="embroidery" value="Yes" checked> With Embroidery
+                                </label>
+                                <label style="display: inline-block;">
+                                    <input type="radio" name="embroidery" value="No"> Without Embroidery
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="remarks">Remarks:</label>
+                            <textarea id="remarks" name="remarks" rows="4" placeholder="Please provide name to embroider, quantity, and any other requirements"></textarea>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Submit Remarks</button>
+                            <button type="button" class="btn btn-secondary" id="checkout-towel">Checkout via WhatsApp</button>
+                        </div>
+                    </form>
+                    
+                    <div id="notice-towel" class="notice" style="display: none;">
+                        <i class="fas fa-info-circle"></i>
+                        <p>Please contact via WhatsApp for more details.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>About PNE Arena</h4>
+                    <p>Established in 2005, PNE ARENA has grown to become a trusted name in custom products and school supplies. With nearly 20 years of experience, we remain active in both online and offline markets.</p>
+                    <div class="social-links">
+                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://pinterest.com" target="_blank"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#" data-page="about">About</a></li>
+                        <li><a href="#" data-page="shop">Shop All</a></li>
+                        <li><a href="#" data-page="new-arrivals">New Arrivals</a></li>
+                        <li><a href="#" data-page="best-sellers">Best Sellers</a></li>
+                        <li><a href="#" data-page="sale-items">Sale Items</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="#" data-page="contact">Contact Us</a></li>
+                        <li><a href="#" data-page="faqs">FAQs</a></li>
+                        <li><a href="#" data-page="shipping">Shipping Policy</a></li>
+                        <li><a href="#" data-page="returns">Returns & Exchanges</a></li>
+                        <li><a href="#" data-page="privacy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Bandar Laguna Merbok, Sungai Petani, Kedah</li>
+                        <li><i class="fas fa-phone"></i> +6013-4036123</li>
+                        <li><i class="fas fa-envelope"></i> pnearena@outlook.com</li>
+                        <li><i class="fas fa-clock"></i> Mon–Fri: 9am–6pm</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 PNE Arena. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for students</p>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Keychain Page -->
+    <div class="page" id="keychain-page">
+        <section class="product-page">
+            <div class="product-container">
+                <div class="product-image">
+                    <i class="fas fa-key"></i>
+                </div>
+                <div class="product-details">
+                    <h1>Custom Made Keychain</h1>
+                    <p class="product-description">Personalized keychains in various shapes and materials. Perfect for gifts, promotions, and personal use.</p>
+                    
+                    <form id="keychain-form">
+                        <div class="form-group">
+                            <label for="remarks">Remarks:</label>
+                            <textarea id="remarks" name="remarks" rows="4" placeholder="Please provide name, shape, material, quantity, and any other requirements"></textarea>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Submit Remarks</button>
+                            <button type="button" class="btn btn-secondary" id="checkout-keychain">Checkout via WhatsApp</button>
+                        </div>
+                    </form>
+                    
+                    <div id="notice-keychain" class="notice" style="display: none;">
+                        <i class="fas fa-info-circle"></i>
+                        <p>Please contact via WhatsApp for more details.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>About PNE Arena</h4>
+                    <p>Established in 2005, PNE ARENA has grown to become a trusted name in custom products and school supplies. With nearly 20 years of experience, we remain active in both online and offline markets.</p>
+                    <div class="social-links">
+                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://pinterest.com" target="_blank"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#" data-page="about">About</a></li>
+                        <li><a href="#" data-page="shop">Shop All</a></li>
+                        <li><a href="#" data-page="new-arrivals">New Arrivals</a></li>
+                        <li><a href="#" data-page="best-sellers">Best Sellers</a></li>
+                        <li><a href="#" data-page="sale-items">Sale Items</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="#" data-page="contact">Contact Us</a></li>
+                        <li><a href="#" data-page="faqs">FAQs</a></li>
+                        <li><a href="#" data-page="shipping">Shipping Policy</a></li>
+                        <li><a href="#" data-page="returns">Returns & Exchanges</a></li>
+                        <li><a href="#" data-page="privacy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Bandar Laguna Merbok, Sungai Petani, Kedah</li>
+                        <li><i class="fas fa-phone"></i> +6013-4036123</li>
+                        <li><i class="fas fa-envelope"></i> pnearena@outlook.com</li>
+                        <li><i class="fas fa-clock"></i> Mon–Fri: 9am–6pm</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 PNE Arena. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for students</p>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Nametag Page -->
+    <div class="page" id="nametag-page">
+        <section class="product-page">
+            <div class="product-container">
+                <div class="product-image">
+                    <i class="fas fa-id-card"></i>
+                </div>
+                <div class="product-details">
+                    <h1>Custom Made Nametag</h1>
+                    <p class="product-description">Professional nametags for corporate and events. High-quality materials with various customization options.</p>
+                    
+                    <form id="nametag-form">
+                        <div class="form-group">
+                            <label for="remarks">Remarks:</label>
+                            <textarea id="remarks" name="remarks" rows="4" placeholder="Please provide name, colour, tag style, quantity, and any other requirements"></textarea>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Submit Remarks</button>
+                            <button type="button" class="btn btn-secondary" id="checkout-nametag">Checkout via WhatsApp</button>
+                        </div>
+                    </form>
+                    
+                    <div id="notice-nametag" class="notice" style="display: none;">
+                        <i class="fas fa-info-circle"></i>
+                        <p>Please contact via WhatsApp for more details.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>About PNE Arena</h4>
+                    <p>Established in 2005, PNE ARENA has grown to become a trusted name in custom products and school supplies. With nearly 20 years of experience, we remain active in both online and offline markets.</p>
+                    <div class="social-links">
+                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://pinterest.com" target="_blank"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#" data-page="about">About</a></li>
+                        <li><a href="#" data-page="shop">Shop All</a></li>
+                        <li><a href="#" data-page="new-arrivals">New Arrivals</a></li>
+                        <li><a href="#" data-page="best-sellers">Best Sellers</a></li>
+                        <li><a href="#" data-page="sale-items">Sale Items</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="#" data-page="contact">Contact Us</a></li>
+                        <li><a href="#" data-page="faqs">FAQs</a></li>
+                        <li><a href="#" data-page="shipping">Shipping Policy</a></li>
+                        <li><a href="#" data-page="returns">Returns & Exchanges</a></li>
+                        <li><a href="#" data-page="privacy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Bandar Laguna Merbok, Sungai Petani, Kedah</li>
+                        <li><i class="fas fa-phone"></i> +6013-4036123</li>
+                        <li><i class="fas fa-envelope"></i> pnearena@outlook.com</li>
+                        <li><i class="fas fa-clock"></i> Mon–Fri: 9am–6pm</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 PNE Arena. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for students</p>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Corporate Shirt Page -->
+    <div class="page" id="corporate-shirt-page">
+        <section class="product-page">
+            <div class="product-container">
+                <div class="product-image">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <div class="product-details">
+                    <h1>Custom Made Corporate Shirt</h1>
+                    <p class="product-description">Professional corporate shirts with custom designs. High-quality materials with various customization options.</p>
+                    
+                    <form id="corporate-shirt-form">
+                        <div class="form-group">
+                            <label for="size">Choose Size:</label>
+                            <select id="size" name="size" required>
+                                <option value="">Select a size</option>
+                                <option value="XS">XS</option>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="XL">XL</option>
+                                <option value="XXL">XXL</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="color">Choose Colour:</label>
+                            <select id="color" name="color" required>
+                                <option value="">Select a color</option>
+                                <option value="White">White</option>
+                                <option value="Black">Black</option>
+                                <option value="Blue">Blue</option>
+                                <option value="Gray">Gray</option>
+                                <option value="Navy">Navy</option>
+                                <option value="Red">Red</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="remarks">Remarks:</label>
+                            <textarea id="remarks" name="remarks" rows="4" placeholder="Please provide logo printing details, sleeve type, quantity, and any other requirements"></textarea>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Submit Remarks</button>
+                            <button type="button" class="btn btn-secondary" id="checkout-corporate-shirt">Checkout via WhatsApp</button>
+                        </div>
+                    </form>
+                    
+                    <div id="notice-corporate-shirt" class="notice" style="display: none;">
+                        <i class="fas fa-info-circle"></i>
+                        <p>Please contact via WhatsApp for more details.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>About PNE Arena</h4>
+                    <p>Established in 2005, PNE ARENA has grown to become a trusted name in custom products and school supplies. With nearly 20 years of experience, we remain active in both online and offline markets.</p>
+                    <div class="social-links">
+                        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://pinterest.com" target="_blank"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#" data-page="about">About</a></li>
+                        <li><a href="#" data-page="shop">Shop All</a></li>
+                        <li><a href="#" data-page="new-arrivals">New Arrivals</a></li>
+                        <li><a href="#" data-page="best-sellers">Best Sellers</a></li>
+                        <li><a href="#" data-page="sale-items">Sale Items</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Customer Service</h4>
+                    <ul>
+                        <li><a href="#" data-page="contact">Contact Us</a></li>
+                        <li><a href="#" data-page="faqs">FAQs</a></li>
+                        <li><a href="#" data-page="shipping">Shipping Policy</a></li>
+                        <li><a href="#" data-page="returns">Returns & Exchanges</a></li>
+                        <li><a href="#" data-page="privacy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact Info</h4>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Bandar Laguna Merbok, Sungai Petani, Kedah</li>
+                        <li><i class="fas fa-phone"></i> +6013-4036123</li>
+                        <li><i class="fas fa-envelope"></i> pnearena@outlook.com</li>
+                        <li><i class="fas fa-clock"></i> Mon–Fri: 9am–6pm</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 PNE Arena. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--accent-color);"></i> for students</p>
+            </div>
+        </footer>
     </div>
     
     <!-- Notification -->
@@ -1372,99 +2710,19 @@
     </div>
     
     <script>
-        // Sample product data
-        const products = [
-            {
-                id: 1,
-                name: "Premium Notebook Set",
-                description: "Set of 3 high-quality notebooks with durable covers",
-                price: 24.99,
-                icon: "fa-book",
-                badge: "Best Seller"
-            },
-            {
-                id: 2,
-                name: "Ergonomic Backpack",
-                description: "Comfortable backpack with multiple compartments",
-                price: 59.99,
-                icon: "fa-backpack",
-                badge: "New"
-            },
-            {
-                id: 3,
-                name: "Scientific Calculator",
-                description: "Advanced calculator for math and science classes",
-                price: 89.99,
-                icon: "fa-calculator",
-                badge: "Popular"
-            },
-            {
-                id: 4,
-                name: "Professional Pen Set",
-                description: "Set of 5 premium pens with different tip sizes",
-                price: 34.99,
-                icon: "fa-pen",
-                badge: "Sale"
-            },
-            {
-                id: 5,
-                name: "Art Supply Kit",
-                description: "Complete kit with paints, brushes, and sketchbook",
-                price: 49.99,
-                icon: "fa-palette",
-                badge: "Limited"
-            },
-            {
-                id: 6,
-                name: "Wireless Headphones",
-                description: "Noise-cancelling headphones for studying",
-                price: 129.99,
-                icon: "fa-headphones",
-                badge: "Premium"
-            },
-            {
-                id: 7,
-                name: "Laptop Sleeve",
-                description: "Protective sleeve for laptops up to 15 inches",
-                price: 29.99,
-                icon: "fa-laptop",
-                badge: "Essential"
-            },
-            {
-                id: 8,
-                name: "Desk Organizer Set",
-                description: "Set of organizers to keep your desk tidy",
-                price: 39.99,
-                icon: "fa-th-large",
-                badge: "New"
-            }
-        ];
-        
-        // Cart state
-        let cart = [];
-        
         // DOM elements
-        const productsGrid = document.getElementById('products-grid');
-        const cartIcon = document.getElementById('cart-icon');
-        const cartModal = document.getElementById('cart-modal');
-        const closeCart = document.getElementById('close-cart');
-        const cartItems = document.getElementById('cart-items');
-        const cartCount = document.getElementById('cart-count');
-        const cartTotal = document.getElementById('cart-total');
-        const cartSummary = document.getElementById('cart-summary');
-        const emptyCart = document.getElementById('empty-cart');
+        const loading = document.getElementById('loading');
         const notification = document.getElementById('notification');
         const notificationText = document.getElementById('notification-text');
-        const loading = document.getElementById('loading');
         
         // Initialize the page
         function init() {
             showLoading();
             setTimeout(() => {
                 hideLoading();
-                renderProducts();
-                setupEventListeners();
-                setupSmoothScrolling();
+                setupNavigation();
+                setupProductForms();
+                setupContactForm();
             }, 1500);
         }
         
@@ -1478,315 +2736,290 @@
             loading.classList.remove('show');
         }
         
-        // Setup smooth scrolling
-        function setupSmoothScrolling() {
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
+        // Setup navigation between pages
+        function setupNavigation() {
+            // Get all navigation links
+            const navLinks = document.querySelectorAll('[data-page]');
+            
+            // Add click event to each link
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
                     e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
+                    const targetPage = link.getAttribute('data-page');
+                    navigateToPage(targetPage);
+                });
+            });
+            
+            // Get all category cards
+            const categoryCards = document.querySelectorAll('.category-card');
+            
+            // Add click event to each category card
+            categoryCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const targetPage = card.getAttribute('data-page');
+                    navigateToPage(targetPage);
                 });
             });
         }
         
-        // Render products
-        function renderProducts() {
-            productsGrid.innerHTML = '';
-            products.forEach((product, index) => {
-                const productCard = document.createElement('div');
-                productCard.className = 'product-card';
-                productCard.style.animationDelay = `${index * 0.1}s`;
-                productCard.innerHTML = `
-                    ${product.badge ? `<div class="product-badge">${product.badge}</div>` : ''}
-                    <div class="product-image">
-                        <i class="fas ${product.icon}"></i>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-name">${product.name}</h3>
-                        <p class="product-description">${product.description}</p>
-                        <div class="product-price">$${product.price.toFixed(2)}</div>
-                        <button class="add-to-cart" data-id="${product.id}">
-                            <i class="fas fa-cart-plus"></i> Add to Cart
-                        </button>
-                    </div>
-                `;
-                productsGrid.appendChild(productCard);
-            });
-        }
-        
-        // Setup event listeners
-        function setupEventListeners() {
-            // Add to cart buttons
-            document.addEventListener('click', (e) => {
-                if (e.target.classList.contains('add-to-cart') || e.target.parentElement.classList.contains('add-to-cart')) {
-                    const button = e.target.classList.contains('add-to-cart') ? e.target : e.target.parentElement;
-                    const productId = parseInt(button.getAttribute('data-id'));
-                    addToCart(productId, button);
-                }
+        // Navigate to a specific page
+        function navigateToPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
+                page.classList.remove('active');
             });
             
-            // Cart icon
-            cartIcon.addEventListener('click', () => {
-                cartModal.style.display = 'flex';
-                renderCart();
-            });
-            
-            // Close cart
-            closeCart.addEventListener('click', () => {
-                cartModal.style.display = 'none';
-            });
-            
-            // Close cart when clicking outside
-            window.addEventListener('click', (e) => {
-                if (e.target === cartModal) {
-                    cartModal.style.display = 'none';
-                }
-            });
-            
-            // Logo link
-            document.getElementById('logo-link').addEventListener('click', (e) => {
-                e.preventDefault();
+            // Show the target page
+            const targetPage = document.getElementById(`${pageId}-page`);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                
+                // Scroll to top of the page
                 window.scrollTo({
                     top: 0,
                     behavior: 'smooth'
                 });
-            });
-            
-            // Shop now button
-            document.getElementById('shop-now-btn').addEventListener('click', (e) => {
-                e.preventDefault();
-                document.getElementById('shop').scrollIntoView({
-                    behavior: 'smooth'
+                
+                // Update active nav link
+                const navLinks = document.querySelectorAll('.nav-link');
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('data-page') === pageId) {
+                        link.classList.add('active');
+                    }
                 });
-            });
+            }
+        }
+        
+        // Setup product forms
+        function setupProductForms() {
+            // Convocation Robe Form
+            const convocationRobeForm = document.getElementById('convocation-robe-form');
+            const checkoutConvocationRobe = document.getElementById('checkout-convocation-robe');
+            const noticeConvocationRobe = document.getElementById('notice-convocation-robe');
+            let remarksSubmittedConvocationRobe = false;
             
-            // View deals button
-            document.getElementById('view-deals-btn').addEventListener('click', (e) => {
+            convocationRobeForm.addEventListener('submit', (e) => {
                 e.preventDefault();
-                showNotification('Deals coming soon!');
+                noticeConvocationRobe.style.display = 'block';
+                remarksSubmittedConvocationRobe = true;
+                
+                // Scroll to notice
+                noticeConvocationRobe.scrollIntoView({ behavior: 'smooth' });
             });
             
-            // Search icon
-            document.getElementById('search-icon').addEventListener('click', (e) => {
-                e.preventDefault();
-                showNotification('Search functionality coming soon!');
-            });
-            
-            // Category cards
-            document.querySelectorAll('.category-card').forEach(card => {
-                card.addEventListener('click', () => {
-                    const category = card.getAttribute('data-category');
-                    showNotification(`Browsing ${category} supplies...`);
-                    document.getElementById('shop').scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                });
-            });
-            
-            // Footer links
-            document.getElementById('new-arrivals').addEventListener('click', (e) => {
-                e.preventDefault();
-                showNotification('New arrivals coming soon!');
-            });
-            
-            document.getElementById('best-sellers').addEventListener('click', (e) => {
-                e.preventDefault();
-                showNotification('Best sellers coming soon!');
-            });
-            
-            document.getElementById('contact-us').addEventListener('click', (e) => {
-                e.preventDefault();
-                showNotification('Contact: info@pnearna.com | (123) 456-7890');
-            });
-            
-            document.getElementById('faqs').addEventListener('click', (e) => {
-                e.preventDefault();
-                showNotification('FAQs page coming soon!');
-            });
-            
-            document.getElementById('shipping').addEventListener('click', (e) => {
-                e.preventDefault();
-                showNotification('Free shipping on orders over $50!');
-            });
-            
-            document.getElementById('returns').addEventListener('click', (e) => {
-                e.preventDefault();
-                showNotification('30-day return policy!');
-            });
-            
-            document.getElementById('privacy').addEventListener('click', (e) => {
-                e.preventDefault();
-                showNotification('Privacy policy page coming soon!');
-            });
-            
-            // Checkout button
-            document.getElementById('checkout-button').addEventListener('click', () => {
-                if (cart.length > 0) {
-                    showNotification('Redirecting to checkout...');
-                    setTimeout(() => {
-                        showNotification('Checkout page coming soon!');
-                    }, 1500);
+            checkoutConvocationRobe.addEventListener('click', () => {
+                if (!remarksSubmittedConvocationRobe) {
+                    showNotification('Please submit your remarks first');
+                    return;
                 }
-            });
-            
-            // Add hover effect to product cards
-            document.querySelectorAll('.product-card').forEach(card => {
-                card.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-10px) rotateX(5deg)';
-                });
                 
-                card.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0) rotateX(0)';
-                });
-            });
-            
-            // Add hover effect to category cards
-            document.querySelectorAll('.category-card').forEach(card => {
-                card.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-10px) rotateX(5deg)';
-                });
+                const color = document.querySelector('#convocation-robe-page #color').value;
+                const remarks = document.querySelector('#convocation-robe-page #remarks').value;
                 
-                card.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0) rotateX(0)';
-                });
+                const message = `Custom Made Convocation Robe - Colour: ${color} - Remarks: ${remarks}`;
+                const whatsappUrl = `https://www.wasap.my/60134036123/${encodeURIComponent(message)}`;
+                
+                window.open(whatsappUrl, '_blank');
+            });
+            
+            // T-Shirt Printing Form
+            const tShirtPrintingForm = document.getElementById('t-shirt-printing-form');
+            const checkoutTShirtPrinting = document.getElementById('checkout-t-shirt-printing');
+            const noticeTShirtPrinting = document.getElementById('notice-t-shirt-printing');
+            let remarksSubmittedTShirtPrinting = false;
+            
+            tShirtPrintingForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                noticeTShirtPrinting.style.display = 'block';
+                remarksSubmittedTShirtPrinting = true;
+                
+                // Scroll to notice
+                noticeTShirtPrinting.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            checkoutTShirtPrinting.addEventListener('click', () => {
+                if (!remarksSubmittedTShirtPrinting) {
+                    showNotification('Please submit your remarks first');
+                    return;
+                }
+                
+                const remarks = document.querySelector('#t-shirt-printing-page #remarks').value;
+                
+                const message = `T-Shirt Printing - Remarks: ${remarks}`;
+                const whatsappUrl = `https://www.wasap.my/60134036123/${encodeURIComponent(message)}`;
+                
+                window.open(whatsappUrl, '_blank');
+            });
+            
+            // Medal/Trophy Form
+            const medalTrophyForm = document.getElementById('medal-trophy-form');
+            const checkoutMedalTrophy = document.getElementById('checkout-medal-trophy');
+            const noticeMedalTrophy = document.getElementById('notice-medal-trophy');
+            let remarksSubmittedMedalTrophy = false;
+            
+            medalTrophyForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                noticeMedalTrophy.style.display = 'block';
+                remarksSubmittedMedalTrophy = true;
+                
+                // Scroll to notice
+                noticeMedalTrophy.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            checkoutMedalTrophy.addEventListener('click', () => {
+                if (!remarksSubmittedMedalTrophy) {
+                    showNotification('Please submit your remarks first');
+                    return;
+                }
+                
+                const item = document.querySelector('#medal-trophy-page #item').value;
+                const remarks = document.querySelector('#medal-trophy-page #remarks').value;
+                
+                const message = `Medal/Trophy - Item: ${item} - Remarks: ${remarks}`;
+                const whatsappUrl = `https://www.wasap.my/60134036123/${encodeURIComponent(message)}`;
+                
+                window.open(whatsappUrl, '_blank');
+            });
+            
+            // Towel Form
+            const towelForm = document.getElementById('towel-form');
+            const checkoutTowel = document.getElementById('checkout-towel');
+            const noticeTowel = document.getElementById('notice-towel');
+            let remarksSubmittedTowel = false;
+            
+            towelForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                noticeTowel.style.display = 'block';
+                remarksSubmittedTowel = true;
+                
+                // Scroll to notice
+                noticeTowel.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            checkoutTowel.addEventListener('click', () => {
+                if (!remarksSubmittedTowel) {
+                    showNotification('Please submit your remarks first');
+                    return;
+                }
+                
+                const embroidery = document.querySelector('#towel-page input[name="embroidery"]:checked').value;
+                const remarks = document.querySelector('#towel-page #remarks').value;
+                
+                const message = `Towel - Embroidery: ${embroidery} - Remarks: ${remarks}`;
+                const whatsappUrl = `https://www.wasap.my/60134036123/${encodeURIComponent(message)}`;
+                
+                window.open(whatsappUrl, '_blank');
+            });
+            
+            // Keychain Form
+            const keychainForm = document.getElementById('keychain-form');
+            const checkoutKeychain = document.getElementById('checkout-keychain');
+            const noticeKeychain = document.getElementById('notice-keychain');
+            let remarksSubmittedKeychain = false;
+            
+            keychainForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                noticeKeychain.style.display = 'block';
+                remarksSubmittedKeychain = true;
+                
+                // Scroll to notice
+                noticeKeychain.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            checkoutKeychain.addEventListener('click', () => {
+                if (!remarksSubmittedKeychain) {
+                    showNotification('Please submit your remarks first');
+                    return;
+                }
+                
+                const remarks = document.querySelector('#keychain-page #remarks').value;
+                
+                const message = `Custom Made Keychain - Remarks: ${remarks}`;
+                const whatsappUrl = `https://www.wasap.my/60134036123/${encodeURIComponent(message)}`;
+                
+                window.open(whatsappUrl, '_blank');
+            });
+            
+            // Nametag Form
+            const nametagForm = document.getElementById('nametag-form');
+            const checkoutNametag = document.getElementById('checkout-nametag');
+            const noticeNametag = document.getElementById('notice-nametag');
+            let remarksSubmittedNametag = false;
+            
+            nametagForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                noticeNametag.style.display = 'block';
+                remarksSubmittedNametag = true;
+                
+                // Scroll to notice
+                noticeNametag.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            checkoutNametag.addEventListener('click', () => {
+                if (!remarksSubmittedNametag) {
+                    showNotification('Please submit your remarks first');
+                    return;
+                }
+                
+                const remarks = document.querySelector('#nametag-page #remarks').value;
+                
+                const message = `Custom Made Nametag - Remarks: ${remarks}`;
+                const whatsappUrl = `https://www.wasap.my/60134036123/${encodeURIComponent(message)}`;
+                
+                window.open(whatsappUrl, '_blank');
+            });
+            
+            // Corporate Shirt Form
+            const corporateShirtForm = document.getElementById('corporate-shirt-form');
+            const checkoutCorporateShirt = document.getElementById('checkout-corporate-shirt');
+            const noticeCorporateShirt = document.getElementById('notice-corporate-shirt');
+            let remarksSubmittedCorporateShirt = false;
+            
+            corporateShirtForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                noticeCorporateShirt.style.display = 'block';
+                remarksSubmittedCorporateShirt = true;
+                
+                // Scroll to notice
+                noticeCorporateShirt.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            checkoutCorporateShirt.addEventListener('click', () => {
+                if (!remarksSubmittedCorporateShirt) {
+                    showNotification('Please submit your remarks first');
+                    return;
+                }
+                
+                const size = document.querySelector('#corporate-shirt-page #size').value;
+                const color = document.querySelector('#corporate-shirt-page #color').value;
+                const remarks = document.querySelector('#corporate-shirt-page #remarks').value;
+                
+                const message = `Custom Made Corporate Shirt - Size: ${size} - Colour: ${color} - Remarks: ${remarks}`;
+                const whatsappUrl = `https://www.wasap.my/60134036123/${encodeURIComponent(message)}`;
+                
+                window.open(whatsappUrl, '_blank');
             });
         }
         
-        // Add product to cart
-        function addToCart(productId, button) {
-            const product = products.find(p => p.id === productId);
-            const existingItem = cart.find(item => item.id === productId);
+        // Setup contact form
+        function setupContactForm() {
+            const contactForm = document.getElementById('contact-form');
+            const formNotice = document.getElementById('form-notice');
             
-            if (existingItem) {
-                existingItem.quantity++;
-            } else {
-                cart.push({
-                    ...product,
-                    quantity: 1
-                });
-            }
-            
-            updateCartCount();
-            showNotification(`${product.name} added to cart!`);
-            
-            // Visual feedback
-            button.classList.add('added');
-            button.innerHTML = '<i class="fas fa-check"></i> Added!';
-            
-            setTimeout(() => {
-                button.classList.remove('added');
-                button.innerHTML = '<i class="fas fa-cart-plus"></i> Add to Cart';
-            }, 2000);
-        }
-        
-        // Update cart count
-        function updateCartCount() {
-            const count = cart.reduce((total, item) => total + item.quantity, 0);
-            cartCount.textContent = count;
-        }
-        
-        // Render cart
-        function renderCart() {
-            cartItems.innerHTML = '';
-            
-            if (cart.length === 0) {
-                cartSummary.style.display = 'none';
-                emptyCart.style.display = 'block';
-                return;
-            }
-            
-            emptyCart.style.display = 'none';
-            cartSummary.style.display = 'block';
-            
-            cart.forEach(item => {
-                const cartItem = document.createElement('div');
-                cartItem.className = 'cart-item';
-                cartItem.innerHTML = `
-                    <div class="cart-item-image">
-                        <i class="fas ${item.icon}"></i>
-                    </div>
-                    <div class="cart-item-details">
-                        <div class="cart-item-name">${item.name}</div>
-                        <div class="cart-item-price">$${item.price.toFixed(2)}</div>
-                        <div class="quantity-control">
-                            <button class="quantity-btn decrease-quantity" data-id="${item.id}">-</button>
-                            <input type="text" class="quantity-input" value="${item.quantity}" readonly>
-                            <button class="quantity-btn increase-quantity" data-id="${item.id}">+</button>
-                            <button class="remove-item" data-id="${item.id}">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
-                cartItems.appendChild(cartItem);
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // In a real application, you would send the form data to a server here
+                // For this example, we'll just show a success message
+                
+                formNotice.style.display = 'block';
+                contactForm.reset();
+                
+                // Scroll to notice
+                formNotice.scrollIntoView({ behavior: 'smooth' });
             });
-            
-            // Add event listeners to quantity controls
-            document.querySelectorAll('.decrease-quantity').forEach(button => {
-                button.addEventListener('click', (e) => {
-                    const productId = parseInt(e.currentTarget.getAttribute('data-id'));
-                    decreaseQuantity(productId);
-                });
-            });
-            
-            document.querySelectorAll('.increase-quantity').forEach(button => {
-                button.addEventListener('click', (e) => {
-                    const productId = parseInt(e.currentTarget.getAttribute('data-id'));
-                    increaseQuantity(productId);
-                });
-            });
-            
-            document.querySelectorAll('.remove-item').forEach(button => {
-                button.addEventListener('click', (e) => {
-                    const productId = parseInt(e.currentTarget.getAttribute('data-id'));
-                    removeFromCart(productId);
-                });
-            });
-            
-            updateCartTotal();
-        }
-        
-        // Decrease quantity
-        function decreaseQuantity(productId) {
-            const item = cart.find(item => item.id === productId);
-            
-            if (item.quantity > 1) {
-                item.quantity--;
-            } else {
-                removeFromCart(productId);
-                return;
-            }
-            
-            updateCartCount();
-            renderCart();
-        }
-        
-        // Increase quantity
-        function increaseQuantity(productId) {
-            const item = cart.find(item => item.id === productId);
-            item.quantity++;
-            updateCartCount();
-            renderCart();
-        }
-        
-        // Remove from cart
-        function removeFromCart(productId) {
-            const product = cart.find(item => item.id === productId);
-            cart = cart.filter(item => item.id !== productId);
-            updateCartCount();
-            renderCart();
-            showNotification(`${product.name} removed from cart!`);
-        }
-        
-        // Update cart total
-        function updateCartTotal() {
-            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            cartTotal.textContent = `$${total.toFixed(2)}`;
         }
         
         // Show notification
