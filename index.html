@@ -616,6 +616,18 @@
             background-color: #c9a037;
         }
         
+        .btn-transparent {
+            background-color: transparent;
+            border: 1px solid var(--black);
+            color: var(--black);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-transparent:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+        }
+        
         .scroll-indicator {
             position: absolute;
             bottom: 30px;
@@ -769,6 +781,7 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
         
         .sales-card .product-img img {
@@ -778,6 +791,26 @@
         }
         
         .sales-card .product-img::after {
+            content: '\f06e'; /* Eye icon from Font Awesome */
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 2rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 2;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .sales-card .product-img:hover::after {
+            opacity: 1;
+        }
+        
+        .sales-card .product-img::before {
             content: '';
             position: absolute;
             top: 0;
@@ -791,12 +824,20 @@
             transition: opacity 0.3s ease;
         }
         
-        .sales-card:hover .product-img::after {
+        .sales-card:hover .product-img::before {
             opacity: 1;
         }
         
         .sales-card:hover .product-img {
             background-color: var(--gray-200);
+        }
+        
+        .sales-card .product-img img {
+            transition: transform 0.3s ease;
+        }
+        
+        .sales-card .product-img:hover img {
+            transform: scale(1.05);
         }
         
         .sales-card .product-info {
@@ -921,6 +962,7 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
         
         .product-img img {
@@ -930,6 +972,26 @@
         }
         
         .product-img::after {
+            content: '\f06e'; /* Eye icon from Font Awesome */
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 2rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 2;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .product-img:hover::after {
+            opacity: 1;
+        }
+        
+        .product-img::before {
             content: '';
             position: absolute;
             top: 0;
@@ -943,7 +1005,7 @@
             transition: opacity 0.3s ease;
         }
         
-        .product-card:hover .product-img::after {
+        .product-card:hover .product-img::before {
             opacity: 1;
         }
         
@@ -953,6 +1015,10 @@
         
         .product-card:hover .product-img i {
             animation: pulse 1s ease-in-out infinite;
+        }
+        
+        .product-card:hover .product-img img {
+            transform: scale(1.05);
         }
         
         .product-info {
@@ -976,6 +1042,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-top: 15px;
         }
         
         .product-price {
@@ -987,9 +1054,7 @@
         .btn-product {
             padding: 8px 16px;
             font-size: 12px;
-            background-color: var(--black);
-            color: var(--white);
-            border: none;
+            border-radius: 4px;
             cursor: pointer;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -997,10 +1062,14 @@
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
+            border: 1px solid var(--black);
+            background-color: transparent;
+            color: var(--black);
         }
         
         .btn-product:hover {
-            background-color: var(--gray-700);
+            background-color: var(--black);
+            color: var(--white);
         }
         
         /* Testimonials Section */
@@ -4055,7 +4124,12 @@
                     productDeleted: "Product Deleted",
                     productDeletedMessage: "Product has been removed successfully",
                     adminExited: "Admin Mode Exited",
-                    adminExitedMessage: "You have successfully exited admin mode"
+                    adminExitedMessage: "You have successfully exited admin mode",
+                    error: "Error",
+                    fillAllFields: "Please fill in all fields",
+                    passwordMismatch: "Passwords do not match",
+                    acceptTerms: "Please accept the terms and conditions",
+                    invalidEmail: "Please enter a valid email address"
                 },
                 cart: {
                     title: "Your Cart",
@@ -4314,7 +4388,12 @@
                     productDeleted: "Produk Dihapuskan",
                     productDeletedMessage: "Produk telah dibuang dengan jayanya",
                     adminExited: "Mod Admin Ditutup",
-                    adminExitedMessage: "Anda telah berjaya keluar dari mod admin"
+                    adminExitedMessage: "Anda telah berjaya keluar dari mod admin",
+                    error: "Ralat",
+                    fillAllFields: "Sila isi semua medan",
+                    passwordMismatch: "Kata luan tidak sepadan",
+                    acceptTerms: "Sila terima terma dan syarat",
+                    invalidEmail: "Sila masukkan alamat emel yang sah"
                 },
                 cart: {
                     title: "Troli Anda",
@@ -4808,18 +4887,18 @@
                 productGrid.appendChild(productCard);
             });
             
-            // Add event listeners to product cards
-            document.querySelectorAll('.product-card .view-details').forEach(button => {
-                button.addEventListener('click', () => {
-                    const productCard = button.closest('.product-card');
-                    const productId = productCard.dataset.product;
+            // Add event listeners to product images for viewing details
+            document.querySelectorAll('.product-img.view-details').forEach(image => {
+                image.addEventListener('click', () => {
+                    const productId = image.dataset.product;
                     showProductView(productId);
                 });
             });
             
             // Add event listeners to add to cart buttons
             document.querySelectorAll('.add-to-cart').forEach(button => {
-                button.addEventListener('click', () => {
+                button.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent triggering the parent click event
                     const productCard = button.closest('.product-card');
                     const productId = productCard.dataset.product;
                     addToCart(productId, 1);
@@ -4840,18 +4919,18 @@
                 salesGrid.appendChild(salesCard);
             });
             
-            // Add event listeners to sales cards
-            document.querySelectorAll('.sales-card .view-details').forEach(button => {
-                button.addEventListener('click', () => {
-                    const salesCard = button.closest('.sales-card');
-                    const productId = salesCard.dataset.product;
+            // Add event listeners to sales product images for viewing details
+            document.querySelectorAll('.sales-card .product-img.view-details').forEach(image => {
+                image.addEventListener('click', () => {
+                    const productId = image.dataset.product;
                     showProductView(productId);
                 });
             });
             
             // Add event listeners to add to cart buttons
             document.querySelectorAll('.sales-card .add-to-cart').forEach(button => {
-                button.addEventListener('click', () => {
+                button.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent triggering the parent click event
                     const salesCard = button.closest('.sales-card');
                     const productId = salesCard.dataset.product;
                     addToCart(productId, 1);
@@ -4877,7 +4956,7 @@
             }
             
             card.innerHTML = `
-                <div class="product-img">
+                <div class="product-img view-details" data-product="${productId}">
                     <img src="${product.image}" alt="${product.name}">
                 </div>
                 <div class="product-info">
@@ -4885,10 +4964,7 @@
                     <p data-i18n="product.description">${getTranslation('product.description') || 'Premium quality product'}</p>
                     <div class="product-footer">
                         <div class="product-price" data-product="${productId}">${priceHtml}</div>
-                        <div>
-                            <button class="btn-product add-to-cart" data-i18n="product.addToCart">Add to Cart</button>
-                            <button class="btn-product view-details" data-i18n="product.viewDetails">View Details</button>
-                        </div>
+                        <button class="btn-product add-to-cart" data-i18n="product.addToCart">Add to Cart</button>
                     </div>
                 </div>
             `;
@@ -4906,7 +4982,7 @@
             
             card.innerHTML = `
                 <div class="sales-badge">-${discount}%</div>
-                <div class="product-img">
+                <div class="product-img view-details" data-product="${productId}">
                     <img src="${product.image}" alt="${product.name}">
                 </div>
                 <div class="product-info">
@@ -4915,9 +4991,8 @@
                         <div class="original-price">RM ${product.price}</div>
                         <div class="sales-price" data-product="${productId}">RM ${product.salePrice}</div>
                     </div>
-                    <div>
+                    <div class="product-footer">
                         <button class="btn-product add-to-cart" data-i18n="product.addToCart">Add to Cart</button>
-                        <button class="btn-product view-details" data-i18n="product.viewDetails">View Details</button>
                     </div>
                 </div>
             `;
@@ -5671,8 +5746,16 @@
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            
+            // Basic validation
+            if (!email || !password) {
+                const errorTitle = getTranslation('notification.error');
+                const errorMessage = getTranslation('notification.fillAllFields');
+                showNotification(errorTitle, errorMessage, 'error');
+                return;
+            }
             
             // For demo purposes, we'll accept any email/password combination
             const user = {
@@ -5703,13 +5786,40 @@
         registerForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
-            const name = document.getElementById('registerName').value;
-            const email = document.getElementById('registerEmail').value;
-            const password = document.getElementById('registerPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
+            const name = document.getElementById('registerName').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value.trim();
+            const confirmPassword = document.getElementById('confirmPassword').value.trim();
+            const agreeTerms = document.getElementById('agreeTerms').checked;
+            
+            // Validation
+            if (!name || !email || !password || !confirmPassword) {
+                const errorTitle = getTranslation('notification.error');
+                const errorMessage = getTranslation('notification.fillAllFields');
+                showNotification(errorTitle, errorMessage, 'error');
+                return;
+            }
             
             if (password !== confirmPassword) {
-                alert('Passwords do not match');
+                const errorTitle = getTranslation('notification.error');
+                const errorMessage = getTranslation('notification.passwordMismatch');
+                showNotification(errorTitle, errorMessage, 'error');
+                return;
+            }
+            
+            if (!agreeTerms) {
+                const errorTitle = getTranslation('notification.error');
+                const errorMessage = getTranslation('notification.acceptTerms');
+                showNotification(errorTitle, errorMessage, 'error');
+                return;
+            }
+            
+            // Simple email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                const errorTitle = getTranslation('notification.error');
+                const errorMessage = getTranslation('notification.invalidEmail');
+                showNotification(errorTitle, errorMessage, 'error');
                 return;
             }
             
