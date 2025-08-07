@@ -3081,6 +3081,9 @@
         <button class="admin-toolbar-btn" id="admin-view-orders">
             <i class="fas fa-clipboard-list"></i> View Orders
         </button>
+        <button class="admin-toolbar-btn" id="admin-view-feedback">
+            <i class="fas fa-comments"></i> View Feedback
+        </button>
         <button class="admin-toolbar-btn admin-exit-btn" id="admin-exit">
             <i class="fas fa-sign-out-alt"></i> Exit Admin Mode
         </button>
@@ -4017,6 +4020,7 @@
                     addProduct: "Add New Product",
                     manageProducts: "Manage Products",
                     viewOrders: "View Orders",
+                    viewFeedback: "View Feedback",
                     exitAdmin: "Exit Admin Mode",
                     basicInfo: "Basic Information",
                     pricingInfo: "Pricing Information",
@@ -4281,6 +4285,7 @@
                     addProduct: "Tambah Produk Baru",
                     manageProducts: "Urus Produk",
                     viewOrders: "Lihat Pesanan",
+                    viewFeedback: "Lihat Maklum Balas",
                     exitAdmin: "Keluar Mod Admin",
                     basicInfo: "Maklumat Asas",
                     pricingInfo: "Maklumat Harga",
@@ -4712,6 +4717,7 @@
         const adminAddProductBtn = document.getElementById('admin-add-product');
         const adminManageProductsBtn = document.getElementById('admin-manage-products');
         const adminViewOrdersBtn = document.getElementById('admin-view-orders');
+        const adminViewFeedbackBtn = document.getElementById('admin-view-feedback');
         
         // Auth tabs
         const authTabs = document.querySelectorAll('.auth-tab');
@@ -4724,6 +4730,9 @@
         let currentLanguage = 'en';
         let currentUser = null;
         let cart = [];
+        
+        // Google Apps Script URL
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbziqxwktPU2En62DyKg6noYbfYWL9IWhtl_7_vdDvuFJG5A_45WDa9g2K1vUzhkPCC7fQ/exec';
         
         // Initialize language
         function initLanguage() {
@@ -5665,12 +5674,69 @@
             summaryTotal.textContent = `RM ${price * quantity}`;
         });
         
-        // Handle form submission
-        orderForm.addEventListener('submit', (e) => {
+        // Add new submitOrder function for Google Apps Script integration
+        async function submitOrder(formData) {
+            try {
+                // Show loading state
+                const submitBtn = document.querySelector('#orderForm button[type="submit"]');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = 'Submitting...';
+                submitBtn.disabled = true;
+                
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    // Close modal
+                    modal.classList.remove('show');
+                    setTimeout(() => {
+                        modal.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                    }, 300);
+                    
+                    // Reset form
+                    orderForm.reset();
+                    
+                    // Show notification
+                    const orderSubmittedTitle = getTranslation('notification.orderSubmitted');
+                    const orderSubmittedMessage = getTranslation('notification.orderSubmittedMessage');
+                    showNotification(orderSubmittedTitle, orderSubmittedMessage, 'success');
+                    
+                    // Clear cart if product was added from cart
+                    if (cart.length > 0) {
+                        cart = [];
+                        saveCart();
+                    }
+                } else {
+                    throw new Error(result.message || 'Unknown error occurred');
+                }
+            } catch (error) {
+                console.error('Error submitting order:', error);
+                const errorTitle = getTranslation('notification.error');
+                const errorMessage = 'Failed to submit order. Please try again.';
+                showNotification(errorTitle, errorMessage, 'error');
+            } finally {
+                // Reset button state
+                const submitBtn = document.querySelector('#orderForm button[type="submit"]');
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+        
+        // Handle order form submission
+        orderForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
             // Get form data
             const formData = {
+                action: 'submitOrder',
                 productId: orderForm.dataset.productId,
                 productName: orderForm.dataset.productName,
                 productPrice: orderForm.dataset.productPrice,
@@ -5685,28 +5751,62 @@
                 date: new Date().toISOString()
             };
             
-            // For now, just log the data and save to localStorage
-            console.log('Order submitted:', formData);
+            // Call the new submitOrder function
+            await submitOrder(formData);
+        });
+        
+        // Handle contact form submission
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
             
-            // Save order to localStorage
-            const orders = JSON.parse(localStorage.getItem('orders') || '[]');
-            orders.push(formData);
-            localStorage.setItem('orders', JSON.stringify(orders));
+            // Get form data
+            const formData = {
+                action: 'submitFeedback',
+                name: document.getElementById('contact-name').value,
+                email: document.getElementById('contact-email').value,
+                subject: document.getElementById('contact-subject').value,
+                message: document.getElementById('contact-message').value
+            };
             
-            // Close modal
-            modal.classList.remove('show');
-            setTimeout(() => {
-                modal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }, 300);
-            
-            // Reset form
-            orderForm.reset();
-            
-            // Show notification
-            const orderSubmittedTitle = getTranslation('notification.orderSubmitted');
-            const orderSubmittedMessage = getTranslation('notification.orderSubmittedMessage');
-            showNotification(orderSubmittedTitle, orderSubmittedMessage, 'success');
+            try {
+                // Show loading state
+                const submitBtn = contactForm.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = 'Sending...';
+                submitBtn.disabled = true;
+                
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    // Reset form
+                    contactForm.reset();
+                    
+                    // Show notification
+                    const messageSentTitle = getTranslation('notification.messageSent');
+                    const messageSentMessage = getTranslation('notification.messageSentMessage');
+                    showNotification(messageSentTitle, messageSentMessage, 'success');
+                } else {
+                    throw new Error(result.message || 'Unknown error occurred');
+                }
+            } catch (error) {
+                console.error('Error submitting feedback:', error);
+                const errorTitle = getTranslation('notification.error');
+                const errorMessage = 'Failed to send message. Please try again.';
+                showNotification(errorTitle, errorMessage, 'error');
+            } finally {
+                // Reset button state
+                const submitBtn = contactForm.querySelector('button[type="submit"]');
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
         });
         
         // Handle password form submission
@@ -5844,30 +5944,6 @@
             const registerSuccessTitle = getTranslation('notification.registerSuccess');
             const registerSuccessMessage = getTranslation('notification.registerSuccessMessage');
             showNotification(registerSuccessTitle, registerSuccessMessage, 'success');
-        });
-        
-        // Handle contact form submission
-        contactForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const formData = {
-                name: document.getElementById('contact-name').value,
-                email: document.getElementById('contact-email').value,
-                subject: document.getElementById('contact-subject').value,
-                message: document.getElementById('contact-message').value,
-                date: new Date().toISOString()
-            };
-            
-            // For demo purposes, just log the data
-            console.log('Contact form submitted:', formData);
-            
-            // Reset form
-            contactForm.reset();
-            
-            // Show notification
-            const messageSentTitle = getTranslation('notification.messageSent');
-            const messageSentMessage = getTranslation('notification.messageSentMessage');
-            showNotification(messageSentTitle, messageSentMessage, 'success');
         });
         
         // Handle newsletter form submission
@@ -6116,6 +6192,11 @@
             openOrdersPanel();
         });
         
+        // Admin view feedback button
+        adminViewFeedbackBtn.addEventListener('click', () => {
+            openFeedbackPanel();
+        });
+        
         function openManageProductsPanel() {
             // Create admin panel modal
             const adminModal = document.createElement('div');
@@ -6247,48 +6328,26 @@
             });
         }
         
-        function openOrdersPanel() {
-            // Get orders from localStorage
-            const orders = JSON.parse(localStorage.getItem('orders') || '[]');
-            
+        function openFeedbackPanel() {
             // Create admin panel modal
             const adminModal = document.createElement('div');
             adminModal.className = 'modal admin-modal';
-            
-            let ordersHtml = '';
-            if (orders.length === 0) {
-                ordersHtml = '<p style="text-align: center; padding: 20px;">No orders found</p>';
-            } else {
-                orders.forEach((order, index) => {
-                    ordersHtml += `
-                        <div class="admin-product-item">
-                            <div>
-                                <div class="admin-product-name">${order.productName}</div>
-                                <div style="font-size: 0.9rem; color: var(--gray-600);">${order.customerName} - ${order.date ? new Date(order.date).toLocaleDateString() : ''}</div>
-                            </div>
-                            <div class="admin-product-actions">
-                                <button class="admin-action-btn" data-order="${index}">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
-            
             adminModal.innerHTML = `
                 <div class="modal-content admin-panel">
                     <div class="modal-header">
-                        <h2>View Orders</h2>
+                        <h2>Customer Feedback</h2>
                         <span class="close">&times;</span>
                     </div>
                     <div class="modal-body">
-                        <div class="admin-product-list">
-                            ${ordersHtml}
+                        <div id="feedback-container">
+                            <p style="text-align: center; padding: 20px;">Loading feedback...</p>
                         </div>
                         <div class="admin-form-actions">
-                            <button type="button" class="btn" id="close-orders-btn">
-                                ${getTranslation('admin.cancel') || 'Close'}
+                            <button type="button" class="btn" id="refresh-feedback-btn">
+                                <i class="fas fa-sync-alt"></i> Refresh
+                            </button>
+                            <button type="button" class="btn" id="close-feedback-btn">
+                                Close
                             </button>
                         </div>
                     </div>
@@ -6302,25 +6361,238 @@
                 adminModal.classList.add('show');
             }, 10);
             
-            // Add event listeners to view buttons
-            adminModal.querySelectorAll('.admin-action-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const orderIndex = btn.dataset.order;
-                    const order = orders[orderIndex];
+            // Load feedback
+            loadFeedback();
+            
+            // Refresh button
+            adminModal.querySelector('#refresh-feedback-btn').addEventListener('click', loadFeedback);
+            
+            // Close button
+            adminModal.querySelector('#close-feedback-btn').addEventListener('click', () => {
+                adminModal.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(adminModal);
+                }, 300);
+            });
+            
+            // Close modal
+            adminModal.querySelector('.close').addEventListener('click', () => {
+                adminModal.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(adminModal);
+                }, 300);
+            });
+            
+            async function loadFeedback() {
+                const feedbackContainer = document.getElementById('feedback-container');
+                feedbackContainer.innerHTML = '<p style="text-align: center; padding: 20px;">Loading feedback...</p>';
+                
+                try {
+                    // Add a timestamp to prevent caching
+                    const timestamp = new Date().getTime();
+                    const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getFeedback&t=${timestamp}`);
+                    const result = await response.json();
                     
-                    // Show order details in a notification
-                    const orderDetailsTitle = 'Order Details';
-                    const orderDetailsMessage = `
-                        Product: ${order.productName}
-                        Customer: ${order.customerName}
-                        Email: ${order.customerEmail}
-                        Phone: ${order.customerPhone}
-                        Quantity: ${order.quantity}
-                        Total: ${order.total}
-                        Date: ${order.date ? new Date(order.date).toLocaleDateString() : ''}
-                    `;
-                    showNotification(orderDetailsTitle, orderDetailsMessage, 'admin');
-                });
+                    if (result.status === 'success') {
+                        if (result.feedback.length === 0) {
+                            feedbackContainer.innerHTML = '<p style="text-align: center; padding: 20px;">No feedback found</p>';
+                        } else {
+                            let feedbackHtml = '<table style="width: 100%; border-collapse: collapse;">';
+                            feedbackHtml += '<tr style="background-color: #f2f2f2;"><th style="padding: 8px; border: 1px solid #ddd;">Date</th><th style="padding: 8px; border: 1px solid #ddd;">Name</th><th style="padding: 8px; border: 1px solid #ddd;">Subject</th><th style="padding: 8px; border: 1px solid #ddd;">Status</th><th style="padding: 8px; border: 1px solid #ddd;">Actions</th></tr>';
+                            
+                            result.feedback.forEach((feedback, index) => {
+                                const statusClass = feedback[5] === 'New' ? 'status-new' : 
+                                                  feedback[5] === 'Reviewed' ? 'status-reviewed' : 'status-responded';
+                                
+                                // Format date in Singapore time (same as Malaysia)
+                                const singaporeDate = new Date(feedback[0]);
+                                const formattedDate = singaporeDate.toLocaleString('en-SG', {
+                                    timeZone: 'Asia/Singapore',
+                                    year: 'numeric',
+                                    month: 'short',
+                                    day: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                });
+                                
+                                feedbackHtml += `
+                                    <tr>
+                                        <td style="padding: 8px; border: 1px solid #ddd;">${formattedDate}</td>
+                                        <td style="padding: 8px; border: 1px solid #ddd;">${feedback[1]}</td>
+                                        <td style="padding: 8px; border: 1px solid #ddd;">${feedback[3]}</td>
+                                        <td style="padding: 8px; border: 1px solid #ddd;">
+                                            <span class="feedback-status ${statusClass}">${feedback[5]}</span>
+                                        </td>
+                                        <td style="padding: 8px; border: 1px solid #ddd;">
+                                            <button class="admin-action-btn view-feedback" data-index="${index}">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <select class="feedback-status-select" data-index="${index}">
+                                                <option value="New" ${feedback[5] === 'New' ? 'selected' : ''}>New</option>
+                                                <option value="Reviewed" ${feedback[5] === 'Reviewed' ? 'selected' : ''}>Reviewed</option>
+                                                <option value="Responded" ${feedback[5] === 'Responded' ? 'selected' : ''}>Responded</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                `;
+                            });
+                            
+                            feedbackHtml += '</table>';
+                            feedbackContainer.innerHTML = feedbackHtml;
+                            
+                            // Add CSS for status indicators
+                            const style = document.createElement('style');
+                            style.textContent = `
+                                .feedback-status {
+                                    padding: 3px 8px;
+                                    border-radius: 12px;
+                                    font-size: 12px;
+                                    font-weight: bold;
+                                }
+                                .status-new {
+                                    background-color: #ffebee;
+                                    color: #c62828;
+                                }
+                                .status-reviewed {
+                                    background-color: #fff8e1;
+                                    color: #ff8f00;
+                                }
+                                .status-responded {
+                                    background-color: #e8f5e9;
+                                    color: #2e7d32;
+                                }
+                                .feedback-status-select {
+                                    margin-left: 8px;
+                                    padding: 4px;
+                                }
+                            `;
+                            document.head.appendChild(style);
+                            
+                            // Add event listeners to view buttons
+                            adminModal.querySelectorAll('.view-feedback').forEach(btn => {
+                                btn.addEventListener('click', () => {
+                                    const feedbackIndex = btn.dataset.index;
+                                    const feedback = result.feedback[feedbackIndex];
+                                    
+                                    // Format date in Singapore time (same as Malaysia)
+                                    const singaporeDate = new Date(feedback[0]);
+                                    const formattedDate = singaporeDate.toLocaleString('en-SG', {
+                                        timeZone: 'Asia/Singapore',
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        second: '2-digit'
+                                    });
+                                    
+                                    // Show feedback details in a notification
+                                    const feedbackDetailsTitle = 'Feedback Details';
+                                    const feedbackDetailsMessage = `
+                                        <div style="text-align: left;">
+                                            <p><strong>Name:</strong> ${feedback[1]}</p>
+                                            <p><strong>Email:</strong> ${feedback[2]}</p>
+                                            <p><strong>Subject:</strong> ${feedback[3]}</p>
+                                            <p><strong>Message:</strong></p>
+                                            <p>${feedback[4]}</p>
+                                            <p><strong>Status:</strong> ${feedback[5]}</p>
+                                            <p><strong>Date:</strong> ${formattedDate}</p>
+                                        </div>
+                                    `;
+                                    showNotification(feedbackDetailsTitle, feedbackDetailsMessage, 'admin');
+                                });
+                            });
+                            
+                            // Add event listeners to status select dropdowns
+                            adminModal.querySelectorAll('.feedback-status-select').forEach(select => {
+                                select.addEventListener('change', async () => {
+                                    const feedbackIndex = select.dataset.index;
+                                    const newStatus = select.value;
+                                    
+                                    try {
+                                        const updateResponse = await fetch(`${GOOGLE_SCRIPT_URL}?action=updateFeedbackStatus&id=${feedbackIndex}&status=${encodeURIComponent(newStatus)}`);
+                                        const updateResult = await updateResponse.json();
+                                        
+                                        if (updateResult.status === 'success') {
+                                            // Update the status indicator
+                                            const statusSpan = select.closest('tr').querySelector('.feedback-status');
+                                            statusSpan.textContent = newStatus;
+                                            
+                                            // Update status class
+                                            statusSpan.className = 'feedback-status ' + 
+                                                (newStatus === 'New' ? 'status-new' : 
+                                                 newStatus === 'Reviewed' ? 'status-reviewed' : 'status-responded');
+                                            
+                                            // Show success notification
+                                            showNotification('Status Updated', `Feedback status has been updated to "${newStatus}"`, 'admin');
+                                        } else {
+                                            throw new Error(updateResult.message || 'Failed to update status');
+                                        }
+                                    } catch (error) {
+                                        console.error('Error updating feedback status:', error);
+                                        showNotification('Error', 'Failed to update feedback status', 'error');
+                                        // Reset select to original value
+                                        select.value = result.feedback[feedbackIndex][5];
+                                    }
+                                });
+                            });
+                        }
+                    } else {
+                        feedbackContainer.innerHTML = `<p style="text-align: center; padding: 20px; color: red;">Error: ${result.message}</p>`;
+                    }
+                } catch (error) {
+                    console.error('Error loading feedback:', error);
+                    feedbackContainer.innerHTML = '<p style="text-align: center; padding: 20px; color: red;">Failed to load feedback. Please try again.</p>';
+                }
+            }
+        }
+        
+        function openOrdersPanel() {
+            // Create admin panel modal
+            const adminModal = document.createElement('div');
+            adminModal.className = 'modal admin-modal';
+            adminModal.innerHTML = `
+                <div class="modal-content admin-panel">
+                    <div class="modal-header">
+                        <h2>View Orders</h2>
+                        <span class="close">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        <div id="orders-container">
+                            <p style="text-align: center; padding: 20px;">Loading orders...</p>
+                        </div>
+                        <div class="admin-form-actions">
+                            <button type="button" class="btn" id="refresh-orders-btn">
+                                <i class="fas fa-sync-alt"></i> Refresh
+                            </button>
+                            <button type="button" class="btn" id="export-orders-btn">
+                                <i class="fas fa-download"></i> Export CSV
+                            </button>
+                            <button type="button" class="btn" id="close-orders-btn">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(adminModal);
+            
+            // Show modal with animation
+            setTimeout(() => {
+                adminModal.classList.add('show');
+            }, 10);
+            
+            // Load orders
+            loadOrders();
+            
+            // Refresh button
+            adminModal.querySelector('#refresh-orders-btn').addEventListener('click', loadOrders);
+            
+            // Export button
+            adminModal.querySelector('#export-orders-btn').addEventListener('click', () => {
+                // Replace with your actual Google Sheet URL
+                window.open('https://docs.google.com/spreadsheets/d/1owgseuFap_CHhjUoh44mbV2oLBbq0Uv22u20-hiJzwo/edit', '_blank');
             });
             
             // Close button
@@ -6338,6 +6610,101 @@
                     document.body.removeChild(adminModal);
                 }, 300);
             });
+            
+            async function loadOrders() {
+                const ordersContainer = document.getElementById('orders-container');
+                ordersContainer.innerHTML = '<p style="text-align: center; padding: 20px;">Loading orders...</p>';
+                
+                try {
+                    // Add a timestamp to prevent caching
+                    const timestamp = new Date().getTime();
+                    const response = await fetch(`${GOOGLE_SCRIPT_URL}?action=getOrders&t=${timestamp}`);
+                    const result = await response.json();
+                    
+                    if (result.status === 'success') {
+                        if (result.orders.length === 0) {
+                            ordersContainer.innerHTML = '<p style="text-align: center; padding: 20px;">No orders found</p>';
+                        } else {
+                            let ordersHtml = '<table style="width: 100%; border-collapse: collapse;">';
+                            ordersHtml += '<tr style="background-color: #f2f2f2;"><th style="padding: 8px; border: 1px solid #ddd;">Date</th><th style="padding: 8px; border: 1px solid #ddd;">Product</th><th style="padding: 8px; border: 1px solid #ddd;">Customer</th><th style="padding: 8px; border: 1px solid #ddd;">Total</th><th style="padding: 8px; border: 1px solid #ddd;">Actions</th></tr>';
+                            
+                            result.orders.forEach((order, index) => {
+                                // Format date in Singapore time (same as Malaysia)
+                                const singaporeDate = new Date(order[0]);
+                                const formattedDate = singaporeDate.toLocaleString('en-SG', {
+                                    timeZone: 'Asia/Singapore',
+                                    year: 'numeric',
+                                    month: 'short',
+                                    day: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                });
+                                
+                                ordersHtml += `
+                                    <tr>
+                                        <td style="padding: 8px; border: 1px solid #ddd;">${formattedDate}</td>
+                                        <td style="padding: 8px; border: 1px solid #ddd;">${order[2]}</td>
+                                        <td style="padding: 8px; border: 1px solid #ddd;">${order[7]}</td>
+                                        <td style="padding: 8px; border: 1px solid #ddd;">${order[6]}</td>
+                                        <td style="padding: 8px; border: 1px solid #ddd;">
+                                            <button class="admin-action-btn view-order" data-index="${index}">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `;
+                            });
+                            
+                            ordersHtml += '</table>';
+                            ordersContainer.innerHTML = ordersHtml;
+                            
+                            // Add event listeners to view buttons
+                            adminModal.querySelectorAll('.view-order').forEach(btn => {
+                                btn.addEventListener('click', () => {
+                                    const orderIndex = btn.dataset.index;
+                                    const order = result.orders[orderIndex];
+                                    
+                                    // Format date in Singapore time (same as Malaysia)
+                                    const singaporeDate = new Date(order[0]);
+                                    const formattedDate = singaporeDate.toLocaleString('en-SG', {
+                                        timeZone: 'Asia/Singapore',
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        second: '2-digit'
+                                    });
+                                    
+                                    // Show order details in a notification
+                                    const orderDetailsTitle = 'Order Details';
+                                    const orderDetailsMessage = `
+                                        <div style="text-align: left;">
+                                            <p><strong>Product:</strong> ${order[2]}</p>
+                                            <p><strong>Customer:</strong> ${order[7]}</p>
+                                            <p><strong>Email:</strong> ${order[8]}</p>
+                                            <p><strong>Phone:</strong> ${order[9]}</p>
+                                            <p><strong>Quantity:</strong> ${order[4]}</p>
+                                            <p><strong>Total:</strong> ${order[6]}</p>
+                                            <p><strong>Customization:</strong> ${order[10]}</p>
+                                            <p><strong>Delivery Address:</strong> ${order[11]}</p>
+                                            <p><strong>Notes:</strong> ${order[12]}</p>
+                                            ${order[13] ? `<p><strong>Design File:</strong> <a href="${order[13]}" target="_blank">View File</a></p>` : ''}
+                                            <p><strong>Date:</strong> ${formattedDate}</p>
+                                        </div>
+                                    `;
+                                    showNotification(orderDetailsTitle, orderDetailsMessage, 'admin');
+                                });
+                            });
+                        }
+                    } else {
+                        ordersContainer.innerHTML = `<p style="text-align: center; padding: 20px; color: red;">Error: ${result.message}</p>`;
+                    }
+                } catch (error) {
+                    console.error('Error loading orders:', error);
+                    ordersContainer.innerHTML = '<p style="text-align: center; padding: 20px; color: red;">Failed to load orders. Please try again.</p>';
+                }
+            }
         }
         
         function openAdminPanel(productId) {
