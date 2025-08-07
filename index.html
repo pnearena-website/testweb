@@ -26,6 +26,9 @@
             --admin-dark: #388e3c;
             --gold: #d4af37;
             --blue: #1e88e5;
+            --error: #f44336;
+            --warning: #ff9800;
+            --info: #2196f3;
         }
         
         * {
@@ -182,6 +185,11 @@
             50% {
                 box-shadow: 0 0 20px var(--admin), 0 0 30px var(--admin);
             }
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
         .animate-fade-in {
@@ -1358,6 +1366,16 @@
             box-shadow: 0 0 0 3px rgba(0,0,0,0.1);
         }
         
+        .form-control.error {
+            border-color: var(--error);
+        }
+        
+        .error-message {
+            color: var(--error);
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
         textarea.form-control {
             resize: vertical;
             min-height: 120px;
@@ -2173,7 +2191,7 @@
             color: var(--black);
         }
         
-        /* Notification */
+        /* Enhanced Notification System */
         .notification {
             position: fixed;
             top: 20px;
@@ -2187,22 +2205,32 @@
             transform: translateX(150%);
             transition: transform 0.4s ease;
             max-width: 350px;
+            opacity: 0;
         }
         
         .notification.show {
             transform: translateX(0);
+            opacity: 1;
         }
         
-        .notification.admin-notification {
+        .notification.success-notification {
             background-color: var(--admin);
         }
         
         .notification.error-notification {
-            background-color: #f44336;
+            background-color: var(--error);
         }
         
-        .notification.success-notification {
-            background-color: #4caf50;
+        .notification.warning-notification {
+            background-color: var(--warning);
+        }
+        
+        .notification.info-notification {
+            background-color: var(--info);
+        }
+        
+        .notification.admin-notification {
+            background-color: var(--admin);
         }
         
         .notification-header {
@@ -2240,6 +2268,85 @@
         
         .notification-close:hover {
             color: var(--white);
+        }
+        
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .loading-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .loading-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top-color: #000;
+            border-radius: 50%;
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto 15px;
+        }
+        
+        .loading-content p {
+            margin: 0;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        /* Back to Top Button */
+        #backToTop {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--black);
+            color: var(--white);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 99;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        #backToTop:hover {
+            background-color: var(--gray-700);
+            transform: translateY(-5px);
+        }
+        
+        #backToTop.show {
+            opacity: 1;
+            visibility: visible;
         }
         
         /* Admin Mode Styles */
@@ -2587,6 +2694,34 @@
         
         .admin-btn-secondary:hover {
             background-color: var(--gray-300);
+        }
+        
+        /* Feedback status indicators */
+        .feedback-status {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .status-new {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        
+        .status-reviewed {
+            background-color: #fff8e1;
+            color: #ff8f00;
+        }
+        
+        .status-responded {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .feedback-status-select {
+            margin-left: 8px;
+            padding: 4px;
         }
         
         /* Footer */
@@ -3012,6 +3147,13 @@
             .admin-tabs {
                 overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
+            }
+            
+            #backToTop {
+                width: 40px;
+                height: 40px;
+                bottom: 20px;
+                right: 20px;
             }
         }
     </style>
@@ -3942,6 +4084,19 @@
         </div>
     </div>
     
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <p>Loading...</p>
+        </div>
+    </div>
+    
+    <!-- Back to Top Button -->
+    <button id="backToTop" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+    
     <script>
         // Language translations
         const translations = {
@@ -4653,6 +4808,8 @@
         const registerBtn = document.getElementById('register-btn');
         const myAccountBtn = document.getElementById('my-account-btn');
         const logoutBtn = document.getElementById('logout-btn');
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const backToTopButton = document.getElementById('backToTop');
         
         // Language elements
         const languageToggle = document.getElementById('language-toggle');
@@ -4965,7 +5122,7 @@
             
             card.innerHTML = `
                 <div class="product-img view-details" data-product="${productId}">
-                    <img src="${product.image}" alt="${product.name}">
+                    <img data-src="${product.image}" alt="${product.name}" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E">
                 </div>
                 <div class="product-info">
                     <h3 data-i18n="productsDetail.${product.name}">${getTranslation(`productsDetail.${product.name}`) || product.name}</h3>
@@ -4991,7 +5148,7 @@
             card.innerHTML = `
                 <div class="sales-badge">-${discount}%</div>
                 <div class="product-img view-details" data-product="${productId}">
-                    <img src="${product.image}" alt="${product.name}">
+                    <img data-src="${product.image}" alt="${product.name}" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E">
                 </div>
                 <div class="product-info">
                     <h3 data-i18n="productsDetail.${product.name}">${getTranslation(`productsDetail.${product.name}`) || product.name}</h3>
@@ -5268,6 +5425,12 @@
                 // Default to home view
                 showHomeView();
             }
+            
+            // Initialize lazy loading
+            initializeLazyLoading();
+            
+            // Initialize form data persistence
+            initializeFormPersistence();
         });
         
         // Show home view
@@ -5630,6 +5793,13 @@
                 header.style.boxShadow = '0 2px 10px rgba(0,0,0,0.05)';
             }
             
+            // Show/hide back to top button
+            if (scrolled > 300) {
+                backToTopButton.classList.add('show');
+            } else {
+                backToTopButton.classList.remove('show');
+            }
+            
             // Animate elements on scroll
             const animateElements = document.querySelectorAll('.animate-slide-up, .animate-slide-down');
             animateElements.forEach(element => {
@@ -5639,6 +5809,14 @@
                 if (elementTop < window.innerHeight - elementVisible) {
                     element.classList.add('visible');
                 }
+            });
+        });
+        
+        // Back to top button
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
             });
         });
         
@@ -5674,24 +5852,171 @@
             summaryTotal.textContent = `RM ${price * quantity}`;
         });
         
-        // Add new submitOrder function for Google Apps Script integration
-        async function submitOrder(formData) {
+        // Enhanced notification system
+        function showNotification(title, message, type = 'success', duration = 5000) {
+            // Remove existing notifications
+            const existingNotifications = document.querySelectorAll('.notification');
+            existingNotifications.forEach(notif => {
+                notif.classList.remove('show');
+                setTimeout(() => notif.remove(), 300);
+            });
+            
+            // Create new notification
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}-notification`;
+            
+            let iconClass = 'fas fa-check-circle';
+            if (type === 'error') iconClass = 'fas fa-exclamation-circle';
+            else if (type === 'warning') iconClass = 'fas fa-exclamation-triangle';
+            else if (type === 'info') iconClass = 'fas fa-info-circle';
+            
+            notification.innerHTML = `
+                <div class="notification-header">
+                    <i class="${iconClass}"></i>
+                    <h3>${title}</h3>
+                    <span class="notification-close">&times;</span>
+                </div>
+                <div class="notification-body">${message}</div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Show notification
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 10);
+            
+            // Add close functionality
+            notification.querySelector('.notification-close').addEventListener('click', () => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            });
+            
+            // Auto-hide after duration
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, duration);
+        }
+        
+        // Loading overlay functions
+        function showLoading(message = 'Loading...') {
+            const loadingOverlay = document.getElementById('loading-overlay');
+            loadingOverlay.querySelector('p').textContent = message;
+            loadingOverlay.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function hideLoading() {
+            const loadingOverlay = document.getElementById('loading-overlay');
+            loadingOverlay.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Form validation
+        function validateForm(form) {
+            const inputs = form.querySelectorAll('input[required], textarea[required]');
+            let isValid = true;
+            
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
+                    isValid = false;
+                    input.classList.add('error');
+                    
+                    // Add error message if not exists
+                    if (!input.nextElementSibling || !input.nextElementSibling.classList.contains('error-message')) {
+                        const errorMsg = document.createElement('div');
+                        errorMsg.className = 'error-message';
+                        errorMsg.textContent = 'This field is required';
+                        errorMsg.style.color = 'var(--error)';
+                        errorMsg.style.fontSize = '12px';
+                        errorMsg.style.marginTop = '5px';
+                        input.parentNode.insertBefore(errorMsg, input.nextSibling);
+                    }
+                } else {
+                    input.classList.remove('error');
+                    // Remove error message if exists
+                    if (input.nextElementSibling && input.nextElementSibling.classList.contains('error-message')) {
+                        input.nextElementSibling.remove();
+                    }
+                }
+            });
+            
+            // Email validation
+            const emailInputs = form.querySelectorAll('input[type="email"]');
+            emailInputs.forEach(input => {
+                if (input.value && !isValidEmail(input.value)) {
+                    isValid = false;
+                    input.classList.add('error');
+                    
+                    // Add error message if not exists
+                    if (!input.nextElementSibling || !input.nextElementSibling.classList.contains('error-message')) {
+                        const errorMsg = document.createElement('div');
+                        errorMsg.className = 'error-message';
+                        errorMsg.textContent = 'Please enter a valid email address';
+                        errorMsg.style.color = 'var(--error)';
+                        errorMsg.style.fontSize = '12px';
+                        errorMsg.style.marginTop = '5px';
+                        input.parentNode.insertBefore(errorMsg, input.nextSibling);
+                    }
+                }
+            });
+            
+            return isValid;
+        }
+        
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+        
+        // Add event listeners to clear errors on input
+        document.addEventListener('input', (e) => {
+            if (e.target.matches('input, textarea')) {
+                e.target.classList.remove('error');
+                // Remove error message if exists
+                if (e.target.nextElementSibling && e.target.nextElementSibling.classList.contains('error-message')) {
+                    e.target.nextElementSibling.remove();
+                }
+            }
+        });
+        
+        // Enhanced API call with retry mechanism
+        async function apiCall(url, options = {}, retries = 3) {
             try {
-                // Show loading state
-                const submitBtn = document.querySelector('#orderForm button[type="submit"]');
-                const originalText = submitBtn.textContent;
-                submitBtn.textContent = 'Submitting...';
-                submitBtn.disabled = true;
-                
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
+                const response = await fetch(url, {
+                    ...options,
                     headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(formData)
+                        'Content-Type': 'application/json',
+                        ...options.headers
+                    }
                 });
                 
-                const result = await response.json();
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                if (retries > 0) {
+                    console.log(`Retrying... (${retries} attempts left)`);
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    return apiCall(url, options, retries - 1);
+                } else {
+                    throw error;
+                }
+            }
+        }
+        
+        // Improved submitOrder function
+        async function submitOrder(formData) {
+            try {
+                showLoading('Submitting your order...');
+                
+                const result = await apiCall(`${GOOGLE_SCRIPT_URL}?t=${Date.now()}`, {
+                    method: 'POST',
+                    body: JSON.stringify(formData)
+                });
                 
                 if (result.status === 'success') {
                     // Close modal
@@ -5720,19 +6045,21 @@
             } catch (error) {
                 console.error('Error submitting order:', error);
                 const errorTitle = getTranslation('notification.error');
-                const errorMessage = 'Failed to submit order. Please try again.';
+                const errorMessage = 'Failed to submit order. Please try again later or contact us directly at pnearena@outlook.com';
                 showNotification(errorTitle, errorMessage, 'error');
             } finally {
-                // Reset button state
-                const submitBtn = document.querySelector('#orderForm button[type="submit"]');
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
+                hideLoading();
             }
         }
         
         // Handle order form submission
         orderForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            // Validate form
+            if (!validateForm(orderForm)) {
+                return;
+            }
             
             // Get form data
             const formData = {
@@ -5751,13 +6078,18 @@
                 date: new Date().toISOString()
             };
             
-            // Call the new submitOrder function
+            // Call the improved submitOrder function
             await submitOrder(formData);
         });
         
         // Handle contact form submission
         contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            // Validate form
+            if (!validateForm(contactForm)) {
+                return;
+            }
             
             // Get form data
             const formData = {
@@ -5769,13 +6101,9 @@
             };
             
             try {
-                // Show loading state
-                const submitBtn = contactForm.querySelector('button[type="submit"]');
-                const originalText = submitBtn.textContent;
-                submitBtn.textContent = 'Sending...';
-                submitBtn.disabled = true;
+                showLoading('Sending your message...');
                 
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                const response = await fetch(`${GOOGLE_SCRIPT_URL}?t=${Date.now()}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -5802,10 +6130,7 @@
                 const errorMessage = 'Failed to send message. Please try again.';
                 showNotification(errorTitle, errorMessage, 'error');
             } finally {
-                // Reset button state
-                const submitBtn = contactForm.querySelector('button[type="submit"]');
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
+                hideLoading();
             }
         });
         
@@ -5969,57 +6294,6 @@
             notification.classList.remove('show');
         });
         
-        // Show notification function
-        function showNotification(title, message, type = 'success') {
-            const notificationHeader = notification.querySelector('h3');
-            const notificationBody = notification.querySelector('.notification-body');
-            const notificationIcon = notification.querySelector('.notification-header i');
-            
-            notificationHeader.textContent = title;
-            notificationBody.textContent = message;
-            
-            // Reset classes
-            notification.classList.remove('admin-notification', 'error-notification', 'success-notification');
-            
-            // Add appropriate class based on type
-            if (type === 'admin') {
-                notification.classList.add('admin-notification');
-                notificationIcon.className = 'fas fa-check-circle';
-            } else if (type === 'error') {
-                notification.classList.add('error-notification');
-                notificationIcon.className = 'fas fa-exclamation-circle';
-            } else {
-                notification.classList.add('success-notification');
-                notificationIcon.className = 'fas fa-check-circle';
-            }
-            
-            notification.classList.add('show');
-            
-            // Hide notification after 5 seconds
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 5000);
-        }
-        
-        // Add scroll animations for product cards
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.1
-        };
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
-        
-        // Observe product cards for animation
-        document.querySelectorAll('.product-card, .sales-card, .feature-card, .testimonial-card').forEach(card => {
-            observer.observe(card);
-        });
-        
         // Search functionality
         searchInput.addEventListener('input', (e) => {
             const searchTerm = e.target.value.toLowerCase();
@@ -6057,7 +6331,7 @@
             // For demo purposes, just show a notification
             const checkoutTitle = 'Checkout';
             const checkoutMessage = 'Checkout functionality would be implemented here in a real application.';
-            showNotification(checkoutTitle, checkoutMessage, 'success');
+            showNotification(checkoutTitle, checkoutMessage, 'info');
         });
         
         // User dropdown functionality
@@ -6097,7 +6371,7 @@
             // For demo purposes, just show a notification
             const accountTitle = 'My Account';
             const accountMessage = 'Account management would be implemented here in a real application.';
-            showNotification(accountTitle, accountMessage, 'success');
+            showNotification(accountTitle, accountMessage, 'info');
         });
         
         logoutBtn.addEventListener('click', (e) => {
@@ -7171,6 +7445,101 @@
         adminIconAbout.addEventListener('click', handleAdminIconClick);
         adminIconContact.addEventListener('click', handleAdminIconClick);
         adminIconDetail.addEventListener('click', handleAdminIconClick);
+        
+        // Initialize lazy loading
+        function initializeLazyLoading() {
+            const lazyImages = document.querySelectorAll('img[data-src]');
+            
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.removeAttribute('data-src');
+                        imageObserver.unobserve(img);
+                    }
+                });
+            });
+            
+            lazyImages.forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+        
+        // Form data persistence
+        function initializeFormPersistence() {
+            // Save form data
+            function saveFormData(formId) {
+                const form = document.getElementById(formId);
+                if (!form) return;
+                
+                const formData = {};
+                const inputs = form.querySelectorAll('input, textarea, select');
+                
+                inputs.forEach(input => {
+                    if (input.type === 'checkbox' || input.type === 'radio') {
+                        formData[input.name] = input.checked;
+                    } else {
+                        formData[input.name] = input.value;
+                    }
+                });
+                
+                localStorage.setItem(`form_${formId}`, JSON.stringify(formData));
+            }
+            
+            // Load form data
+            function loadFormData(formId) {
+                const form = document.getElementById(formId);
+                if (!form) return;
+                
+                const savedData = localStorage.getItem(`form_${formId}`);
+                if (!savedData) return;
+                
+                const formData = JSON.parse(savedData);
+                const inputs = form.querySelectorAll('input, textarea, select');
+                
+                inputs.forEach(input => {
+                    if (formData.hasOwnProperty(input.name)) {
+                        if (input.type === 'checkbox' || input.type === 'radio') {
+                            input.checked = formData[input.name];
+                        } else {
+                            input.value = formData[input.name];
+                        }
+                    }
+                });
+            }
+            
+            // Add auto-save to forms
+            document.addEventListener('input', (e) => {
+                if (e.target.closest('form')) {
+                    const formId = e.target.closest('form').id;
+                    if (formId) {
+                        saveFormData(formId);
+                    }
+                }
+            });
+            
+            // Load form data on page load
+            document.addEventListener('DOMContentLoaded', () => {
+                const forms = document.querySelectorAll('form[id]');
+                forms.forEach(form => {
+                    loadFormData(form.id);
+                });
+            });
+        }
+        
+        // Register service worker for offline support
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('ServiceWorker registration failed: ', error);
+                    });
+            });
+        }
     </script>
 </body>
 </html>
