@@ -981,6 +981,124 @@
         .untally-form.active {
             display: block;
         }
+        /* Crew Management Modal */
+        .crew-list {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-light);
+            border: 1px solid var(--border-color);
+            margin-top: 20px;
+        }
+        .crew-item {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .crew-item:last-child {
+            border-bottom: none;
+        }
+        .crew-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .crew-avatar-small {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+        }
+        .crew-details h4 {
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+        .crew-details p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        .crew-actions {
+            display: flex;
+            gap: 8px;
+        }
+        /* System Settings */
+        .settings-section {
+            background-color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-light);
+            border: 1px solid var(--border-color);
+        }
+        .settings-section h3 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: var(--primary-black);
+        }
+        .settings-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--soft-gray);
+        }
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+        .settings-label {
+            font-weight: 500;
+        }
+        .settings-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--soft-gray);
+            transition: .4s;
+            border-radius: 24px;
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .toggle-slider {
+            background-color: var(--accent-color);
+        }
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
         /* Responsive Styles */
         @media (max-width: 1024px) {
             .portal-content {
@@ -1184,6 +1302,10 @@
                             <i class="fas fa-cogs"></i>
                             <div>System Settings</div>
                         </div>
+                        <div class="admin-tool" id="manageItemsBtn">
+                            <i class="fas fa-boxes"></i>
+                            <div>Manage Items</div>
+                        </div>
                     </div>
                 </div>
                 
@@ -1208,6 +1330,132 @@
                     <div class="form-row">
                         <button class="btn btn-secondary" id="cancelUntallyBtn">Cancel</button>
                         <button class="btn btn-warning" id="processUntallyBtn">Process Adjustment</button>
+                    </div>
+                </div>
+                
+                <div id="crewManagementForm" style="display: none;">
+                    <div class="admin-panel">
+                        <h3 class="section-subtitle">
+                            <i class="fas fa-users-cog"></i> Crew Management
+                        </h3>
+                        <button class="btn" id="addCrewBtn" style="margin-bottom: 16px;">
+                            <i class="fas fa-plus"></i> Add New Crew
+                        </button>
+                        
+                        <div class="crew-list" id="crewList">
+                            <!-- Crew list will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="systemSettingsForm" style="display: none;">
+                    <div class="admin-panel">
+                        <h3 class="section-subtitle">
+                            <i class="fas fa-cogs"></i> System Settings
+                        </h3>
+                        
+                        <div class="settings-section">
+                            <h3>General Settings</h3>
+                            <div class="settings-item">
+                                <div class="settings-label">Auto-save drafts</div>
+                                <div class="settings-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="autoSaveDrafts" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="settings-item">
+                                <div class="settings-label">Email notifications</div>
+                                <div class="settings-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="emailNotifications">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="settings-item">
+                                <div class="settings-label">Require payment processing</div>
+                                <div class="settings-control">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="requirePayment" checked>
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <h3>Promo Codes</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="newPromoCode">New Promo Code</label>
+                                    <input type="text" id="newPromoCode" placeholder="Enter code">
+                                </div>
+                                <div class="form-group">
+                                    <label for="newPromoDiscount">Discount (%)</label>
+                                    <input type="number" id="newPromoDiscount" placeholder="Enter discount" min="1" max="100">
+                                </div>
+                            </div>
+                            <button class="btn" id="addPromoBtn">Add Promo Code</button>
+                            
+                            <div class="crew-list" style="margin-top: 16px;">
+                                <div class="crew-item">
+                                    <div class="crew-info">
+                                        <div>
+                                            <h4>SAVE10</h4>
+                                            <p>10% discount</p>
+                                        </div>
+                                    </div>
+                                    <div class="crew-actions">
+                                        <button class="icon-btn" title="Remove">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="crew-item">
+                                    <div class="crew-info">
+                                        <div>
+                                            <h4>WELCOME</h4>
+                                            <p>15% discount</p>
+                                        </div>
+                                    </div>
+                                    <div class="crew-actions">
+                                        <button class="icon-btn" title="Remove">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="crew-item">
+                                    <div class="crew-info">
+                                        <div>
+                                            <h4>STUDENT</h4>
+                                            <p>20% discount</p>
+                                        </div>
+                                    </div>
+                                    <div class="crew-actions">
+                                        <button class="icon-btn" title="Remove">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="itemsManagementForm" style="display: none;">
+                    <div class="admin-panel">
+                        <h3 class="section-subtitle">
+                            <i class="fas fa-boxes"></i> Item Management
+                        </h3>
+                        <button class="btn" id="addItemBtn" style="margin-bottom: 16px;">
+                            <i class="fas fa-plus"></i> Add New Item
+                        </button>
+                        
+                        <div class="crew-list" id="itemsList">
+                            <!-- Items list will be populated by JavaScript -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1659,6 +1907,214 @@
         </div>
     </div>
     
+    <!-- Add Crew Modal -->
+    <div class="modal" id="addCrewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New Crew Member</h3>
+                <button class="close-btn" id="closeAddCrewModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addCrewForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="newCrewId">Crew ID</label>
+                            <input type="text" id="newCrewId" placeholder="Enter crew ID" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newCrewPassword">Password</label>
+                            <input type="password" id="newCrewPassword" placeholder="Enter password" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="newCrewFirstName">First Name</label>
+                            <input type="text" id="newCrewFirstName" placeholder="Enter first name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newCrewLastName">Last Name</label>
+                            <input type="text" id="newCrewLastName" placeholder="Enter last name" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="newCrewEmail">Email</label>
+                            <input type="email" id="newCrewEmail" placeholder="Enter email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newCrewPhone">Phone</label>
+                            <input type="tel" id="newCrewPhone" placeholder="Enter phone" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="newCrewOutlet">Outlet Location</label>
+                        <input type="text" id="newCrewOutlet" placeholder="Enter outlet location" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelAddCrewBtn">Cancel</button>
+                <button class="btn btn-success" id="saveAddCrewBtn">Add Crew Member</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Crew Modal -->
+    <div class="modal" id="editCrewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Crew Member</h3>
+                <button class="close-btn" id="closeEditCrewModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editCrewForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editCrewId">Crew ID</label>
+                            <input type="text" id="editCrewId" placeholder="Enter crew ID" required readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="editCrewPassword">New Password (leave blank to keep current)</label>
+                            <input type="password" id="editCrewPassword" placeholder="Enter new password">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editCrewFirstName">First Name</label>
+                            <input type="text" id="editCrewFirstName" placeholder="Enter first name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editCrewLastName">Last Name</label>
+                            <input type="text" id="editCrewLastName" placeholder="Enter last name" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editCrewEmail">Email</label>
+                            <input type="email" id="editCrewEmail" placeholder="Enter email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editCrewPhone">Phone</label>
+                            <input type="tel" id="editCrewPhone" placeholder="Enter phone" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="editCrewOutlet">Outlet Location</label>
+                        <input type="text" id="editCrewOutlet" placeholder="Enter outlet location" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelEditCrewBtn">Cancel</button>
+                <button class="btn btn-success" id="saveEditCrewBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Item Modal -->
+    <div class="modal" id="addItemModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New Item</h3>
+                <button class="close-btn" id="closeAddItemModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addItemForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="newItemId">Item ID</label>
+                            <input type="text" id="newItemId" placeholder="Enter item ID" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newItemName">Item Name</label>
+                            <input type="text" id="newItemName" placeholder="Enter item name" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="newItemRegularPrice">Regular Price (MYR)</label>
+                            <input type="number" id="newItemRegularPrice" placeholder="Enter regular price" min="0" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newItemMemberPrice">Member Price (MYR)</label>
+                            <input type="number" id="newItemMemberPrice" placeholder="Enter member price" min="0" step="0.01" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="newItemTaxRate">Tax Rate (%)</label>
+                            <input type="number" id="newItemTaxRate" placeholder="Enter tax rate" min="0" max="100" step="0.1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newItemMinOrder">Minimum Order (optional)</label>
+                            <input type="number" id="newItemMinOrder" placeholder="Enter minimum order quantity" min="0">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="newItemDescription">Description</label>
+                        <textarea id="newItemDescription" rows="3" placeholder="Enter item description"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelAddItemBtn">Cancel</button>
+                <button class="btn btn-success" id="saveAddItemBtn">Add Item</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Item Modal -->
+    <div class="modal" id="editItemModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Item</h3>
+                <button class="close-btn" id="closeEditItemModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editItemForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editItemId">Item ID</label>
+                            <input type="text" id="editItemId" placeholder="Enter item ID" required readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="editItemName">Item Name</label>
+                            <input type="text" id="editItemName" placeholder="Enter item name" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editItemRegularPrice">Regular Price (MYR)</label>
+                            <input type="number" id="editItemRegularPrice" placeholder="Enter regular price" min="0" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editItemMemberPrice">Member Price (MYR)</label>
+                            <input type="number" id="editItemMemberPrice" placeholder="Enter member price" min="0" step="0.01" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editItemTaxRate">Tax Rate (%)</label>
+                            <input type="number" id="editItemTaxRate" placeholder="Enter tax rate" min="0" max="100" step="0.1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editItemMinOrder">Minimum Order (optional)</label>
+                            <input type="number" id="editItemMinOrder" placeholder="Enter minimum order quantity" min="0">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="editItemDescription">Description</label>
+                        <textarea id="editItemDescription" rows="3" placeholder="Enter item description"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelEditItemBtn">Cancel</button>
+                <button class="btn btn-success" id="saveEditItemBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+    
     <!-- Approval Modal -->
     <div class="modal" id="approvalModal">
         <div class="modal-content">
@@ -1689,12 +2145,13 @@
     
     <script>
         // Data
-        const users = [
+        let users = [
             { id: '0000', password: 'Dd123', firstName: 'Danial', lastName: 'Danish', role: 'admin', email: 'danial@example.com', phone: '0123456789', outlet: 'Head Office' },
             { id: '1001', password: '0000', firstName: 'John', lastName: 'Doe', role: 'crew', email: 'john@example.com', phone: '0123456788', outlet: 'Outlet A' },
             { id: '1002', password: '0000', firstName: 'Jane', lastName: 'Smith', role: 'crew', email: 'jane@example.com', phone: '0123456787', outlet: 'Outlet B' }
         ];
-        const itemTypes = [
+        
+        let itemTypes = [
             {
                 id: 'adult-robes',
                 name: 'Adult Robes',
@@ -1722,10 +2179,18 @@
                 minOrder: 10
             }
         ];
-        const promoCodes = {
+        
+        let promoCodes = {
             "SAVE10": 0.1,
             "WELCOME": 0.15,
             "STUDENT": 0.2
+        };
+        
+        // System settings
+        let systemSettings = {
+            autoSaveDrafts: true,
+            emailNotifications: false,
+            requirePayment: true
         };
         
         // State
@@ -1742,6 +2207,8 @@
         let activeSection = 'cashbill';
         let paymentProcessed = false;
         let editPaymentProcessed = false;
+        let currentEditingCrew = null;
+        let currentEditingItem = null;
         
         // DOM elements
         const loginContainer = document.getElementById('loginContainer');
@@ -1767,6 +2234,10 @@
         const editCashbillModal = document.getElementById('editCashbillModal');
         const editProfileModal = document.getElementById('editProfileModal');
         const newLogbookModal = document.getElementById('newLogbookModal');
+        const addCrewModal = document.getElementById('addCrewModal');
+        const editCrewModal = document.getElementById('editCrewModal');
+        const addItemModal = document.getElementById('addItemModal');
+        const editItemModal = document.getElementById('editItemModal');
         const approvalModal = document.getElementById('approvalModal');
         
         // Buttons
@@ -1775,6 +2246,12 @@
         const newLogbookBtn = document.getElementById('newLogbookBtn');
         const addItemBtn = document.getElementById('addItemBtn');
         const editAddItemBtn = document.getElementById('editAddItemBtn');
+        const addCrewBtn = document.getElementById('addCrewBtn');
+        const saveAddCrewBtn = document.getElementById('saveAddCrewBtn');
+        const saveEditCrewBtn = document.getElementById('saveEditCrewBtn');
+        const addNewItemBtn = document.getElementById('addNewItemBtn');
+        const saveAddItemBtn = document.getElementById('saveAddItemBtn');
+        const saveEditItemBtn = document.getElementById('saveEditItemBtn');
         
         // Payment elements
         const paymentProcessing = document.getElementById('paymentProcessing');
@@ -1796,12 +2273,21 @@
         const untallyPaymentBtn = document.getElementById('untallyPaymentBtn');
         const manageCrewBtn = document.getElementById('manageCrewBtn');
         const systemSettingsBtn = document.getElementById('systemSettingsBtn');
+        const manageItemsBtn = document.getElementById('manageItemsBtn');
         const untallyForm = document.getElementById('untallyForm');
         const cancelUntallyBtn = document.getElementById('cancelUntallyBtn');
         const processUntallyBtn = document.getElementById('processUntallyBtn');
+        const crewManagementForm = document.getElementById('crewManagementForm');
+        const systemSettingsForm = document.getElementById('systemSettingsForm');
+        const itemsManagementForm = document.getElementById('itemsManagementForm');
+        const crewList = document.getElementById('crewList');
+        const itemsList = document.getElementById('itemsList');
         
         // Initialize
         function init() {
+            // Load data from localStorage
+            loadAllData();
+            
             // Check for saved session
             const savedUser = localStorage.getItem('currentUser');
             const savedSection = localStorage.getItem('activeSection');
@@ -1826,12 +2312,8 @@
                 switchSection(activeSection);
             }
             
-            // Load data from localStorage
-            const savedCashbills = localStorage.getItem('cashbills');
-            if (savedCashbills) {
-                cashbills = JSON.parse(savedCashbills);
-            } else {
-                // Initialize with some sample data
+            // Load cashbills if not exists
+            if (cashbills.length === 0) {
                 cashbills = [
                     {
                         id: '#PNE0001',
@@ -1901,15 +2383,56 @@
                 saveCashbills();
             }
             
+            setupEventListeners();
+        }
+        
+        // Load all data from localStorage
+        function loadAllData() {
+            // Load users
+            const savedUsers = localStorage.getItem('users');
+            if (savedUsers) {
+                users = JSON.parse(savedUsers);
+            }
+            
+            // Load cashbills
+            const savedCashbills = localStorage.getItem('cashbills');
+            if (savedCashbills) {
+                cashbills = JSON.parse(savedCashbills);
+            }
+            
+            // Load logbook entries
             const savedLogbook = localStorage.getItem('logbookEntries');
             if (savedLogbook) {
                 logbookEntries = JSON.parse(savedLogbook);
-            } else {
-                logbookEntries = [];
-                saveLogbook();
             }
             
-            setupEventListeners();
+            // Load item types
+            const savedItemTypes = localStorage.getItem('itemTypes');
+            if (savedItemTypes) {
+                itemTypes = JSON.parse(savedItemTypes);
+            }
+            
+            // Load promo codes
+            const savedPromoCodes = localStorage.getItem('promoCodes');
+            if (savedPromoCodes) {
+                promoCodes = JSON.parse(savedPromoCodes);
+            }
+            
+            // Load system settings
+            const savedSystemSettings = localStorage.getItem('systemSettings');
+            if (savedSystemSettings) {
+                systemSettings = JSON.parse(savedSystemSettings);
+            }
+        }
+        
+        // Save all data to localStorage
+        function saveAllData() {
+            localStorage.setItem('users', JSON.stringify(users));
+            localStorage.setItem('cashbills', JSON.stringify(cashbills));
+            localStorage.setItem('logbookEntries', JSON.stringify(logbookEntries));
+            localStorage.setItem('itemTypes', JSON.stringify(itemTypes));
+            localStorage.setItem('promoCodes', JSON.stringify(promoCodes));
+            localStorage.setItem('systemSettings', JSON.stringify(systemSettings));
         }
         
         // Setup event listeners
@@ -1930,7 +2453,37 @@
             // Admin panel buttons
             untallyPaymentBtn.addEventListener('click', () => {
                 untallyForm.classList.toggle('active');
+                crewManagementForm.style.display = 'none';
+                systemSettingsForm.style.display = 'none';
+                itemsManagementForm.style.display = 'none';
             });
+            
+            manageCrewBtn.addEventListener('click', () => {
+                crewManagementForm.style.display = 'block';
+                untallyForm.classList.remove('active');
+                systemSettingsForm.style.display = 'none';
+                itemsManagementForm.style.display = 'none';
+                renderCrewList();
+            });
+            
+            systemSettingsBtn.addEventListener('click', () => {
+                systemSettingsForm.style.display = 'block';
+                untallyForm.classList.remove('active');
+                crewManagementForm.style.display = 'none';
+                itemsManagementForm.style.display = 'none';
+                renderSystemSettings();
+            });
+            
+            manageItemsBtn.addEventListener('click', () => {
+                itemsManagementForm.style.display = 'block';
+                untallyForm.classList.remove('active');
+                crewManagementForm.style.display = 'none';
+                systemSettingsForm.style.display = 'none';
+                renderItemsList();
+            });
+            
+            addCrewBtn.addEventListener('click', openAddCrewModal);
+            addNewItemBtn.addEventListener('click', openAddItemModal);
             
             cancelUntallyBtn.addEventListener('click', () => {
                 untallyForm.classList.remove('active');
@@ -1978,6 +2531,10 @@
             document.getElementById('closeEditCashbillModal').addEventListener('click', closeEditCashbillModal);
             document.getElementById('closeProfileModal').addEventListener('click', closeEditProfileModal);
             document.getElementById('closeLogbookModal').addEventListener('click', closeNewLogbookModal);
+            document.getElementById('closeAddCrewModal').addEventListener('click', closeAddCrewModal);
+            document.getElementById('closeEditCrewModal').addEventListener('click', closeEditCrewModal);
+            document.getElementById('closeAddItemModal').addEventListener('click', closeAddItemModal);
+            document.getElementById('closeEditItemModal').addEventListener('click', closeEditItemModal);
             document.getElementById('closeApprovalModal').addEventListener('click', closeApprovalModal);
             
             // Modal cancel buttons
@@ -1986,6 +2543,10 @@
             document.getElementById('cancelEditCashbillBtn').addEventListener('click', closeEditCashbillModal);
             document.getElementById('cancelProfileBtn').addEventListener('click', closeEditProfileModal);
             document.getElementById('cancelLogbookBtn').addEventListener('click', closeNewLogbookModal);
+            document.getElementById('cancelAddCrewBtn').addEventListener('click', closeAddCrewModal);
+            document.getElementById('cancelEditCrewBtn').addEventListener('click', closeEditCrewModal);
+            document.getElementById('cancelAddItemBtn').addEventListener('click', closeAddItemModal);
+            document.getElementById('cancelEditItemBtn').addEventListener('click', closeEditItemModal);
             document.getElementById('cancelApprovalBtn').addEventListener('click', closeApprovalModal);
             
             // Modal action buttons
@@ -1994,8 +2555,30 @@
             document.getElementById('saveEditCashbillBtn').addEventListener('click', saveEditCashbill);
             document.getElementById('saveProfileBtn').addEventListener('click', saveProfile);
             document.getElementById('saveLogbookBtn').addEventListener('click', saveLogbook);
+            document.getElementById('saveAddCrewBtn').addEventListener('click', saveAddCrew);
+            document.getElementById('saveEditCrewBtn').addEventListener('click', saveEditCrew);
+            document.getElementById('saveAddItemBtn').addEventListener('click', saveAddItem);
+            document.getElementById('saveEditItemBtn').addEventListener('click', saveEditItem);
             document.getElementById('requestApprovalBtn').addEventListener('click', requestApproval);
             document.getElementById('printDetailBtn').addEventListener('click', printCashbillDetail);
+            
+            // System settings
+            document.getElementById('autoSaveDrafts').addEventListener('change', (e) => {
+                systemSettings.autoSaveDrafts = e.target.checked;
+                saveAllData();
+            });
+            
+            document.getElementById('emailNotifications').addEventListener('change', (e) => {
+                systemSettings.emailNotifications = e.target.checked;
+                saveAllData();
+            });
+            
+            document.getElementById('requirePayment').addEventListener('change', (e) => {
+                systemSettings.requirePayment = e.target.checked;
+                saveAllData();
+            });
+            
+            document.getElementById('addPromoBtn').addEventListener('click', addPromoCode);
             
             // Payment type selection
             document.querySelectorAll('.payment-type').forEach(type => {
@@ -2263,6 +2846,85 @@
                 `;
                 
                 logbookList.appendChild(logbookItem);
+            });
+        }
+        
+        // Render crew list
+        function renderCrewList() {
+            crewList.innerHTML = '';
+            
+            const crewMembers = users.filter(u => u.role === 'crew');
+            
+            if (crewMembers.length === 0) {
+                crewList.innerHTML = '<div class="crew-item"><div style="text-align: center; color: var(--text-secondary);">No crew members found</div></div>';
+                return;
+            }
+            
+            crewMembers.forEach(crew => {
+                const crewItem = document.createElement('div');
+                crewItem.className = 'crew-item';
+                
+                crewItem.innerHTML = `
+                    <div class="crew-info">
+                        <div class="crew-avatar-small">${crew.firstName.charAt(0)}${crew.lastName.charAt(0)}</div>
+                        <div class="crew-details">
+                            <h4>${crew.firstName} ${crew.lastName}</h4>
+                            <p>ID: ${crew.id} | Outlet: ${crew.outlet}</p>
+                        </div>
+                    </div>
+                    <div class="crew-actions">
+                        <button class="icon-btn" onclick="editCrewMember('${crew.id}')" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="icon-btn" onclick="deleteCrewMember('${crew.id}')" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                
+                crewList.appendChild(crewItem);
+            });
+        }
+        
+        // Render system settings
+        function renderSystemSettings() {
+            // Update toggle switches
+            document.getElementById('autoSaveDrafts').checked = systemSettings.autoSaveDrafts;
+            document.getElementById('emailNotifications').checked = systemSettings.emailNotifications;
+            document.getElementById('requirePayment').checked = systemSettings.requirePayment;
+        }
+        
+        // Render items list
+        function renderItemsList() {
+            itemsList.innerHTML = '';
+            
+            if (itemTypes.length === 0) {
+                itemsList.innerHTML = '<div class="crew-item"><div style="text-align: center; color: var(--text-secondary);">No items found</div></div>';
+                return;
+            }
+            
+            itemTypes.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'crew-item';
+                
+                itemElement.innerHTML = `
+                    <div class="crew-info">
+                        <div>
+                            <h4>${item.name}</h4>
+                            <p>ID: ${item.id} | Regular: MYR ${item.regularPrice} | Member: MYR ${item.memberPrice}</p>
+                        </div>
+                    </div>
+                    <div class="crew-actions">
+                        <button class="icon-btn" onclick="editItem('${item.id}')" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="icon-btn" onclick="deleteItem('${item.id}')" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                
+                itemsList.appendChild(itemElement);
             });
         }
         
@@ -2599,6 +3261,82 @@
         // Close new logbook modal
         function closeNewLogbookModal() {
             newLogbookModal.style.display = 'none';
+        }
+        
+        // Open add crew modal
+        function openAddCrewModal() {
+            // Reset form
+            document.getElementById('addCrewForm').reset();
+            
+            addCrewModal.style.display = 'flex';
+        }
+        
+        // Close add crew modal
+        function closeAddCrewModal() {
+            addCrewModal.style.display = 'none';
+        }
+        
+        // Open edit crew modal
+        function openEditCrewModal(id) {
+            const crew = users.find(u => u.id === id);
+            if (!crew) return;
+            
+            currentEditingCrew = crew;
+            
+            // Populate form with crew data
+            document.getElementById('editCrewId').value = crew.id;
+            document.getElementById('editCrewPassword').value = '';
+            document.getElementById('editCrewFirstName').value = crew.firstName;
+            document.getElementById('editCrewLastName').value = crew.lastName;
+            document.getElementById('editCrewEmail').value = crew.email;
+            document.getElementById('editCrewPhone').value = crew.phone;
+            document.getElementById('editCrewOutlet').value = crew.outlet;
+            
+            editCrewModal.style.display = 'flex';
+        }
+        
+        // Close edit crew modal
+        function closeEditCrewModal() {
+            editCrewModal.style.display = 'none';
+            currentEditingCrew = null;
+        }
+        
+        // Open add item modal
+        function openAddItemModal() {
+            // Reset form
+            document.getElementById('addItemForm').reset();
+            
+            addItemModal.style.display = 'flex';
+        }
+        
+        // Close add item modal
+        function closeAddItemModal() {
+            addItemModal.style.display = 'none';
+        }
+        
+        // Open edit item modal
+        function openEditItemModal(id) {
+            const item = itemTypes.find(i => i.id === id);
+            if (!item) return;
+            
+            currentEditingItem = item;
+            
+            // Populate form with item data
+            document.getElementById('editItemId').value = item.id;
+            document.getElementById('editItemName').value = item.name;
+            document.getElementById('editItemRegularPrice').value = item.regularPrice;
+            document.getElementById('editItemMemberPrice').value = item.memberPrice;
+            document.getElementById('editItemTaxRate').value = item.taxRate;
+            document.getElementById('editItemMinOrder').value = item.minOrder || '';
+            document.getElementById('editItemDescription').value = item.description || '';
+            
+            editItemModal.style.display = 'flex';
+        }
+        
+        // Close edit item modal
+        function closeEditItemModal() {
+            editItemModal.style.display = 'none';
+            currentEditingItem = null;
         }
         
         // Open approval modal
@@ -3036,7 +3774,7 @@
                 return;
             }
             
-            if (!paymentProcessed) {
+            if (systemSettings.requirePayment && !paymentProcessed) {
                 showNotification('Please process the payment first!', true);
                 return;
             }
@@ -3102,7 +3840,7 @@
                 return;
             }
             
-            if (!editPaymentProcessed) {
+            if (systemSettings.requirePayment && !editPaymentProcessed) {
                 showNotification('Please process the payment first!', true);
                 return;
             }
@@ -3239,6 +3977,7 @@
             
             // Update localStorage
             localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            saveAllData();
             
             // Update UI
             userName.textContent = `${currentUser.firstName} ${currentUser.lastName}`;
@@ -3286,6 +4025,218 @@
             renderLogbook();
             closeNewLogbookModal();
             showNotification('Logbook entry saved successfully!');
+        }
+        
+        // Save add crew
+        function saveAddCrew() {
+            const id = document.getElementById('newCrewId').value;
+            const password = document.getElementById('newCrewPassword').value;
+            const firstName = document.getElementById('newCrewFirstName').value;
+            const lastName = document.getElementById('newCrewLastName').value;
+            const email = document.getElementById('newCrewEmail').value;
+            const phone = document.getElementById('newCrewPhone').value;
+            const outlet = document.getElementById('newCrewOutlet').value;
+            
+            if (!id || !password || !firstName || !lastName || !email || !phone || !outlet) {
+                showNotification('Please fill in all required fields!', true);
+                return;
+            }
+            
+            // Check if ID already exists
+            if (users.find(u => u.id === id)) {
+                showNotification('User ID already exists!', true);
+                return;
+            }
+            
+            const newCrew = {
+                id,
+                password,
+                firstName,
+                lastName,
+                email,
+                phone,
+                outlet,
+                role: 'crew'
+            };
+            
+            users.push(newCrew);
+            saveAllData();
+            renderCrewList();
+            closeAddCrewModal();
+            showNotification('Crew member added successfully!');
+        }
+        
+        // Save edit crew
+        function saveEditCrew() {
+            if (!currentEditingCrew) return;
+            
+            const password = document.getElementById('editCrewPassword').value;
+            const firstName = document.getElementById('editCrewFirstName').value;
+            const lastName = document.getElementById('editCrewLastName').value;
+            const email = document.getElementById('editCrewEmail').value;
+            const phone = document.getElementById('editCrewPhone').value;
+            const outlet = document.getElementById('editCrewOutlet').value;
+            
+            if (!firstName || !lastName || !email || !phone || !outlet) {
+                showNotification('Please fill in all required fields!', true);
+                return;
+            }
+            
+            // Update crew member
+            currentEditingCrew.firstName = firstName;
+            currentEditingCrew.lastName = lastName;
+            currentEditingCrew.email = email;
+            currentEditingCrew.phone = phone;
+            currentEditingCrew.outlet = outlet;
+            
+            if (password) {
+                currentEditingCrew.password = password;
+            }
+            
+            // Update user in the users array
+            const userIndex = users.findIndex(u => u.id === currentEditingCrew.id);
+            if (userIndex !== -1) {
+                users[userIndex] = { ...currentEditingCrew };
+            }
+            
+            saveAllData();
+            renderCrewList();
+            renderCrewProfile();
+            closeEditCrewModal();
+            showNotification('Crew member updated successfully!');
+        }
+        
+        // Delete crew member
+        function deleteCrewMember(id) {
+            if (!confirm('Are you sure you want to delete this crew member?')) {
+                return;
+            }
+            
+            users = users.filter(u => u.id !== id);
+            saveAllData();
+            renderCrewList();
+            renderCrewProfile();
+            showNotification('Crew member deleted successfully!');
+        }
+        
+        // Edit crew member
+        function editCrewMember(id) {
+            openEditCrewModal(id);
+        }
+        
+        // Save add item
+        function saveAddItem() {
+            const id = document.getElementById('newItemId').value;
+            const name = document.getElementById('newItemName').value;
+            const regularPrice = parseFloat(document.getElementById('newItemRegularPrice').value);
+            const memberPrice = parseFloat(document.getElementById('newItemMemberPrice').value);
+            const taxRate = parseFloat(document.getElementById('newItemTaxRate').value);
+            const minOrder = parseInt(document.getElementById('newItemMinOrder').value) || 0;
+            const description = document.getElementById('newItemDescription').value;
+            
+            if (!id || !name || isNaN(regularPrice) || isNaN(memberPrice) || isNaN(taxRate)) {
+                showNotification('Please fill in all required fields!', true);
+                return;
+            }
+            
+            // Check if ID already exists
+            if (itemTypes.find(i => i.id === id)) {
+                showNotification('Item ID already exists!', true);
+                return;
+            }
+            
+            const newItem = {
+                id,
+                name,
+                regularPrice,
+                memberPrice,
+                taxRate,
+                minOrder,
+                description
+            };
+            
+            itemTypes.push(newItem);
+            saveAllData();
+            renderItemsList();
+            closeAddItemModal();
+            showNotification('Item added successfully!');
+        }
+        
+        // Save edit item
+        function saveEditItem() {
+            if (!currentEditingItem) return;
+            
+            const name = document.getElementById('editItemName').value;
+            const regularPrice = parseFloat(document.getElementById('editItemRegularPrice').value);
+            const memberPrice = parseFloat(document.getElementById('editItemMemberPrice').value);
+            const taxRate = parseFloat(document.getElementById('editItemTaxRate').value);
+            const minOrder = parseInt(document.getElementById('editItemMinOrder').value) || 0;
+            const description = document.getElementById('editItemDescription').value;
+            
+            if (!name || isNaN(regularPrice) || isNaN(memberPrice) || isNaN(taxRate)) {
+                showNotification('Please fill in all required fields!', true);
+                return;
+            }
+            
+            // Update item
+            currentEditingItem.name = name;
+            currentEditingItem.regularPrice = regularPrice;
+            currentEditingItem.memberPrice = memberPrice;
+            currentEditingItem.taxRate = taxRate;
+            currentEditingItem.minOrder = minOrder;
+            currentEditingItem.description = description;
+            
+            // Update item in the itemTypes array
+            const itemIndex = itemTypes.findIndex(i => i.id === currentEditingItem.id);
+            if (itemIndex !== -1) {
+                itemTypes[itemIndex] = { ...currentEditingItem };
+            }
+            
+            saveAllData();
+            renderItemsList();
+            closeEditItemModal();
+            showNotification('Item updated successfully!');
+        }
+        
+        // Delete item
+        function deleteItem(id) {
+            if (!confirm('Are you sure you want to delete this item?')) {
+                return;
+            }
+            
+            itemTypes = itemTypes.filter(i => i.id !== id);
+            saveAllData();
+            renderItemsList();
+            showNotification('Item deleted successfully!');
+        }
+        
+        // Edit item
+        function editItem(id) {
+            openEditItemModal(id);
+        }
+        
+        // Add promo code
+        function addPromoCode() {
+            const code = document.getElementById('newPromoCode').value.toUpperCase();
+            const discount = parseFloat(document.getElementById('newPromoDiscount').value) / 100;
+            
+            if (!code || isNaN(discount)) {
+                showNotification('Please fill in all fields!', true);
+                return;
+            }
+            
+            if (promoCodes[code]) {
+                showNotification('Promo code already exists!', true);
+                return;
+            }
+            
+            promoCodes[code] = discount;
+            saveAllData();
+            showNotification('Promo code added successfully!');
+            
+            // Clear form
+            document.getElementById('newPromoCode').value = '';
+            document.getElementById('newPromoDiscount').value = '';
         }
         
         // View cashbill
@@ -3478,15 +4429,6 @@
                     showNotification(`Cashbill ${bill.id} reversal approved!`);
                 }
             );
-        }
-        
-        // Edit crew member
-        function editCrewMember(id) {
-            const crew = users.find(u => u.id === id);
-            if (!crew) return;
-            
-            // For now, we'll just show a notification
-            showNotification(`Edit crew member ${crew.firstName} ${crew.lastName} functionality would be implemented here.`);
         }
         
         // Process untally payment
