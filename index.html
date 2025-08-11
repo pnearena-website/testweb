@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal A - Cashbill PNE</title>
+    <title>Portal A - Cashbill System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
@@ -76,7 +76,7 @@
             font-weight: 500;
         }
 
-        .form-group input, .form-group select {
+        .form-group input, .form-group select, .form-group textarea {
             padding: 12px;
             border: 1px solid var(--secondary-grey);
             border-radius: 5px;
@@ -443,6 +443,11 @@
             color: var(--danger-color);
         }
 
+        .status-amendment {
+            background-color: rgba(33, 150, 243, 0.1);
+            color: #2196f3;
+        }
+
         .cashbill-actions {
             display: flex;
             gap: 10px;
@@ -674,6 +679,130 @@
             gap: 10px;
         }
 
+        /* Cashbill Detail Styles */
+        .cashbill-detail {
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            border: 1px solid var(--secondary-grey);
+        }
+
+        .cashbill-detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--secondary-grey);
+        }
+
+        .cashbill-detail-title {
+            font-size: 1.5rem;
+            color: var(--soft-black);
+        }
+
+        .cashbill-detail-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .detail-section {
+            margin-bottom: 25px;
+        }
+
+        .detail-section-title {
+            font-size: 1.2rem;
+            color: var(--soft-black);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-label {
+            font-size: 0.9rem;
+            color: var(--dark-grey);
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-weight: 500;
+        }
+
+        .detail-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .detail-table th {
+            background-color: var(--light-black);
+            color: white;
+            padding: 10px;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        .detail-table td {
+            padding: 10px;
+            border-bottom: 1px solid var(--secondary-grey);
+        }
+
+        .detail-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .detail-summary {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .detail-summary-table {
+            width: 300px;
+        }
+
+        .detail-summary-table td {
+            padding: 8px;
+        }
+
+        .detail-summary-table td:first-child {
+            text-align: left;
+        }
+
+        .detail-summary-table td:last-child {
+            text-align: right;
+            font-weight: 500;
+        }
+
+        .detail-summary-table tr.total td {
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-top: 1px solid var(--secondary-grey);
+            padding-top: 10px;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
         /* Responsive Styles */
         @media (max-width: 768px) {
             .form-row {
@@ -706,6 +835,18 @@
                 margin-top: 10px;
                 width: 100%;
                 justify-content: flex-end;
+            }
+            
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .detail-summary {
+                justify-content: flex-start;
+            }
+            
+            .detail-summary-table {
+                width: 100%;
             }
         }
     </style>
@@ -825,6 +966,10 @@
                                 <input type="email" id="customerEmail" required>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label for="customerAddress">Address</label>
+                            <textarea id="customerAddress" rows="2" placeholder="Enter customer address"></textarea>
+                        </div>
                     </div>
                     
                     <!-- Items Section -->
@@ -915,6 +1060,159 @@
                 <button class="btn btn-secondary" id="cancelCashbillBtn">Cancel</button>
                 <button class="btn" id="saveCashbillBtn">Save Draft</button>
                 <button class="btn btn-success" id="commitCashbillBtn">Commit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cashbill Detail Modal -->
+    <div class="modal" id="cashbillDetailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Cashbill Details</h3>
+                <button class="close-btn" id="closeCashbillDetailModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="cashbill-detail" id="cashbillDetail">
+                    <!-- Cashbill details will be populated by JavaScript -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="action-buttons" id="cashbillActionButtons">
+                    <!-- Action buttons will be populated by JavaScript -->
+                </div>
+                <button class="btn btn-secondary" id="closeDetailBtn">Close</button>
+                <button class="btn" id="printDetailBtn">Print Invoice</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Cashbill Modal -->
+    <div class="modal" id="editCashbillModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Cashbill</h3>
+                <button class="close-btn" id="closeEditCashbillModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editCashbillForm">
+                    <!-- Customer Information Section -->
+                    <div class="form-section">
+                        <h3 class="section-subtitle">
+                            <i class="fas fa-user"></i> Customer Information
+                        </h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editCustomerFirstName">First Name</label>
+                                <input type="text" id="editCustomerFirstName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editCustomerLastName">Last Name</label>
+                                <input type="text" id="editCustomerLastName" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="editCustomerPhone">Phone Number</label>
+                                <input type="tel" id="editCustomerPhone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editCustomerEmail">Email</label>
+                                <input type="email" id="editCustomerEmail" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="editCustomerAddress">Address</label>
+                            <textarea id="editCustomerAddress" rows="2" placeholder="Enter customer address"></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- Items Section -->
+                    <div class="form-section">
+                        <h3 class="section-subtitle">
+                            <i class="fas fa-box"></i> Items
+                        </h3>
+                        <div class="items-table-container">
+                            <table class="items-table">
+                                <thead>
+                                    <tr>
+                                        <th>SNO</th>
+                                        <th>Qty</th>
+                                        <th>Desc / Serial No / IMEI</th>
+                                        <th>Tax %</th>
+                                        <th>Unit Price (MYR)</th>
+                                        <th>Total Excl Tax (MYR)</th>
+                                        <th>Total Tax (MYR)</th>
+                                        <th>Adj Total (MYR)</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="editItemsTableBody">
+                                    <!-- Items will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <button type="button" class="btn btn-secondary add-item-btn" id="editAddItemBtn">
+                            <i class="fas fa-plus"></i> Add Item
+                        </button>
+                    </div>
+                    
+                    <!-- Payment Section -->
+                    <div class="form-section">
+                        <h3 class="section-subtitle">
+                            <i class="fas fa-credit-card"></i> Payment Information
+                        </h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Payment Type</label>
+                                <div class="payment-types" id="editPaymentTypes">
+                                    <div class="payment-type" data-payment="cash">
+                                        <i class="fas fa-money-bill-wave"></i>
+                                        <div>Cash</div>
+                                    </div>
+                                    <div class="payment-type" data-payment="card">
+                                        <i class="fas fa-credit-card"></i>
+                                        <div>Card</div>
+                                    </div>
+                                    <div class="payment-type" data-payment="ewallet">
+                                        <i class="fas fa-mobile-alt"></i>
+                                        <div>E-Wallet</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Total Amount (MYR)</label>
+                                <input type="text" id="editTotalAmount" readonly value="0.00">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Summary Section -->
+                    <div class="form-section">
+                        <h3 class="section-subtitle">
+                            <i class="fas fa-calculator"></i> Summary
+                        </h3>
+                        <div class="summary-row">
+                            <span>Subtotal:</span>
+                            <span id="editSubtotal">MYR 0.00</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Tax:</span>
+                            <span id="editTax">MYR 0.00</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Discount:</span>
+                            <span id="editDiscount">MYR 0.00</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Total:</span>
+                            <span id="editTotal">MYR 0.00</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelEditCashbillBtn">Cancel</button>
+                <button class="btn btn-success" id="saveEditCashbillBtn">Save Changes</button>
             </div>
         </div>
     </div>
@@ -1098,6 +1396,7 @@
         let discount = 0;
         let pendingAction = null;
         let itemCounter = 1;
+        let currentEditingCashbill = null;
 
         // DOM elements
         const loginScreen = document.getElementById('loginScreen');
@@ -1117,6 +1416,8 @@
 
         // Modals
         const newCashbillModal = document.getElementById('newCashbillModal');
+        const cashbillDetailModal = document.getElementById('cashbillDetailModal');
+        const editCashbillModal = document.getElementById('editCashbillModal');
         const editProfileModal = document.getElementById('editProfileModal');
         const newLogbookModal = document.getElementById('newLogbookModal');
         const approvalModal = document.getElementById('approvalModal');
@@ -1126,6 +1427,7 @@
         const editProfileBtn = document.getElementById('editProfileBtn');
         const newLogbookBtn = document.getElementById('newLogbookBtn');
         const addItemBtn = document.getElementById('addItemBtn');
+        const editAddItemBtn = document.getElementById('editAddItemBtn');
 
         // Initialize
         function init() {
@@ -1138,7 +1440,13 @@
                 cashbills = [
                     {
                         id: '#PNE0001',
-                        customer: { firstName: 'John', lastName: 'Doe', phone: '0123456789', email: 'john@example.com' },
+                        customer: { 
+                            firstName: 'John', 
+                            lastName: 'Doe', 
+                            phone: '0123456789', 
+                            email: 'john@example.com',
+                            address: '123 Main Street, Kuala Lumpur, 50000'
+                        },
                         paymentType: 'cash',
                         items: [
                             { 
@@ -1163,7 +1471,13 @@
                     },
                     {
                         id: '#PNE0002',
-                        customer: { firstName: 'Jane', lastName: 'Smith', phone: '0123456788', email: 'jane@example.com' },
+                        customer: { 
+                            firstName: 'Jane', 
+                            lastName: 'Smith', 
+                            phone: '0123456788', 
+                            email: 'jane@example.com',
+                            address: '456 Jalan Sultan, Petaling Jaya, 46000'
+                        },
                         paymentType: 'card',
                         items: [
                             { 
@@ -1214,15 +1528,20 @@
             editProfileBtn.addEventListener('click', openEditProfileModal);
             newLogbookBtn.addEventListener('click', openNewLogbookModal);
             addItemBtn.addEventListener('click', addNewItem);
+            editAddItemBtn.addEventListener('click', addEditItem);
             
             // Modal close buttons
             document.getElementById('closeCashbillModal').addEventListener('click', closeNewCashbillModal);
+            document.getElementById('closeCashbillDetailModal').addEventListener('click', closeCashbillDetailModal);
+            document.getElementById('closeEditCashbillModal').addEventListener('click', closeEditCashbillModal);
             document.getElementById('closeProfileModal').addEventListener('click', closeEditProfileModal);
             document.getElementById('closeLogbookModal').addEventListener('click', closeNewLogbookModal);
             document.getElementById('closeApprovalModal').addEventListener('click', closeApprovalModal);
             
             // Modal cancel buttons
             document.getElementById('cancelCashbillBtn').addEventListener('click', closeNewCashbillModal);
+            document.getElementById('closeDetailBtn').addEventListener('click', closeCashbillDetailModal);
+            document.getElementById('cancelEditCashbillBtn').addEventListener('click', closeEditCashbillModal);
             document.getElementById('cancelProfileBtn').addEventListener('click', closeEditProfileModal);
             document.getElementById('cancelLogbookBtn').addEventListener('click', closeNewLogbookModal);
             document.getElementById('cancelApprovalBtn').addEventListener('click', closeApprovalModal);
@@ -1230,9 +1549,11 @@
             // Modal action buttons
             document.getElementById('saveCashbillBtn').addEventListener('click', saveCashbill);
             document.getElementById('commitCashbillBtn').addEventListener('click', commitCashbill);
+            document.getElementById('saveEditCashbillBtn').addEventListener('click', saveEditCashbill);
             document.getElementById('saveProfileBtn').addEventListener('click', saveProfile);
             document.getElementById('saveLogbookBtn').addEventListener('click', saveLogbook);
             document.getElementById('requestApprovalBtn').addEventListener('click', requestApproval);
+            document.getElementById('printDetailBtn').addEventListener('click', printCashbillDetail);
             
             // Payment type selection
             document.querySelectorAll('.payment-type').forEach(type => {
@@ -1310,13 +1631,15 @@
                 billItem.className = 'cashbill-item';
                 
                 const statusClass = bill.status === 'committed' ? 'status-committed' : 
-                                   bill.status === 'pending' ? 'status-pending' : 'status-reversed';
+                                   bill.status === 'pending' ? 'status-pending' : 
+                                   bill.status === 'reversed' ? 'status-reversed' : 'status-amendment';
                 
                 billItem.innerHTML = `
                     <div class="cashbill-info">
                         <div class="cashbill-id">${bill.id}</div>
                         <div class="cashbill-details">
                             ${bill.customer.firstName} ${bill.customer.lastName} • 
+                            ${bill.customer.address ? bill.customer.address.split(',')[0] + ', ' + (bill.customer.address.split(',')[1] || '') : ''} • 
                             ${bill.items.length} items • 
                             MYR ${bill.total.toFixed(2)} • 
                             ${new Date(bill.createdAt).toLocaleDateString()}
@@ -1332,8 +1655,16 @@
                         </button>
                         ${currentUser.role === 'admin' || bill.createdBy === currentUser.id ? `
                             ${bill.status === 'committed' ? `
+                                <button class="icon-btn" onclick="requestAmendment('${bill.id}')" title="Request Amendment">
+                                    <i class="fas fa-edit"></i>
+                                </button>
                                 <button class="icon-btn" onclick="reverseCashbill('${bill.id}')" title="Reverse">
                                     <i class="fas fa-undo"></i>
+                                </button>
+                            ` : ''}
+                            ${bill.status === 'amendment' && currentUser.role === 'admin' ? `
+                                <button class="icon-btn" onclick="editCashbill('${bill.id}')" title="Edit Cashbill">
+                                    <i class="fas fa-edit"></i>
                                 </button>
                             ` : ''}
                             ${bill.status === 'pending' && currentUser.role === 'admin' ? `
@@ -1454,6 +1785,251 @@
             newCashbillModal.style.display = 'none';
         }
 
+        // Open cashbill detail modal
+        function openCashbillDetailModal(id) {
+            const bill = cashbills.find(b => b.id === id);
+            if (!bill) return;
+            
+            const cashbillDetail = document.getElementById('cashbillDetail');
+            const cashbillActionButtons = document.getElementById('cashbillActionButtons');
+            
+            // Get creator info
+            const creator = users.find(u => u.id === bill.createdBy) || {};
+            
+            cashbillDetail.innerHTML = `
+                <div class="cashbill-detail-header">
+                    <div>
+                        <div class="cashbill-detail-title">${bill.id}</div>
+                        <div style="color: var(--dark-grey); margin-top: 5px;">
+                            Created on ${new Date(bill.createdAt).toLocaleDateString()} at ${new Date(bill.createdAt).toLocaleTimeString()}
+                        </div>
+                    </div>
+                    <div class="cashbill-detail-status status-${bill.status}">${bill.status}</div>
+                </div>
+                
+                <div class="detail-section">
+                    <h3 class="detail-section-title">
+                        <i class="fas fa-user"></i> Customer Information
+                    </h3>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">First Name</div>
+                            <div class="detail-value">${bill.customer.firstName}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Last Name</div>
+                            <div class="detail-value">${bill.customer.lastName}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Phone Number</div>
+                            <div class="detail-value">${bill.customer.phone}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Email</div>
+                            <div class="detail-value">${bill.customer.email}</div>
+                        </div>
+                        <div class="detail-item" style="grid-column: 1 / -1;">
+                            <div class="detail-label">Address</div>
+                            <div class="detail-value">${bill.customer.address || 'N/A'}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <h3 class="detail-section-title">
+                        <i class="fas fa-box"></i> Items
+                    </h3>
+                    <table class="detail-table">
+                        <thead>
+                            <tr>
+                                <th>SNO</th>
+                                <th>Qty</th>
+                                <th>Description</th>
+                                <th>Tax %</th>
+                                <th>Unit Price (MYR)</th>
+                                <th>Total Excl Tax (MYR)</th>
+                                <th>Total Tax (MYR)</th>
+                                <th>Adj Total (MYR)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${bill.items.map(item => `
+                                <tr>
+                                    <td>${item.sno}</td>
+                                    <td>${item.qty}</td>
+                                    <td>${item.description}</td>
+                                    <td>${item.taxRate}%</td>
+                                    <td>${item.unitPrice.toFixed(2)}</td>
+                                    <td>${item.totalExclTax.toFixed(2)}</td>
+                                    <td>${item.totalTax.toFixed(2)}</td>
+                                    <td>${item.adjTotal.toFixed(2)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="detail-section">
+                    <h3 class="detail-section-title">
+                        <i class="fas fa-info-circle"></i> Additional Information
+                    </h3>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Payment Type</div>
+                            <div class="detail-value">${bill.paymentType.charAt(0).toUpperCase() + bill.paymentType.slice(1)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Created By</div>
+                            <div class="detail-value">${creator.firstName || 'Unknown'} ${creator.lastName || ''} (${bill.createdBy})</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Outlet</div>
+                            <div class="detail-value">${creator.outlet || 'Unknown'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Promo Code</div>
+                            <div class="detail-value">${bill.promoCode || 'None'}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <h3 class="detail-section-title">
+                        <i class="fas fa-calculator"></i> Payment Summary
+                    </h3>
+                    <div class="detail-summary">
+                        <table class="detail-summary-table">
+                            <tr>
+                                <td>Subtotal:</td>
+                                <td>MYR ${bill.subtotal.toFixed(2)}</td>
+                            </tr>
+                            <tr>
+                                <td>Tax:</td>
+                                <td>MYR ${bill.tax.toFixed(2)}</td>
+                            </tr>
+                            <tr>
+                                <td>Discount:</td>
+                                <td>MYR ${bill.discount.toFixed(2)}</td>
+                            </tr>
+                            <tr class="total">
+                                <td>Total:</td>
+                                <td>MYR ${bill.total.toFixed(2)}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            `;
+            
+            // Set action buttons based on user role and bill status
+            cashbillActionButtons.innerHTML = '';
+            
+            if (currentUser.role === 'admin' || bill.createdBy === currentUser.id) {
+                if (bill.status === 'committed') {
+                    cashbillActionButtons.innerHTML += `
+                        <button class="btn btn-warning" onclick="requestAmendment('${bill.id}')">
+                            <i class="fas fa-edit"></i> Request Amendment
+                        </button>
+                        <button class="btn btn-danger" onclick="reverseCashbill('${bill.id}')">
+                            <i class="fas fa-undo"></i> Reverse
+                        </button>
+                    `;
+                } else if (bill.status === 'amendment' && currentUser.role === 'admin') {
+                    cashbillActionButtons.innerHTML += `
+                        <button class="btn" onclick="editCashbill('${bill.id}')">
+                            <i class="fas fa-edit"></i> Edit Cashbill
+                        </button>
+                    `;
+                } else if (bill.status === 'pending' && currentUser.role === 'admin') {
+                    cashbillActionButtons.innerHTML += `
+                        <button class="btn btn-success" onclick="approveReverse('${bill.id}')">
+                            <i class="fas fa-check"></i> Approve
+                        </button>
+                    `;
+                }
+            }
+            
+            cashbillDetailModal.style.display = 'flex';
+        }
+
+        // Close cashbill detail modal
+        function closeCashbillDetailModal() {
+            cashbillDetailModal.style.display = 'none';
+        }
+
+        // Open edit cashbill modal
+        function openEditCashbillModal(id) {
+            const bill = cashbills.find(b => b.id === id);
+            if (!bill) return;
+            
+            currentEditingCashbill = bill;
+            
+            // Populate form with bill data
+            document.getElementById('editCustomerFirstName').value = bill.customer.firstName;
+            document.getElementById('editCustomerLastName').value = bill.customer.lastName;
+            document.getElementById('editCustomerPhone').value = bill.customer.phone;
+            document.getElementById('editCustomerEmail').value = bill.customer.email;
+            document.getElementById('editCustomerAddress').value = bill.customer.address || '';
+            
+            // Set payment type
+            document.querySelectorAll('#editPaymentTypes .payment-type').forEach(type => {
+                type.classList.remove('active');
+                if (type.dataset.payment === bill.paymentType) {
+                    type.classList.add('active');
+                }
+            });
+            selectedPayment = bill.paymentType;
+            
+            // Clear and populate items table
+            const itemsTableBody = document.getElementById('editItemsTableBody');
+            itemsTableBody.innerHTML = '';
+            
+            bill.items.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.sno}</td>
+                    <td>
+                        <input type="number" class="quantity-input" min="1" value="${item.qty}" onchange="updateEditItemRow(this)">
+                    </td>
+                    <td>
+                        <select class="item-select" onchange="updateEditItemRow(this)">
+                            <option value="">Select an item</option>
+                            ${itemTypes.map(type => `
+                                <option value="${type.id}" data-regular="${type.regularPrice}" data-member="${type.memberPrice}" data-tax="${type.taxRate}" data-min="${type.minOrder || 0}" ${type.name === item.description ? 'selected' : ''}>
+                                    ${type.name} - MYR ${type.regularPrice} (Member: MYR ${type.memberPrice})
+                                </option>
+                            `).join('')}
+                        </select>
+                    </td>
+                    <td>
+                        <input type="number" class="tax-input" min="0" max="100" value="${item.taxRate}" onchange="updateEditItemRow(this)">
+                    </td>
+                    <td>
+                        <input type="number" class="price-input" min="0" step="0.01" value="${item.unitPrice}" onchange="updateEditItemRow(this)">
+                    </td>
+                    <td class="total-excl-tax">MYR ${item.totalExclTax.toFixed(2)}</td>
+                    <td class="total-tax">MYR ${item.totalTax.toFixed(2)}</td>
+                    <td class="adj-total">MYR ${item.adjTotal.toFixed(2)}</td>
+                    <td>
+                        <button class="action-btn" onclick="removeEditItemRow(this)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                itemsTableBody.appendChild(row);
+            });
+            
+            // Update totals
+            updateEditTotals();
+            
+            editCashbillModal.style.display = 'flex';
+        }
+
+        // Close edit cashbill modal
+        function closeEditCashbillModal() {
+            editCashbillModal.style.display = 'none';
+            currentEditingCashbill = null;
+        }
+
         // Open edit profile modal
         function openEditProfileModal() {
             // Populate form with current user data
@@ -1540,6 +2116,46 @@
             itemCounter++;
         }
 
+        // Add new item to edit table
+        function addEditItem() {
+            const tableBody = document.getElementById('editItemsTableBody');
+            const row = document.createElement('tr');
+            
+            row.innerHTML = `
+                <td>${itemCounter}</td>
+                <td>
+                    <input type="number" class="quantity-input" min="1" value="1" onchange="updateEditItemRow(this)">
+                </td>
+                <td>
+                    <select class="item-select" onchange="updateEditItemRow(this)">
+                        <option value="">Select an item</option>
+                        ${itemTypes.map(item => `
+                            <option value="${item.id}" data-regular="${item.regularPrice}" data-member="${item.memberPrice}" data-tax="${item.taxRate}" data-min="${item.minOrder || 0}">
+                                ${item.name} - MYR ${item.regularPrice} (Member: MYR ${item.memberPrice})
+                            </option>
+                        `).join('')}
+                    </select>
+                </td>
+                <td>
+                    <input type="number" class="tax-input" min="0" max="100" value="10" onchange="updateEditItemRow(this)">
+                </td>
+                <td>
+                    <input type="number" class="price-input" min="0" step="0.01" value="0" onchange="updateEditItemRow(this)">
+                </td>
+                <td class="total-excl-tax">MYR 0.00</td>
+                <td class="total-tax">MYR 0.00</td>
+                <td class="adj-total">MYR 0.00</td>
+                <td>
+                    <button class="action-btn" onclick="removeEditItemRow(this)">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            `;
+            
+            tableBody.appendChild(row);
+            itemCounter++;
+        }
+
         // Update item row calculations
         function updateItemRow(element) {
             const row = element.closest('tr');
@@ -1581,11 +2197,59 @@
             updateTotals();
         }
 
+        // Update edit item row calculations
+        function updateEditItemRow(element) {
+            const row = element.closest('tr');
+            const quantity = parseFloat(row.querySelector('.quantity-input').value) || 0;
+            const itemSelect = row.querySelector('.item-select');
+            const selectedItem = itemSelect.options[itemSelect.selectedIndex];
+            const taxRate = parseFloat(row.querySelector('.tax-input').value) || 0;
+            const unitPrice = parseFloat(row.querySelector('.price-input').value) || 0;
+            
+            // If an item is selected, update the unit price
+            if (selectedItem.value) {
+                const regularPrice = parseFloat(selectedItem.dataset.regular);
+                const memberPrice = parseFloat(selectedItem.dataset.member);
+                const minOrder = parseInt(selectedItem.dataset.min) || 0;
+                
+                // Check if quantity meets minimum order requirement
+                if (quantity < minOrder) {
+                    showNotification(`Minimum order for ${selectedItem.text.split(' - ')[0]} is ${minOrder} sets!`, true);
+                    row.querySelector('.quantity-input').value = minOrder;
+                    return updateEditItemRow(row.querySelector('.quantity-input'));
+                }
+                
+                // Use member price if available, otherwise regular price
+                row.querySelector('.price-input').value = memberPrice || regularPrice;
+                return updateEditItemRow(row.querySelector('.price-input'));
+            }
+            
+            // Calculate totals
+            const totalExclTax = quantity * unitPrice;
+            const totalTax = totalExclTax * (taxRate / 100);
+            const adjTotal = totalExclTax + totalTax;
+            
+            // Update display
+            row.querySelector('.total-excl-tax').textContent = `MYR ${totalExclTax.toFixed(2)}`;
+            row.querySelector('.total-tax').textContent = `MYR ${totalTax.toFixed(2)}`;
+            row.querySelector('.adj-total').textContent = `MYR ${adjTotal.toFixed(2)}`;
+            
+            // Update overall totals
+            updateEditTotals();
+        }
+
         // Remove item row
         function removeItemRow(button) {
             const row = button.closest('tr');
             row.remove();
             updateTotals();
+        }
+
+        // Remove edit item row
+        function removeEditItemRow(button) {
+            const row = button.closest('tr');
+            row.remove();
+            updateEditTotals();
         }
 
         // Update overall totals
@@ -1616,6 +2280,34 @@
             document.getElementById('totalAmount').value = `MYR ${totalAfterDiscount.toFixed(2)}`;
         }
 
+        // Update edit overall totals
+        function updateEditTotals() {
+            const rows = document.querySelectorAll('#editItemsTableBody tr');
+            let subtotal = 0;
+            let totalTax = 0;
+            let adjTotal = 0;
+            
+            rows.forEach(row => {
+                const exclTaxText = row.querySelector('.total-excl-tax').textContent;
+                const taxText = row.querySelector('.total-tax').textContent;
+                const adjText = row.querySelector('.adj-total').textContent;
+                
+                subtotal += parseFloat(exclTaxText.replace('MYR ', '')) || 0;
+                totalTax += parseFloat(taxText.replace('MYR ', '')) || 0;
+                adjTotal += parseFloat(adjText.replace('MYR ', '')) || 0;
+            });
+            
+            // Apply discount if any
+            const totalAfterDiscount = adjTotal - discount;
+            
+            // Update display
+            document.getElementById('editSubtotal').textContent = `MYR ${subtotal.toFixed(2)}`;
+            document.getElementById('editTax').textContent = `MYR ${totalTax.toFixed(2)}`;
+            document.getElementById('editDiscount').textContent = `MYR ${discount.toFixed(2)}`;
+            document.getElementById('editTotal').textContent = `MYR ${totalAfterDiscount.toFixed(2)}`;
+            document.getElementById('editTotalAmount').value = `MYR ${totalAfterDiscount.toFixed(2)}`;
+        }
+
         // Select payment type
         function selectPayment(type) {
             document.querySelectorAll('.payment-type').forEach(el => el.classList.remove('active'));
@@ -1641,6 +2333,7 @@
             const lastName = document.getElementById('customerLastName').value;
             const phone = document.getElementById('customerPhone').value;
             const email = document.getElementById('customerEmail').value;
+            const address = document.getElementById('customerAddress').value;
             
             if (!firstName || !lastName || !phone || !email) {
                 showNotification('Please fill in all customer details!', true);
@@ -1659,7 +2352,7 @@
             
             const newCashbill = {
                 id: newId,
-                customer: { firstName, lastName, phone, email },
+                customer: { firstName, lastName, phone, email, address },
                 paymentType: selectedPayment,
                 items,
                 subtotal,
@@ -1697,6 +2390,7 @@
             const lastName = document.getElementById('customerLastName').value;
             const phone = document.getElementById('customerPhone').value;
             const email = document.getElementById('customerEmail').value;
+            const address = document.getElementById('customerAddress').value;
             
             if (!firstName || !lastName || !phone || !email) {
                 showNotification('Please fill in all customer details!', true);
@@ -1715,7 +2409,7 @@
             
             const newCashbill = {
                 id: newId,
-                customer: { firstName, lastName, phone, email },
+                customer: { firstName, lastName, phone, email, address },
                 paymentType: selectedPayment,
                 items,
                 subtotal,
@@ -1735,9 +2429,90 @@
             showNotification('Cashbill committed successfully!');
         }
 
+        // Save edited cashbill
+        function saveEditCashbill() {
+            if (!currentEditingCashbill) return;
+            
+            const items = getEditItemsFromTable();
+            
+            if (items.length === 0) {
+                showNotification('Please add at least one item!', true);
+                return;
+            }
+            
+            if (!selectedPayment) {
+                showNotification('Please select a payment type!', true);
+                return;
+            }
+            
+            const firstName = document.getElementById('editCustomerFirstName').value;
+            const lastName = document.getElementById('editCustomerLastName').value;
+            const phone = document.getElementById('editCustomerPhone').value;
+            const email = document.getElementById('editCustomerEmail').value;
+            const address = document.getElementById('editCustomerAddress').value;
+            
+            if (!firstName || !lastName || !phone || !email) {
+                showNotification('Please fill in all customer details!', true);
+                return;
+            }
+            
+            // Calculate totals
+            const subtotal = items.reduce((sum, item) => sum + item.totalExclTax, 0);
+            const tax = items.reduce((sum, item) => sum + item.totalTax, 0);
+            const total = items.reduce((sum, item) => sum + item.adjTotal, 0) - discount;
+            
+            // Update cashbill
+            currentEditingCashbill.customer = { firstName, lastName, phone, email, address };
+            currentEditingCashbill.paymentType = selectedPayment;
+            currentEditingCashbill.items = items;
+            currentEditingCashbill.subtotal = subtotal;
+            currentEditingCashbill.tax = tax;
+            currentEditingCashbill.discount = discount;
+            currentEditingCashbill.total = total;
+            currentEditingCashbill.status = 'committed';
+            
+            saveCashbills();
+            renderCashbills();
+            closeEditCashbillModal();
+            closeCashbillDetailModal();
+            showNotification('Cashbill updated successfully!');
+        }
+
         // Get items from table
         function getItemsFromTable() {
             const rows = document.querySelectorAll('#itemsTableBody tr');
+            const items = [];
+            
+            rows.forEach(row => {
+                const sno = parseInt(row.cells[0].textContent);
+                const qty = parseInt(row.querySelector('.quantity-input').value) || 0;
+                const description = row.querySelector('.item-select').options[row.querySelector('.item-select').selectedIndex].text.split(' - ')[0];
+                const taxRate = parseFloat(row.querySelector('.tax-input').value) || 0;
+                const unitPrice = parseFloat(row.querySelector('.price-input').value) || 0;
+                const totalExclTax = parseFloat(row.querySelector('.total-excl-tax').textContent.replace('MYR ', '')) || 0;
+                const totalTax = parseFloat(row.querySelector('.total-tax').textContent.replace('MYR ', '')) || 0;
+                const adjTotal = parseFloat(row.querySelector('.adj-total').textContent.replace('MYR ', '')) || 0;
+                
+                if (description && qty > 0) {
+                    items.push({
+                        sno,
+                        qty,
+                        description,
+                        taxRate,
+                        unitPrice,
+                        totalExclTax,
+                        totalTax,
+                        adjTotal
+                    });
+                }
+            });
+            
+            return items;
+        }
+
+        // Get items from edit table
+        function getEditItemsFromTable() {
+            const rows = document.querySelectorAll('#editItemsTableBody tr');
             const items = [];
             
             rows.forEach(row => {
@@ -1847,12 +2622,7 @@
 
         // View cashbill
         function viewCashbill(id) {
-            const bill = cashbills.find(b => b.id === id);
-            if (!bill) return;
-            
-            // In a real application, this would open a detailed view
-            // For this demo, we'll just show a notification
-            showNotification(`Viewing cashbill ${bill.id}`);
+            openCashbillDetailModal(id);
         }
 
         // Generate PDF
@@ -1863,59 +2633,130 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             
-            // Add content to PDF
-            doc.setFontSize(20);
-            doc.text('Portal A - Cashbill', 105, 15, { align: 'center' });
+            // Add company header
+            doc.setFontSize(24);
+            doc.setFont('helvetica', 'bold');
+            doc.text('PNE ARENA', 105, 20, { align: 'center' });
             
+            // Add invoice title
+            doc.setFontSize(18);
+            doc.text('INVOICE', 105, 35, { align: 'center' });
+            
+            // Add cashbill details
             doc.setFontSize(12);
-            doc.text(`Cashbill ID: ${bill.id}`, 20, 30);
-            doc.text(`Date: ${new Date(bill.createdAt).toLocaleDateString()}`, 20, 40);
-            doc.text(`Status: ${bill.status}`, 20, 50);
+            doc.setFont('helvetica', 'normal');
+            doc.text(`Cashbill No: ${bill.id}`, 20, 55);
+            doc.text(`Date: ${new Date(bill.createdAt).toLocaleDateString()}`, 20, 65);
+            doc.text(`Status: ${bill.status}`, 20, 75);
             
-            doc.text('Customer Information:', 20, 65);
-            doc.text(`Name: ${bill.customer.firstName} ${bill.customer.lastName}`, 20, 75);
-            doc.text(`Phone: ${bill.customer.phone}`, 20, 85);
-            doc.text(`Email: ${bill.customer.email}`, 20, 95);
+            // Add customer information
+            doc.setFont('helvetica', 'bold');
+            doc.text('Bill To:', 20, 95);
+            doc.setFont('helvetica', 'normal');
+            doc.text(`${bill.customer.firstName} ${bill.customer.lastName}`, 20, 105);
+            doc.text(bill.customer.phone, 20, 115);
+            doc.text(bill.customer.email, 20, 125);
             
-            doc.text('Payment Method:', 20, 110);
-            doc.text(`Type: ${bill.paymentType}`, 20, 120);
+            if (bill.customer.address) {
+                const addressLines = doc.splitTextToSize(bill.customer.address, 80);
+                doc.text(addressLines, 20, 135);
+            }
             
-            doc.text('Items:', 20, 135);
-            let yPosition = 145;
+            // Add payment information
+            doc.setFont('helvetica', 'bold');
+            doc.text('Payment Method:', 120, 95);
+            doc.setFont('helvetica', 'normal');
+            doc.text(bill.paymentType.charAt(0).toUpperCase() + bill.paymentType.slice(1), 120, 105);
             
-            // Table headers
-            doc.setFontSize(10);
-            doc.text('SNO', 20, yPosition);
-            doc.text('Qty', 40, yPosition);
-            doc.text('Description', 60, yPosition);
-            doc.text('Unit Price', 120, yPosition);
-            doc.text('Total', 160, yPosition);
+            // Add items table
+            doc.setFont('helvetica', 'bold');
+            doc.text('Description', 20, 165);
+            doc.text('Qty', 100, 165);
+            doc.text('Unit Price', 130, 165);
+            doc.text('Total', 170, 165);
             
-            yPosition += 10;
+            // Add line
+            doc.line(20, 170, 190, 170);
             
-            // Table rows
+            // Add items
+            doc.setFont('helvetica', 'normal');
+            let yPosition = 180;
+            
             bill.items.forEach(item => {
-                doc.text(item.sno.toString(), 20, yPosition);
-                doc.text(item.qty.toString(), 40, yPosition);
-                doc.text(item.description, 60, yPosition);
-                doc.text(`MYR ${item.unitPrice.toFixed(2)}`, 120, yPosition);
-                doc.text(`MYR ${item.adjTotal.toFixed(2)}`, 160, yPosition);
+                doc.text(item.description, 20, yPosition);
+                doc.text(item.qty.toString(), 100, yPosition);
+                doc.text(`MYR ${item.unitPrice.toFixed(2)}`, 130, yPosition);
+                doc.text(`MYR ${item.adjTotal.toFixed(2)}`, 170, yPosition);
                 yPosition += 10;
             });
             
-            // Summary
+            // Add another line
+            doc.line(20, yPosition, 190, yPosition);
             yPosition += 10;
-            doc.setFontSize(12);
-            doc.text(`Subtotal: MYR ${bill.subtotal.toFixed(2)}`, 20, yPosition);
-            doc.text(`Tax: MYR ${bill.tax.toFixed(2)}`, 20, yPosition + 10);
-            doc.text(`Discount: MYR ${bill.discount.toFixed(2)}`, 20, yPosition + 20);
-            doc.setFontSize(14);
-            doc.text(`Total: MYR ${bill.total.toFixed(2)}`, 20, yPosition + 35);
+            
+            // Add summary
+            doc.text('Subtotal:', 130, yPosition);
+            doc.text(`MYR ${bill.subtotal.toFixed(2)}`, 170, yPosition);
+            yPosition += 10;
+            
+            doc.text('Tax:', 130, yPosition);
+            doc.text(`MYR ${bill.tax.toFixed(2)}`, 170, yPosition);
+            yPosition += 10;
+            
+            doc.text('Discount:', 130, yPosition);
+            doc.text(`MYR ${bill.discount.toFixed(2)}`, 170, yPosition);
+            yPosition += 10;
+            
+            // Add total with bold font
+            doc.setFont('helvetica', 'bold');
+            doc.text('Total:', 130, yPosition);
+            doc.text(`MYR ${bill.total.toFixed(2)}`, 170, yPosition);
+            
+            // Add footer
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(10);
+            doc.text('Thank you for your business!', 105, 280, { align: 'center' });
             
             // Save the PDF
-            doc.save(`${bill.id}_${bill.customer.firstName}_${bill.customer.lastName}.pdf`);
+            doc.save(`PNE_ARENA_${bill.id}_${bill.customer.firstName}_${bill.customer.lastName}.pdf`);
             
-            showNotification('PDF generated successfully!');
+            showNotification('Invoice generated successfully!');
+        }
+
+        // Print cashbill detail
+        function printCashbillDetail() {
+            const billId = document.querySelector('.cashbill-detail-title').textContent;
+            generatePDF(billId);
+        }
+
+        // Request amendment
+        function requestAmendment(id) {
+            const bill = cashbills.find(b => b.id === id);
+            if (!bill) return;
+            
+            if (currentUser.role === 'admin') {
+                // Admin can edit directly
+                openEditCashbillModal(id);
+                closeCashbillDetailModal();
+            } else {
+                // Crew needs to request approval
+                openApprovalModal(
+                    `Amending cashbill ${bill.id} requires admin approval. Please enter your crew credentials to request approval.`,
+                    () => {
+                        bill.status = 'amendment';
+                        saveCashbills();
+                        renderCashbills();
+                        closeCashbillDetailModal();
+                        showNotification(`Amendment request for cashbill ${bill.id} sent to admin!`);
+                    }
+                );
+            }
+        }
+
+        // Edit cashbill
+        function editCashbill(id) {
+            openEditCashbillModal(id);
+            closeCashbillDetailModal();
         }
 
         // Reverse cashbill
@@ -1928,6 +2769,7 @@
                 bill.status = 'reversed';
                 saveCashbills();
                 renderCashbills();
+                closeCashbillDetailModal();
                 showNotification(`Cashbill ${bill.id} reversed successfully!`);
             } else {
                 // Crew needs to request approval
@@ -1937,6 +2779,7 @@
                         bill.status = 'pending';
                         saveCashbills();
                         renderCashbills();
+                        closeCashbillDetailModal();
                         showNotification(`Reversal request for cashbill ${bill.id} sent to admin!`);
                     }
                 );
@@ -1954,6 +2797,7 @@
                     bill.status = 'reversed';
                     saveCashbills();
                     renderCashbills();
+                    closeCashbillDetailModal();
                     showNotification(`Cashbill ${bill.id} reversal approved!`);
                 }
             );
