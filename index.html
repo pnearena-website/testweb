@@ -517,6 +517,57 @@
             font-weight: 600;
             font-size: 14px;
         }
+        /* Payment Processing */
+        .payment-processing {
+            background-color: var(--primary-gray);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 16px;
+            display: none;
+        }
+        .payment-processing.active {
+            display: block;
+        }
+        .payment-status {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .payment-status-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+        }
+        .payment-status-text {
+            flex: 1;
+        }
+        .payment-status-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .payment-status-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        .payment-amount {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-black);
+            text-align: center;
+            margin: 20px 0;
+        }
+        .payment-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
         /* Summary Section */
         .summary-row {
             display: flex;
@@ -1268,8 +1319,27 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>Total Amount (MYR)</label>
-                                <input type="text" id="totalAmount" readonly value="0.00">
+                                <label for="promoCode">Promo Code (Optional)</label>
+                                <input type="text" id="promoCode" placeholder="Enter promo code" onchange="applyPromoCode()">
+                            </div>
+                        </div>
+                        
+                        <div class="payment-processing" id="paymentProcessing">
+                            <div class="payment-status">
+                                <div class="payment-status-icon">
+                                    <i class="fas fa-credit-card"></i>
+                                </div>
+                                <div class="payment-status-text">
+                                    <div class="payment-status-title">Payment Method Selected</div>
+                                    <div class="payment-status-desc" id="paymentMethodDesc">Please select a payment method</div>
+                                </div>
+                            </div>
+                            
+                            <div class="payment-amount" id="paymentAmount">MYR 0.00</div>
+                            
+                            <div class="payment-actions">
+                                <button type="button" class="btn btn-secondary" id="changePaymentBtn">Change Payment</button>
+                                <button type="button" class="btn btn-success" id="processPaymentBtn">Process Payment</button>
                             </div>
                         </div>
                     </div>
@@ -1435,8 +1505,27 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>Total Amount (MYR)</label>
-                                <input type="text" id="editTotalAmount" readonly value="0.00">
+                                <label for="editPromoCode">Promo Code (Optional)</label>
+                                <input type="text" id="editPromoCode" placeholder="Enter promo code" onchange="applyEditPromoCode()">
+                            </div>
+                        </div>
+                        
+                        <div class="payment-processing" id="editPaymentProcessing">
+                            <div class="payment-status">
+                                <div class="payment-status-icon">
+                                    <i class="fas fa-credit-card"></i>
+                                </div>
+                                <div class="payment-status-text">
+                                    <div class="payment-status-title">Payment Method Selected</div>
+                                    <div class="payment-status-desc" id="editPaymentMethodDesc">Please select a payment method</div>
+                                </div>
+                            </div>
+                            
+                            <div class="payment-amount" id="editPaymentAmount">MYR 0.00</div>
+                            
+                            <div class="payment-actions">
+                                <button type="button" class="btn btn-secondary" id="editChangePaymentBtn">Change Payment</button>
+                                <button type="button" class="btn btn-success" id="editProcessPaymentBtn">Process Payment</button>
                             </div>
                         </div>
                     </div>
@@ -1651,6 +1740,8 @@
         let itemCounter = 1;
         let currentEditingCashbill = null;
         let activeSection = 'cashbill';
+        let paymentProcessed = false;
+        let editPaymentProcessed = false;
         
         // DOM elements
         const loginContainer = document.getElementById('loginContainer');
@@ -1684,6 +1775,22 @@
         const newLogbookBtn = document.getElementById('newLogbookBtn');
         const addItemBtn = document.getElementById('addItemBtn');
         const editAddItemBtn = document.getElementById('editAddItemBtn');
+        
+        // Payment elements
+        const paymentProcessing = document.getElementById('paymentProcessing');
+        const paymentMethodDesc = document.getElementById('paymentMethodDesc');
+        const paymentAmount = document.getElementById('paymentAmount');
+        const changePaymentBtn = document.getElementById('changePaymentBtn');
+        const processPaymentBtn = document.getElementById('processPaymentBtn');
+        const promoCodeInput = document.getElementById('promoCode');
+        
+        // Edit payment elements
+        const editPaymentProcessing = document.getElementById('editPaymentProcessing');
+        const editPaymentMethodDesc = document.getElementById('editPaymentMethodDesc');
+        const editPaymentAmount = document.getElementById('editPaymentAmount');
+        const editChangePaymentBtn = document.getElementById('editChangePaymentBtn');
+        const editProcessPaymentBtn = document.getElementById('editProcessPaymentBtn');
+        const editPromoCodeInput = document.getElementById('editPromoCode');
         
         // Admin Panel
         const untallyPaymentBtn = document.getElementById('untallyPaymentBtn');
@@ -1830,6 +1937,40 @@
             });
             
             processUntallyBtn.addEventListener('click', processUntallyPayment);
+            
+            // Payment processing buttons
+            changePaymentBtn.addEventListener('click', () => {
+                paymentProcessing.classList.remove('active');
+                selectedPayment = null;
+                paymentProcessed = false;
+                updatePaymentDisplay();
+            });
+            
+            processPaymentBtn.addEventListener('click', () => {
+                if (selectedPayment) {
+                    paymentProcessed = true;
+                    showNotification(`Payment processed successfully via ${selectedPayment}!`);
+                    processPaymentBtn.disabled = true;
+                    processPaymentBtn.innerHTML = '<i class="fas fa-check"></i> Payment Processed';
+                }
+            });
+            
+            // Edit payment processing buttons
+            editChangePaymentBtn.addEventListener('click', () => {
+                editPaymentProcessing.classList.remove('active');
+                selectedPayment = null;
+                editPaymentProcessed = false;
+                updateEditPaymentDisplay();
+            });
+            
+            editProcessPaymentBtn.addEventListener('click', () => {
+                if (selectedPayment) {
+                    editPaymentProcessed = true;
+                    showNotification(`Payment processed successfully via ${selectedPayment}!`);
+                    editProcessPaymentBtn.disabled = true;
+                    editProcessPaymentBtn.innerHTML = '<i class="fas fa-check"></i> Payment Processed';
+                }
+            });
             
             // Modal close buttons
             document.getElementById('closeCashbillModal').addEventListener('click', closeNewCashbillModal);
@@ -2134,9 +2275,15 @@
             appliedPromo = null;
             discount = 0;
             itemCounter = 1;
+            paymentProcessed = false;
             
             // Clear items table
             document.getElementById('itemsTableBody').innerHTML = '';
+            
+            // Reset payment processing
+            paymentProcessing.classList.remove('active');
+            processPaymentBtn.disabled = false;
+            processPaymentBtn.innerHTML = '<i class="fas fa-credit-card"></i> Process Payment';
             
             // Update totals
             updateTotals();
@@ -2355,6 +2502,7 @@
             document.getElementById('editCustomerEmail').value = bill.customer.email;
             document.getElementById('editCustomerAddress').value = bill.customer.address || '';
             document.getElementById('editCashbillRemarks').value = bill.remarks || '';
+            document.getElementById('editPromoCode').value = bill.promoCode || '';
             
             // Set payment type
             document.querySelectorAll('#editPaymentTypes .payment-type').forEach(type => {
@@ -2364,6 +2512,12 @@
                 }
             });
             selectedPayment = bill.paymentType;
+            
+            // Reset edit payment processing
+            editPaymentProcessing.classList.remove('active');
+            editProcessPaymentBtn.disabled = false;
+            editProcessPaymentBtn.innerHTML = '<i class="fas fa-credit-card"></i> Process Payment';
+            editPaymentProcessed = false;
             
             // Clear and populate items table
             const itemsTableBody = document.getElementById('editItemsTableBody');
@@ -2664,6 +2818,11 @@
             document.getElementById('discount').textContent = `MYR ${discount.toFixed(2)}`;
             document.getElementById('total').textContent = `MYR ${totalAfterDiscount.toFixed(2)}`;
             document.getElementById('totalAmount').value = `MYR ${totalAfterDiscount.toFixed(2)}`;
+            
+            // Update payment display if payment is selected
+            if (selectedPayment) {
+                updatePaymentDisplay();
+            }
         }
         
         // Update edit overall totals
@@ -2692,6 +2851,11 @@
             document.getElementById('editDiscount').textContent = `MYR ${discount.toFixed(2)}`;
             document.getElementById('editTotal').textContent = `MYR ${totalAfterDiscount.toFixed(2)}`;
             document.getElementById('editTotalAmount').value = `MYR ${totalAfterDiscount.toFixed(2)}`;
+            
+            // Update payment display if payment is selected
+            if (selectedPayment) {
+                updateEditPaymentDisplay();
+            }
         }
         
         // Select payment type
@@ -2699,6 +2863,109 @@
             document.querySelectorAll('.payment-type').forEach(el => el.classList.remove('active'));
             document.querySelector(`.payment-type[data-payment="${type}"]`).classList.add('active');
             selectedPayment = type;
+            
+            // Show payment processing section
+            paymentProcessing.classList.add('active');
+            updatePaymentDisplay();
+        }
+        
+        // Update payment display
+        function updatePaymentDisplay() {
+            if (!selectedPayment) return;
+            
+            const totalText = document.getElementById('total').textContent;
+            const totalAmount = parseFloat(totalText.replace('MYR ', '')) || 0;
+            
+            // Update payment method description
+            let paymentDesc = '';
+            switch(selectedPayment) {
+                case 'cash':
+                    paymentDesc = 'Cash Payment - Please prepare exact amount';
+                    break;
+                case 'card':
+                    paymentDesc = 'Card Payment - Please have your card ready';
+                    break;
+                case 'ewallet':
+                    paymentDesc = 'E-Wallet Payment - Please open your e-wallet app';
+                    break;
+            }
+            
+            paymentMethodDesc.textContent = paymentDesc;
+            paymentAmount.textContent = `MYR ${totalAmount.toFixed(2)}`;
+        }
+        
+        // Update edit payment display
+        function updateEditPaymentDisplay() {
+            if (!selectedPayment) return;
+            
+            const totalText = document.getElementById('editTotal').textContent;
+            const totalAmount = parseFloat(totalText.replace('MYR ', '')) || 0;
+            
+            // Show edit payment processing section
+            editPaymentProcessing.classList.add('active');
+            
+            // Update payment method description
+            let paymentDesc = '';
+            switch(selectedPayment) {
+                case 'cash':
+                    paymentDesc = 'Cash Payment - Please prepare exact amount';
+                    break;
+                case 'card':
+                    paymentDesc = 'Card Payment - Please have your card ready';
+                    break;
+                case 'ewallet':
+                    paymentDesc = 'E-Wallet Payment - Please open your e-wallet app';
+                    break;
+            }
+            
+            editPaymentMethodDesc.textContent = paymentDesc;
+            editPaymentAmount.textContent = `MYR ${totalAmount.toFixed(2)}`;
+        }
+        
+        // Apply promo code
+        function applyPromoCode() {
+            const promoCode = promoCodeInput.value.toUpperCase();
+            
+            if (!promoCode) {
+                discount = 0;
+                appliedPromo = null;
+                updateTotals();
+                return;
+            }
+            
+            if (promoCodes[promoCode]) {
+                const subtotal = parseFloat(document.getElementById('subtotal').textContent.replace('MYR ', '')) || 0;
+                discount = subtotal * promoCodes[promoCode];
+                appliedPromo = promoCode;
+                updateTotals();
+                showNotification(`Promo code ${promoCode} applied! ${discount * 100}% discount`);
+            } else {
+                showNotification('Invalid promo code!', true);
+                promoCodeInput.value = '';
+            }
+        }
+        
+        // Apply edit promo code
+        function applyEditPromoCode() {
+            const promoCode = editPromoCodeInput.value.toUpperCase();
+            
+            if (!promoCode) {
+                discount = 0;
+                appliedPromo = null;
+                updateEditTotals();
+                return;
+            }
+            
+            if (promoCodes[promoCode]) {
+                const subtotal = parseFloat(document.getElementById('editSubtotal').textContent.replace('MYR ', '')) || 0;
+                discount = subtotal * promoCodes[promoCode];
+                appliedPromo = promoCode;
+                updateEditTotals();
+                showNotification(`Promo code ${promoCode} applied! ${discount * 100}% discount`);
+            } else {
+                showNotification('Invalid promo code!', true);
+                editPromoCodeInput.value = '';
+            }
         }
         
         // Save cashbill as draft
@@ -2707,11 +2974,6 @@
             
             if (items.length === 0) {
                 showNotification('Please add at least one item!', true);
-                return;
-            }
-            
-            if (!selectedPayment) {
-                showNotification('Please select a payment type!', true);
                 return;
             }
             
@@ -2740,7 +3002,7 @@
             const newCashbill = {
                 id: newId,
                 customer: { firstName, lastName, phone, email, address },
-                paymentType: selectedPayment,
+                paymentType: selectedPayment || 'cash',
                 items,
                 subtotal,
                 tax,
@@ -2771,6 +3033,11 @@
             
             if (!selectedPayment) {
                 showNotification('Please select a payment type!', true);
+                return;
+            }
+            
+            if (!paymentProcessed) {
+                showNotification('Please process the payment first!', true);
                 return;
             }
             
@@ -2832,6 +3099,11 @@
             
             if (!selectedPayment) {
                 showNotification('Please select a payment type!', true);
+                return;
+            }
+            
+            if (!editPaymentProcessed) {
+                showNotification('Please process the payment first!', true);
                 return;
             }
             
