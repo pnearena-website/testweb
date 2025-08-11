@@ -8,102 +8,147 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         :root {
-            --primary-grey: #f5f5f5;
-            --secondary-grey: #e0e0e0;
-            --dark-grey: #757575;
-            --soft-black: #333333;
-            --light-black: #424242;
+            --primary-black: #1a1a1a;
+            --secondary-black: #2d2d2d;
+            --soft-black: #404040;
+            --light-black: #555555;
+            --primary-gray: #f5f5f5;
+            --secondary-gray: #e8e8e8;
+            --soft-gray: #d0d0d0;
             --accent-color: #6200ea;
+            --accent-hover: #7c4dff;
             --success-color: #4caf50;
             --warning-color: #ff9800;
             --danger-color: #f44336;
+            --text-primary: #212121;
+            --text-secondary: #757575;
+            --border-color: #e0e0e0;
+            --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.12);
+            --shadow-heavy: 0 8px 24px rgba(0, 0, 0, 0.16);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         body {
-            background-color: var(--primary-grey);
-            color: var(--soft-black);
+            background-color: var(--primary-gray);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            line-height: 1.6;
+        }
+
+        /* Login Screen Styles */
+        .login-container {
+            width: 100%;
+            max-width: 1200px;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            padding: 20px;
         }
 
-        .container {
-            width: 95%;
-            max-width: 1400px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-
-        /* Login Screen Styles */
-        .login-screen {
-            padding: 40px;
+        .login-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow-heavy);
+            width: 100%;
+            max-width: 450px;
+            padding: 48px;
             text-align: center;
         }
 
-        .login-screen h1 {
-            color: var(--soft-black);
-            margin-bottom: 30px;
-            font-size: 2.2rem;
+        .login-logo {
+            margin-bottom: 32px;
+        }
+
+        .login-logo h1 {
+            color: var(--primary-black);
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .login-logo p {
+            color: var(--text-secondary);
+            font-size: 16px;
         }
 
         .login-form {
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            max-width: 350px;
-            margin: 0 auto;
+            gap: 24px;
+            margin-top: 32px;
         }
 
         .form-group {
-            display: flex;
-            flex-direction: column;
             text-align: left;
         }
 
         .form-group label {
-            margin-bottom: 5px;
-            color: var(--dark-grey);
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-primary);
             font-weight: 500;
+            font-size: 14px;
         }
 
-        .form-group input, .form-group select, .form-group textarea {
-            padding: 12px;
-            border: 1px solid var(--secondary-grey);
-            border-radius: 5px;
-            font-size: 1rem;
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background-color: var(--primary-gray);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(98, 0, 234, 0.1);
         }
 
         .btn {
-            padding: 12px 20px;
+            padding: 14px 24px;
             background-color: var(--accent-color);
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
-            font-size: 1rem;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .btn:hover {
-            background-color: #5a0bcc;
+            background-color: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-medium);
         }
 
         .btn-secondary {
-            background-color: var(--dark-grey);
+            background-color: var(--soft-black);
         }
 
         .btn-secondary:hover {
-            background-color: #616161;
+            background-color: var(--light-black);
         }
 
         .btn-success {
@@ -111,7 +156,7 @@
         }
 
         .btn-success:hover {
-            background-color: #3d8b40;
+            background-color: #43a047;
         }
 
         .btn-warning {
@@ -119,7 +164,7 @@
         }
 
         .btn-warning:hover {
-            background-color: #e68900;
+            background-color: #fb8c00;
         }
 
         .btn-danger {
@@ -127,50 +172,86 @@
         }
 
         .btn-danger:hover {
-            background-color: #d32f2f;
+            background-color: #e53935;
         }
 
         /* Portal Styles */
-        .portal {
+        .portal-container {
+            width: 100%;
+            max-width: 1400px;
+            min-height: 100vh;
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow-heavy);
+            overflow: hidden;
             display: none;
         }
 
         .portal-header {
-            background-color: var(--soft-black);
+            background-color: var(--primary-black);
             color: white;
-            padding: 15px 30px;
+            padding: 20px 32px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .portal-title {
-            font-size: 1.8rem;
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         .user-info {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
         }
 
-        .user-info span {
-            font-weight: 500;
+        .user-details {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .user-role {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            font-size: 16px;
         }
 
         .portal-nav {
             display: flex;
-            background-color: var(--light-black);
+            background-color: var(--secondary-black);
             color: white;
         }
 
         .nav-item {
             flex: 1;
-            padding: 15px;
+            padding: 16px 24px;
             text-align: center;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
             border-right: 1px solid rgba(255, 255, 255, 0.1);
+            font-weight: 500;
+            position: relative;
         }
 
         .nav-item:last-child {
@@ -178,15 +259,32 @@
         }
 
         .nav-item:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.05);
         }
 
         .nav-item.active {
             background-color: var(--accent-color);
         }
 
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: white;
+        }
+
+        .nav-item i {
+            display: block;
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
         .portal-content {
-            padding: 30px;
+            padding: 32px;
+            min-height: calc(100vh - 180px);
         }
 
         .content-section {
@@ -201,209 +299,41 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
-            border-bottom: 1px solid var(--secondary-grey);
-            padding-bottom: 15px;
+            margin-bottom: 32px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .section-title {
-            font-size: 1.5rem;
-            color: var(--soft-black);
-        }
-
-        /* Cashbill Form Styles */
-        .cashbill-form {
-            background-color: var(--primary-grey);
-            border-radius: 8px;
-            padding: 25px;
-            margin-bottom: 25px;
-        }
-
-        .form-section {
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--secondary-grey);
-        }
-
-        .form-section:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-        }
-
-        .section-subtitle {
-            font-size: 1.2rem;
-            color: var(--soft-black);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .form-row {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .form-row .form-group {
-            flex: 1;
-        }
-
-        /* Items Table Styles */
-        .items-table-container {
-            overflow-x: auto;
-            margin-bottom: 20px;
-        }
-
-        .items-table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .items-table th {
-            background-color: var(--light-black);
-            color: white;
-            padding: 12px 15px;
-            text-align: left;
-            font-weight: 500;
-        }
-
-        .items-table td {
-            padding: 12px 15px;
-            border-bottom: 1px solid var(--secondary-grey);
-        }
-
-        .items-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .items-table tr:hover {
-            background-color: rgba(0, 0, 0, 0.02);
-        }
-
-        .item-select {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid var(--secondary-grey);
-            border-radius: 4px;
-        }
-
-        .quantity-input {
-            width: 70px;
-            padding: 8px;
-            border: 1px solid var(--secondary-grey);
-            border-radius: 4px;
-            text-align: center;
-        }
-
-        .tax-input {
-            width: 70px;
-            padding: 8px;
-            border: 1px solid var(--secondary-grey);
-            border-radius: 4px;
-            text-align: center;
-        }
-
-        .price-input {
-            width: 100px;
-            padding: 8px;
-            border: 1px solid var(--secondary-grey);
-            border-radius: 4px;
-            text-align: right;
-        }
-
-        .action-btn {
-            background: none;
-            border: none;
-            color: var(--danger-color);
-            cursor: pointer;
-            font-size: 1rem;
-            padding: 5px;
-            border-radius: 4px;
-            transition: all 0.3s;
-        }
-
-        .action-btn:hover {
-            background-color: rgba(244, 67, 54, 0.1);
-        }
-
-        .add-item-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 15px;
-        }
-
-        /* Payment Section */
-        .payment-types {
-            display: flex;
-            gap: 15px;
-            margin-top: 10px;
-        }
-
-        .payment-type {
-            flex: 1;
-            padding: 15px;
-            border: 2px solid var(--secondary-grey);
-            border-radius: 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .payment-type:hover {
-            border-color: var(--accent-color);
-        }
-
-        .payment-type.active {
-            background-color: var(--accent-color);
-            color: white;
-            border-color: var(--accent-color);
-        }
-
-        .payment-type i {
-            font-size: 1.5rem;
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        /* Summary Section */
-        .summary-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-
-        .summary-row.total {
+            font-size: 28px;
             font-weight: 700;
-            font-size: 1.2rem;
-            border-top: 1px solid var(--secondary-grey);
-            padding-top: 10px;
-            margin-top: 10px;
+            color: var(--primary-black);
         }
 
         /* Cashbill List Styles */
         .cashbill-list {
             background-color: white;
-            border-radius: 8px;
+            border-radius: 12px;
             overflow: hidden;
-            border: 1px solid var(--secondary-grey);
+            box-shadow: var(--shadow-light);
+            border: 1px solid var(--border-color);
         }
 
         .cashbill-item {
-            padding: 20px;
-            border-bottom: 1px solid var(--secondary-grey);
+            padding: 24px;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: background-color 0.3s ease;
         }
 
         .cashbill-item:last-child {
             border-bottom: none;
+        }
+
+        .cashbill-item:hover {
+            background-color: var(--primary-gray);
         }
 
         .cashbill-info {
@@ -412,20 +342,33 @@
 
         .cashbill-id {
             font-weight: 600;
-            margin-bottom: 5px;
+            font-size: 18px;
+            color: var(--primary-black);
+            margin-bottom: 4px;
         }
 
         .cashbill-details {
-            color: var(--dark-grey);
-            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-size: 14px;
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .cashbill-detail-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .cashbill-status {
-            padding: 5px 10px;
+            padding: 6px 12px;
             border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            margin-left: 15px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-left: 16px;
         }
 
         .status-committed {
@@ -450,41 +393,256 @@
 
         .cashbill-actions {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
 
         .icon-btn {
-            background: none;
-            border: none;
-            color: var(--dark-grey);
+            width: 36px;
+            height: 36px;
+            background-color: var(--primary-gray);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--light-black);
             cursor: pointer;
-            font-size: 1.2rem;
-            padding: 5px;
-            border-radius: 5px;
-            transition: all 0.3s;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
         }
 
         .icon-btn:hover {
-            background-color: var(--primary-grey);
+            background-color: white;
             color: var(--accent-color);
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-light);
+        }
+
+        /* Form Styles */
+        .cashbill-form {
+            background-color: white;
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow-light);
+            border: 1px solid var(--border-color);
+        }
+
+        .form-section {
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .form-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .section-subtitle {
+            font-size: 20px;
+            color: var(--primary-black);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 20px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background-color: var(--primary-gray);
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(98, 0, 234, 0.1);
+        }
+
+        /* Items Table Styles */
+        .items-table-container {
+            overflow-x: auto;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: var(--shadow-light);
+            border: 1px solid var(--border-color);
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        .items-table th {
+            background-color: var(--secondary-black);
+            color: white;
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .items-table td {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .items-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .items-table tr:hover {
+            background-color: var(--primary-gray);
+        }
+
+        .item-select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 14px;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        .quantity-input, .tax-input {
+            width: 80px;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 14px;
+            text-align: center;
+            background-color: white;
+        }
+
+        .price-input {
+            width: 120px;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 14px;
+            text-align: right;
+            background-color: white;
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            background: none;
+            border: none;
+            color: var(--danger-color);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 0;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-btn:hover {
+            background-color: rgba(244, 67, 54, 0.1);
+        }
+
+        .add-item-btn {
+            margin-top: 16px;
+        }
+
+        /* Payment Section */
+        .payment-types {
+            display: flex;
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .payment-type {
+            flex: 1;
+            padding: 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: white;
+        }
+
+        .payment-type:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-light);
+        }
+
+        .payment-type.active {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        .payment-type i {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .payment-type div {
+            font-weight: 600;
+        }
+
+        /* Summary Section */
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .summary-row.total {
+            font-weight: 700;
+            font-size: 20px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 16px;
+            margin-top: 16px;
+            color: var(--primary-black);
         }
 
         /* Crew Profile Styles */
         .crew-profile {
             background-color: white;
-            border-radius: 8px;
-            padding: 25px;
-            border: 1px solid var(--secondary-grey);
-            margin-bottom: 25px;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: var(--shadow-light);
+            border: 1px solid var(--border-color);
         }
 
         .profile-header {
             display: flex;
             align-items: center;
-            gap: 20px;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--secondary-grey);
+            gap: 24px;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .profile-avatar {
@@ -496,21 +654,24 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 2rem;
+            font-size: 32px;
+            font-weight: 600;
         }
 
         .profile-info h2 {
-            margin-bottom: 5px;
+            font-size: 24px;
+            margin-bottom: 4px;
+            color: var(--primary-black);
         }
 
         .profile-info p {
-            color: var(--dark-grey);
+            color: var(--text-secondary);
         }
 
         .profile-details {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
         }
 
         .detail-item {
@@ -519,35 +680,42 @@
         }
 
         .detail-label {
-            font-weight: 500;
-            margin-bottom: 5px;
-            color: var(--dark-grey);
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .detail-value {
-            padding: 10px;
-            background-color: var(--primary-grey);
-            border-radius: 5px;
+            padding: 12px 16px;
+            background-color: var(--primary-gray);
+            border-radius: 8px;
+            font-weight: 500;
         }
 
         /* Courier Logbook Styles */
         .logbook-form {
-            background-color: var(--primary-grey);
-            border-radius: 8px;
-            padding: 25px;
-            margin-bottom: 25px;
+            background-color: white;
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow-light);
+            border: 1px solid var(--border-color);
         }
 
         .logbook-list {
             background-color: white;
-            border-radius: 8px;
+            border-radius: 12px;
             overflow: hidden;
-            border: 1px solid var(--secondary-grey);
+            box-shadow: var(--shadow-light);
+            border: 1px solid var(--border-color);
         }
 
         .logbook-item {
-            padding: 20px;
-            border-bottom: 1px solid var(--secondary-grey);
+            padding: 24px;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .logbook-item:last-child {
@@ -557,23 +725,26 @@
         .logbook-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
+            align-items: center;
+            margin-bottom: 16px;
         }
 
         .logbook-id {
             font-weight: 600;
+            font-size: 18px;
+            color: var(--primary-black);
         }
 
         .logbook-date {
-            color: var(--dark-grey);
-            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-size: 14px;
         }
 
         .logbook-details {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 10px;
-            margin-top: 10px;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
         }
 
         .logbook-detail {
@@ -582,29 +753,253 @@
         }
 
         .logbook-label {
-            font-size: 0.8rem;
-            color: var(--dark-grey);
-            margin-bottom: 3px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .logbook-value {
             font-weight: 500;
         }
 
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 32px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-black);
+        }
+
+        .close-btn {
+            width: 40px;
+            height: 40px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background-color: var(--primary-gray);
+            color: var(--primary-black);
+        }
+
+        .modal-body {
+            padding: 32px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 24px 32px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Cashbill Detail Styles */
+        .cashbill-detail {
+            background-color: white;
+            border-radius: 12px;
+            padding: 32px;
+            border: 1px solid var(--border-color);
+        }
+
+        .cashbill-detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .cashbill-detail-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-black);
+        }
+
+        .cashbill-detail-status {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-section {
+            margin-bottom: 32px;
+        }
+
+        .detail-section-title {
+            font-size: 20px;
+            color: var(--primary-black);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-value {
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        .detail-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow-light);
+            border: 1px solid var(--border-color);
+        }
+
+        .detail-table th {
+            background-color: var(--secondary-black);
+            color: white;
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-table td {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .detail-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .detail-table tr:hover {
+            background-color: var(--primary-gray);
+        }
+
+        .detail-summary {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+
+        .detail-summary-table {
+            width: 320px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow-light);
+            border: 1px solid var(--border-color);
+        }
+
+        .detail-summary-table td {
+            padding: 12px 16px;
+        }
+
+        .detail-summary-table td:first-child {
+            text-align: left;
+            font-weight: 500;
+        }
+
+        .detail-summary-table td:last-child {
+            text-align: right;
+            font-weight: 600;
+        }
+
+        .detail-summary-table tr.total td {
+            font-weight: 700;
+            font-size: 18px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 16px;
+            color: var(--primary-black);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+
         /* Notification Styles */
         .notification {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
+            top: 24px;
+            right: 24px;
+            padding: 16px 24px;
             background-color: var(--success-color);
             color: white;
-            border-radius: 5px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-            transform: translateX(200%);
+            border-radius: 8px;
+            box-shadow: var(--shadow-medium);
+            transform: translateX(400px);
             transition: transform 0.3s ease-out;
-            z-index: 1000;
-            max-width: 300px;
+            z-index: 3000;
+            max-width: 320px;
+            font-weight: 500;
         }
 
         .notification.show {
@@ -619,222 +1014,34 @@
             background-color: var(--warning-color);
         }
 
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
         }
 
-        .modal-content {
-            background-color: white;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 900px;
-            max-height: 90vh;
-            overflow-y: auto;
-            padding: 30px;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--secondary-grey);
-        }
-
-        .modal-title {
-            font-size: 1.5rem;
-            color: var(--soft-black);
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--dark-grey);
-        }
-
-        .close-btn:hover {
-            color: var(--soft-black);
-        }
-
-        .modal-body {
-            margin-bottom: 20px;
-        }
-
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-
-        /* Cashbill Detail Styles */
-        .cashbill-detail {
-            background-color: white;
-            border-radius: 8px;
-            padding: 25px;
-            border: 1px solid var(--secondary-grey);
-        }
-
-        .cashbill-detail-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--secondary-grey);
-        }
-
-        .cashbill-detail-title {
-            font-size: 1.5rem;
-            color: var(--soft-black);
-        }
-
-        .cashbill-detail-status {
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-
-        .detail-section {
-            margin-bottom: 25px;
-        }
-
-        .detail-section-title {
-            font-size: 1.2rem;
-            color: var(--soft-black);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .detail-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-        }
-
-        .detail-item {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .detail-label {
-            font-size: 0.9rem;
-            color: var(--dark-grey);
-            margin-bottom: 5px;
-        }
-
-        .detail-value {
-            font-weight: 500;
-        }
-
-        .detail-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-
-        .detail-table th {
-            background-color: var(--light-black);
-            color: white;
-            padding: 10px;
-            text-align: left;
-            font-weight: 500;
-        }
-
-        .detail-table td {
-            padding: 10px;
-            border-bottom: 1px solid var(--secondary-grey);
-        }
-
-        .detail-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .detail-summary {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 20px;
-        }
-
-        .detail-summary-table {
-            width: 300px;
-        }
-
-        .detail-summary-table td {
-            padding: 8px;
-        }
-
-        .detail-summary-table td:first-child {
-            text-align: left;
-        }
-
-        .detail-summary-table td:last-child {
-            text-align: right;
-            font-weight: 500;
-        }
-
-        .detail-summary-table tr.total td {
-            font-weight: 700;
-            font-size: 1.1rem;
-            border-top: 1px solid var(--secondary-grey);
-            padding-top: 10px;
-        }
-
-        /* Action Buttons */
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            flex-wrap: wrap;
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         /* Responsive Styles */
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
+            .portal-content {
+                padding: 24px;
+            }
+            
             .form-row {
                 flex-direction: column;
+                gap: 16px;
             }
             
             .payment-types {
                 flex-direction: column;
-            }
-            
-            .items-table-container {
-                overflow-x: scroll;
-            }
-            
-            .action-buttons {
-                flex-direction: column;
-            }
-            
-            .profile-header {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .cashbill-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .cashbill-actions {
-                margin-top: 10px;
-                width: 100%;
-                justify-content: flex-end;
             }
             
             .detail-grid {
@@ -849,13 +1056,70 @@
                 width: 100%;
             }
         }
+
+        @media (max-width: 768px) {
+            .login-card {
+                padding: 32px 24px;
+            }
+            
+            .portal-header {
+                padding: 16px 24px;
+            }
+            
+            .portal-title {
+                font-size: 20px;
+            }
+            
+            .nav-item {
+                padding: 12px 16px;
+                font-size: 14px;
+            }
+            
+            .nav-item i {
+                font-size: 18px;
+            }
+            
+            .section-title {
+                font-size: 24px;
+            }
+            
+            .cashbill-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            
+            .cashbill-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 20px;
+            }
+            
+            .modal-body {
+                padding: 24px;
+            }
+            
+            .modal-footer {
+                flex-direction: column;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Login Screen -->
-        <div class="login-screen" id="loginScreen">
-            <h1><i class="fas fa-cash-register"></i> PNE Portal</h1>
+    <div class="login-container" id="loginContainer">
+        <div class="login-card">
+            <div class="login-logo">
+                <h1><i class="fas fa-cash-register"></i> Portal PNE</h1>
+                <p>Cashbill Management System</p>
+            </div>
             <form class="login-form" id="loginForm">
                 <div class="form-group">
                     <label for="userId">User ID</label>
@@ -865,68 +1129,82 @@
                     <label for="password">Password</label>
                     <input type="password" id="password" placeholder="Enter your password" required>
                 </div>
-                <button type="submit" class="btn">Login</button>
+                <button type="submit" class="btn">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
             </form>
         </div>
+    </div>
 
-        <!-- Portal -->
-        <div class="portal" id="portal">
-            <div class="portal-header">
-                <div class="portal-title">Portal A</div>
-                <div class="user-info">
-                    <span id="userName">User</span>
-                    <span id="userRole">Role</span>
-                    <button class="btn btn-secondary" id="logoutBtn">Logout</button>
+    <div class="portal-container" id="portalContainer">
+        <div class="portal-header">
+            <div class="portal-title">
+                <i class="fas fa-cash-register"></i> Portal A
+            </div>
+            <div class="user-info">
+                <div class="user-details">
+                    <div class="user-name" id="userName">User</div>
+                    <div class="user-role" id="userRole">Role</div>
+                </div>
+                <div class="user-avatar" id="userAvatar">U</div>
+                <button class="btn btn-secondary" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+        
+        <div class="portal-nav">
+            <div class="nav-item active" data-section="cashbill">
+                <i class="fas fa-file-invoice-dollar"></i> Cashbill
+            </div>
+            <div class="nav-item" data-section="crewProfile">
+                <i class="fas fa-user-tie"></i> Crew Profile
+            </div>
+            <div class="nav-item" data-section="courierLogbook">
+                <i class="fas fa-clipboard-list"></i> Courier Logbook
+            </div>
+        </div>
+        
+        <div class="portal-content">
+            <!-- Cashbill Section -->
+            <div class="content-section active" id="cashbillSection">
+                <div class="section-header">
+                    <h2 class="section-title">Cashbill Management</h2>
+                    <button class="btn" id="newCashbillBtn">
+                        <i class="fas fa-plus"></i> New Cashbill
+                    </button>
+                </div>
+                
+                <div class="cashbill-list" id="cashbillList">
+                    <!-- Cashbill items will be populated by JavaScript -->
                 </div>
             </div>
             
-            <div class="portal-nav">
-                <div class="nav-item active" data-section="cashbill">
-                    <i class="fas fa-file-invoice-dollar"></i> Cashbill
+            <!-- Crew Profile Section -->
+            <div class="content-section" id="crewProfileSection">
+                <div class="section-header">
+                    <h2 class="section-title">Crew Profile</h2>
+                    <button class="btn" id="editProfileBtn">
+                        <i class="fas fa-edit"></i> Edit Profile
+                    </button>
                 </div>
-                <div class="nav-item" data-section="crewProfile">
-                    <i class="fas fa-user-tie"></i> Crew Profile
-                </div>
-                <div class="nav-item" data-section="courierLogbook">
-                    <i class="fas fa-clipboard-list"></i> Courier Logbook
+                
+                <div class="crew-profile" id="crewProfile">
+                    <!-- Crew profile will be populated by JavaScript -->
                 </div>
             </div>
             
-            <div class="portal-content">
-                <!-- Cashbill Section -->
-                <div class="content-section active" id="cashbillSection">
-                    <div class="section-header">
-                        <h2 class="section-title">Cashbill Management</h2>
-                        <button class="btn" id="newCashbillBtn">New Cashbill</button>
-                    </div>
-                    
-                    <div class="cashbill-list" id="cashbillList">
-                        <!-- Cashbill items will be populated by JavaScript -->
-                    </div>
+            <!-- Courier Logbook Section -->
+            <div class="content-section" id="courierLogbookSection">
+                <div class="section-header">
+                    <h2 class="section-title">Courier Logbook</h2>
+                    <button class="btn" id="newLogbookBtn">
+                        <i class="fas fa-plus"></i> New Logbook Entry
+                    </button>
                 </div>
                 
-                <!-- Crew Profile Section -->
-                <div class="content-section" id="crewProfileSection">
-                    <div class="section-header">
-                        <h2 class="section-title">Crew Profile</h2>
-                        <button class="btn" id="editProfileBtn">Edit Profile</button>
-                    </div>
-                    
-                    <div class="crew-profile" id="crewProfile">
-                        <!-- Crew profile will be populated by JavaScript -->
-                    </div>
-                </div>
-                
-                <!-- Courier Logbook Section -->
-                <div class="content-section" id="courierLogbookSection">
-                    <div class="section-header">
-                        <h2 class="section-title">Courier Logbook</h2>
-                        <button class="btn" id="newLogbookBtn">New Logbook Entry</button>
-                    </div>
-                    
-                    <div class="logbook-list" id="logbookList">
-                        <!-- Logbook entries will be populated by JavaScript -->
-                    </div>
+                <div class="logbook-list" id="logbookList">
+                    <!-- Logbook entries will be populated by JavaScript -->
                 </div>
             </div>
         </div>
@@ -1081,7 +1359,9 @@
                     <!-- Action buttons will be populated by JavaScript -->
                 </div>
                 <button class="btn btn-secondary" id="closeDetailBtn">Close</button>
-                <button class="btn" id="printDetailBtn">Print Invoice</button>
+                <button class="btn" id="printDetailBtn">
+                    <i class="fas fa-print"></i> Print Invoice
+                </button>
             </div>
         </div>
     </div>
@@ -1304,7 +1584,7 @@
                     </div>
                     <div class="form-group">
                         <label for="logbookNotes">Notes</label>
-                        <textarea id="logbookNotes" rows="3" style="width: 100%; padding: 12px; border: 1px solid var(--secondary-grey); border-radius: 5px; resize: vertical;"></textarea>
+                        <textarea id="logbookNotes" rows="3" placeholder="Enter additional notes"></textarea>
                     </div>
                 </form>
             </div>
@@ -1323,7 +1603,7 @@
                 <button class="close-btn" id="closeApprovalModal">&times;</button>
             </div>
             <div class="modal-body">
-                <p id="approvalMessage">Action requires admin approval.</p>
+                <p id="approvalMessage" style="margin-bottom: 24px; font-size: 16px;">Action requires admin approval.</p>
                 <div class="form-group">
                     <label for="crewId">Crew ID</label>
                     <input type="text" id="crewId" placeholder="Enter your crew ID">
@@ -1399,14 +1679,15 @@
         let currentEditingCashbill = null;
 
         // DOM elements
-        const loginScreen = document.getElementById('loginScreen');
-        const portal = document.getElementById('portal');
+        const loginContainer = document.getElementById('loginContainer');
+        const portalContainer = document.getElementById('portalContainer');
         const loginForm = document.getElementById('loginForm');
         const userIdInput = document.getElementById('userId');
         const passwordInput = document.getElementById('password');
         const logoutBtn = document.getElementById('logoutBtn');
         const userName = document.getElementById('userName');
         const userRole = document.getElementById('userRole');
+        const userAvatar = document.getElementById('userAvatar');
         const navItems = document.querySelectorAll('.nav-item');
         const contentSections = document.querySelectorAll('.content-section');
         const cashbillList = document.getElementById('cashbillList');
@@ -1571,10 +1852,11 @@
             
             if (user) {
                 currentUser = user;
-                loginScreen.style.display = 'none';
-                portal.style.display = 'block';
+                loginContainer.style.display = 'none';
+                portalContainer.style.display = 'block';
                 userName.textContent = `${user.firstName} ${user.lastName}`;
-                userRole.textContent = user.role === 'admin' ? 'Administrator' : 'Crew';
+                userRole.textContent = user.role === 'admin' ? 'Administrator' : 'Crew Member';
+                userAvatar.textContent = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`;
                 
                 renderPortal();
                 showNotification('Login successful!');
@@ -1586,8 +1868,8 @@
         // Handle logout
         function handleLogout() {
             currentUser = null;
-            loginScreen.style.display = 'block';
-            portal.style.display = 'none';
+            loginContainer.style.display = 'flex';
+            portalContainer.style.display = 'none';
             userIdInput.value = '';
             passwordInput.value = '';
             showNotification('Logged out successfully!');
@@ -1622,7 +1904,7 @@
             cashbillList.innerHTML = '';
             
             if (cashbills.length === 0) {
-                cashbillList.innerHTML = '<div class="cashbill-item">No cashbills found</div>';
+                cashbillList.innerHTML = '<div class="cashbill-item"><div style="text-align: center; color: var(--text-secondary);">No cashbills found</div></div>';
                 return;
             }
             
@@ -1638,11 +1920,26 @@
                     <div class="cashbill-info">
                         <div class="cashbill-id">${bill.id}</div>
                         <div class="cashbill-details">
-                            ${bill.customer.firstName} ${bill.customer.lastName} • 
-                            ${bill.customer.address ? bill.customer.address.split(',')[0] + ', ' + (bill.customer.address.split(',')[1] || '') : ''} • 
-                            ${bill.items.length} items • 
-                            MYR ${bill.total.toFixed(2)} • 
-                            ${new Date(bill.createdAt).toLocaleDateString()}
+                            <div class="cashbill-detail-item">
+                                <i class="fas fa-user"></i>
+                                <span>${bill.customer.firstName} ${bill.customer.lastName}</span>
+                            </div>
+                            <div class="cashbill-detail-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>${bill.customer.address ? bill.customer.address.split(',')[0] : 'N/A'}</span>
+                            </div>
+                            <div class="cashbill-detail-item">
+                                <i class="fas fa-box"></i>
+                                <span>${bill.items.length} items</span>
+                            </div>
+                            <div class="cashbill-detail-item">
+                                <i class="fas fa-money-bill-wave"></i>
+                                <span>MYR ${bill.total.toFixed(2)}</span>
+                            </div>
+                            <div class="cashbill-detail-item">
+                                <i class="fas fa-calendar"></i>
+                                <span>${new Date(bill.createdAt).toLocaleDateString()}</span>
+                            </div>
                         </div>
                     </div>
                     <div class="cashbill-status ${statusClass}">${bill.status}</div>
@@ -1684,9 +1981,7 @@
         function renderCrewProfile() {
             crewProfile.innerHTML = `
                 <div class="profile-header">
-                    <div class="profile-avatar">
-                        ${currentUser.firstName.charAt(0)}${currentUser.lastName.charAt(0)}
-                    </div>
+                    <div class="profile-avatar">${currentUser.firstName.charAt(0)}${currentUser.lastName.charAt(0)}</div>
                     <div class="profile-info">
                         <h2>${currentUser.firstName} ${currentUser.lastName}</h2>
                         <p>${currentUser.role === 'admin' ? 'Administrator' : 'Crew Member'}</p>
@@ -1718,7 +2013,7 @@
             logbookList.innerHTML = '';
             
             if (logbookEntries.length === 0) {
-                logbookList.innerHTML = '<div class="logbook-item">No logbook entries found</div>';
+                logbookList.innerHTML = '<div class="logbook-item"><div style="text-align: center; color: var(--text-secondary);">No logbook entries found</div></div>';
                 return;
             }
             
@@ -1800,7 +2095,7 @@
                 <div class="cashbill-detail-header">
                     <div>
                         <div class="cashbill-detail-title">${bill.id}</div>
-                        <div style="color: var(--dark-grey); margin-top: 5px;">
+                        <div style="color: var(--text-secondary); margin-top: 8px;">
                             Created on ${new Date(bill.createdAt).toLocaleDateString()} at ${new Date(bill.createdAt).toLocaleTimeString()}
                         </div>
                     </div>
@@ -1839,34 +2134,32 @@
                     <h3 class="detail-section-title">
                         <i class="fas fa-box"></i> Items
                     </h3>
-                    <table class="detail-table">
-                        <thead>
-                            <tr>
-                                <th>SNO</th>
-                                <th>Qty</th>
-                                <th>Description</th>
-                                <th>Tax %</th>
-                                <th>Unit Price (MYR)</th>
-                                <th>Total Excl Tax (MYR)</th>
-                                <th>Total Tax (MYR)</th>
-                                <th>Adj Total (MYR)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${bill.items.map(item => `
+                    <div class="detail-table">
+                        <table style="width: 100%;">
+                            <thead>
                                 <tr>
-                                    <td>${item.sno}</td>
-                                    <td>${item.qty}</td>
-                                    <td>${item.description}</td>
-                                    <td>${item.taxRate}%</td>
-                                    <td>${item.unitPrice.toFixed(2)}</td>
-                                    <td>${item.totalExclTax.toFixed(2)}</td>
-                                    <td>${item.totalTax.toFixed(2)}</td>
-                                    <td>${item.adjTotal.toFixed(2)}</td>
+                                    <th style="width: 10%;">SNO</th>
+                                    <th style="width: 15%;">Qty</th>
+                                    <th style="width: 30%;">Description</th>
+                                    <th style="width: 10%;">Tax %</th>
+                                    <th style="width: 15%;">Unit Price (MYR)</th>
+                                    <th style="width: 20%;">Adj Total (MYR)</th>
                                 </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                ${bill.items.map(item => `
+                                    <tr>
+                                        <td>${item.sno}</td>
+                                        <td>${item.qty}</td>
+                                        <td>${item.description}</td>
+                                        <td>${item.taxRate}%</td>
+                                        <td>${item.unitPrice.toFixed(2)}</td>
+                                        <td>${item.adjTotal.toFixed(2)}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 
                 <div class="detail-section">
@@ -2575,6 +2868,7 @@
             
             // Update UI
             userName.textContent = `${currentUser.firstName} ${currentUser.lastName}`;
+            userAvatar.textContent = `${currentUser.firstName.charAt(0)}${currentUser.lastName.charAt(0)}`;
             renderCrewProfile();
             closeEditProfileModal();
             showNotification('Profile updated successfully!');
@@ -2634,53 +2928,53 @@
             const doc = new jsPDF();
             
             // Add company header
-            doc.setFontSize(24);
+            doc.setFontSize(28);
             doc.setFont('helvetica', 'bold');
-            doc.text('PNE ARENA', 105, 20, { align: 'center' });
+            doc.text('PNE ARENA', 105, 25, { align: 'center' });
             
             // Add invoice title
-            doc.setFontSize(18);
-            doc.text('INVOICE', 105, 35, { align: 'center' });
+            doc.setFontSize(20);
+            doc.text('INVOICE', 105, 40, { align: 'center' });
             
             // Add cashbill details
             doc.setFontSize(12);
             doc.setFont('helvetica', 'normal');
-            doc.text(`Cashbill No: ${bill.id}`, 20, 55);
-            doc.text(`Date: ${new Date(bill.createdAt).toLocaleDateString()}`, 20, 65);
-            doc.text(`Status: ${bill.status}`, 20, 75);
+            doc.text(`Cashbill No: ${bill.id}`, 20, 60);
+            doc.text(`Date: ${new Date(bill.createdAt).toLocaleDateString()}`, 20, 70);
+            doc.text(`Status: ${bill.status}`, 20, 80);
             
             // Add customer information
             doc.setFont('helvetica', 'bold');
-            doc.text('Bill To:', 20, 95);
+            doc.text('Bill To:', 20, 100);
             doc.setFont('helvetica', 'normal');
-            doc.text(`${bill.customer.firstName} ${bill.customer.lastName}`, 20, 105);
-            doc.text(bill.customer.phone, 20, 115);
-            doc.text(bill.customer.email, 20, 125);
+            doc.text(`${bill.customer.firstName} ${bill.customer.lastName}`, 20, 110);
+            doc.text(bill.customer.phone, 20, 120);
+            doc.text(bill.customer.email, 20, 130);
             
             if (bill.customer.address) {
                 const addressLines = doc.splitTextToSize(bill.customer.address, 80);
-                doc.text(addressLines, 20, 135);
+                doc.text(addressLines, 20, 140);
             }
             
             // Add payment information
             doc.setFont('helvetica', 'bold');
-            doc.text('Payment Method:', 120, 95);
+            doc.text('Payment Method:', 120, 100);
             doc.setFont('helvetica', 'normal');
-            doc.text(bill.paymentType.charAt(0).toUpperCase() + bill.paymentType.slice(1), 120, 105);
+            doc.text(bill.paymentType.charAt(0).toUpperCase() + bill.paymentType.slice(1), 120, 110);
             
             // Add items table
             doc.setFont('helvetica', 'bold');
-            doc.text('Description', 20, 165);
-            doc.text('Qty', 100, 165);
-            doc.text('Unit Price', 130, 165);
-            doc.text('Total', 170, 165);
+            doc.text('Description', 20, 170);
+            doc.text('Qty', 100, 170);
+            doc.text('Unit Price', 130, 170);
+            doc.text('Total', 170, 170);
             
             // Add line
-            doc.line(20, 170, 190, 170);
+            doc.line(20, 175, 190, 175);
             
             // Add items
             doc.setFont('helvetica', 'normal');
-            let yPosition = 180;
+            let yPosition = 185;
             
             bill.items.forEach(item => {
                 doc.text(item.description, 20, yPosition);
