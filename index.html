@@ -8,33 +8,31 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         :root {
-            --primary-black: #1a1a1a;
-            --secondary-black: #2d2d2d;
-            --soft-black: #404040;
-            --light-black: #555555;
-            --primary-gray: #f5f5f5;
-            --secondary-gray: #e8e8e8;
-            --soft-gray: #d0d0d0;
-            --accent-color: #6200ea;
-            --accent-hover: #7c4dff;
-            --success-color: #4caf50;
-            --warning-color: #ff9800;
-            --danger-color: #f44336;
-            --text-primary: #212121;
-            --text-secondary: #757575;
-            --border-color: #e0e0e0;
-            --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.08);
-            --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.12);
-            --shadow-heavy: 0 8px 24px rgba(0, 0, 0, 0.16);
+            --primary-black: #121212;
+            --secondary-black: #1e1e1e;
+            --soft-black: #2d2d2d;
+            --light-black: #3a3a3a;
+            --primary-gray: #f8f9fa;
+            --secondary-gray: #e9ecef;
+            --soft-gray: #dee2e6;
+            --accent-color: #4361ee;
+            --accent-hover: #3a56d4;
+            --success-color: #06ffa5;
+            --warning-color: #ffbe0b;
+            --danger-color: #ff006e;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --border-color: #dee2e6;
+            --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.1);
+            --shadow-heavy: 0 8px 24px rgba(0, 0, 0, 0.12);
         }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
-
         body {
             background-color: var(--primary-gray);
             color: var(--text-primary);
@@ -44,35 +42,31 @@
             align-items: center;
             line-height: 1.6;
         }
-
         /* Login Screen Styles */
         .login-container {
             width: 100%;
-            max-width: 1200px;
+            max-width: 1000px;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             padding: 20px;
         }
-
         .login-card {
             background: white;
             border-radius: 16px;
             box-shadow: var(--shadow-heavy);
             width: 100%;
-            max-width: 450px;
-            padding: 48px;
+            max-width: 400px;
+            padding: 40px;
             text-align: center;
         }
-
         .login-logo {
-            margin-bottom: 32px;
+            margin-bottom: 24px;
         }
-
         .login-logo h1 {
             color: var(--primary-black);
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 700;
             margin-bottom: 8px;
             display: flex;
@@ -80,23 +74,19 @@
             justify-content: center;
             gap: 12px;
         }
-
         .login-logo p {
             color: var(--text-secondary);
             font-size: 16px;
         }
-
         .login-form {
             display: flex;
             flex-direction: column;
-            gap: 24px;
-            margin-top: 32px;
+            gap: 20px;
+            margin-top: 24px;
         }
-
         .form-group {
             text-align: left;
         }
-
         .form-group label {
             display: block;
             margin-bottom: 8px;
@@ -104,25 +94,22 @@
             font-weight: 500;
             font-size: 14px;
         }
-
-        .form-group input {
+        .form-group input, .form-group textarea, .form-group select {
             width: 100%;
-            padding: 14px 16px;
+            padding: 12px 16px;
             border: 1px solid var(--border-color);
             border-radius: 8px;
             font-size: 16px;
             transition: all 0.3s ease;
             background-color: var(--primary-gray);
         }
-
-        .form-group input:focus {
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
             outline: none;
             border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(98, 0, 234, 0.1);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
         }
-
         .btn {
-            padding: 14px 24px;
+            padding: 12px 20px;
             background-color: var(--accent-color);
             color: white;
             border: none;
@@ -136,49 +123,41 @@
             justify-content: center;
             gap: 8px;
         }
-
         .btn:hover {
             background-color: var(--accent-hover);
             transform: translateY(-1px);
             box-shadow: var(--shadow-medium);
         }
-
         .btn-secondary {
             background-color: var(--soft-black);
         }
-
         .btn-secondary:hover {
             background-color: var(--light-black);
         }
-
         .btn-success {
             background-color: var(--success-color);
+            color: var(--primary-black);
         }
-
         .btn-success:hover {
-            background-color: #43a047;
+            background-color: #00e691;
         }
-
         .btn-warning {
             background-color: var(--warning-color);
+            color: var(--primary-black);
         }
-
         .btn-warning:hover {
-            background-color: #fb8c00;
+            background-color: #e6a800;
         }
-
         .btn-danger {
             background-color: var(--danger-color);
         }
-
         .btn-danger:hover {
-            background-color: #e53935;
+            background-color: #e6005f;
         }
-
         /* Portal Styles */
         .portal-container {
             width: 100%;
-            max-width: 1400px;
+            max-width: 1000px;
             min-height: 100vh;
             background: white;
             border-radius: 16px;
@@ -186,47 +165,40 @@
             overflow: hidden;
             display: none;
         }
-
         .portal-header {
             background-color: var(--primary-black);
             color: white;
-            padding: 20px 32px;
+            padding: 16px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-
         .portal-title {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
             display: flex;
             align-items: center;
             gap: 12px;
         }
-
         .user-info {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 16px;
         }
-
         .user-details {
             text-align: right;
         }
-
         .user-name {
             font-weight: 600;
             font-size: 16px;
         }
-
         .user-role {
             font-size: 14px;
             opacity: 0.8;
         }
-
         .user-avatar {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             background-color: var(--accent-color);
             color: white;
@@ -236,36 +208,31 @@
             font-weight: 600;
             font-size: 16px;
         }
-
         .portal-nav {
             display: flex;
             background-color: var(--secondary-black);
             color: white;
         }
-
         .nav-item {
             flex: 1;
-            padding: 16px 24px;
+            padding: 14px 20px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
             border-right: 1px solid rgba(255, 255, 255, 0.1);
             font-weight: 500;
             position: relative;
+            font-size: 14px;
         }
-
         .nav-item:last-child {
             border-right: none;
         }
-
         .nav-item:hover {
             background-color: rgba(255, 255, 255, 0.05);
         }
-
         .nav-item.active {
             background-color: var(--accent-color);
         }
-
         .nav-item.active::after {
             content: '';
             position: absolute;
@@ -275,41 +242,34 @@
             height: 3px;
             background-color: white;
         }
-
         .nav-item i {
             display: block;
-            font-size: 20px;
+            font-size: 18px;
             margin-bottom: 4px;
         }
-
         .portal-content {
-            padding: 32px;
-            min-height: calc(100vh - 180px);
+            padding: 24px;
+            min-height: calc(100vh - 160px);
         }
-
         .content-section {
             display: none;
         }
-
         .content-section.active {
             display: block;
         }
-
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 32px;
-            padding-bottom: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
             border-bottom: 1px solid var(--border-color);
         }
-
         .section-title {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 700;
             color: var(--primary-black);
         }
-
         /* Cashbill List Styles */
         .cashbill-list {
             background-color: white;
@@ -318,35 +278,29 @@
             box-shadow: var(--shadow-light);
             border: 1px solid var(--border-color);
         }
-
         .cashbill-item {
-            padding: 24px;
+            padding: 20px;
             border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
             transition: background-color 0.3s ease;
         }
-
         .cashbill-item:last-child {
             border-bottom: none;
         }
-
         .cashbill-item:hover {
             background-color: var(--primary-gray);
         }
-
         .cashbill-info {
             flex: 1;
         }
-
         .cashbill-id {
             font-weight: 600;
             font-size: 18px;
             color: var(--primary-black);
             margin-bottom: 4px;
         }
-
         .cashbill-details {
             color: var(--text-secondary);
             font-size: 14px;
@@ -354,13 +308,11 @@
             gap: 16px;
             flex-wrap: wrap;
         }
-
         .cashbill-detail-item {
             display: flex;
             align-items: center;
             gap: 4px;
         }
-
         .cashbill-status {
             padding: 6px 12px;
             border-radius: 20px;
@@ -370,32 +322,26 @@
             letter-spacing: 0.5px;
             margin-left: 16px;
         }
-
         .status-committed {
-            background-color: rgba(76, 175, 80, 0.1);
+            background-color: rgba(6, 255, 165, 0.1);
             color: var(--success-color);
         }
-
         .status-pending {
-            background-color: rgba(255, 152, 0, 0.1);
+            background-color: rgba(255, 190, 11, 0.1);
             color: var(--warning-color);
         }
-
         .status-reversed {
-            background-color: rgba(244, 67, 54, 0.1);
+            background-color: rgba(255, 0, 110, 0.1);
             color: var(--danger-color);
         }
-
         .status-amendment {
-            background-color: rgba(33, 150, 243, 0.1);
-            color: #2196f3;
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--accent-color);
         }
-
         .cashbill-actions {
             display: flex;
             gap: 8px;
         }
-
         .icon-btn {
             width: 36px;
             height: 36px;
@@ -410,7 +356,6 @@
             justify-content: center;
             transition: all 0.3s ease;
         }
-
         .icon-btn:hover {
             background-color: white;
             color: var(--accent-color);
@@ -418,135 +363,105 @@
             transform: translateY(-2px);
             box-shadow: var(--shadow-light);
         }
-
         /* Form Styles */
         .cashbill-form {
             background-color: white;
             border-radius: 12px;
-            padding: 32px;
-            margin-bottom: 32px;
+            padding: 24px;
+            margin-bottom: 24px;
             box-shadow: var(--shadow-light);
             border: 1px solid var(--border-color);
         }
-
         .form-section {
-            margin-bottom: 32px;
-            padding-bottom: 24px;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
             border-bottom: 1px solid var(--border-color);
         }
-
         .form-section:last-child {
             border-bottom: none;
             margin-bottom: 0;
         }
-
         .section-subtitle {
-            font-size: 20px;
+            font-size: 18px;
             color: var(--primary-black);
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
             gap: 12px;
             font-weight: 600;
         }
-
         .form-row {
             display: flex;
-            gap: 24px;
-            margin-bottom: 20px;
+            gap: 20px;
+            margin-bottom: 16px;
         }
-
         .form-row .form-group {
             flex: 1;
         }
-
         .form-group textarea {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            background-color: var(--primary-gray);
             resize: vertical;
             font-family: inherit;
         }
-
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(98, 0, 234, 0.1);
-        }
-
         /* Items Table Styles */
         .items-table-container {
             overflow-x: auto;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             border-radius: 8px;
             box-shadow: var(--shadow-light);
             border: 1px solid var(--border-color);
         }
-
         .items-table {
             width: 100%;
             border-collapse: collapse;
             background-color: white;
         }
-
         .items-table th {
             background-color: var(--secondary-black);
             color: white;
-            padding: 16px;
+            padding: 14px;
             text-align: left;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-
         .items-table td {
-            padding: 16px;
+            padding: 14px;
             border-bottom: 1px solid var(--border-color);
         }
-
         .items-table tr:last-child td {
             border-bottom: none;
         }
-
         .items-table tr:hover {
             background-color: var(--primary-gray);
         }
-
         .item-select {
             width: 100%;
-            padding: 10px 12px;
+            padding: 8px 10px;
             border: 1px solid var(--border-color);
             border-radius: 6px;
             font-size: 14px;
             background-color: white;
             cursor: pointer;
         }
-
         .quantity-input, .tax-input {
-            width: 80px;
-            padding: 10px 12px;
+            width: 70px;
+            padding: 8px 10px;
             border: 1px solid var(--border-color);
             border-radius: 6px;
             font-size: 14px;
             text-align: center;
             background-color: white;
         }
-
         .price-input {
-            width: 120px;
-            padding: 10px 12px;
+            width: 110px;
+            padding: 8px 10px;
             border: 1px solid var(--border-color);
             border-radius: 6px;
             font-size: 14px;
             text-align: right;
             background-color: white;
         }
-
         .action-btn {
             width: 32px;
             height: 32px;
@@ -562,25 +477,21 @@
             align-items: center;
             justify-content: center;
         }
-
         .action-btn:hover {
-            background-color: rgba(244, 67, 54, 0.1);
+            background-color: rgba(255, 0, 110, 0.1);
         }
-
         .add-item-btn {
-            margin-top: 16px;
+            margin-top: 12px;
         }
-
         /* Payment Section */
         .payment-types {
             display: flex;
-            gap: 16px;
-            margin-top: 16px;
+            gap: 12px;
+            margin-top: 12px;
         }
-
         .payment-type {
             flex: 1;
-            padding: 20px;
+            padding: 16px;
             border: 2px solid var(--border-color);
             border-radius: 12px;
             text-align: center;
@@ -588,123 +499,107 @@
             transition: all 0.3s ease;
             background-color: white;
         }
-
         .payment-type:hover {
             border-color: var(--accent-color);
             transform: translateY(-2px);
             box-shadow: var(--shadow-light);
         }
-
         .payment-type.active {
             background-color: var(--accent-color);
             color: white;
             border-color: var(--accent-color);
         }
-
         .payment-type i {
-            font-size: 24px;
-            margin-bottom: 8px;
+            font-size: 22px;
+            margin-bottom: 6px;
         }
-
         .payment-type div {
             font-weight: 600;
+            font-size: 14px;
         }
-
         /* Summary Section */
         .summary-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             font-size: 16px;
         }
-
         .summary-row.total {
             font-weight: 700;
-            font-size: 20px;
+            font-size: 18px;
             border-top: 1px solid var(--border-color);
-            padding-top: 16px;
-            margin-top: 16px;
+            padding-top: 12px;
+            margin-top: 12px;
             color: var(--primary-black);
         }
-
         /* Crew Profile Styles */
         .crew-profile {
             background-color: white;
             border-radius: 12px;
-            padding: 32px;
+            padding: 24px;
             box-shadow: var(--shadow-light);
             border: 1px solid var(--border-color);
         }
-
         .profile-header {
             display: flex;
             align-items: center;
-            gap: 24px;
-            margin-bottom: 32px;
-            padding-bottom: 24px;
+            gap: 20px;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
             border-bottom: 1px solid var(--border-color);
         }
-
         .profile-avatar {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             background-color: var(--accent-color);
             color: white;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 600;
         }
-
         .profile-info h2 {
-            font-size: 24px;
+            font-size: 22px;
             margin-bottom: 4px;
             color: var(--primary-black);
         }
-
         .profile-info p {
             color: var(--text-secondary);
         }
-
         .profile-details {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 24px;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
         }
-
         .detail-item {
             display: flex;
             flex-direction: column;
         }
-
         .detail-label {
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             color: var(--text-secondary);
-            font-size: 14px;
+            font-size: 13px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-
         .detail-value {
-            padding: 12px 16px;
+            padding: 10px 14px;
             background-color: var(--primary-gray);
             border-radius: 8px;
             font-weight: 500;
         }
-
         /* Courier Logbook Styles */
         .logbook-form {
             background-color: white;
             border-radius: 12px;
-            padding: 32px;
-            margin-bottom: 32px;
+            padding: 24px;
+            margin-bottom: 24px;
             box-shadow: var(--shadow-light);
             border: 1px solid var(--border-color);
         }
-
         .logbook-list {
             background-color: white;
             border-radius: 12px;
@@ -712,46 +607,38 @@
             box-shadow: var(--shadow-light);
             border: 1px solid var(--border-color);
         }
-
         .logbook-item {
-            padding: 24px;
+            padding: 20px;
             border-bottom: 1px solid var(--border-color);
         }
-
         .logbook-item:last-child {
             border-bottom: none;
         }
-
         .logbook-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
-
         .logbook-id {
             font-weight: 600;
             font-size: 18px;
             color: var(--primary-black);
         }
-
         .logbook-date {
             color: var(--text-secondary);
             font-size: 14px;
         }
-
         .logbook-details {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 16px;
-            margin-top: 16px;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 14px;
+            margin-top: 14px;
         }
-
         .logbook-detail {
             display: flex;
             flex-direction: column;
         }
-
         .logbook-label {
             font-size: 12px;
             color: var(--text-secondary);
@@ -760,11 +647,9 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-
         .logbook-value {
             font-weight: 500;
         }
-
         /* Modal Styles */
         .modal {
             display: none;
@@ -773,43 +658,39 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
+            background-color: rgba(0, 0, 0, 0.5);
             z-index: 2000;
             justify-content: center;
             align-items: center;
             backdrop-filter: blur(4px);
         }
-
         .modal-content {
             background-color: white;
             border-radius: 16px;
             width: 90%;
-            max-width: 1000px;
+            max-width: 900px;
             max-height: 90vh;
             overflow-y: auto;
             box-shadow: var(--shadow-heavy);
         }
-
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 24px 32px;
+            padding: 20px 24px;
             border-bottom: 1px solid var(--border-color);
         }
-
         .modal-title {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
             color: var(--primary-black);
         }
-
         .close-btn {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             background: none;
             border: none;
-            font-size: 24px;
+            font-size: 22px;
             cursor: pointer;
             color: var(--text-secondary);
             border-radius: 8px;
@@ -818,181 +699,155 @@
             justify-content: center;
             transition: all 0.3s ease;
         }
-
         .close-btn:hover {
             background-color: var(--primary-gray);
             color: var(--primary-black);
         }
-
         .modal-body {
-            padding: 32px;
+            padding: 24px;
         }
-
         .modal-footer {
             display: flex;
             justify-content: flex-end;
-            gap: 12px;
-            padding: 24px 32px;
+            gap: 10px;
+            padding: 20px 24px;
             border-top: 1px solid var(--border-color);
         }
-
         /* Cashbill Detail Styles */
         .cashbill-detail {
             background-color: white;
             border-radius: 12px;
-            padding: 32px;
+            padding: 24px;
             border: 1px solid var(--border-color);
         }
-
         .cashbill-detail-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 32px;
-            padding-bottom: 24px;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
             border-bottom: 1px solid var(--border-color);
         }
-
         .cashbill-detail-title {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 700;
             color: var(--primary-black);
         }
-
         .cashbill-detail-status {
-            padding: 8px 16px;
+            padding: 8px 14px;
             border-radius: 20px;
             font-size: 14px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-
         .detail-section {
-            margin-bottom: 32px;
+            margin-bottom: 24px;
         }
-
         .detail-section-title {
-            font-size: 20px;
+            font-size: 18px;
             color: var(--primary-black);
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
             gap: 12px;
             font-weight: 600;
         }
-
         .detail-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
         }
-
         .detail-item {
             display: flex;
             flex-direction: column;
         }
-
         .detail-label {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-secondary);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-
         .detail-value {
             font-weight: 500;
-            font-size: 16px;
+            font-size: 15px;
         }
-
         .detail-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 16px;
             border-radius: 8px;
             overflow: hidden;
             box-shadow: var(--shadow-light);
             border: 1px solid var(--border-color);
         }
-
         .detail-table th {
             background-color: var(--secondary-black);
             color: white;
-            padding: 16px;
+            padding: 14px;
             text-align: left;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-
         .detail-table td {
-            padding: 16px;
+            padding: 14px;
             border-bottom: 1px solid var(--border-color);
         }
-
         .detail-table tr:last-child td {
             border-bottom: none;
         }
-
         .detail-table tr:hover {
             background-color: var(--primary-gray);
         }
-
         .detail-summary {
             display: flex;
             justify-content: flex-end;
-            margin-top: 24px;
+            margin-top: 20px;
         }
-
         .detail-summary-table {
-            width: 320px;
+            width: 300px;
             border-radius: 8px;
             overflow: hidden;
             box-shadow: var(--shadow-light);
             border: 1px solid var(--border-color);
         }
-
         .detail-summary-table td {
-            padding: 12px 16px;
+            padding: 10px 14px;
         }
-
         .detail-summary-table td:first-child {
             text-align: left;
             font-weight: 500;
         }
-
         .detail-summary-table td:last-child {
             text-align: right;
             font-weight: 600;
         }
-
         .detail-summary-table tr.total td {
             font-weight: 700;
-            font-size: 18px;
+            font-size: 17px;
             border-top: 1px solid var(--border-color);
-            padding-top: 16px;
+            padding-top: 14px;
             color: var(--primary-black);
         }
-
         /* Action Buttons */
         .action-buttons {
             display: flex;
-            gap: 12px;
-            margin-top: 24px;
+            gap: 10px;
+            margin-top: 20px;
             flex-wrap: wrap;
         }
-
         /* Notification Styles */
         .notification {
             position: fixed;
-            top: 24px;
-            right: 24px;
-            padding: 16px 24px;
+            top: 20px;
+            right: 20px;
+            padding: 14px 20px;
             background-color: var(--success-color);
-            color: white;
+            color: var(--primary-black);
             border-radius: 8px;
             box-shadow: var(--shadow-medium);
             transform: translateX(400px);
@@ -1001,43 +856,89 @@
             max-width: 320px;
             font-weight: 500;
         }
-
         .notification.show {
             transform: translateX(0);
         }
-
         .notification.error {
             background-color: var(--danger-color);
+            color: white;
         }
-
         .notification.warning {
             background-color: var(--warning-color);
+            color: var(--primary-black);
         }
-
         /* Loading Spinner */
         .spinner {
             display: inline-block;
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             border: 3px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
             border-top-color: white;
             animation: spin 1s ease-in-out infinite;
         }
-
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-
+        /* Admin Panel Styles */
+        .admin-panel {
+            background-color: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-light);
+            border: 1px solid var(--border-color);
+        }
+        .admin-tools {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+        .admin-tool {
+            padding: 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: var(--primary-gray);
+        }
+        .admin-tool:hover {
+            background-color: var(--secondary-gray);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-light);
+        }
+        .admin-tool i {
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: var(--accent-color);
+        }
+        .admin-tool div {
+            font-weight: 600;
+        }
+        /* Untally Payment Form */
+        .untally-form {
+            background-color: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-light);
+            border: 1px solid var(--border-color);
+            display: none;
+        }
+        .untally-form.active {
+            display: block;
+        }
         /* Responsive Styles */
         @media (max-width: 1024px) {
             .portal-content {
-                padding: 24px;
+                padding: 20px;
             }
             
             .form-row {
                 flex-direction: column;
-                gap: 16px;
+                gap: 14px;
             }
             
             .payment-types {
@@ -1056,37 +957,36 @@
                 width: 100%;
             }
         }
-
         @media (max-width: 768px) {
             .login-card {
-                padding: 32px 24px;
+                padding: 28px 20px;
             }
             
             .portal-header {
-                padding: 16px 24px;
+                padding: 14px 20px;
             }
             
             .portal-title {
-                font-size: 20px;
-            }
-            
-            .nav-item {
-                padding: 12px 16px;
-                font-size: 14px;
-            }
-            
-            .nav-item i {
                 font-size: 18px;
             }
             
+            .nav-item {
+                padding: 10px 14px;
+                font-size: 13px;
+            }
+            
+            .nav-item i {
+                font-size: 16px;
+            }
+            
             .section-title {
-                font-size: 24px;
+                font-size: 20px;
             }
             
             .cashbill-item {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 16px;
+                gap: 14px;
             }
             
             .cashbill-actions {
@@ -1100,7 +1000,7 @@
             }
             
             .modal-body {
-                padding: 24px;
+                padding: 20px;
             }
             
             .modal-footer {
@@ -1135,11 +1035,10 @@
             </form>
         </div>
     </div>
-
     <div class="portal-container" id="portalContainer">
         <div class="portal-header">
             <div class="portal-title">
-                <i class="fas fa-cash-register"></i> Portal A
+                <i class="fas fa-cash-register"></i> Portal PNE
             </div>
             <div class="user-info">
                 <div class="user-details">
@@ -1162,6 +1061,9 @@
             </div>
             <div class="nav-item" data-section="courierLogbook">
                 <i class="fas fa-clipboard-list"></i> Courier Logbook
+            </div>
+            <div class="nav-item" data-section="adminPanel" id="adminPanelNav" style="display:none;">
+                <i class="fas fa-tools"></i> Admin Panel
             </div>
         </div>
         
@@ -1207,9 +1109,60 @@
                     <!-- Logbook entries will be populated by JavaScript -->
                 </div>
             </div>
+            
+            <!-- Admin Panel Section -->
+            <div class="content-section" id="adminPanelSection">
+                <div class="section-header">
+                    <h2 class="section-title">Admin Panel</h2>
+                </div>
+                
+                <div class="admin-panel">
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-tools"></i> Administrative Tools
+                    </h3>
+                    <div class="admin-tools">
+                        <div class="admin-tool" id="untallyPaymentBtn">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <div>Untally Payment</div>
+                        </div>
+                        <div class="admin-tool" id="manageCrewBtn">
+                            <i class="fas fa-users-cog"></i>
+                            <div>Manage Crew</div>
+                        </div>
+                        <div class="admin-tool" id="systemSettingsBtn">
+                            <i class="fas fa-cogs"></i>
+                            <div>System Settings</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="untally-form" id="untallyForm">
+                    <h3 class="section-subtitle">
+                        <i class="fas fa-money-bill-wave"></i> Untally Payment Adjustment
+                    </h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="untallyCashbillId">Cashbill ID</label>
+                            <input type="text" id="untallyCashbillId" placeholder="Enter cashbill ID">
+                        </div>
+                        <div class="form-group">
+                            <label for="untallyAmount">Adjustment Amount (MYR)</label>
+                            <input type="number" id="untallyAmount" placeholder="Enter amount" step="0.01">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="untallyReason">Reason for Adjustment</label>
+                        <textarea id="untallyReason" rows="3" placeholder="Explain the reason for this adjustment"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <button class="btn btn-secondary" id="cancelUntallyBtn">Cancel</button>
+                        <button class="btn btn-warning" id="processUntallyBtn">Process Adjustment</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
+    
     <!-- New Cashbill Modal -->
     <div class="modal" id="newCashbillModal">
         <div class="modal-content">
@@ -1280,6 +1233,17 @@
                         </button>
                     </div>
                     
+                    <!-- Remarks Section -->
+                    <div class="form-section">
+                        <h3 class="section-subtitle">
+                            <i class="fas fa-comment-alt"></i> Remarks
+                        </h3>
+                        <div class="form-group">
+                            <label for="cashbillRemarks">Additional Notes</label>
+                            <textarea id="cashbillRemarks" rows="3" placeholder="Enter any additional remarks or notes"></textarea>
+                        </div>
+                    </div>
+                    
                     <!-- Payment Section -->
                     <div class="form-section">
                         <h3 class="section-subtitle">
@@ -1341,7 +1305,7 @@
             </div>
         </div>
     </div>
-
+    
     <!-- Cashbill Detail Modal -->
     <div class="modal" id="cashbillDetailModal">
         <div class="modal-content">
@@ -1365,7 +1329,7 @@
             </div>
         </div>
     </div>
-
+    
     <!-- Edit Cashbill Modal -->
     <div class="modal" id="editCashbillModal">
         <div class="modal-content">
@@ -1436,6 +1400,17 @@
                         </button>
                     </div>
                     
+                    <!-- Remarks Section -->
+                    <div class="form-section">
+                        <h3 class="section-subtitle">
+                            <i class="fas fa-comment-alt"></i> Remarks
+                        </h3>
+                        <div class="form-group">
+                            <label for="editCashbillRemarks">Additional Notes</label>
+                            <textarea id="editCashbillRemarks" rows="3" placeholder="Enter any additional remarks or notes"></textarea>
+                        </div>
+                    </div>
+                    
                     <!-- Payment Section -->
                     <div class="form-section">
                         <h3 class="section-subtitle">
@@ -1496,7 +1471,7 @@
             </div>
         </div>
     </div>
-
+    
     <!-- Edit Profile Modal -->
     <div class="modal" id="editProfileModal">
         <div class="modal-content">
@@ -1542,7 +1517,7 @@
             </div>
         </div>
     </div>
-
+    
     <!-- New Logbook Modal -->
     <div class="modal" id="newLogbookModal">
         <div class="modal-content">
@@ -1594,7 +1569,7 @@
             </div>
         </div>
     </div>
-
+    
     <!-- Approval Modal -->
     <div class="modal" id="approvalModal">
         <div class="modal-content">
@@ -1619,10 +1594,10 @@
             </div>
         </div>
     </div>
-
+    
     <!-- Notification -->
     <div class="notification" id="notification"></div>
-
+    
     <script>
         // Data
         const users = [
@@ -1630,7 +1605,6 @@
             { id: '1001', password: '0000', firstName: 'John', lastName: 'Doe', role: 'crew', email: 'john@example.com', phone: '0123456788', outlet: 'Outlet A' },
             { id: '1002', password: '0000', firstName: 'Jane', lastName: 'Smith', role: 'crew', email: 'jane@example.com', phone: '0123456787', outlet: 'Outlet B' }
         ];
-
         const itemTypes = [
             {
                 id: 'adult-robes',
@@ -1659,13 +1633,12 @@
                 minOrder: 10
             }
         ];
-
         const promoCodes = {
             "SAVE10": 0.1,
             "WELCOME": 0.15,
             "STUDENT": 0.2
         };
-
+        
         // State
         let currentUser = null;
         let cashbills = [];
@@ -1677,7 +1650,8 @@
         let pendingAction = null;
         let itemCounter = 1;
         let currentEditingCashbill = null;
-
+        let activeSection = 'cashbill';
+        
         // DOM elements
         const loginContainer = document.getElementById('loginContainer');
         const portalContainer = document.getElementById('portalContainer');
@@ -1694,7 +1668,8 @@
         const crewProfile = document.getElementById('crewProfile');
         const logbookList = document.getElementById('logbookList');
         const notification = document.getElementById('notification');
-
+        const adminPanelNav = document.getElementById('adminPanelNav');
+        
         // Modals
         const newCashbillModal = document.getElementById('newCashbillModal');
         const cashbillDetailModal = document.getElementById('cashbillDetailModal');
@@ -1702,16 +1677,48 @@
         const editProfileModal = document.getElementById('editProfileModal');
         const newLogbookModal = document.getElementById('newLogbookModal');
         const approvalModal = document.getElementById('approvalModal');
-
+        
         // Buttons
         const newCashbillBtn = document.getElementById('newCashbillBtn');
         const editProfileBtn = document.getElementById('editProfileBtn');
         const newLogbookBtn = document.getElementById('newLogbookBtn');
         const addItemBtn = document.getElementById('addItemBtn');
         const editAddItemBtn = document.getElementById('editAddItemBtn');
-
+        
+        // Admin Panel
+        const untallyPaymentBtn = document.getElementById('untallyPaymentBtn');
+        const manageCrewBtn = document.getElementById('manageCrewBtn');
+        const systemSettingsBtn = document.getElementById('systemSettingsBtn');
+        const untallyForm = document.getElementById('untallyForm');
+        const cancelUntallyBtn = document.getElementById('cancelUntallyBtn');
+        const processUntallyBtn = document.getElementById('processUntallyBtn');
+        
         // Initialize
         function init() {
+            // Check for saved session
+            const savedUser = localStorage.getItem('currentUser');
+            const savedSection = localStorage.getItem('activeSection');
+            
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                loginContainer.style.display = 'none';
+                portalContainer.style.display = 'block';
+                userName.textContent = `${currentUser.firstName} ${currentUser.lastName}`;
+                userRole.textContent = currentUser.role === 'admin' ? 'Administrator' : 'Crew Member';
+                userAvatar.textContent = `${currentUser.firstName.charAt(0)}${currentUser.lastName.charAt(0)}`;
+                
+                if (currentUser.role === 'admin') {
+                    adminPanelNav.style.display = 'block';
+                }
+                
+                if (savedSection) {
+                    activeSection = savedSection;
+                }
+                
+                renderPortal();
+                switchSection(activeSection);
+            }
+            
             // Load data from localStorage
             const savedCashbills = localStorage.getItem('cashbills');
             if (savedCashbills) {
@@ -1746,6 +1753,7 @@
                         discount: 0,
                         total: 550,
                         promoCode: null,
+                        remarks: 'Customer requested urgent delivery',
                         status: 'committed',
                         createdBy: '1001',
                         createdAt: new Date('2023-05-15').toISOString()
@@ -1777,6 +1785,7 @@
                         discount: 0,
                         total: 1870,
                         promoCode: null,
+                        remarks: 'School bulk order',
                         status: 'committed',
                         createdBy: '1002',
                         createdAt: new Date('2023-05-16').toISOString()
@@ -1784,7 +1793,7 @@
                 ];
                 saveCashbills();
             }
-
+            
             const savedLogbook = localStorage.getItem('logbookEntries');
             if (savedLogbook) {
                 logbookEntries = JSON.parse(savedLogbook);
@@ -1792,10 +1801,10 @@
                 logbookEntries = [];
                 saveLogbook();
             }
-
+            
             setupEventListeners();
         }
-
+        
         // Setup event listeners
         function setupEventListeners() {
             loginForm.addEventListener('submit', handleLogin);
@@ -1810,6 +1819,17 @@
             newLogbookBtn.addEventListener('click', openNewLogbookModal);
             addItemBtn.addEventListener('click', addNewItem);
             editAddItemBtn.addEventListener('click', addEditItem);
+            
+            // Admin panel buttons
+            untallyPaymentBtn.addEventListener('click', () => {
+                untallyForm.classList.toggle('active');
+            });
+            
+            cancelUntallyBtn.addEventListener('click', () => {
+                untallyForm.classList.remove('active');
+            });
+            
+            processUntallyBtn.addEventListener('click', processUntallyPayment);
             
             // Modal close buttons
             document.getElementById('closeCashbillModal').addEventListener('click', closeNewCashbillModal);
@@ -1841,7 +1861,7 @@
                 type.addEventListener('click', () => selectPayment(type.dataset.payment));
             });
         }
-
+        
         // Handle login
         function handleLogin(e) {
             e.preventDefault();
@@ -1852,36 +1872,53 @@
             
             if (user) {
                 currentUser = user;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
                 loginContainer.style.display = 'none';
                 portalContainer.style.display = 'block';
                 userName.textContent = `${user.firstName} ${user.lastName}`;
                 userRole.textContent = user.role === 'admin' ? 'Administrator' : 'Crew Member';
                 userAvatar.textContent = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`;
                 
+                if (user.role === 'admin') {
+                    adminPanelNav.style.display = 'block';
+                }
+                
                 renderPortal();
+                switchSection(activeSection);
                 showNotification('Login successful!');
             } else {
                 showNotification('Invalid ID or password!', true);
             }
         }
-
+        
         // Handle logout
         function handleLogout() {
             currentUser = null;
+            localStorage.removeItem('currentUser');
             loginContainer.style.display = 'flex';
             portalContainer.style.display = 'none';
             userIdInput.value = '';
             passwordInput.value = '';
             showNotification('Logged out successfully!');
         }
-
+        
         // Switch portal section
         function switchSection(section) {
             navItems.forEach(item => item.classList.remove('active'));
             contentSections.forEach(sec => sec.classList.remove('active'));
             
-            document.querySelector(`.nav-item[data-section="${section}"]`).classList.add('active');
-            document.getElementById(`${section}Section`).classList.add('active');
+            const navItem = document.querySelector(`.nav-item[data-section="${section}"]`);
+            if (navItem) {
+                navItem.classList.add('active');
+            }
+            
+            const contentSection = document.getElementById(`${section}Section`);
+            if (contentSection) {
+                contentSection.classList.add('active');
+            }
+            
+            activeSection = section;
+            localStorage.setItem('activeSection', section);
             
             if (section === 'cashbill') {
                 renderCashbills();
@@ -1891,14 +1928,14 @@
                 renderLogbook();
             }
         }
-
+        
         // Render portal content
         function renderPortal() {
             renderCashbills();
             renderCrewProfile();
             renderLogbook();
         }
-
+        
         // Render cashbills
         function renderCashbills() {
             cashbillList.innerHTML = '';
@@ -1950,7 +1987,16 @@
                         <button class="icon-btn" onclick="generatePDF('${bill.id}')" title="Generate PDF">
                             <i class="fas fa-file-pdf"></i>
                         </button>
-                        ${currentUser.role === 'admin' || bill.createdBy === currentUser.id ? `
+                        ${currentUser.role === 'admin' ? `
+                            <button class="icon-btn" onclick="editCashbill('${bill.id}')" title="Edit Cashbill">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            ${bill.status === 'committed' ? `
+                                <button class="icon-btn" onclick="reverseCashbill('${bill.id}')" title="Reverse">
+                                    <i class="fas fa-undo"></i>
+                                </button>
+                            ` : ''}
+                        ` : bill.createdBy === currentUser.id ? `
                             ${bill.status === 'committed' ? `
                                 <button class="icon-btn" onclick="requestAmendment('${bill.id}')" title="Request Amendment">
                                     <i class="fas fa-edit"></i>
@@ -1976,7 +2022,7 @@
                 cashbillList.appendChild(billItem);
             });
         }
-
+        
         // Render crew profile
         function renderCrewProfile() {
             crewProfile.innerHTML = `
@@ -2005,9 +2051,32 @@
                         <div class="detail-value">${currentUser.outlet}</div>
                     </div>
                 </div>
+                
+                ${currentUser.role === 'admin' ? `
+                    <div style="margin-top: 24px;">
+                        <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--primary-black);">Manage Crew Members</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px;">
+                            ${users.filter(u => u.role === 'crew').map(crew => `
+                                <div style="border: 1px solid var(--border-color); border-radius: 8px; padding: 16px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                        <div style="font-weight: 600;">${crew.firstName} ${crew.lastName}</div>
+                                        <div style="width: 36px; height: 36px; border-radius: 50%; background-color: var(--accent-color); color: white; display: flex; justify-content: center; align-items: center; font-weight: 600;">
+                                            ${crew.firstName.charAt(0)}${crew.lastName.charAt(0)}
+                                        </div>
+                                    </div>
+                                    <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">ID: ${crew.id}</div>
+                                    <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">Outlet: ${crew.outlet}</div>
+                                    <button class="btn" style="width: 100%; margin-top: 8px;" onclick="editCrewMember('${crew.id}')">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                ` : ''}
             `;
         }
-
+        
         // Render logbook
         function renderLogbook() {
             logbookList.innerHTML = '';
@@ -2055,7 +2124,7 @@
                 logbookList.appendChild(logbookItem);
             });
         }
-
+        
         // Open new cashbill modal
         function openNewCashbillModal() {
             // Reset form
@@ -2074,12 +2143,12 @@
             
             newCashbillModal.style.display = 'flex';
         }
-
+        
         // Close new cashbill modal
         function closeNewCashbillModal() {
             newCashbillModal.style.display = 'none';
         }
-
+        
         // Open cashbill detail modal
         function openCashbillDetailModal(id) {
             const bill = cashbills.find(b => b.id === id);
@@ -2162,6 +2231,15 @@
                     </div>
                 </div>
                 
+                ${bill.remarks ? `
+                    <div class="detail-section">
+                        <h3 class="detail-section-title">
+                            <i class="fas fa-comment-alt"></i> Remarks
+                        </h3>
+                        <div class="detail-value">${bill.remarks}</div>
+                    </div>
+                ` : ''}
+                
                 <div class="detail-section">
                     <h3 class="detail-section-title">
                         <i class="fas fa-info-circle"></i> Additional Information
@@ -2216,7 +2294,21 @@
             // Set action buttons based on user role and bill status
             cashbillActionButtons.innerHTML = '';
             
-            if (currentUser.role === 'admin' || bill.createdBy === currentUser.id) {
+            if (currentUser.role === 'admin') {
+                cashbillActionButtons.innerHTML += `
+                    <button class="btn" onclick="editCashbill('${bill.id}')">
+                        <i class="fas fa-edit"></i> Edit Cashbill
+                    </button>
+                `;
+                
+                if (bill.status === 'committed') {
+                    cashbillActionButtons.innerHTML += `
+                        <button class="btn btn-danger" onclick="reverseCashbill('${bill.id}')">
+                            <i class="fas fa-undo"></i> Reverse
+                        </button>
+                    `;
+                }
+            } else if (bill.createdBy === currentUser.id) {
                 if (bill.status === 'committed') {
                     cashbillActionButtons.innerHTML += `
                         <button class="btn btn-warning" onclick="requestAmendment('${bill.id}')">
@@ -2243,12 +2335,12 @@
             
             cashbillDetailModal.style.display = 'flex';
         }
-
+        
         // Close cashbill detail modal
         function closeCashbillDetailModal() {
             cashbillDetailModal.style.display = 'none';
         }
-
+        
         // Open edit cashbill modal
         function openEditCashbillModal(id) {
             const bill = cashbills.find(b => b.id === id);
@@ -2262,6 +2354,7 @@
             document.getElementById('editCustomerPhone').value = bill.customer.phone;
             document.getElementById('editCustomerEmail').value = bill.customer.email;
             document.getElementById('editCustomerAddress').value = bill.customer.address || '';
+            document.getElementById('editCashbillRemarks').value = bill.remarks || '';
             
             // Set payment type
             document.querySelectorAll('#editPaymentTypes .payment-type').forEach(type => {
@@ -2316,13 +2409,13 @@
             
             editCashbillModal.style.display = 'flex';
         }
-
+        
         // Close edit cashbill modal
         function closeEditCashbillModal() {
             editCashbillModal.style.display = 'none';
             currentEditingCashbill = null;
         }
-
+        
         // Open edit profile modal
         function openEditProfileModal() {
             // Populate form with current user data
@@ -2335,12 +2428,12 @@
             
             editProfileModal.style.display = 'flex';
         }
-
+        
         // Close edit profile modal
         function closeEditProfileModal() {
             editProfileModal.style.display = 'none';
         }
-
+        
         // Open new logbook modal
         function openNewLogbookModal() {
             // Reset form
@@ -2348,12 +2441,12 @@
             
             newLogbookModal.style.display = 'flex';
         }
-
+        
         // Close new logbook modal
         function closeNewLogbookModal() {
             newLogbookModal.style.display = 'none';
         }
-
+        
         // Open approval modal
         function openApprovalModal(message, action) {
             document.getElementById('approvalMessage').textContent = message;
@@ -2362,13 +2455,13 @@
             pendingAction = action;
             approvalModal.style.display = 'flex';
         }
-
+        
         // Close approval modal
         function closeApprovalModal() {
             approvalModal.style.display = 'none';
             pendingAction = null;
         }
-
+        
         // Add new item to table
         function addNewItem() {
             const tableBody = document.getElementById('itemsTableBody');
@@ -2408,7 +2501,7 @@
             tableBody.appendChild(row);
             itemCounter++;
         }
-
+        
         // Add new item to edit table
         function addEditItem() {
             const tableBody = document.getElementById('editItemsTableBody');
@@ -2448,7 +2541,7 @@
             tableBody.appendChild(row);
             itemCounter++;
         }
-
+        
         // Update item row calculations
         function updateItemRow(element) {
             const row = element.closest('tr');
@@ -2489,7 +2582,7 @@
             // Update overall totals
             updateTotals();
         }
-
+        
         // Update edit item row calculations
         function updateEditItemRow(element) {
             const row = element.closest('tr');
@@ -2530,21 +2623,21 @@
             // Update overall totals
             updateEditTotals();
         }
-
+        
         // Remove item row
         function removeItemRow(button) {
             const row = button.closest('tr');
             row.remove();
             updateTotals();
         }
-
+        
         // Remove edit item row
         function removeEditItemRow(button) {
             const row = button.closest('tr');
             row.remove();
             updateEditTotals();
         }
-
+        
         // Update overall totals
         function updateTotals() {
             const rows = document.querySelectorAll('#itemsTableBody tr');
@@ -2572,7 +2665,7 @@
             document.getElementById('total').textContent = `MYR ${totalAfterDiscount.toFixed(2)}`;
             document.getElementById('totalAmount').value = `MYR ${totalAfterDiscount.toFixed(2)}`;
         }
-
+        
         // Update edit overall totals
         function updateEditTotals() {
             const rows = document.querySelectorAll('#editItemsTableBody tr');
@@ -2600,14 +2693,14 @@
             document.getElementById('editTotal').textContent = `MYR ${totalAfterDiscount.toFixed(2)}`;
             document.getElementById('editTotalAmount').value = `MYR ${totalAfterDiscount.toFixed(2)}`;
         }
-
+        
         // Select payment type
         function selectPayment(type) {
             document.querySelectorAll('.payment-type').forEach(el => el.classList.remove('active'));
             document.querySelector(`.payment-type[data-payment="${type}"]`).classList.add('active');
             selectedPayment = type;
         }
-
+        
         // Save cashbill as draft
         function saveCashbill() {
             const items = getItemsFromTable();
@@ -2627,6 +2720,7 @@
             const phone = document.getElementById('customerPhone').value;
             const email = document.getElementById('customerEmail').value;
             const address = document.getElementById('customerAddress').value;
+            const remarks = document.getElementById('cashbillRemarks').value;
             
             if (!firstName || !lastName || !phone || !email) {
                 showNotification('Please fill in all customer details!', true);
@@ -2653,6 +2747,7 @@
                 discount,
                 total,
                 promoCode: appliedPromo,
+                remarks,
                 status: 'draft',
                 createdBy: currentUser.id,
                 createdAt: new Date().toISOString()
@@ -2664,7 +2759,7 @@
             closeNewCashbillModal();
             showNotification('Cashbill saved as draft!');
         }
-
+        
         // Commit cashbill
         function commitCashbill() {
             const items = getItemsFromTable();
@@ -2684,6 +2779,7 @@
             const phone = document.getElementById('customerPhone').value;
             const email = document.getElementById('customerEmail').value;
             const address = document.getElementById('customerAddress').value;
+            const remarks = document.getElementById('cashbillRemarks').value;
             
             if (!firstName || !lastName || !phone || !email) {
                 showNotification('Please fill in all customer details!', true);
@@ -2710,6 +2806,7 @@
                 discount,
                 total,
                 promoCode: appliedPromo,
+                remarks,
                 status: 'committed',
                 createdBy: currentUser.id,
                 createdAt: new Date().toISOString()
@@ -2721,7 +2818,7 @@
             closeNewCashbillModal();
             showNotification('Cashbill committed successfully!');
         }
-
+        
         // Save edited cashbill
         function saveEditCashbill() {
             if (!currentEditingCashbill) return;
@@ -2743,6 +2840,7 @@
             const phone = document.getElementById('editCustomerPhone').value;
             const email = document.getElementById('editCustomerEmail').value;
             const address = document.getElementById('editCustomerAddress').value;
+            const remarks = document.getElementById('editCashbillRemarks').value;
             
             if (!firstName || !lastName || !phone || !email) {
                 showNotification('Please fill in all customer details!', true);
@@ -2762,6 +2860,7 @@
             currentEditingCashbill.tax = tax;
             currentEditingCashbill.discount = discount;
             currentEditingCashbill.total = total;
+            currentEditingCashbill.remarks = remarks;
             currentEditingCashbill.status = 'committed';
             
             saveCashbills();
@@ -2770,7 +2869,7 @@
             closeCashbillDetailModal();
             showNotification('Cashbill updated successfully!');
         }
-
+        
         // Get items from table
         function getItemsFromTable() {
             const rows = document.querySelectorAll('#itemsTableBody tr');
@@ -2802,7 +2901,7 @@
             
             return items;
         }
-
+        
         // Get items from edit table
         function getEditItemsFromTable() {
             const rows = document.querySelectorAll('#editItemsTableBody tr');
@@ -2834,7 +2933,7 @@
             
             return items;
         }
-
+        
         // Save profile
         function saveProfile() {
             const firstName = document.getElementById('profileFirstName').value;
@@ -2866,6 +2965,9 @@
                 users[userIndex] = { ...currentUser };
             }
             
+            // Update localStorage
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
             // Update UI
             userName.textContent = `${currentUser.firstName} ${currentUser.lastName}`;
             userAvatar.textContent = `${currentUser.firstName.charAt(0)}${currentUser.lastName.charAt(0)}`;
@@ -2873,7 +2975,7 @@
             closeEditProfileModal();
             showNotification('Profile updated successfully!');
         }
-
+        
         // Save logbook entry
         function saveLogbook() {
             const firstName = document.getElementById('logbookFirstName').value;
@@ -2913,12 +3015,12 @@
             closeNewLogbookModal();
             showNotification('Logbook entry saved successfully!');
         }
-
+        
         // View cashbill
         function viewCashbill(id) {
             openCashbillDetailModal(id);
         }
-
+        
         // Generate PDF
         function generatePDF(id) {
             const bill = cashbills.find(b => b.id === id);
@@ -3006,6 +3108,15 @@
             doc.text('Total:', 130, yPosition);
             doc.text(`MYR ${bill.total.toFixed(2)}`, 170, yPosition);
             
+            // Add remarks if any
+            if (bill.remarks) {
+                doc.setFont('helvetica', 'bold');
+                doc.text('Remarks:', 20, yPosition + 20);
+                doc.setFont('helvetica', 'normal');
+                const remarksLines = doc.splitTextToSize(bill.remarks, 170);
+                doc.text(remarksLines, 20, yPosition + 30);
+            }
+            
             // Add footer
             doc.setFont('helvetica', 'normal');
             doc.setFontSize(10);
@@ -3016,13 +3127,13 @@
             
             showNotification('Invoice generated successfully!');
         }
-
+        
         // Print cashbill detail
         function printCashbillDetail() {
             const billId = document.querySelector('.cashbill-detail-title').textContent;
             generatePDF(billId);
         }
-
+        
         // Request amendment
         function requestAmendment(id) {
             const bill = cashbills.find(b => b.id === id);
@@ -3046,13 +3157,13 @@
                 );
             }
         }
-
+        
         // Edit cashbill
         function editCashbill(id) {
             openEditCashbillModal(id);
             closeCashbillDetailModal();
         }
-
+        
         // Reverse cashbill
         function reverseCashbill(id) {
             const bill = cashbills.find(b => b.id === id);
@@ -3079,7 +3190,7 @@
                 );
             }
         }
-
+        
         // Approve reverse
         function approveReverse(id) {
             const bill = cashbills.find(b => b.id === id);
@@ -3096,7 +3207,61 @@
                 }
             );
         }
-
+        
+        // Edit crew member
+        function editCrewMember(id) {
+            const crew = users.find(u => u.id === id);
+            if (!crew) return;
+            
+            // For now, we'll just show a notification
+            showNotification(`Edit crew member ${crew.firstName} ${crew.lastName} functionality would be implemented here.`);
+        }
+        
+        // Process untally payment
+        function processUntallyPayment() {
+            const cashbillId = document.getElementById('untallyCashbillId').value;
+            const amount = parseFloat(document.getElementById('untallyAmount').value);
+            const reason = document.getElementById('untallyReason').value;
+            
+            if (!cashbillId || !amount || !reason) {
+                showNotification('Please fill in all fields!', true);
+                return;
+            }
+            
+            const bill = cashbills.find(b => b.id === cashbillId);
+            if (!bill) {
+                showNotification('Cashbill not found!', true);
+                return;
+            }
+            
+            // Adjust the cashbill total
+            bill.total += amount;
+            bill.discount -= amount; // Negative discount means adding to total
+            
+            // Add a note about the adjustment
+            if (!bill.adjustments) {
+                bill.adjustments = [];
+            }
+            
+            bill.adjustments.push({
+                amount,
+                reason,
+                adjustedBy: currentUser.id,
+                adjustedAt: new Date().toISOString()
+            });
+            
+            saveCashbills();
+            renderCashbills();
+            untallyForm.classList.remove('active');
+            
+            // Clear form
+            document.getElementById('untallyCashbillId').value = '';
+            document.getElementById('untallyAmount').value = '';
+            document.getElementById('untallyReason').value = '';
+            
+            showNotification(`Payment adjustment of MYR ${amount.toFixed(2)} processed for ${cashbillId}!`);
+        }
+        
         // Request approval
         function requestApproval() {
             const crewId = document.getElementById('crewId').value;
@@ -3113,17 +3278,17 @@
                 showNotification('Invalid crew credentials!', true);
             }
         }
-
+        
         // Save cashbills to localStorage
         function saveCashbills() {
             localStorage.setItem('cashbills', JSON.stringify(cashbills));
         }
-
+        
         // Save logbook to localStorage
         function saveLogbook() {
             localStorage.setItem('logbookEntries', JSON.stringify(logbookEntries));
         }
-
+        
         // Show notification
         function showNotification(message, isError = false) {
             notification.textContent = message;
@@ -3139,7 +3304,7 @@
                 notification.classList.remove('show');
             }, 3000);
         }
-
+        
         // Initialize the app
         init();
     </script>
