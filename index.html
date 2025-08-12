@@ -249,6 +249,49 @@
             display: flex;
             gap: 5px;
         }
+        .search-box {
+            position: relative;
+        }
+        .search-box input {
+            padding-left: 35px;
+        }
+        .search-box i {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+        .filter-section {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .print-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .print-header h2 {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        .print-section {
+            margin-bottom: 20px;
+        }
+        .print-section h5 {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -272,9 +315,6 @@
                 <label class="form-check-label" for="rememberMe">Remember me</label>
             </div>
             <button type="submit" class="btn btn-primary w-100">Login</button>
-            <div class="mt-3 text-center">
-                <small class="text-muted">Demo: Admin (0000/Dd123) or Crew (0001/1234)</small>
-            </div>
         </form>
     </div>
     <!-- Portal Container -->
@@ -288,8 +328,10 @@
             </div>
             <ul class="sidebar-menu">
                 <li><a href="#" class="menu-link active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                <li><a href="#" class="menu-link" data-section="cashbill"><i class="fas fa-file-invoice-dollar"></i> Cashbill</a></li>
-                <li><a href="#" class="menu-link" data-section="logbook"><i class="fas fa-book"></i> Courier Logbook</a></li>
+                <li><a href="#" class="menu-link" data-section="cashbill"><i class="fas fa-file-invoice-dollar"></i> New Cashbill</a></li>
+                <li><a href="#" class="menu-link" data-section="cashbill-list"><i class="fas fa-list"></i> All Cashbills</a></li>
+                <li><a href="#" class="menu-link" data-section="logbook"><i class="fas fa-book"></i> New Logbook</a></li>
+                <li><a href="#" class="menu-link" data-section="logbook-list"><i class="fas fa-list"></i> All Logbooks</a></li>
                 <li><a href="#" class="menu-link" data-section="products"><i class="fas fa-box"></i> Products</a></li>
                 <li><a href="#" class="menu-link admin-only" data-section="uncommitted"><i class="fas fa-clipboard-list"></i> Uncommitted Requests</a></li>
                 <li><a href="#" class="menu-link admin-only" data-section="staff"><i class="fas fa-users"></i> Staff Management</a></li>
@@ -335,7 +377,7 @@
                             <div class="card text-white bg-primary">
                                 <div class="card-body">
                                     <h5 class="card-title">Total Cashbills</h5>
-                                    <h2 id="totalCashbills">24</h2>
+                                    <h2 id="totalCashbills">0</h2>
                                 </div>
                             </div>
                         </div>
@@ -343,7 +385,7 @@
                             <div class="card text-white bg-success">
                                 <div class="card-body">
                                     <h5 class="card-title">Completed</h5>
-                                    <h2 id="completedCashbills">18</h2>
+                                    <h2 id="completedCashbills">0</h2>
                                 </div>
                             </div>
                         </div>
@@ -351,7 +393,7 @@
                             <div class="card text-white bg-warning">
                                 <div class="card-body">
                                     <h5 class="card-title">Pending Approval</h5>
-                                    <h2 id="pendingCashbills">4</h2>
+                                    <h2 id="pendingCashbills">0</h2>
                                 </div>
                             </div>
                         </div>
@@ -359,7 +401,7 @@
                             <div class="card text-white bg-danger">
                                 <div class="card-body">
                                     <h5 class="card-title">Total Revenue</h5>
-                                    <h2 id="totalRevenue">RM 12,450</h2>
+                                    <h2 id="totalRevenue">RM 0</h2>
                                 </div>
                             </div>
                         </div>
@@ -383,36 +425,9 @@
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody id="recentCashbillsTable">
                                                 <tr>
-                                                    <td>#PA0001</td>
-                                                    <td>Ali Ahmad</td>
-                                                    <td>2023-06-15</td>
-                                                    <td>RM 250.00</td>
-                                                    <td><span class="status-badge status-committed">Committed</span></td>
-                                                    <td>
-                                                        <button class="btn btn-sm btn-primary view-cashbill" data-id="#PA0001">View</button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>#PA0002</td>
-                                                    <td>Siti Aminah</td>
-                                                    <td>2023-06-16</td>
-                                                    <td>RM 170.00</td>
-                                                    <td><span class="status-badge status-pending">Pending Approval</span></td>
-                                                    <td>
-                                                        <button class="btn btn-sm btn-primary view-cashbill" data-id="#PA0002">View</button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>#PA0003</td>
-                                                    <td>Abu Bakar</td>
-                                                    <td>2023-06-17</td>
-                                                    <td>RM 450.00</td>
-                                                    <td><span class="status-badge status-approved">Approved</span></td>
-                                                    <td>
-                                                        <button class="btn btn-sm btn-primary view-cashbill" data-id="#PA0003">View</button>
-                                                    </td>
+                                                    <td colspan="6" class="text-center">No cashbills found</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -431,7 +446,7 @@
                                             <i class="fas fa-plus-circle me-2"></i> New Cashbill
                                         </button>
                                         <button class="btn btn-outline-primary" id="newLogbookBtn">
-                                            <i class="fas fa-plus-circle me-2"></i> New Logbook Entry
+                                            <i class="fas fa-plus-circle me-2"></i> New Logbook
                                         </button>
                                         <button class="btn btn-outline-secondary">
                                             <i class="fas fa-file-export me-2"></i> Export Data
@@ -446,23 +461,20 @@
             <!-- Cashbill Section -->
             <div id="cashbill" class="content-section">
                 <div class="container-fluid">
-                    <h2 class="mb-4">Cashbill Management</h2>
+                    <h2 class="mb-4">Create New Cashbill</h2>
                     
                     <div class="row mb-4">
                         <div class="col-md-12">
                             <div class="card">
-                                <div class="card-header d-flex justify-content-between align-items-center">
-                                    <span>Create New Cashbill</span>
-                                    <button class="btn btn-sm btn-light" id="viewCashbillListBtn">
-                                        <i class="fas fa-list me-1"></i> View All
-                                    </button>
+                                <div class="card-header">
+                                    Cashbill Information
                                 </div>
                                 <div class="card-body">
                                     <form id="cashbillForm">
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <label for="cashbillId" class="form-label">Cashbill ID</label>
-                                                <input type="text" class="form-control" id="cashbillId" value="#PA0004" readonly>
+                                                <input type="text" class="form-control" id="cashbillId" readonly>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="cashbillDate" class="form-label">Date</label>
@@ -503,15 +515,6 @@
                                                     <label for="productSelect" class="form-label">Select Product</label>
                                                     <select class="form-select" id="productSelect">
                                                         <option value="">-- Select Product --</option>
-                                                        <option value="adult-jubah">🕌 Adult Jubah - RM 250</option>
-                                                        <option value="year6-jubah">📘 Year 6 Jubah - RM 170</option>
-                                                        <option value="kindergarten-jubah">🧒 Kindergarten Jubah - RM 110</option>
-                                                        <option value="plaque">🏷️ Plaque Arkalic - RM 19.90</option>
-                                                        <option value="medal">🏅 Cute Medal - RM 12.90</option>
-                                                        <option value="keychain">🔑 Cute Keychain - RM 5.90</option>
-                                                        <option value="attendance-keychain">🔑 Attendance Keychain - RM 4.90</option>
-                                                        <option value="kindergarten-tshirt">👕 Kindergarten T-Shirt - RM 29.90</option>
-                                                        <option value="kindergarten-set">👕👖 Kindergarten T-Shirt + Pants Set - RM 45.00</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-md-3">
@@ -537,20 +540,10 @@
                                                 </div>
                                                 <div class="card-body">
                                                     <div id="orderItems">
-                                                        <div class="cashbill-item">
-                                                            <div>
-                                                                <div class="fw-bold">Adult Jubah</div>
-                                                                <div>1 x RM 250.00</div>
-                                                            </div>
-                                                            <div class="item-actions">
-                                                                <button type="button" class="btn btn-sm btn-outline-danger remove-item">
-                                                                    <i class="fas fa-trash"></i>
-                                                                </button>
-                                                            </div>
-                                                        </div>
+                                                        <div class="text-center text-muted py-3">No items added yet</div>
                                                     </div>
                                                     <div class="mt-3 text-end">
-                                                        <h5>Total: RM <span id="totalAmount">250.00</span></h5>
+                                                        <h5>Total: RM <span id="totalAmount">0.00</span></h5>
                                                     </div>
                                                 </div>
                                             </div>
@@ -599,26 +592,88 @@
                     </div>
                 </div>
             </div>
-            <!-- Logbook Section -->
-            <div id="logbook" class="content-section">
+            <!-- Cashbill List Section -->
+            <div id="cashbill-list" class="content-section">
                 <div class="container-fluid">
-                    <h2 class="mb-4">Courier Logbook</h2>
+                    <h2 class="mb-4">All Cashbills</h2>
                     
                     <div class="row mb-4">
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                    <span>Create New Logbook Entry</span>
-                                    <button class="btn btn-sm btn-light" id="viewLogbookListBtn">
-                                        <i class="fas fa-list me-1"></i> View All
+                                    <span>Cashbill List</span>
+                                    <button class="btn btn-sm btn-primary" id="newCashbillFromListBtn">
+                                        <i class="fas fa-plus me-1"></i> New Cashbill
                                     </button>
+                                </div>
+                                <div class="card-body">
+                                    <div class="filter-section mb-3">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="search-box">
+                                                    <i class="fas fa-search"></i>
+                                                    <input type="text" class="form-control" id="searchCashbill" placeholder="Search by ID or customer name...">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <select class="form-select" id="filterStatus">
+                                                    <option value="">All Status</option>
+                                                    <option value="draft">Draft</option>
+                                                    <option value="committed">Committed</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="date" class="form-control" id="filterDate" placeholder="Filter by date">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <button class="btn btn-outline-secondary w-100" id="clearFiltersBtn">Clear</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Customer</th>
+                                                    <th>Date</th>
+                                                    <th>Amount</th>
+                                                    <th>Status</th>
+                                                    <th>Created By</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="allCashbillsTable">
+                                                <tr>
+                                                    <td colspan="7" class="text-center">No cashbills found</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Logbook Section -->
+            <div id="logbook" class="content-section">
+                <div class="container-fluid">
+                    <h2 class="mb-4">Create New Logbook Entry</h2>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    Logbook Information
                                 </div>
                                 <div class="card-body">
                                     <form id="logbookForm">
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <label for="logbookId" class="form-label">Logbook ID</label>
-                                                <input type="text" class="form-control" id="logbookId" value="LOG-0001" readonly>
+                                                <input type="text" class="form-control" id="logbookId" readonly>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="logbookDate" class="form-label">Date</label>
@@ -631,9 +686,6 @@
                                                 <label for="cashbillRef" class="form-label">Cashbill Reference</label>
                                                 <select class="form-select" id="cashbillRef" required>
                                                     <option value="">-- Select Cashbill --</option>
-                                                    <option value="#PA0001">#PA0001 - Ali Ahmad</option>
-                                                    <option value="#PA0002">#PA0002 - Siti Aminah</option>
-                                                    <option value="#PA0003">#PA0003 - Abu Bakar</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
@@ -694,6 +746,74 @@
                     </div>
                 </div>
             </div>
+            <!-- Logbook List Section -->
+            <div id="logbook-list" class="content-section">
+                <div class="container-fluid">
+                    <h2 class="mb-4">All Logbooks</h2>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <span>Logbook List</span>
+                                    <button class="btn btn-sm btn-primary" id="newLogbookFromListBtn">
+                                        <i class="fas fa-plus me-1"></i> New Logbook
+                                    </button>
+                                </div>
+                                <div class="card-body">
+                                    <div class="filter-section mb-3">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="search-box">
+                                                    <i class="fas fa-search"></i>
+                                                    <input type="text" class="form-control" id="searchLogbook" placeholder="Search by ID or courier name...">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <select class="form-select" id="filterDeliveryStatus">
+                                                    <option value="">All Status</option>
+                                                    <option value="preparing">Preparing</option>
+                                                    <option value="picked-up">Picked Up</option>
+                                                    <option value="in-transit">In Transit</option>
+                                                    <option value="delivered">Delivered</option>
+                                                    <option value="returned">Returned</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="date" class="form-control" id="filterLogbookDate" placeholder="Filter by date">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <button class="btn btn-outline-secondary w-100" id="clearLogbookFiltersBtn">Clear</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Cashbill Ref</th>
+                                                    <th>Courier</th>
+                                                    <th>Date</th>
+                                                    <th>Delivery Status</th>
+                                                    <th>Tracking #</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="allLogbooksTable">
+                                                <tr>
+                                                    <td colspan="7" class="text-center">No logbooks found</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- Uncommitted Requests Section (Admin Only) -->
             <div id="uncommitted" class="content-section">
                 <div class="container-fluid">
@@ -707,52 +827,9 @@
                                 </div>
                                 <div class="card-body">
                                     <div id="uncommittedList">
-                                        <div class="card uncommitted-card mb-3">
-                                            <div class="card-header d-flex justify-content-between align-items-center">
-                                                <span>#PA0005 - Ahmad Ibrahim</span>
-                                                <span class="status-badge status-draft">Draft</span>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <p><strong>Date:</strong> 2023-06-18</p>
-                                                        <p><strong>Created by:</strong> Staff 0001</p>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <p><strong>Total Amount:</strong> RM 370.00</p>
-                                                        <p><strong>Items:</strong> Adult Jubah (1x), Year 6 Jubah (1x)</p>
-                                                    </div>
-                                                </div>
-                                                <div class="action-buttons mt-3">
-                                                    <button class="btn btn-sm btn-primary view-uncommitted" data-id="#PA0005">View Details</button>
-                                                    <button class="btn btn-sm btn-success approve-uncommitted" data-id="#PA0005">Approve</button>
-                                                    <button class="btn btn-sm btn-danger reject-uncommitted" data-id="#PA0005">Reject</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="card uncommitted-card mb-3">
-                                            <div class="card-header d-flex justify-content-between align-items-center">
-                                                <span>#PA0006 - Siti Khadijah</span>
-                                                <span class="status-badge status-draft">Draft</span>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <p><strong>Date:</strong> 2023-06-18</p>
-                                                        <p><strong>Created by:</strong> Staff 0001</p>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <p><strong>Total Amount:</strong> RM 85.70</p>
-                                                        <p><strong>Items:</strong> Plaque Arkalic (2x), Cute Keychain (3x)</p>
-                                                    </div>
-                                                </div>
-                                                <div class="action-buttons mt-3">
-                                                    <button class="btn btn-sm btn-primary view-uncommitted" data-id="#PA0006">View Details</button>
-                                                    <button class="btn btn-sm btn-success approve-uncommitted" data-id="#PA0006">Approve</button>
-                                                    <button class="btn btn-sm btn-danger reject-uncommitted" data-id="#PA0006">Reject</button>
-                                                </div>
-                                            </div>
+                                        <div class="text-center py-5">
+                                            <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
+                                            <p class="text-muted">No uncommitted requests found</p>
                                         </div>
                                     </div>
                                 </div>
@@ -776,127 +853,8 @@
                                     </button>
                                 </div>
                                 <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-4 mb-4">
-                                            <div class="product-item">
-                                                <div class="product-name">🕌 Adult Jubah</div>
-                                                <div class="price-tag">Price: RM 250 per set</div>
-                                                <div class="member-price">Member Price: RM 220 per set</div>
-                                                <div>Free: Cap included</div>
-                                                <div class="mt-2">
-                                                    <button class="btn btn-sm btn-outline-primary me-1 admin-only edit-product">Edit</button>
-                                                    <button class="btn btn-sm btn-outline-danger admin-only delete-product">Delete</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 mb-4">
-                                            <div class="product-item">
-                                                <div class="product-name">📘 Year 6 Jubah</div>
-                                                <div class="price-tag">Price: RM 170 per set</div>
-                                                <div class="member-price">Member Price: RM 150 per set</div>
-                                                <div>Free: Cap included</div>
-                                                <div class="min-order">Minimum Order: 10 sets</div>
-                                                <div class="mt-2">
-                                                    <button class="btn btn-sm btn-outline-primary me-1 admin-only edit-product">Edit</button>
-                                                    <button class="btn btn-sm btn-outline-danger admin-only delete-product">Delete</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 mb-4">
-                                            <div class="product-item">
-                                                <div class="product-name">🧒 Kindergarten Jubah</div>
-                                                <div class="price-tag">Price: RM 110 per set</div>
-                                                <div class="member-price">Member Price: RM 99 per set</div>
-                                                <div>Free: Cap included</div>
-                                                <div class="min-order">Minimum Order: 10 sets</div>
-                                                <div class="mt-2">
-                                                    <button class="btn btn-sm btn-outline-primary me-1 admin-only edit-product">Edit</button>
-                                                    <button class="btn btn-sm btn-outline-danger admin-only delete-product">Delete</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 mb-4">
-                                            <div class="product-item">
-                                                <div class="product-name">🏷️ Plaque Arkalic</div>
-                                                <div class="price-tag">Price: RM 19.90</div>
-                                                <div class="member-price">Member Price: RM 17.50</div>
-                                                <div>Includes: Name printing</div>
-                                                <div>Size: 145mm x 100mm</div>
-                                                <div class="mt-2">
-                                                    <button class="btn btn-sm btn-outline-primary me-1 admin-only edit-product">Edit</button>
-                                                    <button class="btn btn-sm btn-outline-danger admin-only delete-product">Delete</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 mb-4">
-                                            <div class="product-item">
-                                                <div class="product-name">🏅 Cute Medal</div>
-                                                <div class="price-tag">Price: RM 12.90</div>
-                                                <div class="member-price">Member Price: RM 10.90</div>
-                                                <div>Material: Arkalic</div>
-                                                <div class="min-order">Minimum Order: 10 pcs</div>
-                                                <div class="mt-2">
-                                                    <button class="btn btn-sm btn-outline-primary me-1 admin-only edit-product">Edit</button>
-                                                    <button class="btn btn-sm btn-outline-danger admin-only delete-product">Delete</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 mb-4">
-                                            <div class="product-item">
-                                                <div class="product-name">🔑 Cute Keychain</div>
-                                                <div class="price-tag">Price: RM 5.90 each</div>
-                                                <div class="member-price">Member Price: RM 3.90 each</div>
-                                                <div>Material: Arkalic (Sublimation)</div>
-                                                <div>Size: 9cm x 3cm</div>
-                                                <div class="min-order">Minimum Order: 10 pcs</div>
-                                                <div class="mt-2">
-                                                    <button class="btn btn-sm btn-outline-primary me-1 admin-only edit-product">Edit</button>
-                                                    <button class="btn btn-sm btn-outline-danger admin-only delete-product">Delete</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 mb-4">
-                                            <div class="product-item">
-                                                <div class="product-name">🔑 Attendance Keychain</div>
-                                                <div class="price-tag">Price: RM 4.90 each</div>
-                                                <div class="member-price">Member Price: RM 3.50 each</div>
-                                                <div>Material: Acrylic</div>
-                                                <div>Thickness: 2mm</div>
-                                                <div>Size: 4.4cm x 5.5cm</div>
-                                                <div class="min-order">Minimum Order: 10 pcs</div>
-                                                <div class="mt-2">
-                                                    <button class="btn btn-sm btn-outline-primary me-1 admin-only edit-product">Edit</button>
-                                                    <button class="btn btn-sm btn-outline-danger admin-only delete-product">Delete</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 mb-4">
-                                            <div class="product-item">
-                                                <div class="product-name">👕 Kindergarten T-Shirt</div>
-                                                <div class="price-tag">Price: RM 29.90 per piece</div>
-                                                <div class="member-price">Member Price: RM 25.00 per piece</div>
-                                                <div>Material: Microfiber</div>
-                                                <div>Free: School name & logo printing</div>
-                                                <div class="min-order">Minimum Order: 20 pieces</div>
-                                                <div class="mt-2">
-                                                    <button class="btn btn-sm btn-outline-primary me-1 admin-only edit-product">Edit</button>
-                                                    <button class="btn btn-sm btn-outline-danger admin-only delete-product">Delete</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 mb-4">
-                                            <div class="product-item">
-                                                <div class="product-name">👕👖 Kindergarten T-Shirt + Pants Set</div>
-                                                <div class="price-tag">Price: RM 45.00 per set</div>
-                                                <div class="member-price">Member Price: RM 39.90 per set</div>
-                                                <div>Material: Microfiber + Tracksuit</div>
-                                                <div class="min-order">Minimum Order: 20 sets</div>
-                                                <div class="mt-2">
-                                                    <button class="btn btn-sm btn-outline-primary me-1 admin-only edit-product">Edit</button>
-                                                    <button class="btn btn-sm btn-outline-danger admin-only delete-product">Delete</button>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="row" id="productsList">
+                                        <!-- Products will be dynamically loaded here -->
                                     </div>
                                 </div>
                             </div>
@@ -931,40 +889,8 @@
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>0000</td>
-                                                    <td>Admin User</td>
-                                                    <td>0000</td>
-                                                    <td><span class="user-role role-admin">Admin</span></td>
-                                                    <td><span class="badge bg-success">Active</span></td>
-                                                    <td>
-                                                        <button class="btn btn-sm btn-outline-primary me-1 admin-only edit-staff">Edit</button>
-                                                        <button class="btn btn-sm btn-outline-danger admin-only delete-staff">Delete</button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>0001</td>
-                                                    <td>Crew One</td>
-                                                    <td>0001</td>
-                                                    <td><span class="user-role role-staff">Crew</span></td>
-                                                    <td><span class="badge bg-success">Active</span></td>
-                                                    <td>
-                                                        <button class="btn btn-sm btn-outline-primary me-1 admin-only edit-staff">Edit</button>
-                                                        <button class="btn btn-sm btn-outline-danger admin-only delete-staff">Delete</button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>0002</td>
-                                                    <td>Crew Two</td>
-                                                    <td>0002</td>
-                                                    <td><span class="user-role role-staff">Crew</span></td>
-                                                    <td><span class="badge bg-success">Active</span></td>
-                                                    <td>
-                                                        <button class="btn btn-sm btn-outline-primary me-1 admin-only edit-staff">Edit</button>
-                                                        <button class="btn btn-sm btn-outline-danger admin-only delete-staff">Delete</button>
-                                                    </td>
-                                                </tr>
+                                            <tbody id="staffTable">
+                                                <!-- Staff will be dynamically loaded here -->
                                             </tbody>
                                         </table>
                                     </div>
@@ -1172,9 +1098,58 @@
             </div>
         </div>
     </div>
+    <!-- View Logbook Modal -->
+    <div class="modal fade" id="viewLogbookModal" tabindex="-1" aria-labelledby="viewLogbookModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewLogbookModalLabel">Logbook Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="logbookDetails">
+                        <!-- Logbook details will be populated here -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="printLogbookBtn">Print</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Print Cashbill Template (Hidden) -->
+    <div id="printCashbillTemplate" class="print-only" style="display: none;">
+        <div class="print-header">
+            <h2>PNE PORTAL</h2>
+            <h4>CASHBILL INVOICE</h4>
+        </div>
+        <div class="print-section">
+            <h5>Cashbill Information</h5>
+            <div id="printCashbillInfo"></div>
+        </div>
+        <div class="print-section">
+            <h5>Customer Information</h5>
+            <div id="printCustomerInfo"></div>
+        </div>
+        <div class="print-section">
+            <h5>Order Items</h5>
+            <div id="printOrderItems"></div>
+        </div>
+        <div class="print-section">
+            <h5>Payment Information</h5>
+            <div id="printPaymentInfo"></div>
+        </div>
+        <div class="text-center mt-4">
+            <p>Thank you for your business!</p>
+        </div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize data storage
+            initializeDataStorage();
+            
             // Set today's date as default
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('cashbillDate').value = today;
@@ -1184,34 +1159,6 @@
             let currentUser = null;
             let sidebarOpen = false;
             let currentSection = 'dashboard';
-            let cashbillCounter = 4; // Starting from #PA0004
-            let logbookCounter = 1; // Starting from LOG-0001
-            let uncommittedCashbills = [
-                {
-                    id: '#PA0005',
-                    customer: 'Ahmad Ibrahim',
-                    date: '2023-06-18',
-                    createdBy: 'Staff 0001',
-                    totalAmount: 370.00,
-                    items: [
-                        { name: 'Adult Jubah', quantity: 1, price: 250.00 },
-                        { name: 'Year 6 Jubah', quantity: 1, price: 170.00 }
-                    ],
-                    status: 'draft'
-                },
-                {
-                    id: '#PA0006',
-                    customer: 'Siti Khadijah',
-                    date: '2023-06-18',
-                    createdBy: 'Staff 0001',
-                    totalAmount: 85.70,
-                    items: [
-                        { name: 'Plaque Arkalic', quantity: 2, price: 19.90 },
-                        { name: 'Cute Keychain', quantity: 3, price: 5.90 }
-                    ],
-                    status: 'draft'
-                }
-            ];
             
             // DOM elements
             const loginPage = document.getElementById('loginPage');
@@ -1235,20 +1182,12 @@
                 const username = document.getElementById('username').value;
                 const password = document.getElementById('password').value;
                 
-                // Simple authentication (in a real app, this would be server-side)
-                if (username === '0000' && password === 'Dd123') {
-                    currentUser = {
-                        username: '0000',
-                        name: 'Admin User',
-                        role: 'admin'
-                    };
-                    showPortal();
-                } else if (username === '0001' && password === '1234') {
-                    currentUser = {
-                        username: '0001',
-                        name: 'Crew One',
-                        role: 'staff'
-                    };
+                // Authenticate user
+                const users = JSON.parse(localStorage.getItem('pne_users') || '[]');
+                const user = users.find(u => u.username === username && u.password === password);
+                
+                if (user) {
+                    currentUser = user;
                     showPortal();
                 } else {
                     showToast('Invalid Staff ID or password', 'danger');
@@ -1275,6 +1214,14 @@
                         el.style.display = 'none';
                     });
                 }
+                
+                // Load initial data
+                loadDashboardData();
+                loadProducts();
+                loadStaff();
+                loadCashbillList();
+                loadLogbookList();
+                updateCashbillRef();
             }
             
             // Logout functionality
@@ -1345,25 +1292,39 @@
                 
                 currentSection = sectionName;
                 
-                // Refresh uncommitted list if navigating to that section
+                // Refresh data when navigating to certain sections
                 if (sectionName === 'uncommitted') {
                     refreshUncommittedList();
+                } else if (sectionName === 'cashbill-list') {
+                    loadCashbillList();
+                } else if (sectionName === 'logbook-list') {
+                    loadLogbookList();
+                } else if (sectionName === 'products') {
+                    loadProducts();
+                } else if (sectionName === 'staff') {
+                    loadStaff();
                 }
             }
             
             // Quick action buttons
             document.getElementById('newCashbillBtn').addEventListener('click', function() {
                 showSection('cashbill');
-                // Generate new cashbill ID
-                cashbillCounter++;
-                document.getElementById('cashbillId').value = `#PA${String(cashbillCounter).padStart(4, '0')}`;
+                generateNewCashbillId();
             });
             
             document.getElementById('newLogbookBtn').addEventListener('click', function() {
                 showSection('logbook');
-                // Generate new logbook ID
-                logbookCounter++;
-                document.getElementById('logbookId').value = `LOG-${String(logbookCounter).padStart(4, '0')}`;
+                generateNewLogbookId();
+            });
+            
+            document.getElementById('newCashbillFromListBtn').addEventListener('click', function() {
+                showSection('cashbill');
+                generateNewCashbillId();
+            });
+            
+            document.getElementById('newLogbookFromListBtn').addEventListener('click', function() {
+                showSection('logbook');
+                generateNewLogbookId();
             });
             
             // Cashbill form handling
@@ -1375,31 +1336,39 @@
             const orderItemsContainer = document.getElementById('orderItems');
             const totalAmountSpan = document.getElementById('totalAmount');
             
+            // Load products into select dropdown
+            function loadProductsIntoSelect() {
+                const products = JSON.parse(localStorage.getItem('pne_products') || '[]');
+                productSelect.innerHTML = '<option value="">-- Select Product --</option>';
+                
+                products.forEach(product => {
+                    const option = document.createElement('option');
+                    option.value = product.id;
+                    option.textContent = `${product.icon} ${product.name} - RM ${product.regularPrice}`;
+                    productSelect.appendChild(option);
+                });
+            }
+            
             // Set price when product is selected
             productSelect.addEventListener('change', function() {
-                const productPrices = {
-                    'adult-jubah': 250,
-                    'year6-jubah': 170,
-                    'kindergarten-jubah': 110,
-                    'plaque': 19.90,
-                    'medal': 12.90,
-                    'keychain': 5.90,
-                    'attendance-keychain': 4.90,
-                    'kindergarten-tshirt': 29.90,
-                    'kindergarten-set': 45.00
-                };
+                const products = JSON.parse(localStorage.getItem('pne_products') || '[]');
+                const productId = this.value;
                 
-                if (this.value && productPrices[this.value]) {
-                    priceInput.value = productPrices[this.value];
-                    
-                    // Disable price editing for staff users
-                    if (currentUser && currentUser.role === 'staff') {
-                        priceInput.disabled = true;
-                    } else {
-                        priceInput.disabled = false;
+                if (productId) {
+                    const product = products.find(p => p.id === productId);
+                    if (product) {
+                        priceInput.value = product.regularPrice;
+                        
+                        // Disable price editing for staff users
+                        if (currentUser && currentUser.role === 'staff') {
+                            priceInput.disabled = true;
+                        } else {
+                            priceInput.disabled = false;
+                        }
                     }
                 } else {
                     priceInput.value = '';
+                    priceInput.disabled = false;
                 }
             });
             
@@ -1414,15 +1383,26 @@
                     return;
                 }
                 
-                const productText = productSelect.options[productSelect.selectedIndex].text;
-                const productName = productText.split(' - ')[0];
+                const products = JSON.parse(localStorage.getItem('pne_products') || '[]');
+                const product = products.find(p => p.id === productId);
+                
+                if (!product) {
+                    showToast('Product not found', 'danger');
+                    return;
+                }
+                
+                // Clear placeholder if it exists
+                const placeholder = orderItemsContainer.querySelector('.text-center');
+                if (placeholder) {
+                    placeholder.remove();
+                }
                 
                 // Create new item element
                 const itemElement = document.createElement('div');
                 itemElement.className = 'cashbill-item';
                 itemElement.innerHTML = `
                     <div>
-                        <div class="fw-bold">${productName}</div>
+                        <div class="fw-bold">${product.icon} ${product.name}</div>
                         <div>${quantity} x RM ${price.toFixed(2)}</div>
                     </div>
                     <div class="item-actions">
@@ -1436,6 +1416,11 @@
                 itemElement.querySelector('.remove-item').addEventListener('click', function() {
                     itemElement.remove();
                     updateTotalAmount();
+                    
+                    // Add placeholder back if no items
+                    if (orderItemsContainer.children.length === 0) {
+                        orderItemsContainer.innerHTML = '<div class="text-center text-muted py-3">No items added yet</div>';
+                    }
                 });
                 
                 // Add to order items
@@ -1448,6 +1433,7 @@
                 productSelect.value = '';
                 quantityInput.value = '1';
                 priceInput.value = '';
+                priceInput.disabled = false;
             });
             
             // Update total amount
@@ -1473,56 +1459,23 @@
                 e.preventDefault();
                 
                 // Check if there are items in the order
-                if (orderItemsContainer.children.length === 0) {
-                    showToast('Please add at least one item to the order', 'warning');
-                    return;
-                }
-                
-                // In a real app, this would send data to the server
-                const cashbillId = document.getElementById('cashbillId').value;
-                showToast(`Cashbill ${cashbillId} committed successfully!`, 'success');
-                
-                // Reset form after a delay
-                setTimeout(() => {
-                    cashbillForm.reset();
-                    orderItemsContainer.innerHTML = '';
-                    totalAmountSpan.textContent = '0.00';
-                    document.getElementById('cashbillDate').value = today;
-                    
-                    // Generate new cashbill ID
-                    cashbillCounter++;
-                    document.getElementById('cashbillId').value = `#PA${String(cashbillCounter).padStart(4, '0')}`;
-                }, 1500);
-            });
-            
-            // Reset cashbill form
-            document.getElementById('resetCashbillBtn').addEventListener('click', function() {
-                if (confirm('Are you sure you want to reset the form? All data will be lost.')) {
-                    cashbillForm.reset();
-                    orderItemsContainer.innerHTML = '';
-                    totalAmountSpan.textContent = '0.00';
-                    document.getElementById('cashbillDate').value = today;
-                    
-                    // Generate new cashbill ID
-                    cashbillCounter++;
-                    document.getElementById('cashbillId').value = `#PA${String(cashbillCounter).padStart(4, '0')}`;
-                }
-            });
-            
-            // Save draft button
-            document.getElementById('saveDraftBtn').addEventListener('click', function() {
-                // Check if there are items in the order
-                if (orderItemsContainer.children.length === 0) {
+                if (orderItemsContainer.children.length === 0 || orderItemsContainer.querySelector('.text-center')) {
                     showToast('Please add at least one item to the order', 'warning');
                     return;
                 }
                 
                 // Get form data
                 const cashbillId = document.getElementById('cashbillId').value;
+                const cashbillDate = document.getElementById('cashbillDate').value;
                 const customerFirstName = document.getElementById('customerFirstName').value;
                 const customerLastName = document.getElementById('customerLastName').value;
                 const customerName = `${customerFirstName} ${customerLastName}`;
-                const cashbillDate = document.getElementById('cashbillDate').value;
+                const customerPhone = document.getElementById('customerPhone').value;
+                const customerEmail = document.getElementById('customerEmail').value;
+                const customerAddress = document.getElementById('customerAddress').value;
+                const paymentType = document.getElementById('paymentType').value;
+                const paymentStatus = document.getElementById('paymentStatus').value;
+                const notes = document.getElementById('notes').value;
                 
                 // Get order items
                 const items = [];
@@ -1541,32 +1494,147 @@
                 // Calculate total
                 const totalAmount = parseFloat(totalAmountSpan.textContent);
                 
-                // Create uncommitted cashbill object
-                const uncommittedCashbill = {
+                // Create cashbill object
+                const cashbill = {
                     id: cashbillId,
-                    customer: customerName,
                     date: cashbillDate,
-                    createdBy: `Staff ${currentUser.username}`,
-                    totalAmount: totalAmount,
+                    customer: {
+                        firstName: customerFirstName,
+                        lastName: customerLastName,
+                        name: customerName,
+                        phone: customerPhone,
+                        email: customerEmail,
+                        address: customerAddress
+                    },
                     items: items,
-                    status: 'draft'
+                    totalAmount: totalAmount,
+                    payment: {
+                        type: paymentType,
+                        status: paymentStatus
+                    },
+                    notes: notes,
+                    status: 'committed',
+                    createdBy: currentUser.username,
+                    createdAt: new Date().toISOString()
                 };
                 
-                // Add to uncommitted list
-                uncommittedCashbills.push(uncommittedCashbill);
+                // Save cashbill
+                saveCashbill(cashbill);
+                
+                // Show success message
+                showToast(`Cashbill ${cashbillId} committed successfully!`, 'success');
+                
+                // Reset form after a delay
+                setTimeout(() => {
+                    resetCashbillForm();
+                    generateNewCashbillId();
+                }, 1500);
+            });
+            
+            // Save cashbill function
+            function saveCashbill(cashbill) {
+                let cashbills = JSON.parse(localStorage.getItem('pne_cashbills') || '[]');
+                
+                // Check if cashbill already exists (for editing)
+                const existingIndex = cashbills.findIndex(cb => cb.id === cashbill.id);
+                if (existingIndex !== -1) {
+                    cashbills[existingIndex] = cashbill;
+                } else {
+                    cashbills.push(cashbill);
+                }
+                
+                localStorage.setItem('pne_cashbills', JSON.stringify(cashbills));
+                
+                // Update counters
+                updateCounters();
+            }
+            
+            // Reset cashbill form
+            function resetCashbillForm() {
+                cashbillForm.reset();
+                orderItemsContainer.innerHTML = '<div class="text-center text-muted py-3">No items added yet</div>';
+                totalAmountSpan.textContent = '0.00';
+                document.getElementById('cashbillDate').value = today;
+            }
+            
+            document.getElementById('resetCashbillBtn').addEventListener('click', function() {
+                if (confirm('Are you sure you want to reset the form? All data will be lost.')) {
+                    resetCashbillForm();
+                    generateNewCashbillId();
+                }
+            });
+            
+            // Save draft button
+            document.getElementById('saveDraftBtn').addEventListener('click', function() {
+                // Check if there are items in the order
+                if (orderItemsContainer.children.length === 0 || orderItemsContainer.querySelector('.text-center')) {
+                    showToast('Please add at least one item to the order', 'warning');
+                    return;
+                }
+                
+                // Get form data
+                const cashbillId = document.getElementById('cashbillId').value;
+                const cashbillDate = document.getElementById('cashbillDate').value;
+                const customerFirstName = document.getElementById('customerFirstName').value;
+                const customerLastName = document.getElementById('customerLastName').value;
+                const customerName = `${customerFirstName} ${customerLastName}`;
+                const customerPhone = document.getElementById('customerPhone').value;
+                const customerEmail = document.getElementById('customerEmail').value;
+                const customerAddress = document.getElementById('customerAddress').value;
+                const paymentType = document.getElementById('paymentType').value;
+                const paymentStatus = document.getElementById('paymentStatus').value;
+                const notes = document.getElementById('notes').value;
+                
+                // Get order items
+                const items = [];
+                orderItemsContainer.querySelectorAll('.cashbill-item').forEach(item => {
+                    const name = item.querySelector('.fw-bold').textContent;
+                    const text = item.querySelector('div div:last-child').textContent;
+                    const match = text.match(/(\d+) x RM ([\d.]+)/);
+                    
+                    if (match) {
+                        const quantity = parseInt(match[1]);
+                        const price = parseFloat(match[2]);
+                        items.push({ name, quantity, price });
+                    }
+                });
+                
+                // Calculate total
+                const totalAmount = parseFloat(totalAmountSpan.textContent);
+                
+                // Create cashbill object
+                const cashbill = {
+                    id: cashbillId,
+                    date: cashbillDate,
+                    customer: {
+                        firstName: customerFirstName,
+                        lastName: customerLastName,
+                        name: customerName,
+                        phone: customerPhone,
+                        email: customerEmail,
+                        address: customerAddress
+                    },
+                    items: items,
+                    totalAmount: totalAmount,
+                    payment: {
+                        type: paymentType,
+                        status: paymentStatus
+                    },
+                    notes: notes,
+                    status: 'draft',
+                    createdBy: currentUser.username,
+                    createdAt: new Date().toISOString()
+                };
+                
+                // Save cashbill
+                saveCashbill(cashbill);
                 
                 showToast(`Cashbill ${cashbillId} saved as draft!`, 'info');
                 
                 // Reset form after a delay
                 setTimeout(() => {
-                    cashbillForm.reset();
-                    orderItemsContainer.innerHTML = '';
-                    totalAmountSpan.textContent = '0.00';
-                    document.getElementById('cashbillDate').value = today;
-                    
-                    // Generate new cashbill ID
-                    cashbillCounter++;
-                    document.getElementById('cashbillId').value = `#PA${String(cashbillCounter).padStart(4, '0')}`;
+                    resetCashbillForm();
+                    generateNewCashbillId();
                 }, 1500);
             });
             
@@ -1576,30 +1644,74 @@
             logbookForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
-                // In a real app, this would send data to the server
+                // Get form data
                 const logbookId = document.getElementById('logbookId').value;
+                const logbookDate = document.getElementById('logbookDate').value;
+                const cashbillRef = document.getElementById('cashbillRef').value;
+                const trackingNumber = document.getElementById('trackingNumber').value;
+                const courierName = document.getElementById('courierName').value;
+                const deliveryStatus = document.getElementById('deliveryStatus').value;
+                const deliveryAddress = document.getElementById('deliveryAddress').value;
+                const deliveryDate = document.getElementById('deliveryDate').value;
+                const deliveryTime = document.getElementById('deliveryTime').value;
+                const logbookNotes = document.getElementById('logbookNotes').value;
+                
+                // Create logbook object
+                const logbook = {
+                    id: logbookId,
+                    date: logbookDate,
+                    cashbillRef: cashbillRef,
+                    trackingNumber: trackingNumber,
+                    courierName: courierName,
+                    deliveryStatus: deliveryStatus,
+                    deliveryAddress: deliveryAddress,
+                    expectedDelivery: {
+                        date: deliveryDate,
+                        time: deliveryTime
+                    },
+                    notes: logbookNotes,
+                    status: 'saved',
+                    createdBy: currentUser.username,
+                    createdAt: new Date().toISOString()
+                };
+                
+                // Save logbook
+                saveLogbook(logbook);
+                
                 showToast(`Logbook ${logbookId} saved successfully!`, 'success');
                 
                 // Reset form after a delay
                 setTimeout(() => {
-                    logbookForm.reset();
-                    document.getElementById('logbookDate').value = today;
-                    
-                    // Generate new logbook ID
-                    logbookCounter++;
-                    document.getElementById('logbookId').value = `LOG-${String(logbookCounter).padStart(4, '0')}`;
+                    resetLogbookForm();
+                    generateNewLogbookId();
                 }, 1500);
             });
             
+            // Save logbook function
+            function saveLogbook(logbook) {
+                let logbooks = JSON.parse(localStorage.getItem('pne_logbooks') || '[]');
+                
+                // Check if logbook already exists (for editing)
+                const existingIndex = logbooks.findIndex(lb => lb.id === logbook.id);
+                if (existingIndex !== -1) {
+                    logbooks[existingIndex] = logbook;
+                } else {
+                    logbooks.push(logbook);
+                }
+                
+                localStorage.setItem('pne_logbooks', JSON.stringify(logbooks));
+            }
+            
             // Reset logbook form
+            function resetLogbookForm() {
+                logbookForm.reset();
+                document.getElementById('logbookDate').value = today;
+            }
+            
             document.getElementById('resetLogbookBtn').addEventListener('click', function() {
                 if (confirm('Are you sure you want to reset the form? All data will be lost.')) {
-                    logbookForm.reset();
-                    document.getElementById('logbookDate').value = today;
-                    
-                    // Generate new logbook ID
-                    logbookCounter++;
-                    document.getElementById('logbookId').value = `LOG-${String(logbookCounter).padStart(4, '0')}`;
+                    resetLogbookForm();
+                    generateNewLogbookId();
                 }
             });
             
@@ -1626,37 +1738,116 @@
             saveProductBtn.addEventListener('click', function() {
                 // Get form data
                 const productName = document.getElementById('productName').value;
+                const productIcon = document.getElementById('productIcon').value;
+                const regularPrice = parseFloat(document.getElementById('regularPrice').value);
+                const memberPrice = parseFloat(document.getElementById('memberPrice').value);
+                const productUnit = document.getElementById('productUnit').value;
+                const minOrder = parseInt(document.getElementById('minOrder').value) || 0;
+                const productDescription = document.getElementById('productDescription').value;
+                const productFeatures = document.getElementById('productFeatures').value;
                 
-                // In a real app, this would send data to the server
+                // Generate product ID
+                const products = JSON.parse(localStorage.getItem('pne_products') || '[]');
+                const productId = `PROD-${String(products.length + 1).padStart(3, '0')}`;
+                
+                // Create product object
+                const product = {
+                    id: productId,
+                    name: productName,
+                    icon: productIcon,
+                    regularPrice: regularPrice,
+                    memberPrice: memberPrice,
+                    unit: productUnit,
+                    minOrder: minOrder,
+                    description: productDescription,
+                    features: productFeatures.split('\n').filter(f => f.trim() !== ''),
+                    createdBy: currentUser.username,
+                    createdAt: new Date().toISOString()
+                };
+                
+                // Save product
+                products.push(product);
+                localStorage.setItem('pne_products', JSON.stringify(products));
+                
                 showToast(`Product "${productName}" added successfully!`, 'success');
                 addProductModal.hide();
                 document.getElementById('addProductForm').reset();
+                
+                // Reload products
+                loadProducts();
+                loadProductsIntoSelect();
             });
             
-            // Edit product buttons
-            document.querySelectorAll('.edit-product').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    if (currentUser && currentUser.role === 'admin') {
-                        showToast('Edit product functionality would open here', 'info');
-                    } else {
-                        showToast('You do not have permission to edit products', 'danger');
-                    }
+            // Load products function
+            function loadProducts() {
+                const products = JSON.parse(localStorage.getItem('pne_products') || '[]');
+                const productsList = document.getElementById('productsList');
+                
+                productsList.innerHTML = '';
+                
+                if (products.length === 0) {
+                    productsList.innerHTML = '<div class="col-12 text-center py-5"><p class="text-muted">No products found</p></div>';
+                    return;
+                }
+                
+                products.forEach(product => {
+                    const featuresHtml = product.features.map(f => `<div>${f}</div>`).join('');
+                    
+                    const productElement = document.createElement('div');
+                    productElement.className = 'col-md-4 mb-4';
+                    productElement.innerHTML = `
+                        <div class="product-item">
+                            <div class="product-name">${product.icon} ${product.name}</div>
+                            <div class="price-tag">Price: RM ${product.regularPrice} ${product.unit}</div>
+                            <div class="member-price">Member Price: RM ${product.memberPrice} ${product.unit}</div>
+                            ${product.description ? `<div>${product.description}</div>` : ''}
+                            ${featuresHtml}
+                            ${product.minOrder > 0 ? `<div class="min-order">Minimum Order: ${product.minOrder} ${product.unit}</div>` : ''}
+                            <div class="mt-2">
+                                <button class="btn btn-sm btn-outline-primary me-1 admin-only edit-product" data-id="${product.id}">Edit</button>
+                                <button class="btn btn-sm btn-outline-danger admin-only delete-product" data-id="${product.id}">Delete</button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    productsList.appendChild(productElement);
                 });
-            });
-            
-            // Delete product buttons
-            document.querySelectorAll('.delete-product').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    if (currentUser && currentUser.role === 'admin') {
-                        if (confirm('Are you sure you want to delete this product?')) {
-                            showToast('Product deleted successfully', 'success');
-                            // In a real app, this would remove the product from the database
+                
+                // Add event listeners to buttons
+                document.querySelectorAll('.edit-product').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        if (currentUser && currentUser.role === 'admin') {
+                            showToast('Edit product functionality would open here', 'info');
+                        } else {
+                            showToast('You do not have permission to edit products', 'danger');
                         }
-                    } else {
-                        showToast('You do not have permission to delete products', 'danger');
-                    }
+                    });
                 });
-            });
+                
+                document.querySelectorAll('.delete-product').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        if (currentUser && currentUser.role === 'admin') {
+                            const productId = this.getAttribute('data-id');
+                            deleteProduct(productId);
+                        } else {
+                            showToast('You do not have permission to delete products', 'danger');
+                        }
+                    });
+                });
+            }
+            
+            // Delete product function
+            function deleteProduct(productId) {
+                if (confirm('Are you sure you want to delete this product?')) {
+                    let products = JSON.parse(localStorage.getItem('pne_products') || '[]');
+                    products = products.filter(p => p.id !== productId);
+                    localStorage.setItem('pne_products', JSON.stringify(products));
+                    
+                    showToast('Product deleted successfully', 'success');
+                    loadProducts();
+                    loadProductsIntoSelect();
+                }
+            }
             
             // Staff management
             const addStaffBtn = document.getElementById('addStaffBtn');
@@ -1677,70 +1868,398 @@
                 const staffFirstName = document.getElementById('staffFirstName').value;
                 const staffLastName = document.getElementById('staffLastName').value;
                 const staffName = `${staffFirstName} ${staffLastName}`;
+                const staffUsername = document.getElementById('staffUsername').value;
+                const staffPassword = document.getElementById('staffPassword').value;
+                const staffRole = document.getElementById('staffRole').value;
                 
-                // In a real app, this would send data to the server
+                // Check if username already exists
+                const users = JSON.parse(localStorage.getItem('pne_users') || '[]');
+                if (users.find(u => u.username === staffUsername)) {
+                    showToast('Staff ID already exists', 'danger');
+                    return;
+                }
+                
+                // Create user object
+                const user = {
+                    username: staffUsername,
+                    password: staffPassword,
+                    name: staffName,
+                    role: staffRole,
+                    status: 'active',
+                    createdBy: currentUser.username,
+                    createdAt: new Date().toISOString()
+                };
+                
+                // Save user
+                users.push(user);
+                localStorage.setItem('pne_users', JSON.stringify(users));
+                
                 showToast(`Staff "${staffName}" added successfully!`, 'success');
                 addStaffModal.hide();
                 document.getElementById('addStaffForm').reset();
+                
+                // Reload staff
+                loadStaff();
             });
             
-            // Edit staff buttons
-            document.querySelectorAll('.edit-staff').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    if (currentUser && currentUser.role === 'admin') {
-                        showToast('Edit staff functionality would open here', 'info');
-                    } else {
-                        showToast('You do not have permission to edit staff', 'danger');
-                    }
+            // Load staff function
+            function loadStaff() {
+                const users = JSON.parse(localStorage.getItem('pne_users') || '[]');
+                const staffTable = document.getElementById('staffTable');
+                
+                staffTable.innerHTML = '';
+                
+                if (users.length === 0) {
+                    staffTable.innerHTML = '<tr><td colspan="6" class="text-center">No staff found</td></tr>';
+                    return;
+                }
+                
+                users.forEach(user => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${user.username}</td>
+                        <td>${user.name}</td>
+                        <td>${user.username}</td>
+                        <td><span class="user-role ${user.role === 'admin' ? 'role-admin' : 'role-staff'}">${user.role === 'admin' ? 'Admin' : 'Crew'}</span></td>
+                        <td><span class="badge bg-${user.status === 'active' ? 'success' : 'danger'}">${user.status}</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary me-1 admin-only edit-staff" data-username="${user.username}">Edit</button>
+                            <button class="btn btn-sm btn-outline-danger admin-only delete-staff" data-username="${user.username}">Delete</button>
+                        </td>
+                    `;
+                    
+                    staffTable.appendChild(row);
                 });
-            });
-            
-            // Delete staff buttons
-            document.querySelectorAll('.delete-staff').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    if (currentUser && currentUser.role === 'admin') {
-                        if (confirm('Are you sure you want to delete this staff member?')) {
-                            showToast('Staff member deleted successfully', 'success');
-                            // In a real app, this would remove the staff from the database
+                
+                // Add event listeners to buttons
+                document.querySelectorAll('.edit-staff').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        if (currentUser && currentUser.role === 'admin') {
+                            showToast('Edit staff functionality would open here', 'info');
+                        } else {
+                            showToast('You do not have permission to edit staff', 'danger');
                         }
-                    } else {
-                        showToast('You do not have permission to delete staff', 'danger');
-                    }
+                    });
                 });
-            });
+                
+                document.querySelectorAll('.delete-staff').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        if (currentUser && currentUser.role === 'admin') {
+                            const username = this.getAttribute('data-username');
+                            deleteStaff(username);
+                        } else {
+                            showToast('You do not have permission to delete staff', 'danger');
+                        }
+                    });
+                });
+            }
             
-            // View cashbill buttons
-            document.querySelectorAll('.view-cashbill').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const cashbillId = this.getAttribute('data-id');
-                    viewCashbillDetails(cashbillId);
+            // Delete staff function
+            function deleteStaff(username) {
+                if (confirm('Are you sure you want to delete this staff member?')) {
+                    let users = JSON.parse(localStorage.getItem('pne_users') || '[]');
+                    users = users.filter(u => u.username !== username);
+                    localStorage.setItem('pne_users', JSON.stringify(users));
+                    
+                    showToast('Staff member deleted successfully', 'success');
+                    loadStaff();
+                }
+            }
+            
+            // Load dashboard data
+            function loadDashboardData() {
+                const cashbills = JSON.parse(localStorage.getItem('pne_cashbills') || '[]');
+                const logbooks = JSON.parse(localStorage.getItem('pne_logbooks') || '[]');
+                
+                // Update counters
+                document.getElementById('totalCashbills').textContent = cashbills.length;
+                document.getElementById('completedCashbills').textContent = cashbills.filter(cb => cb.status === 'committed').length;
+                document.getElementById('pendingCashbills').textContent = cashbills.filter(cb => cb.status === 'draft').length;
+                
+                // Calculate total revenue
+                const totalRevenue = cashbills
+                    .filter(cb => cb.status === 'committed')
+                    .reduce((sum, cb) => sum + cb.totalAmount, 0);
+                document.getElementById('totalRevenue').textContent = `RM ${totalRevenue.toFixed(2)}`;
+                
+                // Load recent cashbills
+                const recentCashbillsTable = document.getElementById('recentCashbillsTable');
+                recentCashbillsTable.innerHTML = '';
+                
+                if (cashbills.length === 0) {
+                    recentCashbillsTable.innerHTML = '<tr><td colspan="6" class="text-center">No cashbills found</td></tr>';
+                    return;
+                }
+                
+                // Sort by date (newest first) and take first 5
+                const sortedCashbills = [...cashbills]
+                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                    .slice(0, 5);
+                
+                sortedCashbills.forEach(cashbill => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${cashbill.id}</td>
+                        <td>${cashbill.customer.name}</td>
+                        <td>${cashbill.date}</td>
+                        <td>RM ${cashbill.totalAmount.toFixed(2)}</td>
+                        <td><span class="status-badge status-${cashbill.status}">${cashbill.status.charAt(0).toUpperCase() + cashbill.status.slice(1)}</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-primary view-cashbill" data-id="${cashbill.id}">View</button>
+                        </td>
+                    `;
+                    
+                    recentCashbillsTable.appendChild(row);
                 });
-            });
+                
+                // Add event listeners to view buttons
+                document.querySelectorAll('.view-cashbill').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const cashbillId = this.getAttribute('data-id');
+                        viewCashbillDetails(cashbillId);
+                    });
+                });
+            }
+            
+            // Load cashbill list
+            function loadCashbillList() {
+                const cashbills = JSON.parse(localStorage.getItem('pne_cashbills') || '[]');
+                const allCashbillsTable = document.getElementById('allCashbillsTable');
+                
+                allCashbillsTable.innerHTML = '';
+                
+                if (cashbills.length === 0) {
+                    allCashbillsTable.innerHTML = '<tr><td colspan="7" class="text-center">No cashbills found</td></tr>';
+                    return;
+                }
+                
+                // Sort by date (newest first)
+                const sortedCashbills = [...cashbills]
+                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                
+                sortedCashbills.forEach(cashbill => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${cashbill.id}</td>
+                        <td>${cashbill.customer.name}</td>
+                        <td>${cashbill.date}</td>
+                        <td>RM ${cashbill.totalAmount.toFixed(2)}</td>
+                        <td><span class="status-badge status-${cashbill.status}">${cashbill.status.charAt(0).toUpperCase() + cashbill.status.slice(1)}</span></td>
+                        <td>${cashbill.createdBy}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary view-cashbill" data-id="${cashbill.id}">View</button>
+                            ${cashbill.status === 'draft' && currentUser.role === 'admin' ? `
+                                <button class="btn btn-sm btn-success approve-cashbill" data-id="${cashbill.id}">Approve</button>
+                                <button class="btn btn-sm btn-danger reject-cashbill" data-id="${cashbill.id}">Reject</button>
+                            ` : ''}
+                        </td>
+                    `;
+                    
+                    allCashbillsTable.appendChild(row);
+                });
+                
+                // Add event listeners to buttons
+                document.querySelectorAll('.view-cashbill').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const cashbillId = this.getAttribute('data-id');
+                        viewCashbillDetails(cashbillId);
+                    });
+                });
+                
+                document.querySelectorAll('.approve-cashbill').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const cashbillId = this.getAttribute('data-id');
+                        approveCashbill(cashbillId);
+                    });
+                });
+                
+                document.querySelectorAll('.reject-cashbill').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const cashbillId = this.getAttribute('data-id');
+                        rejectCashbill(cashbillId);
+                    });
+                });
+                
+                // Add filter functionality
+                setupCashbillFilters();
+            }
+            
+            // Setup cashbill filters
+            function setupCashbillFilters() {
+                const searchInput = document.getElementById('searchCashbill');
+                const statusFilter = document.getElementById('filterStatus');
+                const dateFilter = document.getElementById('filterDate');
+                const clearBtn = document.getElementById('clearFiltersBtn');
+                
+                function applyFilters() {
+                    const searchTerm = searchInput.value.toLowerCase();
+                    const statusValue = statusFilter.value;
+                    const dateValue = dateFilter.value;
+                    
+                    const rows = document.querySelectorAll('#allCashbillsTable tr');
+                    
+                    rows.forEach(row => {
+                        let show = true;
+                        
+                        // Search filter
+                        if (searchTerm && !row.textContent.toLowerCase().includes(searchTerm)) {
+                            show = false;
+                        }
+                        
+                        // Status filter
+                        if (statusValue) {
+                            const statusBadge = row.querySelector('.status-badge');
+                            if (statusBadge && !statusBadge.textContent.toLowerCase().includes(statusValue)) {
+                                show = false;
+                            }
+                        }
+                        
+                        // Date filter
+                        if (dateValue) {
+                            const dateCell = row.cells[2];
+                            if (dateCell && dateCell.textContent !== dateValue) {
+                                show = false;
+                            }
+                        }
+                        
+                        row.style.display = show ? '' : 'none';
+                    });
+                }
+                
+                searchInput.addEventListener('input', applyFilters);
+                statusFilter.addEventListener('change', applyFilters);
+                dateFilter.addEventListener('change', applyFilters);
+                
+                clearBtn.addEventListener('click', function() {
+                    searchInput.value = '';
+                    statusFilter.value = '';
+                    dateFilter.value = '';
+                    applyFilters();
+                });
+            }
+            
+            // Load logbook list
+            function loadLogbookList() {
+                const logbooks = JSON.parse(localStorage.getItem('pne_logbooks') || '[]');
+                const allLogbooksTable = document.getElementById('allLogbooksTable');
+                
+                allLogbooksTable.innerHTML = '';
+                
+                if (logbooks.length === 0) {
+                    allLogbooksTable.innerHTML = '<tr><td colspan="7" class="text-center">No logbooks found</td></tr>';
+                    return;
+                }
+                
+                // Sort by date (newest first)
+                const sortedLogbooks = [...logbooks]
+                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                
+                sortedLogbooks.forEach(logbook => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${logbook.id}</td>
+                        <td>${logbook.cashbillRef}</td>
+                        <td>${logbook.courierName}</td>
+                        <td>${logbook.date}</td>
+                        <td><span class="status-badge status-${logbook.deliveryStatus}">${logbook.deliveryStatus.replace('-', ' ').charAt(0).toUpperCase() + logbook.deliveryStatus.replace('-', ' ').slice(1)}</span></td>
+                        <td>${logbook.trackingNumber || '-'}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary view-logbook" data-id="${logbook.id}">View</button>
+                        </td>
+                    `;
+                    
+                    allLogbooksTable.appendChild(row);
+                });
+                
+                // Add event listeners to view buttons
+                document.querySelectorAll('.view-logbook').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const logbookId = this.getAttribute('data-id');
+                        viewLogbookDetails(logbookId);
+                    });
+                });
+                
+                // Add filter functionality
+                setupLogbookFilters();
+            }
+            
+            // Setup logbook filters
+            function setupLogbookFilters() {
+                const searchInput = document.getElementById('searchLogbook');
+                const statusFilter = document.getElementById('filterDeliveryStatus');
+                const dateFilter = document.getElementById('filterLogbookDate');
+                const clearBtn = document.getElementById('clearLogbookFiltersBtn');
+                
+                function applyFilters() {
+                    const searchTerm = searchInput.value.toLowerCase();
+                    const statusValue = statusFilter.value;
+                    const dateValue = dateFilter.value;
+                    
+                    const rows = document.querySelectorAll('#allLogbooksTable tr');
+                    
+                    rows.forEach(row => {
+                        let show = true;
+                        
+                        // Search filter
+                        if (searchTerm && !row.textContent.toLowerCase().includes(searchTerm)) {
+                            show = false;
+                        }
+                        
+                        // Status filter
+                        if (statusValue) {
+                            const statusBadge = row.querySelector('.status-badge');
+                            if (statusBadge && !statusBadge.textContent.toLowerCase().includes(statusValue.replace('-', ' '))) {
+                                show = false;
+                            }
+                        }
+                        
+                        // Date filter
+                        if (dateValue) {
+                            const dateCell = row.cells[3];
+                            if (dateCell && dateCell.textContent !== dateValue) {
+                                show = false;
+                            }
+                        }
+                        
+                        row.style.display = show ? '' : 'none';
+                    });
+                }
+                
+                searchInput.addEventListener('input', applyFilters);
+                statusFilter.addEventListener('change', applyFilters);
+                dateFilter.addEventListener('change', applyFilters);
+                
+                clearBtn.addEventListener('click', function() {
+                    searchInput.value = '';
+                    statusFilter.value = '';
+                    dateFilter.value = '';
+                    applyFilters();
+                });
+            }
+            
+            // Update cashbill reference dropdown
+            function updateCashbillRef() {
+                const cashbills = JSON.parse(localStorage.getItem('pne_cashbills') || '[]');
+                const cashbillRef = document.getElementById('cashbillRef');
+                
+                cashbillRef.innerHTML = '<option value="">-- Select Cashbill --</option>';
+                
+                cashbills.forEach(cashbill => {
+                    const option = document.createElement('option');
+                    option.value = cashbill.id;
+                    option.textContent = `${cashbill.id} - ${cashbill.customer.name}`;
+                    cashbillRef.appendChild(option);
+                });
+            }
             
             // View cashbill details function
             function viewCashbillDetails(cashbillId) {
-                // In a real app, this would fetch data from the server
-                // For demo purposes, we'll use mock data
+                const cashbills = JSON.parse(localStorage.getItem('pne_cashbills') || '[]');
+                const cashbill = cashbills.find(cb => cb.id === cashbillId);
                 
-                let cashbillData;
-                
-                // Check if it's one of our mock uncommitted cashbills
-                const uncommitted = uncommittedCashbills.find(cb => cb.id === cashbillId);
-                if (uncommitted) {
-                    cashbillData = uncommitted;
-                } else {
-                    // Use mock data for committed cashbills
-                    cashbillData = {
-                        id: cashbillId,
-                        customer: 'Mock Customer',
-                        date: '2023-06-15',
-                        createdBy: 'Staff 0001',
-                        totalAmount: 250.00,
-                        items: [
-                            { name: 'Adult Jubah', quantity: 1, price: 250.00 }
-                        ],
-                        status: 'committed'
-                    };
+                if (!cashbill) {
+                    showToast('Cashbill not found', 'danger');
+                    return;
                 }
                 
                 // Populate modal with cashbill details
@@ -1748,16 +2267,26 @@
                 cashbillDetails.innerHTML = `
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <p><strong>Cashbill ID:</strong> ${cashbillData.id}</p>
-                            <p><strong>Customer:</strong> ${cashbillData.customer}</p>
-                            <p><strong>Date:</strong> ${cashbillData.date}</p>
+                            <p><strong>Cashbill ID:</strong> ${cashbill.id}</p>
+                            <p><strong>Customer:</strong> ${cashbill.customer.name}</p>
+                            <p><strong>Date:</strong> ${cashbill.date}</p>
+                            <p><strong>Phone:</strong> ${cashbill.customer.phone}</p>
+                            <p><strong>Email:</strong> ${cashbill.customer.email || '-'}</p>
                         </div>
                         <div class="col-md-6">
-                            <p><strong>Status:</strong> <span class="status-badge status-${cashbillData.status}">${cashbillData.status.charAt(0).toUpperCase() + cashbillData.status.slice(1)}</span></p>
-                            <p><strong>Created By:</strong> ${cashbillData.createdBy}</p>
-                            <p><strong>Total Amount:</strong> RM ${cashbillData.totalAmount.toFixed(2)}</p>
+                            <p><strong>Status:</strong> <span class="status-badge status-${cashbill.status}">${cashbill.status.charAt(0).toUpperCase() + cashbill.status.slice(1)}</span></p>
+                            <p><strong>Created By:</strong> ${cashbill.createdBy}</p>
+                            <p><strong>Payment Type:</strong> ${cashbill.payment.type}</p>
+                            <p><strong>Payment Status:</strong> ${cashbill.payment.status}</p>
+                            <p><strong>Total Amount:</strong> RM ${cashbill.totalAmount.toFixed(2)}</p>
                         </div>
                     </div>
+                    
+                    <div class="mb-3">
+                        <p><strong>Address:</strong> ${cashbill.customer.address}</p>
+                    </div>
+                    
+                    ${cashbill.notes ? `<div class="mb-3"><p><strong>Notes:</strong> ${cashbill.notes}</p></div>` : ''}
                     
                     <h5 class="mt-4 mb-3">Order Items</h5>
                     <div class="table-responsive">
@@ -1771,7 +2300,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                ${cashbillData.items.map(item => `
+                                ${cashbill.items.map(item => `
                                     <tr>
                                         <td>${item.name}</td>
                                         <td>${item.quantity}</td>
@@ -1783,7 +2312,7 @@
                             <tfoot>
                                 <tr>
                                     <td colspan="3" class="text-end"><strong>Total:</strong></td>
-                                    <td><strong>RM ${cashbillData.totalAmount.toFixed(2)}</strong></td>
+                                    <td><strong>RM ${cashbill.totalAmount.toFixed(2)}</strong></td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -1795,21 +2324,198 @@
                 viewCashbillModal.show();
             }
             
+            // View logbook details function
+            function viewLogbookDetails(logbookId) {
+                const logbooks = JSON.parse(localStorage.getItem('pne_logbooks') || '[]');
+                const logbook = logbooks.find(lb => lb.id === logbookId);
+                
+                if (!logbook) {
+                    showToast('Logbook not found', 'danger');
+                    return;
+                }
+                
+                // Populate modal with logbook details
+                const logbookDetails = document.getElementById('logbookDetails');
+                logbookDetails.innerHTML = `
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Logbook ID:</strong> ${logbook.id}</p>
+                            <p><strong>Cashbill Ref:</strong> ${logbook.cashbillRef}</p>
+                            <p><strong>Date:</strong> ${logbook.date}</p>
+                            <p><strong>Courier Name:</strong> ${logbook.courierName}</p>
+                            <p><strong>Tracking Number:</strong> ${logbook.trackingNumber || '-'}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Delivery Status:</strong> <span class="status-badge status-${logbook.deliveryStatus}">${logbook.deliveryStatus.replace('-', ' ').charAt(0).toUpperCase() + logbook.deliveryStatus.replace('-', ' ').slice(1)}</span></p>
+                            <p><strong>Expected Delivery Date:</strong> ${logbook.expectedDelivery.date || '-'}</p>
+                            <p><strong>Expected Delivery Time:</strong> ${logbook.expectedDelivery.time || '-'}</p>
+                            <p><strong>Created By:</strong> ${logbook.createdBy}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <p><strong>Delivery Address:</strong> ${logbook.deliveryAddress}</p>
+                    </div>
+                    
+                    ${logbook.notes ? `<div class="mb-3"><p><strong>Notes:</strong> ${logbook.notes}</p></div>` : ''}
+                `;
+                
+                // Show modal
+                const viewLogbookModal = new bootstrap.Modal(document.getElementById('viewLogbookModal'));
+                viewLogbookModal.show();
+            }
+            
             // Print cashbill button
             document.getElementById('printCashbillBtn').addEventListener('click', function() {
-                showToast('Print functionality would be implemented here', 'info');
-                // In a real app, this would open a print dialog or generate a PDF
+                const cashbillId = document.querySelector('#viewCashbillModal .modal-title').textContent.split(' - ')[1];
+                printCashbill(cashbillId);
             });
+            
+            // Print logbook button
+            document.getElementById('printLogbookBtn').addEventListener('click', function() {
+                const logbookId = document.querySelector('#viewLogbookModal .modal-title').textContent.split(' - ')[1];
+                printLogbook(logbookId);
+            });
+            
+            // Print cashbill function
+            function printCashbill(cashbillId) {
+                const cashbills = JSON.parse(localStorage.getItem('pne_cashbills') || '[]');
+                const cashbill = cashbills.find(cb => cb.id === cashbillId);
+                
+                if (!cashbill) {
+                    showToast('Cashbill not found', 'danger');
+                    return;
+                }
+                
+                // Populate print template
+                document.getElementById('printCashbillInfo').innerHTML = `
+                    <p><strong>Cashbill ID:</strong> ${cashbill.id}</p>
+                    <p><strong>Date:</strong> ${cashbill.date}</p>
+                    <p><strong>Status:</strong> ${cashbill.status.charAt(0).toUpperCase() + cashbill.status.slice(1)}</p>
+                `;
+                
+                document.getElementById('printCustomerInfo').innerHTML = `
+                    <p><strong>Name:</strong> ${cashbill.customer.name}</p>
+                    <p><strong>Phone:</strong> ${cashbill.customer.phone}</p>
+                    <p><strong>Email:</strong> ${cashbill.customer.email || '-'}</p>
+                    <p><strong>Address:</strong> ${cashbill.customer.address}</p>
+                `;
+                
+                const itemsHtml = cashbill.items.map(item => `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>${item.quantity}</td>
+                        <td>RM ${item.price.toFixed(2)}</td>
+                        <td>RM ${(item.quantity * item.price).toFixed(2)}</td>
+                    </tr>
+                `).join('');
+                
+                document.getElementById('printOrderItems').innerHTML = `
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${itemsHtml}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                                <td><strong>RM ${cashbill.totalAmount.toFixed(2)}</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                `;
+                
+                document.getElementById('printPaymentInfo').innerHTML = `
+                    <p><strong>Payment Type:</strong> ${cashbill.payment.type}</p>
+                    <p><strong>Payment Status:</strong> ${cashbill.payment.status}</p>
+                `;
+                
+                // Print the document
+                window.print();
+            }
+            
+            // Print logbook function
+            function printLogbook(logbookId) {
+                const logbooks = JSON.parse(localStorage.getItem('pne_logbooks') || '[]');
+                const logbook = logbooks.find(lb => lb.id === logbookId);
+                
+                if (!logbook) {
+                    showToast('Logbook not found', 'danger');
+                    return;
+                }
+                
+                // Create a simple print window
+                const printContent = `
+                    <html>
+                    <head>
+                        <title>Logbook - ${logbook.id}</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; margin: 20px; }
+                            h1 { color: #2c3e50; }
+                            .section { margin-bottom: 20px; }
+                            .label { font-weight: bold; }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>Logbook Details</h1>
+                        <div class="section">
+                            <p><span class="label">Logbook ID:</span> ${logbook.id}</p>
+                            <p><span class="label">Cashbill Ref:</span> ${logbook.cashbillRef}</p>
+                            <p><span class="label">Date:</span> ${logbook.date}</p>
+                            <p><span class="label">Courier Name:</span> ${logbook.courierName}</p>
+                            <p><span class="label">Tracking Number:</span> ${logbook.trackingNumber || '-'}</p>
+                            <p><span class="label">Delivery Status:</span> ${logbook.deliveryStatus.replace('-', ' ').charAt(0).toUpperCase() + logbook.deliveryStatus.replace('-', ' ').slice(1)}</p>
+                            <p><span class="label">Expected Delivery Date:</span> ${logbook.expectedDelivery.date || '-'}</p>
+                            <p><span class="label">Expected Delivery Time:</span> ${logbook.expectedDelivery.time || '-'}</p>
+                        </div>
+                        <div class="section">
+                            <p><span class="label">Delivery Address:</span></p>
+                            <p>${logbook.deliveryAddress}</p>
+                        </div>
+                        ${logbook.notes ? `
+                        <div class="section">
+                            <p><span class="label">Notes:</span></p>
+                            <p>${logbook.notes}</p>
+                        </div>
+                        ` : ''}
+                    </body>
+                    </html>
+                `;
+                
+                const printWindow = window.open('', '_blank');
+                printWindow.document.write(printContent);
+                printWindow.document.close();
+                printWindow.print();
+            }
             
             // Uncommitted requests functionality
             function refreshUncommittedList() {
+                const cashbills = JSON.parse(localStorage.getItem('pne_cashbills') || '[]');
                 const uncommittedList = document.getElementById('uncommittedList');
                 
-                // Clear existing list
+                // Get draft cashbills
+                const draftCashbills = cashbills.filter(cb => cb.status === 'draft');
+                
+                if (draftCashbills.length === 0) {
+                    uncommittedList.innerHTML = `
+                        <div class="text-center py-5">
+                            <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">No uncommitted requests found</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
                 uncommittedList.innerHTML = '';
                 
-                // Add each uncommitted cashbill to the list
-                uncommittedCashbills.forEach(cashbill => {
+                draftCashbills.forEach(cashbill => {
                     const itemsText = cashbill.items.map(item => 
                         `${item.name} (${item.quantity}x)`
                     ).join(', ');
@@ -1818,7 +2524,7 @@
                     cardElement.className = 'card uncommitted-card mb-3';
                     cardElement.innerHTML = `
                         <div class="card-header d-flex justify-content-between align-items-center">
-                            <span>${cashbill.id} - ${cashbill.customer}</span>
+                            <span>${cashbill.id} - ${cashbill.customer.name}</span>
                             <span class="status-badge status-draft">Draft</span>
                         </div>
                         <div class="card-body">
@@ -1854,53 +2560,82 @@
                 document.querySelectorAll('.approve-uncommitted').forEach(btn => {
                     btn.addEventListener('click', function() {
                         const cashbillId = this.getAttribute('data-id');
-                        approveUncommittedCashbill(cashbillId);
+                        approveCashbill(cashbillId);
                     });
                 });
                 
                 document.querySelectorAll('.reject-uncommitted').forEach(btn => {
                     btn.addEventListener('click', function() {
                         const cashbillId = this.getAttribute('data-id');
-                        rejectUncommittedCashbill(cashbillId);
+                        rejectCashbill(cashbillId);
                     });
                 });
             }
             
-            // Approve uncommitted cashbill
-            function approveUncommittedCashbill(cashbillId) {
+            // Approve cashbill function
+            function approveCashbill(cashbillId) {
                 if (confirm(`Are you sure you want to approve cashbill ${cashbillId}?`)) {
-                    // Find and remove the cashbill from uncommitted list
-                    const index = uncommittedCashbills.findIndex(cb => cb.id === cashbillId);
-                    if (index !== -1) {
-                        uncommittedCashbills.splice(index, 1);
+                    let cashbills = JSON.parse(localStorage.getItem('pne_cashbills') || '[]');
+                    const cashbill = cashbills.find(cb => cb.id === cashbillId);
+                    
+                    if (cashbill) {
+                        cashbill.status = 'committed';
+                        localStorage.setItem('pne_cashbills', JSON.stringify(cashbills));
+                        
                         showToast(`Cashbill ${cashbillId} approved successfully!`, 'success');
+                        
+                        // Refresh data
+                        loadDashboardData();
+                        loadCashbillList();
                         refreshUncommittedList();
-                        
-                        // Update dashboard stats
-                        const pendingCount = document.getElementById('pendingCashbills');
-                        pendingCount.textContent = parseInt(pendingCount.textContent) - 1;
-                        
-                        const completedCount = document.getElementById('completedCashbills');
-                        completedCount.textContent = parseInt(completedCount.textContent) + 1;
+                        updateCounters();
                     }
                 }
             }
             
-            // Reject uncommitted cashbill
-            function rejectUncommittedCashbill(cashbillId) {
+            // Reject cashbill function
+            function rejectCashbill(cashbillId) {
                 if (confirm(`Are you sure you want to reject cashbill ${cashbillId}?`)) {
-                    // Find and remove the cashbill from uncommitted list
-                    const index = uncommittedCashbills.findIndex(cb => cb.id === cashbillId);
-                    if (index !== -1) {
-                        uncommittedCashbills.splice(index, 1);
-                        showToast(`Cashbill ${cashbillId} rejected!`, 'warning');
-                        refreshUncommittedList();
-                        
-                        // Update dashboard stats
-                        const pendingCount = document.getElementById('pendingCashbills');
-                        pendingCount.textContent = parseInt(pendingCount.textContent) - 1;
-                    }
+                    let cashbills = JSON.parse(localStorage.getItem('pne_cashbills') || '[]');
+                    cashbills = cashbills.filter(cb => cb.id !== cashbillId);
+                    localStorage.setItem('pne_cashbills', JSON.stringify(cashbills));
+                    
+                    showToast(`Cashbill ${cashbillId} rejected!`, 'warning');
+                    
+                    // Refresh data
+                    loadDashboardData();
+                    loadCashbillList();
+                    refreshUncommittedList();
+                    updateCounters();
                 }
+            }
+            
+            // Update counters function
+            function updateCounters() {
+                const cashbills = JSON.parse(localStorage.getItem('pne_cashbills') || '[]');
+                
+                document.getElementById('totalCashbills').textContent = cashbills.length;
+                document.getElementById('completedCashbills').textContent = cashbills.filter(cb => cb.status === 'committed').length;
+                document.getElementById('pendingCashbills').textContent = cashbills.filter(cb => cb.status === 'draft').length;
+                
+                const totalRevenue = cashbills
+                    .filter(cb => cb.status === 'committed')
+                    .reduce((sum, cb) => sum + cb.totalAmount, 0);
+                document.getElementById('totalRevenue').textContent = `RM ${totalRevenue.toFixed(2)}`;
+            }
+            
+            // Generate new cashbill ID
+            function generateNewCashbillId() {
+                const cashbills = JSON.parse(localStorage.getItem('pne_cashbills') || '[]');
+                const counter = cashbills.length + 1;
+                document.getElementById('cashbillId').value = `#PA${String(counter).padStart(4, '0')}`;
+            }
+            
+            // Generate new logbook ID
+            function generateNewLogbookId() {
+                const logbooks = JSON.parse(localStorage.getItem('pne_logbooks') || '[]');
+                const counter = logbooks.length + 1;
+                document.getElementById('logbookId').value = `LOG-${String(counter).padStart(4, '0')}`;
             }
             
             // Generate report buttons
@@ -1916,17 +2651,166 @@
                 });
             });
             
-            // View all cashbills
-            document.getElementById('viewCashbillListBtn').addEventListener('click', function() {
-                showToast('Redirecting to cashbill list...', 'info');
-                // In a real app, this would navigate to a list view
-            });
-            
-            // View all logbooks
-            document.getElementById('viewLogbookListBtn').addEventListener('click', function() {
-                showToast('Redirecting to logbook list...', 'info');
-                // In a real app, this would navigate to a list view
-            });
+            // Initialize data storage
+            function initializeDataStorage() {
+                // Check if users exist, if not create default users
+                if (!localStorage.getItem('pne_users')) {
+                    const defaultUsers = [
+                        {
+                            username: '0000',
+                            password: 'Dd123',
+                            name: 'Admin User',
+                            role: 'admin',
+                            status: 'active',
+                            createdBy: 'system',
+                            createdAt: new Date().toISOString()
+                        },
+                        {
+                            username: '0001',
+                            password: '1234',
+                            name: 'Crew One',
+                            role: 'staff',
+                            status: 'active',
+                            createdBy: 'system',
+                            createdAt: new Date().toISOString()
+                        }
+                    ];
+                    localStorage.setItem('pne_users', JSON.stringify(defaultUsers));
+                }
+                
+                // Check if products exist, if not create default products
+                if (!localStorage.getItem('pne_products')) {
+                    const defaultProducts = [
+                        {
+                            id: 'PROD-001',
+                            name: 'Adult Jubah',
+                            icon: '🕌',
+                            regularPrice: 250,
+                            memberPrice: 220,
+                            unit: 'per set',
+                            minOrder: 0,
+                            description: 'High-quality adult jubah for special occasions',
+                            features: ['Free: Cap included', 'Available in multiple sizes', 'Premium fabric'],
+                            createdBy: 'system',
+                            createdAt: new Date().toISOString()
+                        },
+                        {
+                            id: 'PROD-002',
+                            name: 'Year 6 Jubah',
+                            icon: '📘',
+                            regularPrice: 170,
+                            memberPrice: 150,
+                            unit: 'per set',
+                            minOrder: 10,
+                            description: 'Comfortable jubah for Year 6 students',
+                            features: ['Free: Cap included', 'School colors available', 'Durable material'],
+                            createdBy: 'system',
+                            createdAt: new Date().toISOString()
+                        },
+                        {
+                            id: 'PROD-003',
+                            name: 'Kindergarten Jubah',
+                            icon: '🧒',
+                            regularPrice: 110,
+                            memberPrice: 99,
+                            unit: 'per set',
+                            minOrder: 10,
+                            description: 'Cute jubah for kindergarten children',
+                            features: ['Free: Cap included', 'Child-friendly design', 'Easy to wear'],
+                            createdBy: 'system',
+                            createdAt: new Date().toISOString()
+                        },
+                        {
+                            id: 'PROD-004',
+                            name: 'Plaque Arkalic',
+                            icon: '🏷️',
+                            regularPrice: 19.90,
+                            memberPrice: 17.50,
+                            unit: 'each',
+                            minOrder: 0,
+                            description: 'Customizable plaque for achievements',
+                            features: ['Includes: Name printing', 'Size: 145mm x 100mm', 'High-quality finish'],
+                            createdBy: 'system',
+                            createdAt: new Date().toISOString()
+                        },
+                        {
+                            id: 'PROD-005',
+                            name: 'Cute Medal',
+                            icon: '🏅',
+                            regularPrice: 12.90,
+                            memberPrice: 10.90,
+                            unit: 'each',
+                            minOrder: 10,
+                            description: 'Adorable medals for events',
+                            features: ['Material: Arkalic', 'Custom design available', 'Ribbon included'],
+                            createdBy: 'system',
+                            createdAt: new Date().toISOString()
+                        },
+                        {
+                            id: 'PROD-006',
+                            name: 'Cute Keychain',
+                            icon: '🔑',
+                            regularPrice: 5.90,
+                            memberPrice: 3.90,
+                            unit: 'each',
+                            minOrder: 10,
+                            description: 'Fun keychains for everyone',
+                            features: ['Material: Arkalic (Sublimation)', 'Size: 9cm x 3cm', 'Waterproof'],
+                            createdBy: 'system',
+                            createdAt: new Date().toISOString()
+                        },
+                        {
+                            id: 'PROD-007',
+                            name: 'Attendance Keychain',
+                            icon: '🔑',
+                            regularPrice: 4.90,
+                            memberPrice: 3.50,
+                            unit: 'each',
+                            minOrder: 10,
+                            description: 'Practical keychain for attendance tracking',
+                            features: ['Material: Acrylic', 'Thickness: 2mm', 'Size: 4.4cm x 5.5cm'],
+                            createdBy: 'system',
+                            createdAt: new Date().toISOString()
+                        },
+                        {
+                            id: 'PROD-008',
+                            name: 'Kindergarten T-Shirt',
+                            icon: '👕',
+                            regularPrice: 29.90,
+                            memberPrice: 25.00,
+                            unit: 'per piece',
+                            minOrder: 20,
+                            description: 'Comfortable t-shirt for kindergarten',
+                            features: ['Material: Microfiber', 'Free: School name & logo printing', 'Breathable fabric'],
+                            createdBy: 'system',
+                            createdAt: new Date().toISOString()
+                        },
+                        {
+                            id: 'PROD-009',
+                            name: 'Kindergarten T-Shirt + Pants Set',
+                            icon: '👕👖',
+                            regularPrice: 45.00,
+                            memberPrice: 39.90,
+                            unit: 'per set',
+                            minOrder: 20,
+                            description: 'Complete set for kindergarten students',
+                            features: ['Material: Microfiber + Tracksuit', 'Matching set', 'Comfortable fit'],
+                            createdBy: 'system',
+                            createdAt: new Date().toISOString()
+                        }
+                    ];
+                    localStorage.setItem('pne_products', JSON.stringify(defaultProducts));
+                }
+                
+                // Initialize empty arrays for cashbills and logbooks if they don't exist
+                if (!localStorage.getItem('pne_cashbills')) {
+                    localStorage.setItem('pne_cashbills', JSON.stringify([]));
+                }
+                
+                if (!localStorage.getItem('pne_logbooks')) {
+                    localStorage.setItem('pne_logbooks', JSON.stringify([]));
+                }
+            }
             
             // Toast notification function
             function showToast(message, type = 'info') {
@@ -1962,11 +2846,8 @@
                 });
             }
             
-            // Initialize tooltips if needed
-            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            tooltipTriggerList.map(function (tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl);
-            });
+            // Initialize the application
+            loadProductsIntoSelect();
         });
     </script>
 </body>
