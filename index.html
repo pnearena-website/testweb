@@ -292,6 +292,16 @@
                 display: block !important;
             }
         }
+        .edit-mode {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .edit-mode label {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 <body>
@@ -1098,6 +1108,124 @@
             </div>
         </div>
     </div>
+    <!-- Edit Cashbill Modal -->
+    <div class="modal fade" id="editCashbillModal" tabindex="-1" aria-labelledby="editCashbillModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editCashbillModalLabel">Edit Cashbill</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editCashbillForm">
+                        <input type="hidden" id="editCashbillId">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="editCashbillDate" class="form-label">Date</label>
+                                <input type="date" class="form-control" id="editCashbillDate" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editPaymentType" class="form-label">Payment Type</label>
+                                <select class="form-select" id="editPaymentType" required>
+                                    <option value="cash">Cash</option>
+                                    <option value="bank-transfer">Bank Transfer</option>
+                                    <option value="credit-card">Credit Card</option>
+                                    <option value="e-wallet">E-Wallet</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <h5 class="mt-4 mb-3">Customer Information</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="editCustomerFirstName" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="editCustomerFirstName" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editCustomerLastName" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="editCustomerLastName" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="editCustomerPhone" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="editCustomerPhone" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editCustomerEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="editCustomerEmail">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editCustomerAddress" class="form-label">Address</label>
+                            <textarea class="form-control" id="editCustomerAddress" rows="2" required></textarea>
+                        </div>
+                        
+                        <h5 class="mt-4 mb-3">Order Items</h5>
+                        <div class="mb-3">
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <label for="editProductSelect" class="form-label">Select Product</label>
+                                    <select class="form-select" id="editProductSelect">
+                                        <option value="">-- Select Product --</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="editQuantity" class="form-label">Quantity</label>
+                                    <input type="number" class="form-control" id="editQuantity" min="1" value="1">
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="editPrice" class="form-label">Price (RM)</label>
+                                    <input type="number" class="form-control" id="editPrice" step="0.01" min="0">
+                                </div>
+                                <div class="col-md-1 d-flex align-items-end">
+                                    <button type="button" class="btn btn-primary" id="addEditItemBtn">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="card">
+                                <div class="card-header">
+                                    Order Items
+                                </div>
+                                <div class="card-body">
+                                    <div id="editOrderItems">
+                                        <!-- Items will be populated here -->
+                                    </div>
+                                    <div class="mt-3 text-end">
+                                        <h5>Total: RM <span id="editTotalAmount">0.00</span></h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="editPaymentStatus" class="form-label">Payment Status</label>
+                                <select class="form-select" id="editPaymentStatus" required>
+                                    <option value="pending">Pending</option>
+                                    <option value="partial">Partial</option>
+                                    <option value="completed">Completed</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editNotes" class="form-label">Notes</label>
+                                <textarea class="form-control" id="editNotes" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-warning" id="updateDraftBtn">Update Draft</button>
+                    <button type="button" class="btn btn-primary" id="updateAndCommitBtn">Update & Commit</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- View Logbook Modal -->
     <div class="modal fade" id="viewLogbookModal" tabindex="-1" aria-labelledby="viewLogbookModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -1159,6 +1287,7 @@
             let currentUser = null;
             let sidebarOpen = false;
             let currentSection = 'dashboard';
+            let editingCashbillId = null;
             
             // DOM elements
             const loginPage = document.getElementById('loginPage');
@@ -1175,6 +1304,13 @@
             const userName = document.getElementById('userName');
             const userRole = document.getElementById('userRole');
             
+            // Check if user is already logged in
+            const savedUser = localStorage.getItem('pne_current_user');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showPortal();
+            }
+            
             // Login form submission
             loginForm.addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -1188,6 +1324,7 @@
                 
                 if (user) {
                     currentUser = user;
+                    localStorage.setItem('pne_current_user', JSON.stringify(user));
                     showPortal();
                 } else {
                     showToast('Invalid Staff ID or password', 'danger');
@@ -1230,6 +1367,7 @@
             
             function logout() {
                 currentUser = null;
+                localStorage.removeItem('pne_current_user');
                 loginPage.style.display = 'block';
                 portalContainer.style.display = 'none';
                 document.getElementById('username').value = '';
@@ -1638,6 +1776,294 @@
                 }, 1500);
             });
             
+            // Edit Cashbill Modal Setup
+            const editCashbillModal = new bootstrap.Modal(document.getElementById('editCashbillModal'));
+            const editCashbillForm = document.getElementById('editCashbillForm');
+            const editProductSelect = document.getElementById('editProductSelect');
+            const editQuantityInput = document.getElementById('editQuantity');
+            const editPriceInput = document.getElementById('editPrice');
+            const editOrderItemsContainer = document.getElementById('editOrderItems');
+            const editTotalAmountSpan = document.getElementById('editTotalAmount');
+            
+            // Load products into edit select
+            function loadProductsIntoEditSelect() {
+                const products = JSON.parse(localStorage.getItem('pne_products') || '[]');
+                editProductSelect.innerHTML = '<option value="">-- Select Product --</option>';
+                
+                products.forEach(product => {
+                    const option = document.createElement('option');
+                    option.value = product.id;
+                    option.textContent = `${product.icon} ${product.name} - RM ${product.regularPrice}`;
+                    editProductSelect.appendChild(option);
+                });
+            }
+            
+            // Set price when product is selected in edit mode
+            editProductSelect.addEventListener('change', function() {
+                const products = JSON.parse(localStorage.getItem('pne_products') || '[]');
+                const productId = this.value;
+                
+                if (productId) {
+                    const product = products.find(p => p.id === productId);
+                    if (product) {
+                        editPriceInput.value = product.regularPrice;
+                    }
+                } else {
+                    editPriceInput.value = '';
+                }
+            });
+            
+            // Add item to edit order
+            document.getElementById('addEditItemBtn').addEventListener('click', function() {
+                const productId = editProductSelect.value;
+                const quantity = parseInt(editQuantityInput.value) || 1;
+                const price = parseFloat(editPriceInput.value) || 0;
+                
+                if (!productId) {
+                    showToast('Please select a product', 'warning');
+                    return;
+                }
+                
+                const products = JSON.parse(localStorage.getItem('pne_products') || '[]');
+                const product = products.find(p => p.id === productId);
+                
+                if (!product) {
+                    showToast('Product not found', 'danger');
+                    return;
+                }
+                
+                // Create new item element
+                const itemElement = document.createElement('div');
+                itemElement.className = 'cashbill-item';
+                itemElement.innerHTML = `
+                    <div>
+                        <div class="fw-bold">${product.icon} ${product.name}</div>
+                        <div>${quantity} x RM ${price.toFixed(2)}</div>
+                    </div>
+                    <div class="item-actions">
+                        <button type="button" class="btn btn-sm btn-outline-danger remove-edit-item">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                
+                // Add remove functionality
+                itemElement.querySelector('.remove-edit-item').addEventListener('click', function() {
+                    itemElement.remove();
+                    updateEditTotalAmount();
+                });
+                
+                // Add to order items
+                editOrderItemsContainer.appendChild(itemElement);
+                
+                // Update total
+                updateEditTotalAmount();
+                
+                // Reset form
+                editProductSelect.value = '';
+                editQuantityInput.value = '1';
+                editPriceInput.value = '';
+            });
+            
+            // Update edit total amount
+            function updateEditTotalAmount() {
+                let total = 0;
+                
+                editOrderItemsContainer.querySelectorAll('.cashbill-item').forEach(item => {
+                    const text = item.querySelector('div div:last-child').textContent;
+                    const match = text.match(/(\d+) x RM ([\d.]+)/);
+                    
+                    if (match) {
+                        const quantity = parseInt(match[1]);
+                        const price = parseFloat(match[2]);
+                        total += quantity * price;
+                    }
+                });
+                
+                editTotalAmountSpan.textContent = total.toFixed(2);
+            }
+            
+            // Update draft button
+            document.getElementById('updateDraftBtn').addEventListener('click', function() {
+                updateCashbill('draft');
+            });
+            
+            // Update and commit button
+            document.getElementById('updateAndCommitBtn').addEventListener('click', function() {
+                updateCashbill('committed');
+            });
+            
+            // Update cashbill function
+            function updateCashbill(newStatus) {
+                // Get form data
+                const cashbillId = document.getElementById('editCashbillId').value;
+                const cashbillDate = document.getElementById('editCashbillDate').value;
+                const customerFirstName = document.getElementById('editCustomerFirstName').value;
+                const customerLastName = document.getElementById('editCustomerLastName').value;
+                const customerName = `${customerFirstName} ${customerLastName}`;
+                const customerPhone = document.getElementById('editCustomerPhone').value;
+                const customerEmail = document.getElementById('editCustomerEmail').value;
+                const customerAddress = document.getElementById('editCustomerAddress').value;
+                const paymentType = document.getElementById('editPaymentType').value;
+                const paymentStatus = document.getElementById('editPaymentStatus').value;
+                const notes = document.getElementById('editNotes').value;
+                
+                // Check if there are items in the order
+                if (editOrderItemsContainer.children.length === 0) {
+                    showToast('Please add at least one item to the order', 'warning');
+                    return;
+                }
+                
+                // Get order items
+                const items = [];
+                editOrderItemsContainer.querySelectorAll('.cashbill-item').forEach(item => {
+                    const name = item.querySelector('.fw-bold').textContent;
+                    const text = item.querySelector('div div:last-child').textContent;
+                    const match = text.match(/(\d+) x RM ([\d.]+)/);
+                    
+                    if (match) {
+                        const quantity = parseInt(match[1]);
+                        const price = parseFloat(match[2]);
+                        items.push({ name, quantity, price });
+                    }
+                });
+                
+                // Calculate total
+                const totalAmount = parseFloat(editTotalAmountSpan.textContent);
+                
+                // Get existing cashbill
+                let cashbills = JSON.parse(localStorage.getItem('pne_cashbills') || '[]');
+                const cashbillIndex = cashbills.findIndex(cb => cb.id === cashbillId);
+                
+                if (cashbillIndex === -1) {
+                    showToast('Cashbill not found', 'danger');
+                    return;
+                }
+                
+                // Update cashbill
+                cashbills[cashbillIndex] = {
+                    ...cashbills[cashbillIndex],
+                    date: cashbillDate,
+                    customer: {
+                        firstName: customerFirstName,
+                        lastName: customerLastName,
+                        name: customerName,
+                        phone: customerPhone,
+                        email: customerEmail,
+                        address: customerAddress
+                    },
+                    items: items,
+                    totalAmount: totalAmount,
+                    payment: {
+                        type: paymentType,
+                        status: paymentStatus
+                    },
+                    notes: notes,
+                    status: newStatus,
+                    updatedAt: new Date().toISOString()
+                };
+                
+                // Save cashbill
+                localStorage.setItem('pne_cashbills', JSON.stringify(cashbills));
+                
+                // Show success message
+                const statusText = newStatus === 'draft' ? 'draft updated' : 'updated and committed';
+                showToast(`Cashbill ${cashbillId} ${statusText} successfully!`, 'success');
+                
+                // Close modal
+                editCashbillModal.hide();
+                
+                // Refresh data
+                loadDashboardData();
+                loadCashbillList();
+                refreshUncommittedList();
+                updateCounters();
+            }
+            
+            // Edit cashbill function
+            function editCashbill(cashbillId) {
+                const cashbills = JSON.parse(localStorage.getItem('pne_cashbills') || '[]');
+                const cashbill = cashbills.find(cb => cb.id === cashbillId);
+                
+                if (!cashbill) {
+                    showToast('Cashbill not found', 'danger');
+                    return;
+                }
+                
+                // Only allow editing draft cashbills
+                if (cashbill.status !== 'draft' && currentUser.role !== 'admin') {
+                    showToast('Only draft cashbills can be edited', 'warning');
+                    return;
+                }
+                
+                // Set editing cashbill ID
+                editingCashbillId = cashbillId;
+                
+                // Populate form with cashbill data
+                document.getElementById('editCashbillId').value = cashbill.id;
+                document.getElementById('editCashbillDate').value = cashbill.date;
+                document.getElementById('editCustomerFirstName').value = cashbill.customer.firstName;
+                document.getElementById('editCustomerLastName').value = cashbill.customer.lastName;
+                document.getElementById('editCustomerPhone').value = cashbill.customer.phone;
+                document.getElementById('editCustomerEmail').value = cashbill.customer.email || '';
+                document.getElementById('editCustomerAddress').value = cashbill.customer.address;
+                document.getElementById('editPaymentType').value = cashbill.payment.type;
+                document.getElementById('editPaymentStatus').value = cashbill.payment.status;
+                document.getElementById('editNotes').value = cashbill.notes || '';
+                
+                // Populate order items
+                editOrderItemsContainer.innerHTML = '';
+                cashbill.items.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'cashbill-item';
+                    itemElement.innerHTML = `
+                        <div>
+                            <div class="fw-bold">${item.name}</div>
+                            <div>${item.quantity} x RM ${item.price.toFixed(2)}</div>
+                        </div>
+                        <div class="item-actions">
+                            <button type="button" class="btn btn-sm btn-outline-danger remove-edit-item">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                    
+                    // Add remove functionality
+                    itemElement.querySelector('.remove-edit-item').addEventListener('click', function() {
+                        itemElement.remove();
+                        updateEditTotalAmount();
+                    });
+                    
+                    editOrderItemsContainer.appendChild(itemElement);
+                });
+                
+                // Update total
+                updateEditTotalAmount();
+                
+                // Load products into select
+                loadProductsIntoEditSelect();
+                
+                // Show modal
+                editCashbillModal.show();
+            }
+            
+            // Delete cashbill function
+            function deleteCashbill(cashbillId) {
+                if (confirm(`Are you sure you want to delete cashbill ${cashbillId}? This action cannot be undone.`)) {
+                    let cashbills = JSON.parse(localStorage.getItem('pne_cashbills') || '[]');
+                    cashbills = cashbills.filter(cb => cb.id !== cashbillId);
+                    localStorage.setItem('pne_cashbills', JSON.stringify(cashbills));
+                    
+                    showToast(`Cashbill ${cashbillId} deleted successfully!`, 'success');
+                    
+                    // Refresh data
+                    loadDashboardData();
+                    loadCashbillList();
+                    refreshUncommittedList();
+                    updateCounters();
+                }
+            }
+            
             // Logbook form handling
             const logbookForm = document.getElementById('logbookForm');
             
@@ -1776,6 +2202,7 @@
                 // Reload products
                 loadProducts();
                 loadProductsIntoSelect();
+                loadProductsIntoEditSelect();
             });
             
             // Load products function
@@ -1846,6 +2273,7 @@
                     showToast('Product deleted successfully', 'success');
                     loadProducts();
                     loadProductsIntoSelect();
+                    loadProductsIntoEditSelect();
                 }
             }
             
@@ -2048,6 +2476,10 @@
                         <td>${cashbill.createdBy}</td>
                         <td>
                             <button class="btn btn-sm btn-primary view-cashbill" data-id="${cashbill.id}">View</button>
+                            ${cashbill.status === 'draft' ? `
+                                <button class="btn btn-sm btn-warning edit-cashbill" data-id="${cashbill.id}">Edit</button>
+                                <button class="btn btn-sm btn-danger delete-cashbill" data-id="${cashbill.id}">Delete</button>
+                            ` : ''}
                             ${cashbill.status === 'draft' && currentUser.role === 'admin' ? `
                                 <button class="btn btn-sm btn-success approve-cashbill" data-id="${cashbill.id}">Approve</button>
                                 <button class="btn btn-sm btn-danger reject-cashbill" data-id="${cashbill.id}">Reject</button>
@@ -2063,6 +2495,20 @@
                     btn.addEventListener('click', function() {
                         const cashbillId = this.getAttribute('data-id');
                         viewCashbillDetails(cashbillId);
+                    });
+                });
+                
+                document.querySelectorAll('.edit-cashbill').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const cashbillId = this.getAttribute('data-id');
+                        editCashbill(cashbillId);
+                    });
+                });
+                
+                document.querySelectorAll('.delete-cashbill').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const cashbillId = this.getAttribute('data-id');
+                        deleteCashbill(cashbillId);
                     });
                 });
                 
@@ -2262,6 +2708,9 @@
                     return;
                 }
                 
+                // Set modal title
+                document.getElementById('viewCashbillModalLabel').textContent = `Cashbill Details - ${cashbillId}`;
+                
                 // Populate modal with cashbill details
                 const cashbillDetails = document.getElementById('cashbillDetails');
                 cashbillDetails.innerHTML = `
@@ -2333,6 +2782,9 @@
                     showToast('Logbook not found', 'danger');
                     return;
                 }
+                
+                // Set modal title
+                document.getElementById('viewLogbookModalLabel').textContent = `Logbook Details - ${logbookId}`;
                 
                 // Populate modal with logbook details
                 const logbookDetails = document.getElementById('logbookDetails');
@@ -2540,6 +2992,8 @@
                             </div>
                             <div class="action-buttons mt-3">
                                 <button class="btn btn-sm btn-primary view-uncommitted" data-id="${cashbill.id}">View Details</button>
+                                <button class="btn btn-sm btn-warning edit-uncommitted" data-id="${cashbill.id}">Edit</button>
+                                <button class="btn btn-sm btn-danger delete-uncommitted" data-id="${cashbill.id}">Delete</button>
                                 <button class="btn btn-sm btn-success approve-uncommitted" data-id="${cashbill.id}">Approve</button>
                                 <button class="btn btn-sm btn-danger reject-uncommitted" data-id="${cashbill.id}">Reject</button>
                             </div>
@@ -2554,6 +3008,20 @@
                     btn.addEventListener('click', function() {
                         const cashbillId = this.getAttribute('data-id');
                         viewCashbillDetails(cashbillId);
+                    });
+                });
+                
+                document.querySelectorAll('.edit-uncommitted').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const cashbillId = this.getAttribute('data-id');
+                        editCashbill(cashbillId);
+                    });
+                });
+                
+                document.querySelectorAll('.delete-uncommitted').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const cashbillId = this.getAttribute('data-id');
+                        deleteCashbill(cashbillId);
                     });
                 });
                 
@@ -2580,6 +3048,7 @@
                     
                     if (cashbill) {
                         cashbill.status = 'committed';
+                        cashbill.updatedAt = new Date().toISOString();
                         localStorage.setItem('pne_cashbills', JSON.stringify(cashbills));
                         
                         showToast(`Cashbill ${cashbillId} approved successfully!`, 'success');
@@ -2848,6 +3317,7 @@
             
             // Initialize the application
             loadProductsIntoSelect();
+            loadProductsIntoEditSelect();
         });
     </script>
 </body>
