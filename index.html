@@ -302,6 +302,9 @@
             font-weight: 600;
             margin-bottom: 5px;
         }
+        .admin-action {
+            margin-left: 5px;
+        }
     </style>
 </head>
 <body>
@@ -1990,7 +1993,7 @@
                     return;
                 }
                 
-                // Only allow editing draft cashbills
+                // Only allow editing draft cashbills or if user is admin
                 if (cashbill.status !== 'draft' && currentUser.role !== 'admin') {
                     showToast('Only draft cashbills can be edited', 'warning');
                     return;
@@ -2061,6 +2064,28 @@
                     loadCashbillList();
                     refreshUncommittedList();
                     updateCounters();
+                }
+            }
+            
+            // Uncommit cashbill function (admin only)
+            function uncommitCashbill(cashbillId) {
+                if (confirm(`Are you sure you want to uncommit cashbill ${cashbillId}? This will change its status back to draft.`)) {
+                    let cashbills = JSON.parse(localStorage.getItem('pne_cashbills') || '[]');
+                    const cashbill = cashbills.find(cb => cb.id === cashbillId);
+                    
+                    if (cashbill) {
+                        cashbill.status = 'draft';
+                        cashbill.updatedAt = new Date().toISOString();
+                        localStorage.setItem('pne_cashbills', JSON.stringify(cashbills));
+                        
+                        showToast(`Cashbill ${cashbillId} uncommitted successfully!`, 'success');
+                        
+                        // Refresh data
+                        loadDashboardData();
+                        loadCashbillList();
+                        refreshUncommittedList();
+                        updateCounters();
+                    }
                 }
             }
             
@@ -2480,6 +2505,14 @@
                                 <button class="btn btn-sm btn-warning edit-cashbill" data-id="${cashbill.id}">Edit</button>
                                 <button class="btn btn-sm btn-danger delete-cashbill" data-id="${cashbill.id}">Delete</button>
                             ` : ''}
+                            ${currentUser.role === 'admin' ? `
+                                <button class="btn btn-sm btn-warning admin-action amend-cashbill" data-id="${cashbill.id}" title="Amend/Uncommit">
+                                    <i class="fas fa-undo"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger admin-action delete-cashbill-admin" data-id="${cashbill.id}" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            ` : ''}
                             ${cashbill.status === 'draft' && currentUser.role === 'admin' ? `
                                 <button class="btn btn-sm btn-success approve-cashbill" data-id="${cashbill.id}">Approve</button>
                                 <button class="btn btn-sm btn-danger reject-cashbill" data-id="${cashbill.id}">Reject</button>
@@ -2506,6 +2539,20 @@
                 });
                 
                 document.querySelectorAll('.delete-cashbill').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const cashbillId = this.getAttribute('data-id');
+                        deleteCashbill(cashbillId);
+                    });
+                });
+                
+                document.querySelectorAll('.amend-cashbill').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const cashbillId = this.getAttribute('data-id');
+                        uncommitCashbill(cashbillId);
+                    });
+                });
+                
+                document.querySelectorAll('.delete-cashbill-admin').forEach(btn => {
                     btn.addEventListener('click', function() {
                         const cashbillId = this.getAttribute('data-id');
                         deleteCashbill(cashbillId);
@@ -2678,7 +2725,7 @@
                 clearBtn.addEventListener('click', function() {
                     searchInput.value = '';
                     statusFilter.value = '';
-                    dateFilter.value = '';
+                    dateValue.value = '';
                     applyFilters();
                 });
             }
