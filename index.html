@@ -16,13 +16,11 @@
             --light-color: #ecf0f1;
             --dark-color: #2c3e50;
         }
-
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f8f9fa;
             color: #333;
         }
-
         .login-container {
             max-width: 400px;
             margin: 100px auto;
@@ -31,21 +29,17 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             background-color: white;
         }
-
         .login-header {
             text-align: center;
             margin-bottom: 30px;
         }
-
         .login-header h2 {
             color: var(--primary-color);
             font-weight: 600;
         }
-
         .portal-container {
             display: none;
         }
-
         .sidebar {
             position: fixed;
             top: 0;
@@ -58,11 +52,9 @@
             padding-top: 60px;
             overflow-y: auto;
         }
-
         .sidebar.active {
             left: 0;
         }
-
         .sidebar-header {
             padding: 15px;
             background-color: rgba(0, 0, 0, 0.1);
@@ -70,17 +62,14 @@
             font-weight: 600;
             text-align: center;
         }
-
         .sidebar-menu {
             list-style: none;
             padding: 0;
             margin: 0;
         }
-
         .sidebar-menu li {
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
-
         .sidebar-menu li a {
             display: block;
             padding: 15px;
@@ -88,56 +77,45 @@
             text-decoration: none;
             transition: all 0.3s ease;
         }
-
         .sidebar-menu li a:hover {
             background-color: rgba(255, 255, 255, 0.1);
             color: white;
         }
-
         .sidebar-menu li a.active {
             background-color: var(--secondary-color);
             color: white;
         }
-
         .sidebar-menu li a i {
             margin-right: 10px;
         }
-
         .main-content {
             margin-left: 0;
             transition: all 0.3s ease;
             min-height: 100vh;
         }
-
         .main-content.shifted {
             margin-left: 250px;
         }
-
         .navbar {
             background-color: var(--primary-color);
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-
         .navbar-brand {
             font-weight: 600;
         }
-
         .content-section {
             display: none;
             padding: 20px;
         }
-
         .content-section.active {
             display: block;
         }
-
         .card {
             border-radius: 10px;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
             margin-bottom: 20px;
             border: none;
         }
-
         .card-header {
             background-color: var(--primary-color);
             color: white;
@@ -145,27 +123,22 @@
             border-radius: 10px 10px 0 0 !important;
             padding: 15px;
         }
-
         .btn-primary {
             background-color: var(--secondary-color);
             border-color: var(--secondary-color);
         }
-
         .btn-primary:hover {
             background-color: #2980b9;
             border-color: #2980b9;
         }
-
         .table {
             border-radius: 10px;
             overflow: hidden;
         }
-
         .table thead {
             background-color: var(--primary-color);
             color: white;
         }
-
         .product-item {
             border: 1px solid #ddd;
             border-radius: 8px;
@@ -173,59 +146,52 @@
             margin-bottom: 15px;
             transition: all 0.3s ease;
         }
-
         .product-item:hover {
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
-
         .product-name {
             font-weight: 600;
             margin-bottom: 10px;
             color: var(--primary-color);
         }
-
         .price-tag {
             font-weight: 600;
             color: var(--danger-color);
         }
-
         .member-price {
             color: var(--success-color);
         }
-
         .min-order {
             font-size: 0.85rem;
             color: #6c757d;
         }
-
         .toast-container {
             position: fixed;
             bottom: 20px;
             right: 20px;
             z-index: 1050;
         }
-
         .status-badge {
             font-size: 0.75rem;
             padding: 5px 10px;
             border-radius: 20px;
         }
-
         .status-pending {
             background-color: var(--warning-color);
             color: white;
         }
-
         .status-approved {
             background-color: var(--success-color);
             color: white;
         }
-
         .status-committed {
             background-color: var(--secondary-color);
             color: white;
         }
-
+        .status-draft {
+            background-color: #6c757d;
+            color: white;
+        }
         .overlay {
             position: fixed;
             top: 0;
@@ -236,28 +202,23 @@
             z-index: 999;
             display: none;
         }
-
         .overlay.active {
             display: block;
         }
-
         .user-role {
             font-size: 0.8rem;
             padding: 3px 8px;
             border-radius: 4px;
             margin-left: 10px;
         }
-
         .role-admin {
             background-color: var(--danger-color);
             color: white;
         }
-
         .role-staff {
             background-color: var(--secondary-color);
             color: white;
         }
-
         .cashbill-item {
             display: flex;
             justify-content: space-between;
@@ -265,21 +226,28 @@
             padding: 10px;
             border-bottom: 1px solid #eee;
         }
-
         .cashbill-item:last-child {
             border-bottom: none;
         }
-
         .item-actions {
             display: flex;
             gap: 5px;
         }
-
         .btn-sm {
             padding: 0.25rem 0.5rem;
             font-size: 0.875rem;
             line-height: 1.5;
             border-radius: 0.2rem;
+        }
+        .uncommitted-card {
+            border-left: 4px solid var(--warning-color);
+        }
+        .uncommitted-card .card-header {
+            background-color: var(--warning-color);
+        }
+        .action-buttons {
+            display: flex;
+            gap: 5px;
         }
     </style>
 </head>
@@ -292,7 +260,7 @@
         </div>
         <form id="loginForm">
             <div class="mb-3">
-                <label for="username" class="form-label">Username</label>
+                <label for="username" class="form-label">Staff ID</label>
                 <input type="text" class="form-control" id="username" required>
             </div>
             <div class="mb-3">
@@ -305,16 +273,14 @@
             </div>
             <button type="submit" class="btn btn-primary w-100">Login</button>
             <div class="mt-3 text-center">
-                <small class="text-muted">Demo: admin/admin or staff/staff</small>
+                <small class="text-muted">Demo: Admin (0000/Dd123) or Crew (0001/1234)</small>
             </div>
         </form>
     </div>
-
     <!-- Portal Container -->
     <div id="portalContainer" class="portal-container">
         <!-- Overlay for sidebar -->
         <div id="overlay" class="overlay"></div>
-
         <!-- Sidebar -->
         <div id="sidebar" class="sidebar">
             <div class="sidebar-header">
@@ -325,12 +291,12 @@
                 <li><a href="#" class="menu-link" data-section="cashbill"><i class="fas fa-file-invoice-dollar"></i> Cashbill</a></li>
                 <li><a href="#" class="menu-link" data-section="logbook"><i class="fas fa-book"></i> Courier Logbook</a></li>
                 <li><a href="#" class="menu-link" data-section="products"><i class="fas fa-box"></i> Products</a></li>
-                <li><a href="#" class="menu-link" data-section="staff"><i class="fas fa-users"></i> Staff Management</a></li>
+                <li><a href="#" class="menu-link admin-only" data-section="uncommitted"><i class="fas fa-clipboard-list"></i> Uncommitted Requests</a></li>
+                <li><a href="#" class="menu-link admin-only" data-section="staff"><i class="fas fa-users"></i> Staff Management</a></li>
                 <li><a href="#" class="menu-link" data-section="reports"><i class="fas fa-chart-bar"></i> Reports</a></li>
                 <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             </ul>
         </div>
-
         <!-- Main Content -->
         <div id="mainContent" class="main-content">
             <!-- Navbar -->
@@ -359,7 +325,6 @@
                     </div>
                 </div>
             </nav>
-
             <!-- Dashboard Section -->
             <div id="dashboard" class="content-section active">
                 <div class="container-fluid">
@@ -399,7 +364,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="col-md-8">
                             <div class="card">
@@ -421,33 +385,33 @@
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td>CASH-0001</td>
+                                                    <td>#PA0001</td>
                                                     <td>Ali Ahmad</td>
                                                     <td>2023-06-15</td>
                                                     <td>RM 250.00</td>
                                                     <td><span class="status-badge status-committed">Committed</span></td>
                                                     <td>
-                                                        <button class="btn btn-sm btn-primary">View</button>
+                                                        <button class="btn btn-sm btn-primary view-cashbill" data-id="#PA0001">View</button>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>CASH-0002</td>
+                                                    <td>#PA0002</td>
                                                     <td>Siti Aminah</td>
                                                     <td>2023-06-16</td>
                                                     <td>RM 170.00</td>
                                                     <td><span class="status-badge status-pending">Pending Approval</span></td>
                                                     <td>
-                                                        <button class="btn btn-sm btn-primary">View</button>
+                                                        <button class="btn btn-sm btn-primary view-cashbill" data-id="#PA0002">View</button>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>CASH-0003</td>
+                                                    <td>#PA0003</td>
                                                     <td>Abu Bakar</td>
                                                     <td>2023-06-17</td>
                                                     <td>RM 450.00</td>
                                                     <td><span class="status-badge status-approved">Approved</span></td>
                                                     <td>
-                                                        <button class="btn btn-sm btn-primary">View</button>
+                                                        <button class="btn btn-sm btn-primary view-cashbill" data-id="#PA0003">View</button>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -479,7 +443,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- Cashbill Section -->
             <div id="cashbill" class="content-section">
                 <div class="container-fluid">
@@ -499,7 +462,7 @@
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <label for="cashbillId" class="form-label">Cashbill ID</label>
-                                                <input type="text" class="form-control" id="cashbillId" value="CASH-0004" readonly>
+                                                <input type="text" class="form-control" id="cashbillId" value="#PA0004" readonly>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="cashbillDate" class="form-label">Date</label>
@@ -580,7 +543,7 @@
                                                                 <div>1 x RM 250.00</div>
                                                             </div>
                                                             <div class="item-actions">
-                                                                <button type="button" class="btn btn-sm btn-outline-danger">
+                                                                <button type="button" class="btn btn-sm btn-outline-danger remove-item">
                                                                     <i class="fas fa-trash"></i>
                                                                 </button>
                                                             </div>
@@ -636,7 +599,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- Logbook Section -->
             <div id="logbook" class="content-section">
                 <div class="container-fluid">
@@ -669,9 +631,9 @@
                                                 <label for="cashbillRef" class="form-label">Cashbill Reference</label>
                                                 <select class="form-select" id="cashbillRef" required>
                                                     <option value="">-- Select Cashbill --</option>
-                                                    <option value="CASH-0001">CASH-0001 - Ali Ahmad</option>
-                                                    <option value="CASH-0002">CASH-0002 - Siti Aminah</option>
-                                                    <option value="CASH-0003">CASH-0003 - Abu Bakar</option>
+                                                    <option value="#PA0001">#PA0001 - Ali Ahmad</option>
+                                                    <option value="#PA0002">#PA0002 - Siti Aminah</option>
+                                                    <option value="#PA0003">#PA0003 - Abu Bakar</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
@@ -732,7 +694,73 @@
                     </div>
                 </div>
             </div>
-
+            <!-- Uncommitted Requests Section (Admin Only) -->
+            <div id="uncommitted" class="content-section">
+                <div class="container-fluid">
+                    <h2 class="mb-4">Uncommitted Requests</h2>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    Pending Approval
+                                </div>
+                                <div class="card-body">
+                                    <div id="uncommittedList">
+                                        <div class="card uncommitted-card mb-3">
+                                            <div class="card-header d-flex justify-content-between align-items-center">
+                                                <span>#PA0005 - Ahmad Ibrahim</span>
+                                                <span class="status-badge status-draft">Draft</span>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <p><strong>Date:</strong> 2023-06-18</p>
+                                                        <p><strong>Created by:</strong> Staff 0001</p>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <p><strong>Total Amount:</strong> RM 370.00</p>
+                                                        <p><strong>Items:</strong> Adult Jubah (1x), Year 6 Jubah (1x)</p>
+                                                    </div>
+                                                </div>
+                                                <div class="action-buttons mt-3">
+                                                    <button class="btn btn-sm btn-primary view-uncommitted" data-id="#PA0005">View Details</button>
+                                                    <button class="btn btn-sm btn-success approve-uncommitted" data-id="#PA0005">Approve</button>
+                                                    <button class="btn btn-sm btn-danger reject-uncommitted" data-id="#PA0005">Reject</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="card uncommitted-card mb-3">
+                                            <div class="card-header d-flex justify-content-between align-items-center">
+                                                <span>#PA0006 - Siti Khadijah</span>
+                                                <span class="status-badge status-draft">Draft</span>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <p><strong>Date:</strong> 2023-06-18</p>
+                                                        <p><strong>Created by:</strong> Staff 0001</p>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <p><strong>Total Amount:</strong> RM 85.70</p>
+                                                        <p><strong>Items:</strong> Plaque Arkalic (2x), Cute Keychain (3x)</p>
+                                                    </div>
+                                                </div>
+                                                <div class="action-buttons mt-3">
+                                                    <button class="btn btn-sm btn-primary view-uncommitted" data-id="#PA0006">View Details</button>
+                                                    <button class="btn btn-sm btn-success approve-uncommitted" data-id="#PA0006">Approve</button>
+                                                    <button class="btn btn-sm btn-danger reject-uncommitted" data-id="#PA0006">Reject</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- Products Section -->
             <div id="products" class="content-section">
                 <div class="container-fluid">
@@ -743,7 +771,7 @@
                             <div class="card">
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                     <span>Product Catalog</span>
-                                    <button class="btn btn-sm btn-primary" id="addProductBtn">
+                                    <button class="btn btn-sm btn-primary admin-only" id="addProductBtn">
                                         <i class="fas fa-plus me-1"></i> Add Product
                                     </button>
                                 </div>
@@ -756,8 +784,8 @@
                                                 <div class="member-price">Member Price: RM 220 per set</div>
                                                 <div>Free: Cap included</div>
                                                 <div class="mt-2">
-                                                    <button class="btn btn-sm btn-outline-primary me-1">Edit</button>
-                                                    <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                                    <button class="btn btn-sm btn-outline-primary me-1 admin-only edit-product">Edit</button>
+                                                    <button class="btn btn-sm btn-outline-danger admin-only delete-product">Delete</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -769,8 +797,8 @@
                                                 <div>Free: Cap included</div>
                                                 <div class="min-order">Minimum Order: 10 sets</div>
                                                 <div class="mt-2">
-                                                    <button class="btn btn-sm btn-outline-primary me-1">Edit</button>
-                                                    <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                                    <button class="btn btn-sm btn-outline-primary me-1 admin-only edit-product">Edit</button>
+                                                    <button class="btn btn-sm btn-outline-danger admin-only delete-product">Delete</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -782,8 +810,8 @@
                                                 <div>Free: Cap included</div>
                                                 <div class="min-order">Minimum Order: 10 sets</div>
                                                 <div class="mt-2">
-                                                    <button class="btn btn-sm btn-outline-primary me-1">Edit</button>
-                                                    <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                                    <button class="btn btn-sm btn-outline-primary me-1 admin-only edit-product">Edit</button>
+                                                    <button class="btn btn-sm btn-outline-danger admin-only delete-product">Delete</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -795,8 +823,8 @@
                                                 <div>Includes: Name printing</div>
                                                 <div>Size: 145mm x 100mm</div>
                                                 <div class="mt-2">
-                                                    <button class="btn btn-sm btn-outline-primary me-1">Edit</button>
-                                                    <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                                    <button class="btn btn-sm btn-outline-primary me-1 admin-only edit-product">Edit</button>
+                                                    <button class="btn btn-sm btn-outline-danger admin-only delete-product">Delete</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -808,8 +836,8 @@
                                                 <div>Material: Arkalic</div>
                                                 <div class="min-order">Minimum Order: 10 pcs</div>
                                                 <div class="mt-2">
-                                                    <button class="btn btn-sm btn-outline-primary me-1">Edit</button>
-                                                    <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                                    <button class="btn btn-sm btn-outline-primary me-1 admin-only edit-product">Edit</button>
+                                                    <button class="btn btn-sm btn-outline-danger admin-only delete-product">Delete</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -822,8 +850,8 @@
                                                 <div>Size: 9cm x 3cm</div>
                                                 <div class="min-order">Minimum Order: 10 pcs</div>
                                                 <div class="mt-2">
-                                                    <button class="btn btn-sm btn-outline-primary me-1">Edit</button>
-                                                    <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                                    <button class="btn btn-sm btn-outline-primary me-1 admin-only edit-product">Edit</button>
+                                                    <button class="btn btn-sm btn-outline-danger admin-only delete-product">Delete</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -837,8 +865,8 @@
                                                 <div>Size: 4.4cm x 5.5cm</div>
                                                 <div class="min-order">Minimum Order: 10 pcs</div>
                                                 <div class="mt-2">
-                                                    <button class="btn btn-sm btn-outline-primary me-1">Edit</button>
-                                                    <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                                    <button class="btn btn-sm btn-outline-primary me-1 admin-only edit-product">Edit</button>
+                                                    <button class="btn btn-sm btn-outline-danger admin-only delete-product">Delete</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -851,8 +879,8 @@
                                                 <div>Free: School name & logo printing</div>
                                                 <div class="min-order">Minimum Order: 20 pieces</div>
                                                 <div class="mt-2">
-                                                    <button class="btn btn-sm btn-outline-primary me-1">Edit</button>
-                                                    <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                                    <button class="btn btn-sm btn-outline-primary me-1 admin-only edit-product">Edit</button>
+                                                    <button class="btn btn-sm btn-outline-danger admin-only delete-product">Delete</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -864,8 +892,8 @@
                                                 <div>Material: Microfiber + Tracksuit</div>
                                                 <div class="min-order">Minimum Order: 20 sets</div>
                                                 <div class="mt-2">
-                                                    <button class="btn btn-sm btn-outline-primary me-1">Edit</button>
-                                                    <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                                    <button class="btn btn-sm btn-outline-primary me-1 admin-only edit-product">Edit</button>
+                                                    <button class="btn btn-sm btn-outline-danger admin-only delete-product">Delete</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -876,7 +904,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- Staff Management Section -->
             <div id="staff" class="content-section">
                 <div class="container-fluid">
@@ -887,7 +914,7 @@
                             <div class="card">
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                     <span>Staff List</span>
-                                    <button class="btn btn-sm btn-primary" id="addStaffBtn">
+                                    <button class="btn btn-sm btn-primary admin-only" id="addStaffBtn">
                                         <i class="fas fa-user-plus me-1"></i> Add New Staff
                                     </button>
                                 </div>
@@ -908,34 +935,34 @@
                                                 <tr>
                                                     <td>0000</td>
                                                     <td>Admin User</td>
-                                                    <td>admin</td>
+                                                    <td>0000</td>
                                                     <td><span class="user-role role-admin">Admin</span></td>
                                                     <td><span class="badge bg-success">Active</span></td>
                                                     <td>
-                                                        <button class="btn btn-sm btn-outline-primary me-1">Edit</button>
-                                                        <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                                        <button class="btn btn-sm btn-outline-primary me-1 admin-only edit-staff">Edit</button>
+                                                        <button class="btn btn-sm btn-outline-danger admin-only delete-staff">Delete</button>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>0001</td>
-                                                    <td>Staff One</td>
-                                                    <td>staff</td>
-                                                    <td><span class="user-role role-staff">Staff</span></td>
+                                                    <td>Crew One</td>
+                                                    <td>0001</td>
+                                                    <td><span class="user-role role-staff">Crew</span></td>
                                                     <td><span class="badge bg-success">Active</span></td>
                                                     <td>
-                                                        <button class="btn btn-sm btn-outline-primary me-1">Edit</button>
-                                                        <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                                        <button class="btn btn-sm btn-outline-primary me-1 admin-only edit-staff">Edit</button>
+                                                        <button class="btn btn-sm btn-outline-danger admin-only delete-staff">Delete</button>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>0002</td>
-                                                    <td>Staff Two</td>
-                                                    <td>staff2</td>
-                                                    <td><span class="user-role role-staff">Staff</span></td>
+                                                    <td>Crew Two</td>
+                                                    <td>0002</td>
+                                                    <td><span class="user-role role-staff">Crew</span></td>
                                                     <td><span class="badge bg-success">Active</span></td>
                                                     <td>
-                                                        <button class="btn btn-sm btn-outline-primary me-1">Edit</button>
-                                                        <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                                        <button class="btn btn-sm btn-outline-primary me-1 admin-only edit-staff">Edit</button>
+                                                        <button class="btn btn-sm btn-outline-danger admin-only delete-staff">Delete</button>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -947,7 +974,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- Reports Section -->
             <div id="reports" class="content-section">
                 <div class="container-fluid">
@@ -967,7 +993,7 @@
                                                     <i class="fas fa-file-invoice-dollar fa-3x text-primary mb-3"></i>
                                                     <h5>Cashbill Report</h5>
                                                     <p class="text-muted">Generate cashbill reports with filters</p>
-                                                    <button class="btn btn-primary">Generate</button>
+                                                    <button class="btn btn-primary generate-report" data-type="cashbill">Generate</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -977,7 +1003,7 @@
                                                     <i class="fas fa-truck fa-3x text-success mb-3"></i>
                                                     <h5>Delivery Report</h5>
                                                     <p class="text-muted">Generate delivery and logistics reports</p>
-                                                    <button class="btn btn-primary">Generate</button>
+                                                    <button class="btn btn-primary generate-report" data-type="delivery">Generate</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -987,7 +1013,7 @@
                                                     <i class="fas fa-chart-line fa-3x text-warning mb-3"></i>
                                                     <h5>Sales Report</h5>
                                                     <p class="text-muted">Generate sales and revenue reports</p>
-                                                    <button class="btn btn-primary">Generate</button>
+                                                    <button class="btn btn-primary generate-report" data-type="sales">Generate</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -997,7 +1023,7 @@
                                                     <i class="fas fa-box fa-3x text-info mb-3"></i>
                                                     <h5>Inventory Report</h5>
                                                     <p class="text-muted">Generate inventory and stock reports</p>
-                                                    <button class="btn btn-primary">Generate</button>
+                                                    <button class="btn btn-primary generate-report" data-type="inventory">Generate</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -1010,10 +1036,8 @@
             </div>
         </div>
     </div>
-
     <!-- Toast Container -->
     <div class="toast-container"></div>
-
     <!-- Add Product Modal -->
     <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -1086,7 +1110,6 @@
             </div>
         </div>
     </div>
-
     <!-- Add Staff Modal -->
     <div class="modal fade" id="addStaffModal" tabindex="-1" aria-labelledby="addStaffModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -1106,7 +1129,7 @@
                             <input type="text" class="form-control" id="staffLastName" required>
                         </div>
                         <div class="mb-3">
-                            <label for="staffUsername" class="form-label">Username</label>
+                            <label for="staffUsername" class="form-label">Staff ID</label>
                             <input type="text" class="form-control" id="staffUsername" required>
                         </div>
                         <div class="mb-3">
@@ -1116,7 +1139,7 @@
                         <div class="mb-3">
                             <label for="staffRole" class="form-label">Role</label>
                             <select class="form-select" id="staffRole" required>
-                                <option value="staff">Staff</option>
+                                <option value="staff">Crew</option>
                                 <option value="admin">Admin</option>
                             </select>
                         </div>
@@ -1129,7 +1152,26 @@
             </div>
         </div>
     </div>
-
+    <!-- View Cashbill Modal -->
+    <div class="modal fade" id="viewCashbillModal" tabindex="-1" aria-labelledby="viewCashbillModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewCashbillModalLabel">Cashbill Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="cashbillDetails">
+                        <!-- Cashbill details will be populated here -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="printCashbillBtn">Print</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -1142,6 +1184,34 @@
             let currentUser = null;
             let sidebarOpen = false;
             let currentSection = 'dashboard';
+            let cashbillCounter = 4; // Starting from #PA0004
+            let logbookCounter = 1; // Starting from LOG-0001
+            let uncommittedCashbills = [
+                {
+                    id: '#PA0005',
+                    customer: 'Ahmad Ibrahim',
+                    date: '2023-06-18',
+                    createdBy: 'Staff 0001',
+                    totalAmount: 370.00,
+                    items: [
+                        { name: 'Adult Jubah', quantity: 1, price: 250.00 },
+                        { name: 'Year 6 Jubah', quantity: 1, price: 170.00 }
+                    ],
+                    status: 'draft'
+                },
+                {
+                    id: '#PA0006',
+                    customer: 'Siti Khadijah',
+                    date: '2023-06-18',
+                    createdBy: 'Staff 0001',
+                    totalAmount: 85.70,
+                    items: [
+                        { name: 'Plaque Arkalic', quantity: 2, price: 19.90 },
+                        { name: 'Cute Keychain', quantity: 3, price: 5.90 }
+                    ],
+                    status: 'draft'
+                }
+            ];
             
             // DOM elements
             const loginPage = document.getElementById('loginPage');
@@ -1166,22 +1236,22 @@
                 const password = document.getElementById('password').value;
                 
                 // Simple authentication (in a real app, this would be server-side)
-                if (username === 'admin' && password === 'admin') {
+                if (username === '0000' && password === 'Dd123') {
                     currentUser = {
-                        username: 'admin',
+                        username: '0000',
                         name: 'Admin User',
                         role: 'admin'
                     };
                     showPortal();
-                } else if (username === 'staff' && password === 'staff') {
+                } else if (username === '0001' && password === '1234') {
                     currentUser = {
-                        username: 'staff',
-                        name: 'Staff One',
+                        username: '0001',
+                        name: 'Crew One',
                         role: 'staff'
                     };
                     showPortal();
                 } else {
-                    showToast('Invalid username or password', 'danger');
+                    showToast('Invalid Staff ID or password', 'danger');
                 }
             });
             
@@ -1192,7 +1262,7 @@
                 
                 // Set user info
                 userName.textContent = currentUser.name;
-                userRole.textContent = currentUser.role === 'admin' ? 'Admin' : 'Staff';
+                userRole.textContent = currentUser.role === 'admin' ? 'Admin' : 'Crew';
                 userRole.className = `user-role ${currentUser.role === 'admin' ? 'role-admin' : 'role-staff'}`;
                 
                 // Show success message
@@ -1200,11 +1270,10 @@
                 
                 // Check if user is admin to show/hide certain features
                 if (currentUser.role === 'staff') {
-                    // Hide staff management for regular staff
-                    const staffMenuLink = document.querySelector('[data-section="staff"]');
-                    if (staffMenuLink) {
-                        staffMenuLink.style.display = 'none';
-                    }
+                    // Hide admin-only features for regular staff
+                    document.querySelectorAll('.admin-only').forEach(el => {
+                        el.style.display = 'none';
+                    });
                 }
             }
             
@@ -1275,15 +1344,26 @@
                 });
                 
                 currentSection = sectionName;
+                
+                // Refresh uncommitted list if navigating to that section
+                if (sectionName === 'uncommitted') {
+                    refreshUncommittedList();
+                }
             }
             
             // Quick action buttons
             document.getElementById('newCashbillBtn').addEventListener('click', function() {
                 showSection('cashbill');
+                // Generate new cashbill ID
+                cashbillCounter++;
+                document.getElementById('cashbillId').value = `#PA${String(cashbillCounter).padStart(4, '0')}`;
             });
             
             document.getElementById('newLogbookBtn').addEventListener('click', function() {
                 showSection('logbook');
+                // Generate new logbook ID
+                logbookCounter++;
+                document.getElementById('logbookId').value = `LOG-${String(logbookCounter).padStart(4, '0')}`;
             });
             
             // Cashbill form handling
@@ -1346,14 +1426,14 @@
                         <div>${quantity} x RM ${price.toFixed(2)}</div>
                     </div>
                     <div class="item-actions">
-                        <button type="button" class="btn btn-sm btn-outline-danger remove-item-btn">
+                        <button type="button" class="btn btn-sm btn-outline-danger remove-item">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
                 `;
                 
                 // Add remove functionality
-                itemElement.querySelector('.remove-item-btn').addEventListener('click', function() {
+                itemElement.querySelector('.remove-item').addEventListener('click', function() {
                     itemElement.remove();
                     updateTotalAmount();
                 });
@@ -1399,7 +1479,8 @@
                 }
                 
                 // In a real app, this would send data to the server
-                showToast('Cashbill committed successfully!', 'success');
+                const cashbillId = document.getElementById('cashbillId').value;
+                showToast(`Cashbill ${cashbillId} committed successfully!`, 'success');
                 
                 // Reset form after a delay
                 setTimeout(() => {
@@ -1407,6 +1488,10 @@
                     orderItemsContainer.innerHTML = '';
                     totalAmountSpan.textContent = '0.00';
                     document.getElementById('cashbillDate').value = today;
+                    
+                    // Generate new cashbill ID
+                    cashbillCounter++;
+                    document.getElementById('cashbillId').value = `#PA${String(cashbillCounter).padStart(4, '0')}`;
                 }, 1500);
             });
             
@@ -1417,7 +1502,72 @@
                     orderItemsContainer.innerHTML = '';
                     totalAmountSpan.textContent = '0.00';
                     document.getElementById('cashbillDate').value = today;
+                    
+                    // Generate new cashbill ID
+                    cashbillCounter++;
+                    document.getElementById('cashbillId').value = `#PA${String(cashbillCounter).padStart(4, '0')}`;
                 }
+            });
+            
+            // Save draft button
+            document.getElementById('saveDraftBtn').addEventListener('click', function() {
+                // Check if there are items in the order
+                if (orderItemsContainer.children.length === 0) {
+                    showToast('Please add at least one item to the order', 'warning');
+                    return;
+                }
+                
+                // Get form data
+                const cashbillId = document.getElementById('cashbillId').value;
+                const customerFirstName = document.getElementById('customerFirstName').value;
+                const customerLastName = document.getElementById('customerLastName').value;
+                const customerName = `${customerFirstName} ${customerLastName}`;
+                const cashbillDate = document.getElementById('cashbillDate').value;
+                
+                // Get order items
+                const items = [];
+                orderItemsContainer.querySelectorAll('.cashbill-item').forEach(item => {
+                    const name = item.querySelector('.fw-bold').textContent;
+                    const text = item.querySelector('div div:last-child').textContent;
+                    const match = text.match(/(\d+) x RM ([\d.]+)/);
+                    
+                    if (match) {
+                        const quantity = parseInt(match[1]);
+                        const price = parseFloat(match[2]);
+                        items.push({ name, quantity, price });
+                    }
+                });
+                
+                // Calculate total
+                const totalAmount = parseFloat(totalAmountSpan.textContent);
+                
+                // Create uncommitted cashbill object
+                const uncommittedCashbill = {
+                    id: cashbillId,
+                    customer: customerName,
+                    date: cashbillDate,
+                    createdBy: `Staff ${currentUser.username}`,
+                    totalAmount: totalAmount,
+                    items: items,
+                    status: 'draft'
+                };
+                
+                // Add to uncommitted list
+                uncommittedCashbills.push(uncommittedCashbill);
+                
+                showToast(`Cashbill ${cashbillId} saved as draft!`, 'info');
+                
+                // Reset form after a delay
+                setTimeout(() => {
+                    cashbillForm.reset();
+                    orderItemsContainer.innerHTML = '';
+                    totalAmountSpan.textContent = '0.00';
+                    document.getElementById('cashbillDate').value = today;
+                    
+                    // Generate new cashbill ID
+                    cashbillCounter++;
+                    document.getElementById('cashbillId').value = `#PA${String(cashbillCounter).padStart(4, '0')}`;
+                }, 1500);
             });
             
             // Logbook form handling
@@ -1427,12 +1577,17 @@
                 e.preventDefault();
                 
                 // In a real app, this would send data to the server
-                showToast('Logbook entry saved successfully!', 'success');
+                const logbookId = document.getElementById('logbookId').value;
+                showToast(`Logbook ${logbookId} saved successfully!`, 'success');
                 
                 // Reset form after a delay
                 setTimeout(() => {
                     logbookForm.reset();
                     document.getElementById('logbookDate').value = today;
+                    
+                    // Generate new logbook ID
+                    logbookCounter++;
+                    document.getElementById('logbookId').value = `LOG-${String(logbookCounter).padStart(4, '0')}`;
                 }, 1500);
             });
             
@@ -1441,7 +1596,17 @@
                 if (confirm('Are you sure you want to reset the form? All data will be lost.')) {
                     logbookForm.reset();
                     document.getElementById('logbookDate').value = today;
+                    
+                    // Generate new logbook ID
+                    logbookCounter++;
+                    document.getElementById('logbookId').value = `LOG-${String(logbookCounter).padStart(4, '0')}`;
                 }
+            });
+            
+            // Save logbook draft
+            document.getElementById('saveLogbookDraftBtn').addEventListener('click', function() {
+                const logbookId = document.getElementById('logbookId').value;
+                showToast(`Logbook ${logbookId} saved as draft!`, 'info');
             });
             
             // Product management
@@ -1459,10 +1624,38 @@
             });
             
             saveProductBtn.addEventListener('click', function() {
+                // Get form data
+                const productName = document.getElementById('productName').value;
+                
                 // In a real app, this would send data to the server
-                showToast('Product added successfully!', 'success');
+                showToast(`Product "${productName}" added successfully!`, 'success');
                 addProductModal.hide();
                 document.getElementById('addProductForm').reset();
+            });
+            
+            // Edit product buttons
+            document.querySelectorAll('.edit-product').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (currentUser && currentUser.role === 'admin') {
+                        showToast('Edit product functionality would open here', 'info');
+                    } else {
+                        showToast('You do not have permission to edit products', 'danger');
+                    }
+                });
+            });
+            
+            // Delete product buttons
+            document.querySelectorAll('.delete-product').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (currentUser && currentUser.role === 'admin') {
+                        if (confirm('Are you sure you want to delete this product?')) {
+                            showToast('Product deleted successfully', 'success');
+                            // In a real app, this would remove the product from the database
+                        }
+                    } else {
+                        showToast('You do not have permission to delete products', 'danger');
+                    }
+                });
             });
             
             // Staff management
@@ -1480,10 +1673,259 @@
             });
             
             saveStaffBtn.addEventListener('click', function() {
+                // Get form data
+                const staffFirstName = document.getElementById('staffFirstName').value;
+                const staffLastName = document.getElementById('staffLastName').value;
+                const staffName = `${staffFirstName} ${staffLastName}`;
+                
                 // In a real app, this would send data to the server
-                showToast('Staff added successfully!', 'success');
+                showToast(`Staff "${staffName}" added successfully!`, 'success');
                 addStaffModal.hide();
                 document.getElementById('addStaffForm').reset();
+            });
+            
+            // Edit staff buttons
+            document.querySelectorAll('.edit-staff').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (currentUser && currentUser.role === 'admin') {
+                        showToast('Edit staff functionality would open here', 'info');
+                    } else {
+                        showToast('You do not have permission to edit staff', 'danger');
+                    }
+                });
+            });
+            
+            // Delete staff buttons
+            document.querySelectorAll('.delete-staff').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (currentUser && currentUser.role === 'admin') {
+                        if (confirm('Are you sure you want to delete this staff member?')) {
+                            showToast('Staff member deleted successfully', 'success');
+                            // In a real app, this would remove the staff from the database
+                        }
+                    } else {
+                        showToast('You do not have permission to delete staff', 'danger');
+                    }
+                });
+            });
+            
+            // View cashbill buttons
+            document.querySelectorAll('.view-cashbill').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const cashbillId = this.getAttribute('data-id');
+                    viewCashbillDetails(cashbillId);
+                });
+            });
+            
+            // View cashbill details function
+            function viewCashbillDetails(cashbillId) {
+                // In a real app, this would fetch data from the server
+                // For demo purposes, we'll use mock data
+                
+                let cashbillData;
+                
+                // Check if it's one of our mock uncommitted cashbills
+                const uncommitted = uncommittedCashbills.find(cb => cb.id === cashbillId);
+                if (uncommitted) {
+                    cashbillData = uncommitted;
+                } else {
+                    // Use mock data for committed cashbills
+                    cashbillData = {
+                        id: cashbillId,
+                        customer: 'Mock Customer',
+                        date: '2023-06-15',
+                        createdBy: 'Staff 0001',
+                        totalAmount: 250.00,
+                        items: [
+                            { name: 'Adult Jubah', quantity: 1, price: 250.00 }
+                        ],
+                        status: 'committed'
+                    };
+                }
+                
+                // Populate modal with cashbill details
+                const cashbillDetails = document.getElementById('cashbillDetails');
+                cashbillDetails.innerHTML = `
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Cashbill ID:</strong> ${cashbillData.id}</p>
+                            <p><strong>Customer:</strong> ${cashbillData.customer}</p>
+                            <p><strong>Date:</strong> ${cashbillData.date}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Status:</strong> <span class="status-badge status-${cashbillData.status}">${cashbillData.status.charAt(0).toUpperCase() + cashbillData.status.slice(1)}</span></p>
+                            <p><strong>Created By:</strong> ${cashbillData.createdBy}</p>
+                            <p><strong>Total Amount:</strong> RM ${cashbillData.totalAmount.toFixed(2)}</p>
+                        </div>
+                    </div>
+                    
+                    <h5 class="mt-4 mb-3">Order Items</h5>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${cashbillData.items.map(item => `
+                                    <tr>
+                                        <td>${item.name}</td>
+                                        <td>${item.quantity}</td>
+                                        <td>RM ${item.price.toFixed(2)}</td>
+                                        <td>RM ${(item.quantity * item.price).toFixed(2)}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                                    <td><strong>RM ${cashbillData.totalAmount.toFixed(2)}</strong></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                `;
+                
+                // Show modal
+                const viewCashbillModal = new bootstrap.Modal(document.getElementById('viewCashbillModal'));
+                viewCashbillModal.show();
+            }
+            
+            // Print cashbill button
+            document.getElementById('printCashbillBtn').addEventListener('click', function() {
+                showToast('Print functionality would be implemented here', 'info');
+                // In a real app, this would open a print dialog or generate a PDF
+            });
+            
+            // Uncommitted requests functionality
+            function refreshUncommittedList() {
+                const uncommittedList = document.getElementById('uncommittedList');
+                
+                // Clear existing list
+                uncommittedList.innerHTML = '';
+                
+                // Add each uncommitted cashbill to the list
+                uncommittedCashbills.forEach(cashbill => {
+                    const itemsText = cashbill.items.map(item => 
+                        `${item.name} (${item.quantity}x)`
+                    ).join(', ');
+                    
+                    const cardElement = document.createElement('div');
+                    cardElement.className = 'card uncommitted-card mb-3';
+                    cardElement.innerHTML = `
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span>${cashbill.id} - ${cashbill.customer}</span>
+                            <span class="status-badge status-draft">Draft</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Date:</strong> ${cashbill.date}</p>
+                                    <p><strong>Created by:</strong> ${cashbill.createdBy}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Total Amount:</strong> RM ${cashbill.totalAmount.toFixed(2)}</p>
+                                    <p><strong>Items:</strong> ${itemsText}</p>
+                                </div>
+                            </div>
+                            <div class="action-buttons mt-3">
+                                <button class="btn btn-sm btn-primary view-uncommitted" data-id="${cashbill.id}">View Details</button>
+                                <button class="btn btn-sm btn-success approve-uncommitted" data-id="${cashbill.id}">Approve</button>
+                                <button class="btn btn-sm btn-danger reject-uncommitted" data-id="${cashbill.id}">Reject</button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    uncommittedList.appendChild(cardElement);
+                });
+                
+                // Add event listeners to the buttons
+                document.querySelectorAll('.view-uncommitted').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const cashbillId = this.getAttribute('data-id');
+                        viewCashbillDetails(cashbillId);
+                    });
+                });
+                
+                document.querySelectorAll('.approve-uncommitted').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const cashbillId = this.getAttribute('data-id');
+                        approveUncommittedCashbill(cashbillId);
+                    });
+                });
+                
+                document.querySelectorAll('.reject-uncommitted').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const cashbillId = this.getAttribute('data-id');
+                        rejectUncommittedCashbill(cashbillId);
+                    });
+                });
+            }
+            
+            // Approve uncommitted cashbill
+            function approveUncommittedCashbill(cashbillId) {
+                if (confirm(`Are you sure you want to approve cashbill ${cashbillId}?`)) {
+                    // Find and remove the cashbill from uncommitted list
+                    const index = uncommittedCashbills.findIndex(cb => cb.id === cashbillId);
+                    if (index !== -1) {
+                        uncommittedCashbills.splice(index, 1);
+                        showToast(`Cashbill ${cashbillId} approved successfully!`, 'success');
+                        refreshUncommittedList();
+                        
+                        // Update dashboard stats
+                        const pendingCount = document.getElementById('pendingCashbills');
+                        pendingCount.textContent = parseInt(pendingCount.textContent) - 1;
+                        
+                        const completedCount = document.getElementById('completedCashbills');
+                        completedCount.textContent = parseInt(completedCount.textContent) + 1;
+                    }
+                }
+            }
+            
+            // Reject uncommitted cashbill
+            function rejectUncommittedCashbill(cashbillId) {
+                if (confirm(`Are you sure you want to reject cashbill ${cashbillId}?`)) {
+                    // Find and remove the cashbill from uncommitted list
+                    const index = uncommittedCashbills.findIndex(cb => cb.id === cashbillId);
+                    if (index !== -1) {
+                        uncommittedCashbills.splice(index, 1);
+                        showToast(`Cashbill ${cashbillId} rejected!`, 'warning');
+                        refreshUncommittedList();
+                        
+                        // Update dashboard stats
+                        const pendingCount = document.getElementById('pendingCashbills');
+                        pendingCount.textContent = parseInt(pendingCount.textContent) - 1;
+                    }
+                }
+            }
+            
+            // Generate report buttons
+            document.querySelectorAll('.generate-report').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const reportType = this.getAttribute('data-type');
+                    showToast(`Generating ${reportType} report...`, 'info');
+                    
+                    // In a real app, this would generate and download a report
+                    setTimeout(() => {
+                        showToast(`${reportType.charAt(0).toUpperCase() + reportType.slice(1)} report generated successfully!`, 'success');
+                    }, 1500);
+                });
+            });
+            
+            // View all cashbills
+            document.getElementById('viewCashbillListBtn').addEventListener('click', function() {
+                showToast('Redirecting to cashbill list...', 'info');
+                // In a real app, this would navigate to a list view
+            });
+            
+            // View all logbooks
+            document.getElementById('viewLogbookListBtn').addEventListener('click', function() {
+                showToast('Redirecting to logbook list...', 'info');
+                // In a real app, this would navigate to a list view
             });
             
             // Toast notification function
@@ -1519,27 +1961,6 @@
                     toast.remove();
                 });
             }
-            
-            // View all cashbills
-            document.getElementById('viewCashbillListBtn').addEventListener('click', function() {
-                showToast('Redirecting to cashbill list...', 'info');
-                // In a real app, this would navigate to a list view
-            });
-            
-            // View all logbooks
-            document.getElementById('viewLogbookListBtn').addEventListener('click', function() {
-                showToast('Redirecting to logbook list...', 'info');
-                // In a real app, this would navigate to a list view
-            });
-            
-            // Save draft buttons
-            document.getElementById('saveDraftBtn').addEventListener('click', function() {
-                showToast('Cashbill saved as draft!', 'info');
-            });
-            
-            document.getElementById('saveLogbookDraftBtn').addEventListener('click', function() {
-                showToast('Logbook saved as draft!', 'info');
-            });
             
             // Initialize tooltips if needed
             const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
