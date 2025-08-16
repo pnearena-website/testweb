@@ -867,6 +867,166 @@
                 margin-bottom: 5px;
             }
         }
+        
+        /* Enhanced Cashbill Table Styles */
+        .cashbill-actions {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .action-btn {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+        }
+        
+        .action-btn.view {
+            background-color: var(--info-color);
+            color: white;
+        }
+        
+        .action-btn.edit {
+            background-color: var(--warning-color);
+            color: white;
+        }
+        
+        .action-btn.delete {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .action-btn.commit {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .action-btn.uncommit {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .action-btn.remark {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        .remark-badge {
+            background-color: #e3f2fd;
+            color: var(--primary-color);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin-left: 5px;
+        }
+        
+        .remark-tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .remark-tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--dark-color);
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.75rem;
+        }
+        
+        .remark-tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* Empty State Styles */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            color: #ccc;
+            margin-bottom: 15px;
+        }
+        
+        .empty-state h4 {
+            color: #555;
+            margin-bottom: 10px;
+        }
+        
+        .empty-state p {
+            margin-bottom: 20px;
+        }
+        
+        /* Status Timeline */
+        .status-timeline {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 10px;
+            position: relative;
+        }
+        
+        .status-timeline::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            height: 2px;
+            background-color: #e0e0e0;
+            z-index: 1;
+        }
+        
+        .timeline-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .timeline-step .step-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 5px;
+        }
+        
+        .timeline-step.completed .step-icon {
+            background-color: var(--success-color);
+        }
+        
+        .timeline-step.active .step-icon {
+            background-color: var(--info-color);
+        }
+        
+        .timeline-step .step-label {
+            font-size: 0.75rem;
+            text-align: center;
+            max-width: 80px;
+        }
     </style>
 </head>
 <body>
@@ -874,7 +1034,6 @@
     <div id="loadingSpinner" class="spinner-container" style="display: none;">
         <div class="spinner"></div>
     </div>
-
     <!-- Login Page -->
     <div id="loginPage" class="login-container">
         <div class="login-header">
@@ -902,7 +1061,6 @@
             <small class="text-muted">© 2023 PNE PORTAL PRO. All rights reserved.</small>
         </div>
     </div>
-
     <!-- Portal Container -->
     <div id="portalContainer" class="portal-container">
         <!-- Overlay for sidebar -->
@@ -1421,12 +1579,21 @@
                                             <th>Amount</th>
                                             <th>Status</th>
                                             <th>Created By</th>
-                                            <th>Action</th>
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td colspan="7" class="text-center">No cashbills found</td>
+                                            <td colspan="7" class="text-center">
+                                                <div class="empty-state">
+                                                    <i class="fas fa-file-invoice-dollar"></i>
+                                                    <h4>No Cashbills Found</h4>
+                                                    <p>Start by creating your first cashbill</p>
+                                                    <button class="btn btn-primary" id="createFirstCashbillBtn">
+                                                        <i class="fas fa-plus me-2"></i> Create Cashbill
+                                                    </button>
+                                                </div>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -1650,9 +1817,10 @@
                     <div class="card">
                         <div class="card-body">
                             <div id="uncommittedList">
-                                <div class="text-center py-5">
-                                    <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
-                                    <p class="text-muted">No uncommitted requests found</p>
+                                <div class="empty-state">
+                                    <i class="fas fa-clipboard-list"></i>
+                                    <h4>No Uncommitted Requests</h4>
+                                    <p>All cashbills have been committed</p>
                                 </div>
                             </div>
                         </div>
@@ -2317,6 +2485,31 @@
         </div>
     </div>
     
+    <!-- Remark Modal -->
+    <div class="modal fade" id="remarkModal" tabindex="-1" aria-labelledby="remarkModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="remarkModalLabel">Add Remark</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="remarkForm">
+                        <input type="hidden" id="remarkCashbillId">
+                        <div class="mb-3">
+                            <label for="remarkText" class="form-label">Remark</label>
+                            <textarea class="form-control" id="remarkText" rows="3" required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveRemarkBtn">Save Remark</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- Print Cashbill Template (Hidden) -->
     <div id="printCashbillTemplate" class="print-only" style="display: none;">
         <div class="print-header">
@@ -2648,6 +2841,12 @@
             document.getElementById('newLogbookFromListBtn').addEventListener('click', function() {
                 showSection('logbook');
                 generateNewLogbookId();
+            });
+            
+            // Create first cashbill button
+            document.getElementById('createFirstCashbillBtn')?.addEventListener('click', function() {
+                showSection('cashbill');
+                generateNewCashbillId();
             });
             
             // Dashboard date range buttons
@@ -3148,6 +3347,7 @@
                     },
                     notes: notes,
                     status: 'committed',
+                    remark: '',
                     createdBy: currentUser.username,
                     createdAt: new Date().toISOString()
                 };
@@ -3267,6 +3467,7 @@
                     },
                     notes: notes,
                     status: 'draft',
+                    remark: '',
                     createdBy: currentUser.username,
                     createdAt: new Date().toISOString()
                 };
@@ -3773,6 +3974,58 @@
                 }
             }
             
+            // Add remark to cashbill function
+            function addRemark(cashbillId) {
+                const cashbills = JSON.parse(localStorage.getItem('pne_cashbills') || '[]');
+                const cashbill = cashbills.find(cb => cb.id === cashbillId);
+                
+                if (!cashbill) {
+                    showToast('Cashbill not found', 'danger');
+                    return;
+                }
+                
+                // Set cashbill ID in modal
+                document.getElementById('remarkCashbillId').value = cashbillId;
+                
+                // Set current remark if exists
+                document.getElementById('remarkText').value = cashbill.remark || '';
+                
+                // Show modal
+                const remarkModal = new bootstrap.Modal(document.getElementById('remarkModal'));
+                remarkModal.show();
+            }
+            
+            // Save remark button
+            document.getElementById('saveRemarkBtn').addEventListener('click', function() {
+                const cashbillId = document.getElementById('remarkCashbillId').value;
+                const remarkText = document.getElementById('remarkText').value;
+                
+                let cashbills = JSON.parse(localStorage.getItem('pne_cashbills') || '[]');
+                const cashbillIndex = cashbills.findIndex(cb => cb.id === cashbillId);
+                
+                if (cashbillIndex === -1) {
+                    showToast('Cashbill not found', 'danger');
+                    return;
+                }
+                
+                // Update remark
+                cashbills[cashbillIndex].remark = remarkText;
+                cashbills[cashbillIndex].updatedAt = new Date().toISOString();
+                localStorage.setItem('pne_cashbills', JSON.stringify(cashbills));
+                
+                // Log activity
+                logActivity('update', `Added remark to cashbill ${cashbillId}`);
+                
+                showToast('Remark saved successfully!', 'success');
+                
+                // Close modal
+                const remarkModal = bootstrap.Modal.getInstance(document.getElementById('remarkModal'));
+                remarkModal.hide();
+                
+                // Refresh data
+                loadCashbillList();
+            });
+            
             // Logbook form handling
             const logbookForm = document.getElementById('logbookForm');
             
@@ -3919,16 +4172,15 @@
                     { status: 'Delivered', time: 'Today, 4:00 PM', completed: false }
                 ];
                 
-                let html = '<h6 class="mb-3">Delivery Timeline</h6><div class="timeline">';
+                let html = '<h6 class="mb-3">Delivery Timeline</h6><div class="status-timeline">';
                 
                 timeline.forEach((item, index) => {
                     html += `
-                        <div class="timeline-item ${item.completed ? 'completed' : ''}">
-                            <div class="timeline-marker ${item.completed ? 'bg-success' : 'bg-secondary'}"></div>
-                            <div class="timeline-content">
-                                <div class="fw-bold">${item.status}</div>
-                                <div class="text-muted small">${item.time}</div>
+                        <div class="timeline-step ${item.completed ? 'completed' : ''}">
+                            <div class="step-icon">
+                                ${item.completed ? '<i class="fas fa-check"></i>' : (index === 2 ? '<i class="fas fa-truck"></i>' : '<i class="fas fa-clock"></i>')}
                             </div>
+                            <div class="step-label">${item.status}</div>
                         </div>
                     `;
                 });
@@ -4452,7 +4704,27 @@
                 allCashbillsTable.innerHTML = '';
                 
                 if (cashbills.length === 0) {
-                    allCashbillsTable.innerHTML = '<tr><td colspan="7" class="text-center">No cashbills found</td></tr>';
+                    allCashbillsTable.innerHTML = `
+                        <tr>
+                            <td colspan="7" class="text-center">
+                                <div class="empty-state">
+                                    <i class="fas fa-file-invoice-dollar fa-3x text-muted mb-3"></i>
+                                    <h4>No Cashbills Found</h4>
+                                    <p>Start by creating your first cashbill</p>
+                                    <button class="btn btn-primary" id="createFirstCashbillBtn">
+                                        <i class="fas fa-plus me-2"></i> Create Cashbill
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                    
+                    // Add event listener to create first cashbill button
+                    document.getElementById('createFirstCashbillBtn')?.addEventListener('click', function() {
+                        showSection('cashbill');
+                        generateNewCashbillId();
+                    });
+                    
                     return;
                 }
                 
@@ -4461,42 +4733,53 @@
                     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
                 
                 sortedCashbills.forEach(cashbill => {
+                    const remarkBadge = cashbill.remark ? 
+                        `<span class="remark-badge remark-tooltip">
+                            <i class="fas fa-comment"></i>
+                            <span class="tooltiptext">${cashbill.remark}</span>
+                        </span>` : '';
+                    
                     const row = document.createElement('tr');
                     row.innerHTML = `
                         <td>${cashbill.id}</td>
                         <td>${cashbill.customer.name}</td>
                         <td>${cashbill.date}</td>
                         <td>RM ${cashbill.totalAmount.toFixed(2)}</td>
-                        <td><span class="status-badge status-${cashbill.status}">${cashbill.status.charAt(0).toUpperCase() + cashbill.status.slice(1)}</span></td>
+                        <td>
+                            <span class="status-badge status-${cashbill.status}">${cashbill.status.charAt(0).toUpperCase() + cashbill.status.slice(1)}</span>
+                            ${remarkBadge}
+                        </td>
                         <td>${cashbill.createdBy}</td>
                         <td>
-                            <button class="btn btn-sm btn-primary view-cashbill" data-id="${cashbill.id}">
-                                <i class="fas fa-eye me-1"></i> View
-                            </button>
-                            ${cashbill.status === 'draft' ? `
-                                <button class="btn btn-sm btn-warning edit-cashbill" data-id="${cashbill.id}">
-                                    <i class="fas fa-edit me-1"></i> Edit
+                            <div class="cashbill-actions">
+                                <button class="btn btn-sm action-btn view" data-id="${cashbill.id}" title="View">
+                                    <i class="fas fa-eye"></i>
                                 </button>
-                                <button class="btn btn-sm btn-danger delete-cashbill" data-id="${cashbill.id}">
-                                    <i class="fas fa-trash me-1"></i> Delete
+                                ${cashbill.status === 'draft' ? `
+                                    <button class="btn btn-sm action-btn edit" data-id="${cashbill.id}" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm action-btn delete" data-id="${cashbill.id}" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                ` : ''}
+                                ${currentUser.role === 'admin' ? `
+                                    <button class="btn btn-sm action-btn uncommit" data-id="${cashbill.id}" title="Uncommit">
+                                        <i class="fas fa-undo"></i>
+                                    </button>
+                                    <button class="btn btn-sm action-btn delete" data-id="${cashbill.id}" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                ` : ''}
+                                <button class="btn btn-sm action-btn remark" data-id="${cashbill.id}" title="Add Remark">
+                                    <i class="fas fa-comment"></i>
                                 </button>
-                            ` : ''}
-                            ${currentUser.role === 'admin' ? `
-                                <button class="btn btn-sm btn-warning admin-action amend-cashbill" data-id="${cashbill.id}" title="Amend/Uncommit">
-                                    <i class="fas fa-undo"></i>
-                                </button>
-                                <button class="btn btn-sm btn-danger admin-action delete-cashbill-admin" data-id="${cashbill.id}" title="Delete">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            ` : ''}
-                            ${cashbill.status === 'draft' && currentUser.role === 'admin' ? `
-                                <button class="btn btn-sm btn-success approve-cashbill" data-id="${cashbill.id}">
-                                    <i class="fas fa-check me-1"></i> Approve
-                                </button>
-                                <button class="btn btn-sm btn-danger reject-cashbill" data-id="${cashbill.id}">
-                                    <i class="fas fa-times me-1"></i> Reject
-                                </button>
-                            ` : ''}
+                                ${cashbill.status === 'draft' && currentUser.role === 'admin' ? `
+                                    <button class="btn btn-sm action-btn commit" data-id="${cashbill.id}" title="Commit">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                ` : ''}
+                            </div>
                         </td>
                     `;
                     
@@ -4525,31 +4808,24 @@
                     });
                 });
                 
-                document.querySelectorAll('.amend-cashbill').forEach(btn => {
+                document.querySelectorAll('.uncommit-cashbill').forEach(btn => {
                     btn.addEventListener('click', function() {
                         const cashbillId = this.getAttribute('data-id');
                         uncommitCashbill(cashbillId);
                     });
                 });
                 
-                document.querySelectorAll('.delete-cashbill-admin').forEach(btn => {
+                document.querySelectorAll('.remark-cashbill').forEach(btn => {
                     btn.addEventListener('click', function() {
                         const cashbillId = this.getAttribute('data-id');
-                        deleteCashbill(cashbillId);
+                        addRemark(cashbillId);
                     });
                 });
                 
-                document.querySelectorAll('.approve-cashbill').forEach(btn => {
+                document.querySelectorAll('.commit-cashbill').forEach(btn => {
                     btn.addEventListener('click', function() {
                         const cashbillId = this.getAttribute('data-id');
                         approveCashbill(cashbillId);
-                    });
-                });
-                
-                document.querySelectorAll('.reject-cashbill').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const cashbillId = this.getAttribute('data-id');
-                        rejectCashbill(cashbillId);
                     });
                 });
                 
@@ -4782,6 +5058,12 @@
                     <div class="mb-3">
                         <p><strong>Address:</strong> ${cashbill.customer.address}</p>
                     </div>
+                    
+                    ${cashbill.remark ? `
+                    <div class="mb-3">
+                        <p><strong>Remark:</strong> ${cashbill.remark}</p>
+                    </div>
+                    ` : ''}
                     
                     ${cashbill.notes ? `<div class="mb-3"><p><strong>Notes:</strong> ${cashbill.notes}</p></div>` : ''}
                     
@@ -5036,9 +5318,10 @@
                 
                 if (draftCashbills.length === 0) {
                     uncommittedList.innerHTML = `
-                        <div class="text-center py-5">
+                        <div class="empty-state">
                             <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
-                            <p class="text-muted">No uncommitted requests found</p>
+                            <h4>No Uncommitted Requests</h4>
+                            <p>All cashbills have been committed</p>
                         </div>
                     `;
                     return;
@@ -5071,7 +5354,7 @@
                             </div>
                             <div class="action-buttons mt-3">
                                 <button class="btn btn-sm btn-primary view-uncommitted" data-id="${cashbill.id}">
-                                    <i class="fas fa-eye me-1"></i> View Details
+                                    <i class="fas fa-eye me-1"></i> View
                                 </button>
                                 <button class="btn btn-sm btn-warning edit-uncommitted" data-id="${cashbill.id}">
                                     <i class="fas fa-edit me-1"></i> Edit
