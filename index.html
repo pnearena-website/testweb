@@ -1573,18 +1573,20 @@
                                 <table class="table table-striped" id="allCashbillsTable">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
-                                            <th>Customer</th>
+                                            <th>No</th>
+                                            <th>Cashbill ID</th>
                                             <th>Date</th>
-                                            <th>Amount</th>
+                                            <th>Customer Name</th>
+                                            <th>Prices</th>
+                                            <th>Username Crew</th>
+                                            <th>Crew ID</th>
                                             <th>Status</th>
-                                            <th>Created By</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td colspan="7" class="text-center">
+                                            <td colspan="9" class="text-center">
                                                 <div class="empty-state">
                                                     <i class="fas fa-file-invoice-dollar"></i>
                                                     <h4>No Cashbills Found</h4>
@@ -1778,18 +1780,21 @@
                                 <table class="table table-striped" id="allLogbooksTable">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
+                                            <th>No</th>
+                                            <th>Logbook ID</th>
                                             <th>Cashbill Ref</th>
                                             <th>Courier</th>
                                             <th>Date</th>
                                             <th>Delivery Status</th>
                                             <th>Tracking #</th>
-                                            <th>Action</th>
+                                            <th>Username Crew</th>
+                                            <th>Crew ID</th>
+                                            <th>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td colspan="7" class="text-center">No logbooks found</td>
+                                            <td colspan="10" class="text-center">No logbooks found</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -2674,7 +2679,7 @@
                     $('#allLogbooksTable').DataTable({
                         responsive: true,
                         pageLength: 10,
-                        order: [[3, 'desc']]
+                        order: [[4, 'desc']]
                     });
                     
                     $('#staffTable').DataTable({
@@ -4706,7 +4711,7 @@
                 if (cashbills.length === 0) {
                     allCashbillsTable.innerHTML = `
                         <tr>
-                            <td colspan="7" class="text-center">
+                            <td colspan="9" class="text-center">
                                 <div class="empty-state">
                                     <i class="fas fa-file-invoice-dollar fa-3x text-muted mb-3"></i>
                                     <h4>No Cashbills Found</h4>
@@ -4732,7 +4737,14 @@
                 const sortedCashbills = [...cashbills]
                     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
                 
-                sortedCashbills.forEach(cashbill => {
+                // Get users for crew information
+                const users = JSON.parse(localStorage.getItem('pne_users') || '[]');
+                
+                sortedCashbills.forEach((cashbill, index) => {
+                    // Find the user who created the cashbill
+                    const user = users.find(u => u.username === cashbill.createdBy);
+                    const userName = user ? user.name : 'Unknown';
+                    
                     const remarkBadge = cashbill.remark ? 
                         `<span class="remark-badge remark-tooltip">
                             <i class="fas fa-comment"></i>
@@ -4741,15 +4753,17 @@
                     
                     const row = document.createElement('tr');
                     row.innerHTML = `
+                        <td>${index + 1}</td>
                         <td>${cashbill.id}</td>
-                        <td>${cashbill.customer.name}</td>
                         <td>${cashbill.date}</td>
+                        <td>${cashbill.customer.name}</td>
                         <td>RM ${cashbill.totalAmount.toFixed(2)}</td>
+                        <td>${userName}</td>
+                        <td>${cashbill.createdBy}</td>
                         <td>
                             <span class="status-badge status-${cashbill.status}">${cashbill.status.charAt(0).toUpperCase() + cashbill.status.slice(1)}</span>
                             ${remarkBadge}
                         </td>
-                        <td>${cashbill.createdBy}</td>
                         <td>
                             <div class="cashbill-actions">
                                 <button class="btn btn-sm action-btn view" data-id="${cashbill.id}" title="View">
@@ -4786,47 +4800,28 @@
                     allCashbillsTable.appendChild(row);
                 });
                 
-                // Add event listeners to buttons
-                document.querySelectorAll('.view-cashbill').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const cashbillId = this.getAttribute('data-id');
+                // Add event listeners to buttons using event delegation
+                allCashbillsTable.addEventListener('click', function(e) {
+                    const target = e.target;
+                    const button = target.closest('button');
+                    
+                    if (!button) return;
+                    
+                    const cashbillId = button.getAttribute('data-id');
+                    
+                    if (button.classList.contains('view')) {
                         viewCashbillDetails(cashbillId);
-                    });
-                });
-                
-                document.querySelectorAll('.edit-cashbill').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const cashbillId = this.getAttribute('data-id');
+                    } else if (button.classList.contains('edit')) {
                         editCashbill(cashbillId);
-                    });
-                });
-                
-                document.querySelectorAll('.delete-cashbill').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const cashbillId = this.getAttribute('data-id');
+                    } else if (button.classList.contains('delete')) {
                         deleteCashbill(cashbillId);
-                    });
-                });
-                
-                document.querySelectorAll('.uncommit-cashbill').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const cashbillId = this.getAttribute('data-id');
+                    } else if (button.classList.contains('uncommit')) {
                         uncommitCashbill(cashbillId);
-                    });
-                });
-                
-                document.querySelectorAll('.remark-cashbill').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const cashbillId = this.getAttribute('data-id');
+                    } else if (button.classList.contains('remark')) {
                         addRemark(cashbillId);
-                    });
-                });
-                
-                document.querySelectorAll('.commit-cashbill').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const cashbillId = this.getAttribute('data-id');
+                    } else if (button.classList.contains('commit')) {
                         approveCashbill(cashbillId);
-                    });
+                    }
                 });
                 
                 // Initialize DataTable
@@ -4861,7 +4856,7 @@
                     
                     // Custom filtering for status and date
                     $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-                        const status = data[4]; // Status column
+                        const status = data[7]; // Status column
                         const date = data[2]; // Date column
                         
                         // Status filter
@@ -4907,7 +4902,7 @@
                 allLogbooksTable.innerHTML = '';
                 
                 if (logbooks.length === 0) {
-                    allLogbooksTable.innerHTML = '<tr><td colspan="7" class="text-center">No logbooks found</td></tr>';
+                    allLogbooksTable.innerHTML = '<tr><td colspan="10" class="text-center">No logbooks found</td></tr>';
                     return;
                 }
                 
@@ -4915,15 +4910,25 @@
                 const sortedLogbooks = [...logbooks]
                     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
                 
-                sortedLogbooks.forEach(logbook => {
+                // Get users for crew information
+                const users = JSON.parse(localStorage.getItem('pne_users') || '[]');
+                
+                sortedLogbooks.forEach((logbook, index) => {
+                    // Find the user who created the logbook
+                    const user = users.find(u => u.username === logbook.createdBy);
+                    const userName = user ? user.name : 'Unknown';
+                    
                     const row = document.createElement('tr');
                     row.innerHTML = `
+                        <td>${index + 1}</td>
                         <td>${logbook.id}</td>
                         <td>${logbook.cashbillRef}</td>
                         <td>${logbook.courierName}</td>
                         <td>${logbook.date}</td>
                         <td><span class="status-badge status-${logbook.deliveryStatus}">${logbook.deliveryStatus.replace('-', ' ').charAt(0).toUpperCase() + logbook.deliveryStatus.replace('-', ' ').slice(1)}</span></td>
                         <td>${logbook.trackingNumber || '-'}</td>
+                        <td>${userName}</td>
+                        <td>${logbook.createdBy}</td>
                         <td>
                             <button class="btn btn-sm btn-primary view-logbook" data-id="${logbook.id}">
                                 <i class="fas fa-eye me-1"></i> View
@@ -4934,12 +4939,18 @@
                     allLogbooksTable.appendChild(row);
                 });
                 
-                // Add event listeners to view buttons
-                document.querySelectorAll('.view-logbook').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const logbookId = this.getAttribute('data-id');
+                // Add event listeners to buttons using event delegation
+                allLogbooksTable.addEventListener('click', function(e) {
+                    const target = e.target;
+                    const button = target.closest('button');
+                    
+                    if (!button) return;
+                    
+                    const logbookId = button.getAttribute('data-id');
+                    
+                    if (button.classList.contains('view-logbook')) {
                         viewLogbookDetails(logbookId);
-                    });
+                    }
                 });
                 
                 // Initialize DataTable
@@ -4947,7 +4958,7 @@
                     $('#allLogbooksTable').DataTable({
                         responsive: true,
                         pageLength: 10,
-                        order: [[3, 'desc']]
+                        order: [[4, 'desc']]
                     });
                 }, 100);
                 
@@ -4974,8 +4985,8 @@
                     
                     // Custom filtering for status and date
                     $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-                        const status = data[4]; // Status column
-                        const date = data[3]; // Date column
+                        const status = data[5]; // Status column
+                        const date = data[4]; // Date column
                         
                         // Status filter
                         if (statusValue && !status.includes(statusValue.replace('-', ' '))) {
@@ -5376,39 +5387,25 @@
                 });
                 
                 // Add event listeners to the buttons
-                document.querySelectorAll('.view-uncommitted').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const cashbillId = this.getAttribute('data-id');
+                uncommittedList.addEventListener('click', function(e) {
+                    const target = e.target;
+                    const button = target.closest('button');
+                    
+                    if (!button) return;
+                    
+                    const cashbillId = button.getAttribute('data-id');
+                    
+                    if (button.classList.contains('view-uncommitted')) {
                         viewCashbillDetails(cashbillId);
-                    });
-                });
-                
-                document.querySelectorAll('.edit-uncommitted').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const cashbillId = this.getAttribute('data-id');
+                    } else if (button.classList.contains('edit-uncommitted')) {
                         editCashbill(cashbillId);
-                    });
-                });
-                
-                document.querySelectorAll('.delete-uncommitted').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const cashbillId = this.getAttribute('data-id');
+                    } else if (button.classList.contains('delete-uncommitted')) {
                         deleteCashbill(cashbillId);
-                    });
-                });
-                
-                document.querySelectorAll('.approve-uncommitted').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const cashbillId = this.getAttribute('data-id');
+                    } else if (button.classList.contains('approve-uncommitted')) {
                         approveCashbill(cashbillId);
-                    });
-                });
-                
-                document.querySelectorAll('.reject-uncommitted').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const cashbillId = this.getAttribute('data-id');
+                    } else if (button.classList.contains('reject-uncommitted')) {
                         rejectCashbill(cashbillId);
-                    });
+                    }
                 });
             }
             
