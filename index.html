@@ -1,756 +1,1507 @@
+improve my html can? 
+
+add features uncommit and amendment adjustments features for admin
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Management Dashboard</title>
-    <!-- Bootstrap CSS -->
+    <title>Business Management System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome for Icons -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
         :root {
-            --primary-color: #007bff;
-            --success-color: #28a745;
-            --warning-color: #ffc107;
-            --danger-color: #dc3545;
-            --info-color: #17a2b8;
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
         }
-
+        
         body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f8f9fa;
-            font-family: Arial, sans-serif;
+            color: #333;
         }
-
+        
+        /* Login Page Styles */
+        .login-container {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+        
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        .login-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .login-body {
+            padding: 30px;
+        }
+        
+        /* Dashboard Styles */
+        .dashboard-card {
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Sidebar Styles */
         .sidebar {
             height: 100vh;
             position: fixed;
-            width: 250px;
-            background-color: #343a40;
-            padding-top: 20px;
-        }
-
-        .sidebar a {
+            top: 0;
+            left: 0;
+            z-index: 100;
+            padding-top: 60px;
+            background-color: var(--primary-color);
             color: white;
-            padding: 10px 15px;
-            display: block;
-            text-decoration: none;
+            transition: all 0.3s;
+            width: 250px;
         }
-
-        .sidebar a:hover {
-            background-color: #495057;
+        
+        .sidebar.collapsed {
+            width: 70px;
         }
-
+        
+        .sidebar-header {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+        
+        .sidebar-menu .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-menu .nav-link:hover {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-menu .nav-link.active {
+            color: white;
+            background-color: var(--secondary-color);
+            border-left: 4px solid var(--warning-color);
+        }
+        
+        .sidebar-menu .nav-link i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .sidebar.collapsed .nav-link span {
+            display: none;
+        }
+        
+        /* Top Navigation */
+        .top-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 99;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
         .main-content {
-            margin-left: 260px;
-            padding: 20px;
+            margin-left: 250px;
+            padding: 80px 20px 20px;
+            transition: all 0.3s;
         }
-
+        
+        .main-content.expanded {
+            margin-left: 70px;
+        }
+        
+        /* Page Content */
         .page {
             display: none;
         }
-
+        
         .page.active {
             display: block;
         }
-
-        .card {
+        
+        .page-header {
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        /* Tables */
+        .data-table {
+            background-color: white;
             border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
-
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            display: none;
-        }
-
-        .amendment-status {
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-        }
-
-        .amendment-status.committed {
-            background-color: var(--success-color);
-            color: white;
-        }
-
-        .amendment-status.uncommitted {
-            background-color: var(--warning-color);
-            color: white;
-        }
-
-        .modal-content {
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .modal-header {
+        
+        .data-table thead {
             background-color: var(--primary-color);
             color: white;
         }
-
-        .modal-body {
-            max-height: 400px;
-            overflow-y: auto;
+        
+        .data-table th {
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
         }
-
-        .diff-table {
-            width: 100%;
-            border-collapse: collapse;
+        
+        /* Forms */
+        .form-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
-
-        .diff-table th, .diff-table td {
-            padding: 8px;
-            border: 1px solid #dee2e6;
+        
+        .form-control:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
         }
-
-        .diff-table .added {
-            background-color: rgba(40, 167, 69, 0.1);
+        
+        /* Buttons */
+        .btn-primary {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
         }
-
-        .diff-table .removed {
-            background-color: rgba(231, 76, 60, 0.1);
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+            border-color: #2980b9;
         }
-
-        .admin-only {
-            display: none;
+        
+        .btn-success {
+            background-color: var(--success-color);
+            border-color: var(--success-color);
+        }
+        
+        .btn-success:hover {
+            background-color: #229954;
+            border-color: #229954;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger-color);
+            border-color: var(--danger-color);
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+            border-color: #c0392b;
+        }
+        
+        /* Utility Classes */
+        .text-primary {
+            color: var(--primary-color) !important;
+        }
+        
+        .text-secondary {
+            color: var(--secondary-color) !important;
+        }
+        
+        .bg-primary {
+            background-color: var(--primary-color) !important;
+        }
+        
+        .bg-secondary {
+            background-color: var(--secondary-color) !important;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+            }
+            
+            .sidebar-menu .nav-link span {
+                display: none;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+            
+            .top-navbar {
+                padding: 15px;
+            }
+        }
+        
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 5px;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s ease;
+        }
+        
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .notification.success {
+            background-color: var(--success-color);
+        }
+        
+        .notification.error {
+            background-color: var(--danger-color);
+        }
+        
+        .notification.info {
+            background-color: var(--secondary-color);
         }
     </style>
 </head>
 <body>
-    <!-- Notification -->
-    <div id="notification" class="notification alert" role="alert"></div>
-
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <h4 class="text-white text-center">Management Dashboard</h4>
-        <a href="#" data-page="dashboard-page"><i class="fas fa-home me-2"></i> Dashboard</a>
-        <a href="#" data-page="cashbill-page"><i class="fas fa-file-invoice-dollar me-2"></i> Cashbill</a>
-        <a href="#" data-page="logbook-page"><i class="fas fa-book me-2"></i> Logbook</a>
-        <a href="#" data-page="quotation-page"><i class="fas fa-file-alt me-2"></i> Quotation</a>
-        <a href="#" data-page="online-order-page"><i class="fas fa-shopping-cart me-2"></i> Online Orders</a>
-        <a href="#" data-page="crew-management-page" class="admin-only"><i class="fas fa-users me-2"></i> Crew Management</a>
-        <a href="#" data-page="stock-page"><i class="fas fa-boxes me-2"></i> Stock</a>
-        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
+    <!-- Login Page -->
+    <div id="login-page" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h3>Business Management System</h3>
+            </div>
+            <div class="login-body">
+                <form id="login-form">
+                    <div class="mb-3">
+                        <label for="userId" class="form-label">User ID</label>
+                        <input type="text" class="form-control" id="userId" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" required>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </div>
+                    <div class="mt-3 text-center text-muted">
+                        <small>Admin: 0001 / Dd1234</small>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
-    <!-- Main Content -->
-    <div class="main-content">
-        <!-- Login Page -->
-        <div id="login-page" class="page active">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-4">
+    <!-- Main Application -->
+    <div id="main-app" class="d-none">
+        <!-- Top Navigation -->
+        <nav class="top-navbar">
+            <div class="d-flex align-items-center">
+                <button id="sidebar-toggle" class="btn btn-sm btn-light me-3">
+                    <i class="bi bi-list"></i>
+                </button>
+                <h4 class="mb-0">Business Management System</h4>
+            </div>
+            <div class="d-flex align-items-center">
+                <div class="me-3">
+                    <span class="badge bg-secondary" id="user-role-badge">Admin</span>
+                </div>
+                <button id="logout-btn" class="btn btn-sm btn-outline-danger">
+                    <i class="bi bi-box-arrow-right me-1"></i> Logout
+                </button>
+            </div>
+        </nav>
+
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h5 class="mb-0">Navigation</h5>
+            </div>
+            <ul class="nav flex-column sidebar-menu">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" data-page="dashboard">
+                        <i class="bi bi-speedometer2"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-page="cashbill">
+                        <i class="bi bi-receipt"></i>
+                        <span>Cashbill</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-page="logbook">
+                        <i class="bi bi-journal-text"></i>
+                        <span>Logbook</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-page="quotation">
+                        <i class="bi bi-file-earmark-text"></i>
+                        <span>Quotation</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-page="online-order">
+                        <i class="bi bi-cart3"></i>
+                        <span>Online Order</span>
+                    </a>
+                </li>
+                <li class="nav-item admin-only">
+                    <a class="nav-link" href="#" data-page="crew-management">
+                        <i class="bi bi-people"></i>
+                        <span>Crew Management</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-page="stock-management">
+                        <i class="bi bi-box-seam"></i>
+                        <span>Stock Management</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content" id="main-content">
+            <!-- Dashboard Page -->
+            <div id="dashboard-page" class="page active">
+                <div class="page-header">
+                    <h2>Dashboard</h2>
+                    <p class="text-muted">Welcome to your business management dashboard</p>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-3 mb-3">
+                        <div class="card dashboard-card">
+                            <div class="card-body text-center">
+                                <div class="card-icon text-primary">
+                                    <i class="bi bi-receipt"></i>
+                                </div>
+                                <h5 class="card-title">Cashbills</h5>
+                                <h3 class="text-primary" id="dashboard-cashbill-count">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card dashboard-card">
+                            <div class="card-body text-center">
+                                <div class="card-icon text-success">
+                                    <i class="bi bi-journal-text"></i>
+                                </div>
+                                <h5 class="card-title">Log Entries</h5>
+                                <h3 class="text-success" id="dashboard-logbook-count">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card dashboard-card">
+                            <div class="card-body text-center">
+                                <div class="card-icon text-warning">
+                                    <i class="bi bi-file-earmark-text"></i>
+                                </div>
+                                <h5 class="card-title">Quotations</h5>
+                                <h3 class="text-warning" id="dashboard-quotation-count">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card dashboard-card">
+                            <div class="card-body text-center">
+                                <div class="card-icon text-danger">
+                                    <i class="bi bi-cart3"></i>
+                                </div>
+                                <h5 class="card-title">Orders</h5>
+                                <h3 class="text-danger" id="dashboard-order-count">0</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-4">
                         <div class="card">
                             <div class="card-header bg-primary text-white">
-                                <h4 class="mb-0">Login</h4>
+                                <h5 class="mb-0">Recent Cashbills</h5>
                             </div>
                             <div class="card-body">
-                                <form id="login-form">
-                                    <div class="mb-3">
-                                        <label for="user-id" class="form-label">User ID</label>
-                                        <input type="text" class="form-control" id="user-id" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="password" class="form-label">Password</label>
-                                        <input type="password" class="form-control" id="password" required>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary w-100">Login</button>
-                                </form>
+                                <div class="table-responsive">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Invoice #</th>
+                                                <th>Customer</th>
+                                                <th>Date</th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="recent-cashbills">
+                                            <!-- Populated dynamically -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                            <div class="card-header bg-success text-white">
+                                <h5 class="mb-0">Recent Log Entries</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Description</th>
+                                                <th>Crew</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="recent-logbook">
+                                            <!-- Populated dynamically -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cashbill Page -->
+            <div id="cashbill-page" class="page">
+                <div class="page-header">
+                    <h2>Cashbill Management</h2>
+                    <p class="text-muted">Create and manage cashbills</p>
+                    <button id="new-cashbill-btn" class="btn btn-primary">
+                        <i class="bi bi-plus-circle me-1"></i> Create New Cashbill
+                    </button>
+                </div>
+                
+                <!-- Cashbill List Section -->
+                <div id="cashbill-list-section" class="mb-4">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Cashbill List</h5>
+                            <div>
+                                <input type="text" class="form-control form-control-sm" id="cashbill-search" placeholder="Search cashbills...">
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Invoice No</th>
+                                            <th>Date</th>
+                                            <th>Customer</th>
+                                            <th>Total</th>
+                                            <th>Crew</th>
+                                            <th>Payment Type</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="cashbill-list">
+                                        <!-- Populated dynamically -->
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Dashboard Page -->
-        <div id="dashboard-page" class="page">
-            <h2>Dashboard</h2>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5>Total Cashbills</h5>
-                            <p id="total-cashbills">0</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5>Total Log Entries</h5>
-                            <p id="total-logs">0</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5>Total Crew</h5>
-                            <p id="total-crew">0</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Cashbill Page -->
-        <div id="cashbill-page" class="page">
-            <h2>Cashbill Management</h2>
-            <!-- Cashbill List -->
-            <div id="cashbill-list-section">
-                <div class="card mb-4">
-                    <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Cashbills</h5>
-                        <div>
-                            <input type="text" class="form-control form-control-sm" id="cashbill-search" placeholder="Search cashbills...">
-                            <button class="btn btn-primary btn-sm mt-2" onclick="showCashbillForm()">Add Cashbill</button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Invoice No</th>
-                                        <th>Date</th>
-                                        <th>Customer</th>
-                                        <th>Total</th>
-                                        <th>Crew</th>
-                                        <th>Payment Type</th>
-                                        <th>Amendment Status</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="cashbill-list"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Cashbill Form -->
-            <div id="cashbill-form-section" class="d-none">
-                <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        <h4>Add Cashbill</h4>
-                    </div>
-                    <div class="card-body">
-                        <form id="cashbill-form">
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="invoice-no" class="form-label">Invoice No</label>
-                                    <input type="text" class="form-control" id="invoice-no" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="cashbill-date" class="form-label">Date</label>
-                                    <input type="date" class="form-control" id="cashbill-date" required>
-                                </div>
+                
+                <!-- Create/Edit Cashbill Form (initially hidden) -->
+                <div id="cashbill-form-section" class="form-section d-none">
+                    <h4 class="mb-4">Create New Cashbill</h4>
+                    <form id="cashbill-form">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="invoice-no" class="form-label">Invoice No</label>
+                                <input type="text" class="form-control" id="invoice-no" readonly>
                             </div>
-                            <div class="mb-3">
+                            <div class="col-md-6">
+                                <label for="cashbill-date" class="form-label">Date</label>
+                                <input type="date" class="form-control" id="cashbill-date" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
                                 <label for="customer-name" class="form-label">Customer Name</label>
                                 <input type="text" class="form-control" id="customer-name" required>
                             </div>
-                            <div class="mb-3">
-                                <label for="crew-name" class="form-label">Crew</label>
-                                <select class="form-control" id="crew-name" required>
-                                    <!-- Populated dynamically -->
-                                </select>
+                            <div class="col-md-6">
+                                <label for="crew-name" class="form-label">Crew Name</label>
+                                <input type="text" class="form-control" id="crew-name" readonly>
                             </div>
-                            <div class="mb-3">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Items</label>
+                            <div id="cashbill-items">
+                                <div class="cashbill-item row mb-2">
+                                    <div class="col-md-5">
+                                        <input type="text" class="form-control item-name" placeholder="Item name" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="number" class="form-control item-quantity" placeholder="Qty" min="1" value="1" required>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="number" class="form-control item-price" placeholder="Price" min="0" step="0.01" required>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <button type="button" class="btn btn-sm btn-danger remove-item">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" id="add-item-btn" class="btn btn-sm btn-secondary mt-2">
+                                <i class="bi bi-plus-circle me-1"></i> Add Item
+                            </button>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
                                 <label for="payment-type" class="form-label">Payment Type</label>
-                                <select class="form-control" id="payment-type" required>
+                                <select class="form-select" id="payment-type" required>
+                                    <option value="">Select payment type</option>
                                     <option value="Cash">Cash</option>
-                                    <option value="Credit">Credit</option>
-                                    <option value="Online">Online</option>
+                                    <option value="Credit Card">Credit Card</option>
+                                    <option value="Bank Transfer">Bank Transfer</option>
+                                    <option value="Other">Other</option>
                                 </select>
                             </div>
-                            <div class="mb-3">
+                            <div class="col-md-6">
                                 <label for="total-amount" class="form-label">Total Amount</label>
-                                <input type="number" class="form-control" id="total-amount" min="0" step="0.01" required>
+                                <input type="number" class="form-control" id="total-amount" readonly>
                             </div>
-                            <div id="cashbill-items" class="mb-3">
-                                <!-- Item rows added dynamically -->
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <button type="button" id="cancel-cashbill-btn" class="btn btn-secondary">Cancel</button>
+                            <div>
+                                <button type="button" id="print-cashbill-btn" class="btn btn-info me-2">
+                                    <i class="bi bi-printer me-1"></i> Print
+                                </button>
+                                <button type="button" id="download-cashbill-btn" class="btn btn-warning me-2">
+                                    <i class="bi bi-download me-1"></i> Download
+                                </button>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="bi bi-check-circle me-1"></i> Save Cashbill
+                                </button>
                             </div>
-                            <button type="button" class="btn btn-secondary mb-3" onclick="addCashbillItem()">Add Item</button>
-                            <div class="d-flex justify-content-end">
-                                <button type="button" class="btn btn-secondary me-2" id="cancel-cashbill-btn" onclick="cancelCashbillForm()">Cancel</button>
-                                <button type="submit" class="btn btn-primary"><i class="fas fa-check-circle me-1"></i> Save Cashbill</button>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-        </div>
 
-        <!-- Logbook Page -->
-        <div id="logbook-page" class="page">
-            <h2>Logbook</h2>
-            <div id="logbook-list-section">
-                <div class="card mb-4">
-                    <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Log Entries</h5>
-                        <div>
-                            <input type="text" class="form-control form-control-sm" id="logbook-search" placeholder="Search logs...">
-                            <button class="btn btn-primary btn-sm mt-2" onclick="showLogForm()">Add Log Entry</button>
+            <!-- Logbook Page -->
+            <div id="logbook-page" class="page">
+                <div class="page-header">
+                    <h2>Logbook Management</h2>
+                    <p class="text-muted">View and manage log entries</p>
+                    <button id="new-log-entry-btn" class="btn btn-success admin-only">
+                        <i class="bi bi-plus-circle me-1"></i> Add Log Entry
+                    </button>
+                </div>
+                
+                <!-- Logbook List Section -->
+                <div id="logbook-list-section" class="mb-4">
+                    <div class="card">
+                        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Logbook Entries</h5>
+                            <div>
+                                <input type="text" class="form-control form-control-sm" id="logbook-search" placeholder="Search log entries...">
+                            </div>
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Description</th>
-                                        <th>Crew</th>
-                                        <th>Type</th>
-                                        <th>Amendment Status</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="logbook-list"></tbody>
-                            </table>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Description</th>
+                                            <th>Crew</th>
+                                            <th>Type</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="logbook-list">
+                                        <!-- Populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div id="log-form-section" class="d-none">
-                <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        <h4>Add Log Entry</h4>
-                    </div>
-                    <div class="card-body">
-                        <form id="log-form">
-                            <div class="mb-3">
+                
+                <!-- Add/Edit Log Entry Form (initially hidden) -->
+                <div id="log-form-section" class="form-section d-none admin-only">
+                    <h4 class="mb-4">Add Log Entry</h4>
+                    <form id="log-form">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
                                 <label for="log-date" class="form-label">Date</label>
                                 <input type="date" class="form-control" id="log-date" required>
                             </div>
-                            <div class="mb-3">
+                            <div class="col-md-6">
                                 <label for="log-crew" class="form-label">Crew</label>
-                                <select class="form-control" id="log-crew" required>
-                                    <!-- Populated dynamically -->
+                                <select class="form-select" id="log-crew" required>
+                                    <option value="">Select crew member</option>
                                 </select>
                             </div>
-                            <div class="mb-3">
-                                <label for="log-description" class="form-label">Description</label>
-                                <textarea class="form-control" id="log-description" required></textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label for="log-type" class="form-label">Type</label>
-                                <select class="form-control" id="log-type" required>
-                                    <option value="Cashbill">Cashbill</option>
-                                    <option value="Quotation">Quotation</option>
-                                    <option value="Order">Order</option>
-                                    <option value="Stock">Stock</option>
-                                </select>
-                            </div>
-                            <div class="d-flex justify-content-end">
-                                <button type="button" class="btn btn-secondary me-2" onclick="cancelLogForm()">Cancel</button>
-                                <button type="submit" class="btn btn-primary"><i class="fas fa-check-circle me-1"></i> Save Log Entry</button>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="log-description" class="form-label">Description</label>
+                            <textarea class="form-control" id="log-description" rows="3" required></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="log-type" class="form-label">Type</label>
+                            <select class="form-select" id="log-type" required>
+                                <option value="">Select type</option>
+                                <option value="Cashbill">Cashbill</option>
+                                <option value="Maintenance">Maintenance</option>
+                                <option value="Delivery">Delivery</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <button type="button" id="cancel-log-btn" class="btn btn-secondary">Cancel</button>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-circle me-1"></i> Save Log Entry
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
-        </div>
 
-        <!-- Crew Management Page -->
-        <div id="crew-management-page" class="page admin-only">
-            <h2>Crew Management</h2>
-            <!-- Crew List -->
-            <div id="crew-list-section">
-                <div class="card mb-4">
-                    <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Crew Members</h5>
-                        <div>
-                            <input type="text" class="form-control form-control-sm" id="crew-search" placeholder="Search crew...">
-                            <button class="btn btn-primary btn-sm mt-2" onclick="showCrewForm()">Add Crew</button>
+            <!-- Quotation Page -->
+            <div id="quotation-page" class="page">
+                <div class="page-header">
+                    <h2>Quotation Management</h2>
+                    <p class="text-muted">Create and manage quotations</p>
+                    <button id="new-quotation-btn" class="btn btn-primary">
+                        <i class="bi bi-plus-circle me-1"></i> Create New Quotation
+                    </button>
+                </div>
+                
+                <!-- Quotation List Section -->
+                <div id="quotation-list-section" class="mb-4">
+                    <div class="card">
+                        <div class="card-header bg-warning text-white d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Quotation List</h5>
+                            <div>
+                                <input type="text" class="form-control form-control-sm" id="quotation-search" placeholder="Search quotations...">
+                            </div>
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
-                                        <th>Role</th>
-                                        <th>Contact</th>
-                                        <th>Amendment Status</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="crew-list"></tbody>
-                            </table>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Quote #</th>
+                                            <th>Client</th>
+                                            <th>Date</th>
+                                            <th>Price</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="quotation-list">
+                                        <!-- Populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
+                
+                <!-- Create/Edit Quotation Form (initially hidden) -->
+                <div id="quotation-form-section" class="form-section d-none">
+                    <h4 class="mb-4">Create New Quotation</h4>
+                    <form id="quotation-form">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="quote-no" class="form-label">Quote No</label>
+                                <input type="text" class="form-control" id="quote-no" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="quote-date" class="form-label">Date</label>
+                                <input type="date" class="form-control" id="quote-date" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="client-name" class="form-label">Client Name</label>
+                                <input type="text" class="form-control" id="client-name" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="client-contact" class="form-label">Client Contact</label>
+                                <input type="text" class="form-control" id="client-contact" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Services</label>
+                            <div id="quotation-services">
+                                <div class="quotation-service row mb-2">
+                                    <div class="col-md-7">
+                                        <input type="text" class="form-control service-name" placeholder="Service name" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="number" class="form-control service-price" placeholder="Price" min="0" step="0.01" required>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <button type="button" class="btn btn-sm btn-danger remove-service">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" id="add-service-btn" class="btn btn-sm btn-secondary mt-2">
+                                <i class="bi bi-plus-circle me-1"></i> Add Service
+                            </button>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="quote-status" class="form-label">Status</label>
+                                <select class="form-select" id="quote-status" required>
+                                    <option value="Draft">Draft</option>
+                                    <option value="Sent">Sent</option>
+                                    <option value="Accepted">Accepted</option>
+                                    <option value="Rejected">Rejected</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="quote-total" class="form-label">Total Amount</label>
+                                <input type="number" class="form-control" id="quote-total" readonly>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <button type="button" id="cancel-quotation-btn" class="btn btn-secondary">Cancel</button>
+                            <div>
+                                <button type="button" id="download-quote-btn" class="btn btn-warning me-2">
+                                    <i class="bi bi-download me-1"></i> Download PDF
+                                </button>
+                                <button type="button" id="email-quote-btn" class="btn btn-info me-2">
+                                    <i class="bi bi-envelope me-1"></i> Send Email
+                                </button>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="bi bi-check-circle me-1"></i> Save Quotation
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <!-- Crew Form -->
-            <div id="crew-form-section" class="d-none">
-                <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        <h4>Add Crew Member</h4>
+
+            <!-- Online Order Page -->
+            <div id="online-order-page" class="page">
+                <div class="page-header">
+                    <h2>Online Order Management</h2>
+                    <p class="text-muted">Manage online orders</p>
+                    <button id="new-order-btn" class="btn btn-primary admin-only">
+                        <i class="bi bi-plus-circle me-1"></i> Add New Order
+                    </button>
+                </div>
+                
+                <!-- Order List Section -->
+                <div id="order-list-section" class="mb-4">
+                    <div class="card">
+                        <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Online Orders</h5>
+                            <div>
+                                <input type="text" class="form-control form-control-sm" id="order-search" placeholder="Search orders...">
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Order #</th>
+                                            <th>Customer</th>
+                                            <th>Date</th>
+                                            <th>Items</th>
+                                            <th>Status</th>
+                                            <th>Assigned To</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="order-list">
+                                        <!-- Populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <form id="crew-form">
-                            <div class="mb-3">
-                                <label for="crew-id" class="form-label">ID</label>
+                </div>
+                
+                <!-- Add/Edit Order Form (initially hidden) -->
+                <div id="order-form-section" class="form-section d-none admin-only">
+                    <h4 class="mb-4">Add New Order</h4>
+                    <form id="order-form">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="order-no" class="form-label">Order No</label>
+                                <input type="text" class="form-control" id="order-no" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="order-date" class="form-label">Date</label>
+                                <input type="date" class="form-control" id="order-date" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="order-customer" class="form-label">Customer Name</label>
+                                <input type="text" class="form-control" id="order-customer" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="order-contact" class="form-label">Customer Contact</label>
+                                <input type="text" class="form-control" id="order-contact" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Order Items</label>
+                            <div id="order-items">
+                                <div class="order-item row mb-2">
+                                    <div class="col-md-7">
+                                        <input type="text" class="form-control order-item-name" placeholder="Item name" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="number" class="form-control order-item-quantity" placeholder="Qty" min="1" value="1" required>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <button type="button" class="btn btn-sm btn-danger remove-order-item">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" id="add-order-item-btn" class="btn btn-sm btn-secondary mt-2">
+                                <i class="bi bi-plus-circle me-1"></i> Add Item
+                            </button>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="order-status" class="form-label">Status</label>
+                                <select class="form-select" id="order-status" required>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Assigned">Assigned</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Fulfilled">Fulfilled</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="assign-crew" class="form-label">Assign To</label>
+                                <select class="form-select" id="assign-crew">
+                                    <option value="">Select crew member</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <button type="button" id="cancel-order-btn" class="btn btn-secondary">Cancel</button>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-circle me-1"></i> Save Order
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Crew Management Page -->
+            <div id="crew-management-page" class="page admin-only">
+                <div class="page-header">
+                    <h2>Crew Management</h2>
+                    <p class="text-muted">Manage crew members (Admin Only)</p>
+                    <button id="new-crew-btn" class="btn btn-primary">
+                        <i class="bi bi-plus-circle me-1"></i> Add New Crew
+                    </button>
+                </div>
+                
+                <!-- Crew List Section -->
+                <div id="crew-list-section" class="mb-4">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Crew Members</h5>
+                            <div>
+                                <input type="text" class="form-control form-control-sm" id="crew-search" placeholder="Search crew members...">
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Role</th>
+                                            <th>Contact</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="crew-list">
+                                        <!-- Populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Add/Edit Crew Form (initially hidden) -->
+                <div id="crew-form-section" class="form-section d-none">
+                    <h4 class="mb-4">Add New Crew</h4>
+                    <form id="crew-form">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="crew-id" class="form-label">Crew ID</label>
                                 <input type="text" class="form-control" id="crew-id" required>
                             </div>
-                            <div class="mb-3">
-                                <label for="crew-name-input" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="crew-name-input" required>
+                            <div class="col-md-6">
+                                <label for="crew-name" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="crew-name" required>
                             </div>
-                            <div class="mb-3">
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
                                 <label for="crew-role" class="form-label">Role</label>
-                                <select class="form-control" id="crew-role" required>
-                                    <option value="Administrator">Administrator</option>
+                                <select class="form-select" id="crew-role" required>
+                                    <option value="">Select role</option>
                                     <option value="Technician">Technician</option>
                                     <option value="Driver">Driver</option>
+                                    <option value="Sales">Sales</option>
+                                    <option value="Manager">Manager</option>
                                 </select>
                             </div>
-                            <div class="mb-3">
+                            <div class="col-md-6">
                                 <label for="crew-contact" class="form-label">Contact</label>
                                 <input type="text" class="form-control" id="crew-contact" required>
                             </div>
-                            <div class="mb-3">
-                                <label for="crew-password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="crew-password" required>
-                            </div>
-                            <div class="d-flex justify-content-end">
-                                <button type="button" class="btn btn-secondary me-2" onclick="cancelCrewForm()">Cancel</button>
-                                <button type="submit" class="btn btn-primary"><i class="fas fa-check-circle me-1"></i> Save Crew</button>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="crew-password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="crew-password" required>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <button type="button" id="cancel-crew-btn" class="btn btn-secondary">Cancel</button>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-circle me-1"></i> Save Crew
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
-            <!-- Amendment History Section -->
-            <div id="amendment-history-section" class="mb-4">
-                <div class="card">
-                    <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Amendment History</h5>
-                        <div>
-                            <input type="text" class="form-control form-control-sm" id="amendment-search" placeholder="Search amendments...">
+
+            <!-- Stock Management Page -->
+            <div id="stock-management-page" class="page">
+                <div class="page-header">
+                    <h2>Stock Management</h2>
+                    <p class="text-muted">Manage inventory stock</p>
+                    <button id="new-stock-btn" class="btn btn-primary admin-only">
+                        <i class="bi bi-plus-circle me-1"></i> Add New Stock
+                    </button>
+                </div>
+                
+                <!-- Stock List Section -->
+                <div id="stock-list-section" class="mb-4">
+                    <div class="card">
+                        <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Stock Items</h5>
+                            <div>
+                                <input type="text" class="form-control form-control-sm" id="stock-search" placeholder="Search stock items...">
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Item ID</th>
+                                            <th>Name</th>
+                                            <th>Quantity</th>
+                                            <th>Unit</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="stock-list">
+                                        <!-- Populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Record Type</th>
-                                        <th>Record ID</th>
-                                        <th>Modified By</th>
-                                        <th>Timestamp</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="amendment-list"></tbody>
-                            </table>
+                </div>
+                
+                <!-- Add/Edit Stock Form (initially hidden) -->
+                <div id="stock-form-section" class="form-section d-none admin-only">
+                    <h4 class="mb-4">Add New Stock</h4>
+                    <form id="stock-form">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="stock-id" class="form-label">Item ID</label>
+                                <input type="text" class="form-control" id="stock-id" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="stock-name" class="form-label">Item Name</label>
+                                <input type="text" class="form-control" id="stock-name" required>
+                            </div>
                         </div>
-                    </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="stock-quantity" class="form-label">Quantity</label>
+                                <input type="number" class="form-control" id="stock-quantity" min="0" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="stock-unit" class="form-label">Unit</label>
+                                <select class="form-select" id="stock-unit" required>
+                                    <option value="">Select unit</option>
+                                    <option value="Pieces">Pieces</option>
+                                    <option value="Kg">Kg</option>
+                                    <option value="Liters">Liters</option>
+                                    <option value="Boxes">Boxes</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="stock-status" class="form-label">Status</label>
+                                <select class="form-select" id="stock-status" required>
+                                    <option value="In Stock">In Stock</option>
+                                    <option value="Low Stock">Low Stock</option>
+                                    <option value="Out of Stock">Out of Stock</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <button type="button" id="cancel-stock-btn" class="btn btn-secondary">Cancel</button>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-circle me-1"></i> Save Stock
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
-        </div>
-
-        <!-- Amendment Details Modal -->
-        <div class="modal fade" id="amendment-details-modal" tabindex="-1" aria-labelledby="amendment-details-modal-label" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="amendment-details-modal-label">Amendment Details</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <table class="table diff-table">
-                            <thead>
-                                <tr>
-                                    <th>Field</th>
-                                    <th>Original Value</th>
-                                    <th>New Value</th>
-                                </tr>
-                            </thead>
-                            <tbody id="amendment-details"></tbody>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Other Pages (Placeholder) -->
-        <div id="quotation-page" class="page">
-            <h2>Quotation Management</h2>
-            <p>Quotation management functionality can be added here.</p>
-        </div>
-        <div id="online-order-page" class="page">
-            <h2>Online Orders</h2>
-            <p>Online order management functionality can be added here.</p>
-        </div>
-        <div id="stock-page" class="page">
-            <h2>Stock Management</h2>
-            <p>Stock management functionality can be added here.</p>
         </div>
     </div>
 
-    <!-- Bootstrap JS and Popper.js -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
     <script>
-        // Data Storage
+        // Initialize data structure
         let appData = {
             cashbills: [],
             logbook: [],
             quotations: [],
             onlineOrders: [],
             crew: [
-                { id: "0001", name: "Admin User", role: "Administrator", contact: "admin@example.com", password: "Dd1234", committed: true },
-                { id: "0002", name: "John Doe", role: "Technician", contact: "john@example.com", password: "password1", committed: true },
-                { id: "0003", name: "Jane Smith", role: "Driver", contact: "jane@example.com", password: "password2", committed: true }
+                { id: "0001", name: "Admin User", role: "Administrator", contact: "admin@example.com", password: "Dd1234" },
+                { id: "0002", name: "John Doe", role: "Technician", contact: "john@example.com", password: "password1" },
+                { id: "0003", name: "Jane Smith", role: "Driver", contact: "jane@example.com", password: "password2" }
             ],
-            stock: [],
-            amendments: []
+            stock: []
         };
 
-        let currentUser = null;
-        let userRole = null;
-
-        // Load data from localStorage
-        function loadData() {
-            const savedData = localStorage.getItem('appData');
-            if (savedData) {
-                appData = JSON.parse(savedData);
-            }
+        // Load data from localStorage if available
+        if (localStorage.getItem('businessAppData')) {
+            appData = JSON.parse(localStorage.getItem('businessAppData'));
         }
 
         // Save data to localStorage
         function saveData() {
-            localStorage.setItem('appData', JSON.stringify(appData));
+            localStorage.setItem('businessAppData', JSON.stringify(appData));
         }
 
-        // Show notification
-        function showNotification(message, type) {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.className = `notification alert alert-${type === 'success' ? 'success' : 'danger'}`;
-            notification.style.display = 'block';
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 3000);
+        // Current user and role
+        let currentUser = null;
+        let userRole = null;
+
+        // DOM elements
+        const loginPage = document.getElementById('login-page');
+        const mainApp = document.getElementById('main-app');
+        const loginForm = document.getElementById('login-form');
+        const logoutBtn = document.getElementById('logout-btn');
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('main-content');
+        const userRoleBadge = document.getElementById('user-role-badge');
+        const notification = document.getElementById('notification');
+
+        // Login functionality
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const userId = document.getElementById('userId').value;
+            const password = document.getElementById('password').value;
+            
+            // Check if user exists
+            const user = appData.crew.find(u => u.id === userId && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                userRole = user.id === "0001" ? "Admin" : "Crew";
+                
+                // Update UI
+                userRoleBadge.textContent = userRole;
+                applyRolePermissions();
+                
+                // Show main app
+                loginPage.classList.add('d-none');
+                mainApp.classList.remove('d-none');
+                
+                // Load dashboard
+                showPage('dashboard');
+                updateDashboard();
+                
+                // Show notification
+                showNotification('Login successful', 'success');
+            } else {
+                showNotification('Invalid user ID or password', 'error');
+            }
+        });
+
+        // Logout functionality
+        logoutBtn.addEventListener('click', function() {
+            currentUser = null;
+            userRole = null;
+            
+            // Show login page
+            mainApp.classList.add('d-none');
+            loginPage.classList.remove('d-none');
+            
+            // Reset form
+            loginForm.reset();
+            
+            // Show notification
+            showNotification('Logged out successfully', 'info');
+        });
+
+        // Sidebar toggle
+        sidebarToggle.addEventListener('click', function() {
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('expanded');
+        });
+
+        // Navigation
+        document.querySelectorAll('.sidebar-menu .nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const pageName = this.getAttribute('data-page');
+                showPage(pageName);
+                
+                // Update active menu item
+                document.querySelectorAll('.sidebar-menu .nav-link').forEach(item => {
+                    item.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+
+        // Show page function
+        function showPage(pageName) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(`${pageName}-page`).classList.add('active');
+            
+            // Load page data
+            switch(pageName) {
+                case 'dashboard':
+                    updateDashboard();
+                    break;
+                case 'cashbill':
+                    loadCashbillList();
+                    break;
+                case 'logbook':
+                    loadLogbookList();
+                    break;
+                case 'quotation':
+                    loadQuotationList();
+                    break;
+                case 'online-order':
+                    loadOrderList();
+                    break;
+                case 'crew-management':
+                    loadCrewList();
+                    break;
+                case 'stock-management':
+                    loadStockList();
+                    break;
+            }
         }
 
         // Apply role-based permissions
         function applyRolePermissions() {
-            const adminElements = document.querySelectorAll('.admin-only');
-            adminElements.forEach(el => {
-                el.style.display = userRole === 'Admin' ? 'block' : 'none';
-            });
-        }
-
-        // Switch pages
-        document.querySelectorAll('.sidebar a[data-page]').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-                const pageId = this.getAttribute('data-page');
-                document.getElementById(pageId).classList.add('active');
-                if (pageId === 'dashboard-page') updateDashboard();
-                if (pageId === 'cashbill-page') loadCashbillList();
-                if (pageId === 'logbook-page') loadLogbookList();
-                if (pageId === 'crew-management-page') {
-                    loadCrewList();
-                    loadAmendmentHistory();
-                }
-            });
-        });
-
-        // Login
-        document.getElementById('login-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const userId = document.getElementById('user-id').value;
-            const password = document.getElementById('password').value;
-            const user = appData.crew.find(c => c.id === userId && c.password === password);
-            if (user) {
-                currentUser = user;
-                userRole = user.role === 'Administrator' ? 'Admin' : 'User';
-                document.getElementById('login-page').classList.remove('active');
-                document.getElementById('dashboard-page').classList.add('active');
-                applyRolePermissions();
-                updateDashboard();
-                showNotification('Login successful', 'success');
+            if (userRole === 'Crew') {
+                // Hide admin-only elements
+                document.querySelectorAll('.admin-only').forEach(el => {
+                    el.style.display = 'none';
+                });
+                
+                // Disable edit/delete functionality for crew
+                document.querySelectorAll('.crew-readonly').forEach(el => {
+                    el.setAttribute('disabled', 'disabled');
+                });
             } else {
-                showNotification('Invalid credentials', 'error');
+                // Show admin-only elements
+                document.querySelectorAll('.admin-only').forEach(el => {
+                    el.style.display = '';
+                });
             }
-        });
-
-        // Logout
-        function logout() {
-            currentUser = null;
-            userRole = null;
-            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-            document.getElementById('login-page').classList.add('active');
-            applyRolePermissions();
         }
 
-        // Update Dashboard
+        // Show notification
+        function showNotification(message, type) {
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Dashboard functions
         function updateDashboard() {
-            document.getElementById('total-cashbills').textContent = appData.cashbills.length;
-            document.getElementById('total-logs').textContent = appData.logbook.length;
-            document.getElementById('total-crew').textContent = appData.crew.length;
+            // Update counts
+            document.getElementById('dashboard-cashbill-count').textContent = appData.cashbills.length;
+            document.getElementById('dashboard-logbook-count').textContent = appData.logbook.length;
+            document.getElementById('dashboard-quotation-count').textContent = appData.quotations.length;
+            document.getElementById('dashboard-order-count').textContent = appData.onlineOrders.length;
+            
+            // Load recent cashbills
+            const recentCashbills = appData.cashbills.slice(-5);
+            const recentCashbillsHtml = recentCashbills.map(cashbill => `
+                <tr>
+                    <td>${cashbill.invoiceNo}</td>
+                    <td>${cashbill.customerName}</td>
+                    <td>${cashbill.date}</td>
+                    <td>$${cashbill.totalAmount.toFixed(2)}</td>
+                </tr>
+            `).join('');
+            document.getElementById('recent-cashbills').innerHTML = recentCashbillsHtml || '<tr><td colspan="4" class="text-center">No cashbills found</td></tr>';
+            
+            // Load recent log entries
+            const recentLogEntries = appData.logbook.slice(-5);
+            const recentLogHtml = recentLogEntries.map(log => `
+                <tr>
+                    <td>${log.date}</td>
+                    <td>${log.description}</td>
+                    <td>${log.crew}</td>
+                </tr>
+            `).join('');
+            document.getElementById('recent-logbook').innerHTML = recentLogHtml || '<tr><td colspan="3" class="text-center">No log entries found</td></tr>';
         }
 
-        // Cashbill Management
+        // Cashbill functions
+        const newCashbillBtn = document.getElementById('new-cashbill-btn');
         const cashbillFormSection = document.getElementById('cashbill-form-section');
         const cashbillListSection = document.getElementById('cashbill-list-section');
         const cashbillForm = document.getElementById('cashbill-form');
+        const cancelCashbillBtn = document.getElementById('cancel-cashbill-btn');
+        const addItemBtn = document.getElementById('add-item-btn');
         const cashbillItems = document.getElementById('cashbill-items');
         const cashbillSearch = document.getElementById('cashbill-search');
-
-        function showCashbillForm(editInvoiceNo = null) {
+        
+        // Show new cashbill form
+        newCashbillBtn.addEventListener('click', function() {
+            // Generate invoice number
+            const invoiceNo = 'INV-' + Date.now();
+            document.getElementById('invoice-no').value = invoiceNo;
+            
+            // Set current date
+            document.getElementById('cashbill-date').value = new Date().toISOString().split('T')[0];
+            
+            // Set crew name
+            document.getElementById('crew-name').value = currentUser.name;
+            
+            // Reset form
+            cashbillForm.reset();
+            document.getElementById('invoice-no').value = invoiceNo;
+            document.getElementById('cashbill-date').value = new Date().toISOString().split('T')[0];
+            document.getElementById('crew-name').value = currentUser.name;
+            
+            // Reset items
+            cashbillItems.innerHTML = `
+                <div class="cashbill-item row mb-2">
+                    <div class="col-md-5">
+                        <input type="text" class="form-control item-name" placeholder="Item name" required>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" class="form-control item-quantity" placeholder="Qty" min="1" value="1" required>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" class="form-control item-price" placeholder="Price" min="0" step="0.01" required>
+                    </div>
+                    <div class="col-md-1">
+                        <button type="button" class="btn btn-sm btn-danger remove-item">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Show form, hide list
             cashbillFormSection.classList.remove('d-none');
             cashbillListSection.classList.add('d-none');
-            cashbillForm.reset();
-            cashbillItems.innerHTML = '';
-            addCashbillItem();
-            populateCrewDropdown('crew-name');
-            if (editInvoiceNo) {
-                viewCashbill(editInvoiceNo);
-            } else {
-                cashbillForm.querySelectorAll('input, select, button').forEach(el => el.removeAttribute('disabled'));
-                cashbillFormSection.querySelector('h4').textContent = 'Add Cashbill';
-                cashbillForm.querySelector('button[type="submit"]').innerHTML = '<i class="fas fa-check-circle me-1"></i> Save Cashbill';
-            }
-        }
-
-        function cancelCashbillForm() {
+            
+            // Add event listeners to remove buttons
+            addRemoveItemListeners();
+        });
+        
+        // Cancel cashbill form
+        cancelCashbillBtn.addEventListener('click', function() {
             cashbillFormSection.classList.add('d-none');
             cashbillListSection.classList.remove('d-none');
-            loadCashbillList();
-        }
-
-        function addCashbillItem() {
-            const itemElement = document.createElement('div');
-            itemElement.className = 'cashbill-item row mb-2';
-            itemElement.innerHTML = `
+        });
+        
+        // Add item to cashbill
+        addItemBtn.addEventListener('click', function() {
+            const newItem = document.createElement('div');
+            newItem.className = 'cashbill-item row mb-2';
+            newItem.innerHTML = `
                 <div class="col-md-5">
                     <input type="text" class="form-control item-name" placeholder="Item name" required>
                 </div>
                 <div class="col-md-3">
-                    <input type="number" class="form-control item-quantity" placeholder="Qty" min="1" required>
+                    <input type="number" class="form-control item-quantity" placeholder="Qty" min="1" value="1" required>
                 </div>
                 <div class="col-md-3">
                     <input type="number" class="form-control item-price" placeholder="Price" min="0" step="0.01" required>
                 </div>
                 <div class="col-md-1">
-                    <button type="button" class="btn btn-sm btn-danger remove-item"><i class="fas fa-trash"></i></button>
+                    <button type="button" class="btn btn-sm btn-danger remove-item">
+                        <i class="bi bi-trash"></i>
+                    </button>
                 </div>
             `;
-            cashbillItems.appendChild(itemElement);
-            addRemoveItemListeners();
-        }
-
+            cashbillItems.appendChild(newItem);
+            
+            // Add event listener to remove button
+            newItem.querySelector('.remove-item').addEventListener('click', function() {
+                newItem.remove();
+                calculateTotal();
+            });
+        });
+        
+        // Add event listeners to remove buttons
         function addRemoveItemListeners() {
             document.querySelectorAll('.remove-item').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    if (document.querySelectorAll('.cashbill-item').length > 1) {
-                        this.closest('.cashbill-item').remove();
-                    }
+                    this.closest('.cashbill-item').remove();
+                    calculateTotal();
                 });
             });
         }
-
-        function populateCrewDropdown(selectId) {
-            const select = document.getElementById(selectId);
-            select.innerHTML = '<option value="">Select Crew</option>' + 
-                appData.crew.map(crew => `<option value="${crew.name}">${crew.name}</option>`).join('');
+        
+        // Calculate total amount
+        function calculateTotal() {
+            let total = 0;
+            document.querySelectorAll('.cashbill-item').forEach(item => {
+                const quantity = parseFloat(item.querySelector('.item-quantity').value) || 0;
+                const price = parseFloat(item.querySelector('.item-price').value) || 0;
+                total += quantity * price;
+            });
+            document.getElementById('total-amount').value = total.toFixed(2);
         }
-
-        function loadCashbillList() {
-            const cashbillList = document.getElementById('cashbill-list');
-            const searchTerm = cashbillSearch.value.toLowerCase();
-            const filteredCashbills = appData.cashbills.filter(cashbill => 
-                cashbill.invoiceNo.toLowerCase().includes(searchTerm) ||
-                cashbill.customerName.toLowerCase().includes(searchTerm) ||
-                cashbill.crewName.toLowerCase().includes(searchTerm)
-            );
-            const cashbillHtml = filteredCashbills.map(cashbill => {
-                const amendmentStatus = cashbill.committed ? 
-                    '<span class="amendment-status committed">Committed</span>' : 
-                    '<span class="amendment-status uncommitted">Uncommitted</span>';
-                const actions = userRole === 'Admin' ? 
-                    `<button class="btn btn-sm btn-primary view-cashbill" data-id="${cashbill.invoiceNo}"><i class="fas fa-eye"></i></button>
-                     <button class="btn btn-sm btn-info print-cashbill" data-id="${cashbill.invoiceNo}"><i class="fas fa-print"></i></button>
-                     <button class="btn btn-sm btn-warning download-cashbill" data-id="${cashbill.invoiceNo}"><i class="fas fa-download"></i></button>
-                     ${cashbill.committed ? `<button class="btn btn-sm btn-secondary uncommit-cashbill" data-id="${cashbill.invoiceNo}"><i class="fas fa-undo"></i> Uncommit</button>` : ''}
-                     <button class="btn btn-sm btn-danger delete-cashbill" data-id="${cashbill.invoiceNo}"><i class="fas fa-trash"></i></button>` :
-                    `<button class="btn btn-sm btn-primary view-cashbill" data-id="${cashbill.invoiceNo}"><i class="fas fa-eye"></i></button>
-                     <button class="btn btn-sm btn-info print-cashbill" data-id="${cashbill.invoiceNo}"><i class="fas fa-print"></i></button>
-                     <button class="btn btn-sm btn-warning download-cashbill" data-id="${cashbill.invoiceNo}"><i class="fas fa-download"></i></button>`;
-                return `
-                    <tr>
-                        <td>${cashbill.invoiceNo}</td>
-                        <td>${cashbill.date}</td>
-                        <td>${cashbill.customerName}</td>
-                        <td>$${cashbill.totalAmount.toFixed(2)}</td>
-                        <td>${cashbill.crewName}</td>
-                        <td>${cashbill.paymentType}</td>
-                        <td>${amendmentStatus}</td>
-                        <td>${actions}</td>
-                    </tr>
-                `;
-            }).join('');
-            cashbillList.innerHTML = cashbillHtml || '<tr><td colspan="8" class="text-center">No cashbills found</td></tr>';
-            document.querySelectorAll('.view-cashbill').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    showCashbillForm(this.getAttribute('data-id'));
-                });
-            });
-            document.querySelectorAll('.print-cashbill').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    printCashbill(this.getAttribute('data-id'));
-                });
-            });
-            document.querySelectorAll('.download-cashbill').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    downloadCashbill(this.getAttribute('data-id'));
-                });
-            });
-            document.querySelectorAll('.delete-cashbill').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    deleteCashbill(this.getAttribute('data-id'));
-                });
-            });
-            document.querySelectorAll('.uncommit-cashbill').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    uncommitCashbill(this.getAttribute('data-id'));
-                });
-            });
-        }
-
-        cashbillSearch.addEventListener('input', loadCashbillList);
-
+        
+        // Add event listeners to calculate total when item price/quantity changes
+        cashbillItems.addEventListener('input', function(e) {
+            if (e.target.classList.contains('item-quantity') || e.target.classList.contains('item-price')) {
+                calculateTotal();
+            }
+        });
+        
+        // Submit cashbill form
         cashbillForm.addEventListener('submit', function(e) {
             e.preventDefault();
+            
+            // Get form data
             const invoiceNo = document.getElementById('invoice-no').value;
             const date = document.getElementById('cashbill-date').value;
             const customerName = document.getElementById('customer-name').value;
             const crewName = document.getElementById('crew-name').value;
             const paymentType = document.getElementById('payment-type').value;
             const totalAmount = parseFloat(document.getElementById('total-amount').value);
+            
+            // Get items
             const items = [];
             document.querySelectorAll('.cashbill-item').forEach(item => {
                 const name = item.querySelector('.item-name').value;
                 const quantity = parseFloat(item.querySelector('.item-quantity').value);
                 const price = parseFloat(item.querySelector('.item-price').value);
-                items.push({ name, quantity, price, total: quantity * price });
+                
+                items.push({
+                    name,
+                    quantity,
+                    price,
+                    total: quantity * price
+                });
             });
+            
+            // Create cashbill object
             const cashbill = {
                 invoiceNo,
                 date,
@@ -759,602 +1510,1622 @@
                 paymentType,
                 totalAmount,
                 items,
-                timestamp: new Date().toISOString(),
-                committed: true
+                timestamp: new Date().toISOString()
             };
-            const existingIndex = appData.cashbills.findIndex(c => c.invoiceNo === invoiceNo);
-            if (existingIndex !== -1) {
-                logAmendment('cashbill', invoiceNo, appData.cashbills[existingIndex], cashbill, currentUser.name);
-                appData.cashbills[existingIndex] = cashbill;
-            } else {
-                appData.cashbills.push(cashbill);
-                const logEntry = {
-                    date: new Date().toISOString().split('T')[0],
-                    description: `Created cashbill #${invoiceNo} for ${customerName}`,
-                    crew: crewName,
-                    type: 'Cashbill',
-                    timestamp: new Date().toISOString(),
-                    committed: true
-                };
-                appData.logbook.push(logEntry);
-            }
+            
+            // Add to cashbills array
+            appData.cashbills.push(cashbill);
+            
+            // Add to logbook
+            const logEntry = {
+                date: new Date().toISOString().split('T')[0],
+                description: `Created cashbill #${invoiceNo} for ${customerName}`,
+                crew: crewName,
+                type: 'Cashbill',
+                timestamp: new Date().toISOString()
+            };
+            appData.logbook.push(logEntry);
+            
+            // Save data
             saveData();
+            
+            // Show list, hide form
             cashbillFormSection.classList.add('d-none');
             cashbillListSection.classList.remove('d-none');
+            
+            // Reload cashbill list
             loadCashbillList();
+            
+            // Show notification
             showNotification('Cashbill saved successfully', 'success');
         });
-
+        
+        // Load cashbill list
+        function loadCashbillList() {
+            const cashbillList = document.getElementById('cashbill-list');
+            const searchTerm = cashbillSearch.value.toLowerCase();
+            
+            // Filter cashbills based on search term
+            const filteredCashbills = appData.cashbills.filter(cashbill => 
+                cashbill.invoiceNo.toLowerCase().includes(searchTerm) ||
+                cashbill.customerName.toLowerCase().includes(searchTerm) ||
+                cashbill.crewName.toLowerCase().includes(searchTerm)
+            );
+            
+            // Generate HTML for cashbill list
+            const cashbillHtml = filteredCashbills.map(cashbill => {
+                const actions = userRole === 'Admin' ? 
+                    `<button class="btn btn-sm btn-primary view-cashbill" data-id="${cashbill.invoiceNo}"><i class="bi bi-eye"></i></button>
+                     <button class="btn btn-sm btn-info print-cashbill" data-id="${cashbill.invoiceNo}"><i class="bi bi-printer"></i></button>
+                     <button class="btn btn-sm btn-warning download-cashbill" data-id="${cashbill.invoiceNo}"><i class="bi bi-download"></i></button>
+                     <button class="btn btn-sm btn-danger delete-cashbill" data-id="${cashbill.invoiceNo}"><i class="bi bi-trash"></i></button>` :
+                    `<button class="btn btn-sm btn-primary view-cashbill" data-id="${cashbill.invoiceNo}"><i class="bi bi-eye"></i></button>
+                     <button class="btn btn-sm btn-info print-cashbill" data-id="${cashbill.invoiceNo}"><i class="bi bi-printer"></i></button>
+                     <button class="btn btn-sm btn-warning download-cashbill" data-id="${cashbill.invoiceNo}"><i class="bi bi-download"></i></button>`;
+                
+                return `
+                    <tr>
+                        <td>${cashbill.invoiceNo}</td>
+                        <td>${cashbill.date}</td>
+                        <td>${cashbill.customerName}</td>
+                        <td>$${cashbill.totalAmount.toFixed(2)}</td>
+                        <td>${cashbill.crewName}</td>
+                        <td>${cashbill.paymentType}</td>
+                        <td>${actions}</td>
+                    </tr>
+                `;
+            }).join('');
+            
+            cashbillList.innerHTML = cashbillHtml || '<tr><td colspan="7" class="text-center">No cashbills found</td></tr>';
+            
+            // Add event listeners to action buttons
+            document.querySelectorAll('.view-cashbill').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const invoiceNo = this.getAttribute('data-id');
+                    viewCashbill(invoiceNo);
+                });
+            });
+            
+            document.querySelectorAll('.print-cashbill').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const invoiceNo = this.getAttribute('data-id');
+                    printCashbill(invoiceNo);
+                });
+            });
+            
+            document.querySelectorAll('.download-cashbill').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const invoiceNo = this.getAttribute('data-id');
+                    downloadCashbill(invoiceNo);
+                });
+            });
+            
+            document.querySelectorAll('.delete-cashbill').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const invoiceNo = this.getAttribute('data-id');
+                    deleteCashbill(invoiceNo);
+                });
+            });
+        }
+        
+        // Search cashbills
+        cashbillSearch.addEventListener('input', loadCashbillList);
+        
+        // View cashbill
         function viewCashbill(invoiceNo) {
             const cashbill = appData.cashbills.find(c => c.invoiceNo === invoiceNo);
             if (cashbill) {
+                // Populate form with cashbill data
                 document.getElementById('invoice-no').value = cashbill.invoiceNo;
                 document.getElementById('cashbill-date').value = cashbill.date;
                 document.getElementById('customer-name').value = cashbill.customerName;
                 document.getElementById('crew-name').value = cashbill.crewName;
                 document.getElementById('payment-type').value = cashbill.paymentType;
                 document.getElementById('total-amount').value = cashbill.totalAmount.toFixed(2);
+                
+                // Clear and populate items
                 cashbillItems.innerHTML = '';
                 cashbill.items.forEach(item => {
                     const itemElement = document.createElement('div');
                     itemElement.className = 'cashbill-item row mb-2';
                     itemElement.innerHTML = `
                         <div class="col-md-5">
-                            <input type="text" class="form-control item-name" placeholder="Item name" value="${item.name}" ${cashbill.committed ? 'readonly' : ''}>
+                            <input type="text" class="form-control item-name" placeholder="Item name" value="${item.name}" readonly>
                         </div>
                         <div class="col-md-3">
-                            <input type="number" class="form-control item-quantity" placeholder="Qty" min="1" value="${item.quantity}" ${cashbill.committed ? 'readonly' : ''}>
+                            <input type="number" class="form-control item-quantity" placeholder="Qty" min="1" value="${item.quantity}" readonly>
                         </div>
                         <div class="col-md-3">
-                            <input type="number" class="form-control item-price" placeholder="Price" min="0" step="0.01" value="${item.price}" ${cashbill.committed ? 'readonly' : ''}>
+                            <input type="number" class="form-control item-price" placeholder="Price" min="0" step="0.01" value="${item.price}" readonly>
                         </div>
                         <div class="col-md-1">
-                            <button type="button" class="btn btn-sm btn-danger remove-item" ${cashbill.committed ? 'disabled' : ''}><i class="fas fa-trash"></i></button>
+                            <button type="button" class="btn btn-sm btn-danger remove-item" disabled>
+                                <i class="bi bi-trash"></i>
+                            </button>
                         </div>
                     `;
                     cashbillItems.appendChild(itemElement);
                 });
+                
+                // Show form, hide list
                 cashbillFormSection.classList.remove('d-none');
                 cashbillListSection.classList.add('d-none');
-                if (cashbill.committed) {
-                    cashbillForm.querySelectorAll('input, select, button').forEach(el => {
-                        if (el.id !== 'cancel-cashbill-btn') el.setAttribute('disabled', 'disabled');
-                    });
-                    cashbillFormSection.querySelector('h4').textContent = 'View Cashbill';
-                } else {
-                    cashbillForm.querySelectorAll('input, select, button').forEach(el => el.removeAttribute('disabled'));
-                    cashbillFormSection.querySelector('h4').textContent = 'Edit Cashbill';
-                    cashbillForm.querySelector('button[type="submit"]').innerHTML = '<i class="fas fa-check-circle me-1"></i> Update Cashbill';
-                    addRemoveItemListeners();
-                }
+                
+                // Disable form for viewing
+                cashbillForm.querySelectorAll('input, select, button').forEach(el => {
+                    if (el.id !== 'cancel-cashbill-btn') {
+                        el.setAttribute('disabled', 'disabled');
+                    }
+                });
+                
+                // Change form title
+                cashbillFormSection.querySelector('h4').textContent = 'View Cashbill';
             }
         }
-
+        
+        // Print cashbill
         function printCashbill(invoiceNo) {
             const cashbill = appData.cashbills.find(c => c.invoiceNo === invoiceNo);
             if (cashbill) {
+                // Create a new window for printing
                 const printWindow = window.open('', '_blank');
-                printWindow.document.write(`
+                
+                // Generate HTML for printing
+                let itemsHtml = '';
+                cashbill.items.forEach(item => {
+                    itemsHtml += `
+                        <tr>
+                            <td>${item.name}</td>
+                            <td>${item.quantity}</td>
+                            <td>$${item.price.toFixed(2)}</td>
+                            <td>$${item.total.toFixed(2)}</td>
+                        </tr>
+                    `;
+                });
+                
+                const printHtml = `
                     <html>
-                        <head><title>Cashbill #${cashbill.invoiceNo}</title></head>
-                        <body>
-                            <h1>Cashbill #${cashbill.invoiceNo}</h1>
-                            <p>Date: ${cashbill.date}</p>
-                            <p>Customer: ${cashbill.customerName}</p>
-                            <p>Crew: ${cashbill.crewName}</p>
-                            <p>Payment Type: ${cashbill.paymentType}</p>
-                            <p>Total: $${cashbill.totalAmount.toFixed(2)}</p>
-                            <h3>Items</h3>
-                            <table border="1">
-                                <tr><th>Item</th><th>Quantity</th><th>Price</th><th>Total</th></tr>
-                                ${cashbill.items.map(item => `
-                                    <tr>
-                                        <td>${item.name}</td>
-                                        <td>${item.quantity}</td>
-                                        <td>$${item.price.toFixed(2)}</td>
-                                        <td>$${item.total.toFixed(2)}</td>
-                                    </tr>
-                                `).join('')}
-                            </table>
-                            <script>window.print(); window.close();</script>
-                        </body>
+                    <head>
+                        <title>Invoice ${cashbill.invoiceNo}</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; margin: 20px; }
+                            .invoice-header { text-align: center; margin-bottom: 30px; }
+                            .invoice-details { margin-bottom: 30px; }
+                            .invoice-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+                            .invoice-table th, .invoice-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                            .invoice-table th { background-color: #f2f2f2; }
+                            .invoice-total { text-align: right; font-weight: bold; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="invoice-header">
+                            <h1>INVOICE</h1>
+                            <h2>${cashbill.invoiceNo}</h2>
+                        </div>
+                        
+                        <div class="invoice-details">
+                            <p><strong>Date:</strong> ${cashbill.date}</p>
+                            <p><strong>Customer:</strong> ${cashbill.customerName}</p>
+                            <p><strong>Crew:</strong> ${cashbill.crewName}</p>
+                            <p><strong>Payment Type:</strong> ${cashbill.paymentType}</p>
+                        </div>
+                        
+                        <table class="invoice-table">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${itemsHtml}
+                            </tbody>
+                        </table>
+                        
+                        <div class="invoice-total">
+                            <p>Total Amount: $${cashbill.totalAmount.toFixed(2)}</p>
+                        </div>
+                    </body>
                     </html>
-                `);
+                `;
+                
+                printWindow.document.write(printHtml);
                 printWindow.document.close();
+                printWindow.print();
+                
+                showNotification('Cashbill sent to printer', 'success');
             }
         }
-
+        
+        // Download cashbill
         function downloadCashbill(invoiceNo) {
             const cashbill = appData.cashbills.find(c => c.invoiceNo === invoiceNo);
             if (cashbill) {
-                const content = `
-                    Cashbill #${cashbill.invoiceNo}
-                    Date: ${cashbill.date}
-                    Customer: ${cashbill.customerName}
-                    Crew: ${cashbill.crewName}
-                    Payment Type: ${cashbill.paymentType}
-                    Total: $${cashbill.totalAmount.toFixed(2)}
-                    
-                    Items:
-                    ${cashbill.items.map(item => `${item.name}, Qty: ${item.quantity}, Price: $${item.price.toFixed(2)}, Total: $${item.total.toFixed(2)}`).join('\n')}
-                `;
-                const blob = new Blob([content], { type: 'text/plain' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `cashbill_${cashbill.invoiceNo}.txt`;
-                a.click();
-                URL.revokeObjectURL(url);
+                // Create a JSON representation of the cashbill
+                const dataStr = JSON.stringify(cashbill, null, 2);
+                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                
+                // Create download link
+                const exportFileDefaultName = `cashbill_${invoiceNo}.json`;
+                
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileDefaultName);
+                linkElement.click();
+                
+                showNotification('Cashbill downloaded', 'success');
             }
         }
-
+        
+        // Delete cashbill
         function deleteCashbill(invoiceNo) {
-            if (userRole !== 'Admin') {
-                showNotification('Only admins can delete records', 'error');
-                return;
-            }
             if (confirm('Are you sure you want to delete this cashbill?')) {
-                appData.cashbills = appData.cashbills.filter(c => c.invoiceNo !== invoiceNo);
-                saveData();
-                loadCashbillList();
-                showNotification('Cashbill deleted successfully', 'success');
-            }
-        }
-
-        function uncommitCashbill(invoiceNo) {
-            if (userRole !== 'Admin') {
-                showNotification('Only admins can uncommit records', 'error');
-                return;
-            }
-            if (confirm('Are you sure you want to uncommit this cashbill?')) {
-                const cashbill = appData.cashbills.find(c => c.invoiceNo === invoiceNo);
-                if (cashbill) {
-                    cashbill.committed = false;
-                    logAmendment('cashbill', invoiceNo, cashbill, cashbill, currentUser.name);
+                // Find and remove cashbill
+                const index = appData.cashbills.findIndex(c => c.invoiceNo === invoiceNo);
+                if (index !== -1) {
+                    appData.cashbills.splice(index, 1);
+                    
+                    // Save data
                     saveData();
+                    
+                    // Reload cashbill list
                     loadCashbillList();
-                    showNotification('Cashbill uncommitted successfully', 'success');
+                    
+                    // Show notification
+                    showNotification('Cashbill deleted', 'success');
                 }
             }
         }
-
-        // Logbook Management
+        
+        // Logbook functions
+        const newLogEntryBtn = document.getElementById('new-log-entry-btn');
         const logFormSection = document.getElementById('log-form-section');
         const logbookListSection = document.getElementById('logbook-list-section');
         const logForm = document.getElementById('log-form');
+        const cancelLogBtn = document.getElementById('cancel-log-btn');
         const logbookSearch = document.getElementById('logbook-search');
-
-        function showLogForm(editTimestamp = null) {
+        
+        // Show new log entry form
+        newLogEntryBtn.addEventListener('click', function() {
+            // Set current date
+            document.getElementById('log-date').value = new Date().toISOString().split('T')[0];
+            
+            // Populate crew dropdown
+            const crewDropdown = document.getElementById('log-crew');
+            crewDropdown.innerHTML = '<option value="">Select crew member</option>';
+            
+            appData.crew.forEach(crew => {
+                const option = document.createElement('option');
+                option.value = crew.name;
+                option.textContent = crew.name;
+                crewDropdown.appendChild(option);
+            });
+            
+            // Reset form
+            logForm.reset();
+            document.getElementById('log-date').value = new Date().toISOString().split('T')[0];
+            
+            // Show form, hide list
             logFormSection.classList.remove('d-none');
             logbookListSection.classList.add('d-none');
-            logForm.reset();
-            populateCrewDropdown('log-crew');
-            if (editTimestamp) {
-                editLog(editTimestamp);
-            } else {
-                logForm.querySelectorAll('input, select, button').forEach(el => el.removeAttribute('disabled'));
-                logFormSection.querySelector('h4').textContent = 'Add Log Entry';
-                logForm.querySelector('button[type="submit"]').innerHTML = '<i class="fas fa-check-circle me-1"></i> Save Log Entry';
-                logForm.removeAttribute('data-edit-timestamp');
-            }
-        }
-
-        function cancelLogForm() {
+        });
+        
+        // Cancel log form
+        cancelLogBtn.addEventListener('click', function() {
             logFormSection.classList.add('d-none');
             logbookListSection.classList.remove('d-none');
+        });
+        
+        // Submit log form
+        logForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const date = document.getElementById('log-date').value;
+            const crew = document.getElementById('log-crew').value;
+            const description = document.getElementById('log-description').value;
+            const type = document.getElementById('log-type').value;
+            
+            // Create log entry object
+            const logEntry = {
+                date,
+                description,
+                crew,
+                type,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Add to logbook array
+            appData.logbook.push(logEntry);
+            
+            // Save data
+            saveData();
+            
+            // Show list, hide form
+            logFormSection.classList.add('d-none');
+            logbookListSection.classList.remove('d-none');
+            
+            // Reload logbook list
             loadLogbookList();
-        }
-
+            
+            // Show notification
+            showNotification('Log entry saved successfully', 'success');
+        });
+        
+        // Load logbook list
         function loadLogbookList() {
             const logbookList = document.getElementById('logbook-list');
             const searchTerm = logbookSearch.value.toLowerCase();
+            
+            // Filter log entries based on search term
             const filteredLogs = appData.logbook.filter(log => 
                 log.description.toLowerCase().includes(searchTerm) ||
                 log.crew.toLowerCase().includes(searchTerm) ||
                 log.type.toLowerCase().includes(searchTerm)
             );
+            
+            // Generate HTML for logbook list
             const logbookHtml = filteredLogs.map(log => {
-                const amendmentStatus = log.committed ? 
-                    '<span class="amendment-status committed">Committed</span>' : 
-                    '<span class="amendment-status uncommitted">Uncommitted</span>';
                 const actions = userRole === 'Admin' ? 
-                    `<button class="btn btn-sm btn-primary view-log" data-id="${log.timestamp}"><i class="fas fa-eye"></i></button>
-                     <button class="btn btn-sm btn-warning edit-log" data-id="${log.timestamp}"><i class="fas fa-pencil-alt"></i></button>
-                     ${log.committed ? `<button class="btn btn-sm btn-secondary uncommit-log" data-id="${log.timestamp}"><i class="fas fa-undo"></i> Uncommit</button>` : ''}
-                     <button class="btn btn-sm btn-danger delete-log" data-id="${log.timestamp}"><i class="fas fa-trash"></i></button>` :
-                    `<button class="btn btn-sm btn-primary view-log" data-id="${log.timestamp}"><i class="fas fa-eye"></i></button>`;
+                    `<button class="btn btn-sm btn-primary view-log" data-id="${log.timestamp}"><i class="bi bi-eye"></i></button>
+                     <button class="btn btn-sm btn-warning edit-log" data-id="${log.timestamp}"><i class="bi bi-pencil"></i></button>
+                     <button class="btn btn-sm btn-danger delete-log" data-id="${log.timestamp}"><i class="bi bi-trash"></i></button>` :
+                    `<button class="btn btn-sm btn-primary view-log" data-id="${log.timestamp}"><i class="bi bi-eye"></i></button>`;
+                
                 return `
                     <tr>
                         <td>${log.date}</td>
                         <td>${log.description}</td>
                         <td>${log.crew}</td>
                         <td>${log.type}</td>
-                        <td>${amendmentStatus}</td>
                         <td>${actions}</td>
                     </tr>
                 `;
             }).join('');
-            logbookList.innerHTML = logbookHtml || '<tr><td colspan="6" class="text-center">No log entries found</td></tr>';
+            
+            logbookList.innerHTML = logbookHtml || '<tr><td colspan="5" class="text-center">No log entries found</td></tr>';
+            
+            // Add event listeners to action buttons
             document.querySelectorAll('.view-log').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    viewLog(this.getAttribute('data-id'));
+                    const timestamp = this.getAttribute('data-id');
+                    viewLog(timestamp);
                 });
             });
+            
             document.querySelectorAll('.edit-log').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    showLogForm(this.getAttribute('data-id'));
+                    const timestamp = this.getAttribute('data-id');
+                    editLog(timestamp);
                 });
             });
+            
             document.querySelectorAll('.delete-log').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    deleteLog(this.getAttribute('data-id'));
-                });
-            });
-            document.querySelectorAll('.uncommit-log').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    uncommitLog(this.getAttribute('data-id'));
+                    const timestamp = this.getAttribute('data-id');
+                    deleteLog(timestamp);
                 });
             });
         }
-
+        
+        // Search logbook
         logbookSearch.addEventListener('input', loadLogbookList);
-
-        logForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const date = document.getElementById('log-date').value;
-            const crew = document.getElementById('log-crew').value;
-            const description = document.getElementById('log-description').value;
-            const type = document.getElementById('log-type').value;
-            const timestamp = logForm.getAttribute('data-edit-timestamp') || new Date().toISOString();
-            const logEntry = { date, description, crew, type, timestamp, committed: true };
-            const editTimestamp = logForm.getAttribute('data-edit-timestamp');
-            if (editTimestamp) {
-                const existingIndex = appData.logbook.findIndex(l => l.timestamp === editTimestamp);
-                if (existingIndex !== -1) {
-                    logAmendment('logbook', editTimestamp, appData.logbook[existingIndex], logEntry, currentUser.name);
-                    appData.logbook[existingIndex] = logEntry;
-                }
-            } else {
-                appData.logbook.push(logEntry);
-            }
-            saveData();
-            logFormSection.classList.add('d-none');
-            logbookListSection.classList.remove('d-none');
-            loadLogbookList();
-            showNotification('Log entry saved successfully', 'success');
-            logForm.removeAttribute('data-edit-timestamp');
-        });
-
+        
+        // View log entry
         function viewLog(timestamp) {
             const log = appData.logbook.find(l => l.timestamp === timestamp);
             if (log) {
+                // Populate form with log data
                 document.getElementById('log-date').value = log.date;
                 document.getElementById('log-crew').value = log.crew;
                 document.getElementById('log-description').value = log.description;
                 document.getElementById('log-type').value = log.type;
+                
+                // Show form, hide list
                 logFormSection.classList.remove('d-none');
                 logbookListSection.classList.add('d-none');
-                if (log.committed) {
-                    logForm.querySelectorAll('input, select, button').forEach(el => {
-                        if (el.id !== 'cancel-log-btn') el.setAttribute('disabled', 'disabled');
-                    });
-                    logFormSection.querySelector('h4').textContent = 'View Log Entry';
-                } else {
-                    logForm.querySelectorAll('input, select, button').forEach(el => el.removeAttribute('disabled'));
-                    logFormSection.querySelector('h4').textContent = 'Edit Log Entry';
-                    logForm.querySelector('button[type="submit"]').innerHTML = '<i class="fas fa-check-circle me-1"></i> Update Log Entry';
-                    logForm.setAttribute('data-edit-timestamp', timestamp);
-                }
+                
+                // Disable form for viewing
+                logForm.querySelectorAll('input, select, textarea, button').forEach(el => {
+                    if (el.id !== 'cancel-log-btn') {
+                        el.setAttribute('disabled', 'disabled');
+                    }
+                });
+                
+                // Change form title
+                logFormSection.querySelector('h4').textContent = 'View Log Entry';
             }
         }
-
+        
+        // Edit log entry
         function editLog(timestamp) {
             const log = appData.logbook.find(l => l.timestamp === timestamp);
-            if (log && !log.committed) {
+            if (log) {
+                // Populate form with log data
                 document.getElementById('log-date').value = log.date;
                 document.getElementById('log-crew').value = log.crew;
                 document.getElementById('log-description').value = log.description;
                 document.getElementById('log-type').value = log.type;
+                
+                // Show form, hide list
                 logFormSection.classList.remove('d-none');
                 logbookListSection.classList.add('d-none');
-                logForm.querySelectorAll('input, select, button').forEach(el => el.removeAttribute('disabled'));
+                
+                // Enable form for editing
+                logForm.querySelectorAll('input, select, textarea, button').forEach(el => {
+                    el.removeAttribute('disabled');
+                });
+                
+                // Change form title
                 logFormSection.querySelector('h4').textContent = 'Edit Log Entry';
-                logForm.querySelector('button[type="submit"]').innerHTML = '<i class="fas fa-check-circle me-1"></i> Update Log Entry';
+                
+                // Change submit button text
+                logForm.querySelector('button[type="submit"]').innerHTML = '<i class="bi bi-check-circle me-1"></i> Update Log Entry';
+                
+                // Store original timestamp for updating
                 logForm.setAttribute('data-edit-timestamp', timestamp);
-            } else {
-                showNotification('Cannot edit committed log entry', 'error');
             }
         }
-
+        
+        // Delete log entry
         function deleteLog(timestamp) {
-            if (userRole !== 'Admin') {
-                showNotification('Only admins can delete records', 'error');
-                return;
-            }
             if (confirm('Are you sure you want to delete this log entry?')) {
-                appData.logbook = appData.logbook.filter(l => l.timestamp !== timestamp);
-                saveData();
-                loadLogbookList();
-                showNotification('Log entry deleted successfully', 'success');
-            }
-        }
-
-        function uncommitLog(timestamp) {
-            if (userRole !== 'Admin') {
-                showNotification('Only admins can uncommit records', 'error');
-                return;
-            }
-            if (confirm('Are you sure you want to uncommit this log entry?')) {
-                const log = appData.logbook.find(l => l.timestamp === timestamp);
-                if (log) {
-                    log.committed = false;
-                    logAmendment('logbook', timestamp, log, log, currentUser.name);
+                // Find and remove log entry
+                const index = appData.logbook.findIndex(l => l.timestamp === timestamp);
+                if (index !== -1) {
+                    appData.logbook.splice(index, 1);
+                    
+                    // Save data
                     saveData();
+                    
+                    // Reload logbook list
                     loadLogbookList();
-                    showNotification('Log entry uncommitted successfully', 'success');
+                    
+                    // Show notification
+                    showNotification('Log entry deleted', 'success');
                 }
             }
         }
-
-        // Crew Management
+        
+        // Quotation functions
+        const newQuotationBtn = document.getElementById('new-quotation-btn');
+        const quotationFormSection = document.getElementById('quotation-form-section');
+        const quotationListSection = document.getElementById('quotation-list-section');
+        const quotationForm = document.getElementById('quotation-form');
+        const cancelQuotationBtn = document.getElementById('cancel-quotation-btn');
+        const addServiceBtn = document.getElementById('add-service-btn');
+        const quotationServices = document.getElementById('quotation-services');
+        const quotationSearch = document.getElementById('quotation-search');
+        
+        // Show new quotation form
+        newQuotationBtn.addEventListener('click', function() {
+            // Generate quote number
+            const quoteNo = 'QTE-' + Date.now();
+            document.getElementById('quote-no').value = quoteNo;
+            
+            // Set current date
+            document.getElementById('quote-date').value = new Date().toISOString().split('T')[0];
+            
+            // Reset form
+            quotationForm.reset();
+            document.getElementById('quote-no').value = quoteNo;
+            document.getElementById('quote-date').value = new Date().toISOString().split('T')[0];
+            
+            // Reset services
+            quotationServices.innerHTML = `
+                <div class="quotation-service row mb-2">
+                    <div class="col-md-7">
+                        <input type="text" class="form-control service-name" placeholder="Service name" required>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="number" class="form-control service-price" placeholder="Price" min="0" step="0.01" required>
+                    </div>
+                    <div class="col-md-1">
+                        <button type="button" class="btn btn-sm btn-danger remove-service">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Show form, hide list
+            quotationFormSection.classList.remove('d-none');
+            quotationListSection.classList.add('d-none');
+            
+            // Add event listeners to remove buttons
+            addRemoveServiceListeners();
+        });
+        
+        // Cancel quotation form
+        cancelQuotationBtn.addEventListener('click', function() {
+            quotationFormSection.classList.add('d-none');
+            quotationListSection.classList.remove('d-none');
+        });
+        
+        // Add service to quotation
+        addServiceBtn.addEventListener('click', function() {
+            const newService = document.createElement('div');
+            newService.className = 'quotation-service row mb-2';
+            newService.innerHTML = `
+                <div class="col-md-7">
+                    <input type="text" class="form-control service-name" placeholder="Service name" required>
+                </div>
+                <div class="col-md-4">
+                    <input type="number" class="form-control service-price" placeholder="Price" min="0" step="0.01" required>
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-sm btn-danger remove-service">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            `;
+            quotationServices.appendChild(newService);
+            
+            // Add event listener to remove button
+            newService.querySelector('.remove-service').addEventListener('click', function() {
+                newService.remove();
+                calculateQuoteTotal();
+            });
+        });
+        
+        // Add event listeners to remove buttons
+        function addRemoveServiceListeners() {
+            document.querySelectorAll('.remove-service').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.closest('.quotation-service').remove();
+                    calculateQuoteTotal();
+                });
+            });
+        }
+        
+        // Calculate quote total
+        function calculateQuoteTotal() {
+            let total = 0;
+            document.querySelectorAll('.quotation-service').forEach(service => {
+                const price = parseFloat(service.querySelector('.service-price').value) || 0;
+                total += price;
+            });
+            document.getElementById('quote-total').value = total.toFixed(2);
+        }
+        
+        // Add event listeners to calculate total when service price changes
+        quotationServices.addEventListener('input', function(e) {
+            if (e.target.classList.contains('service-price')) {
+                calculateQuoteTotal();
+            }
+        });
+        
+        // Submit quotation form
+        quotationForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const quoteNo = document.getElementById('quote-no').value;
+            const date = document.getElementById('quote-date').value;
+            const clientName = document.getElementById('client-name').value;
+            const clientContact = document.getElementById('client-contact').value;
+            const status = document.getElementById('quote-status').value;
+            const totalAmount = parseFloat(document.getElementById('quote-total').value);
+            
+            // Get services
+            const services = [];
+            document.querySelectorAll('.quotation-service').forEach(service => {
+                const name = service.querySelector('.service-name').value;
+                const price = parseFloat(service.querySelector('.service-price').value);
+                
+                services.push({
+                    name,
+                    price
+                });
+            });
+            
+            // Create quotation object
+            const quotation = {
+                quoteNo,
+                date,
+                clientName,
+                clientContact,
+                status,
+                totalAmount,
+                services,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Add to quotations array
+            appData.quotations.push(quotation);
+            
+            // Save data
+            saveData();
+            
+            // Show list, hide form
+            quotationFormSection.classList.add('d-none');
+            quotationListSection.classList.remove('d-none');
+            
+            // Reload quotation list
+            loadQuotationList();
+            
+            // Show notification
+            showNotification('Quotation saved successfully', 'success');
+        });
+        
+        // Load quotation list
+        function loadQuotationList() {
+            const quotationList = document.getElementById('quotation-list');
+            const searchTerm = quotationSearch.value.toLowerCase();
+            
+            // Filter quotations based on search term
+            const filteredQuotations = appData.quotations.filter(quotation => 
+                quotation.quoteNo.toLowerCase().includes(searchTerm) ||
+                quotation.clientName.toLowerCase().includes(searchTerm) ||
+                quotation.status.toLowerCase().includes(searchTerm)
+            );
+            
+            // Generate HTML for quotation list
+            const quotationHtml = filteredQuotations.map(quotation => {
+                const actions = 
+                    `<button class="btn btn-sm btn-primary view-quotation" data-id="${quotation.quoteNo}"><i class="bi bi-eye"></i></button>
+                     <button class="btn btn-sm btn-warning download-quote" data-id="${quotation.quoteNo}"><i class="bi bi-download"></i></button>
+                     <button class="btn btn-sm btn-info email-quote" data-id="${quotation.quoteNo}"><i class="bi bi-envelope"></i></button>`;
+                
+                return `
+                    <tr>
+                        <td>${quotation.quoteNo}</td>
+                        <td>${quotation.clientName}</td>
+                        <td>${quotation.date}</td>
+                        <td>$${quotation.totalAmount.toFixed(2)}</td>
+                        <td>${quotation.status}</td>
+                        <td>${actions}</td>
+                    </tr>
+                `;
+            }).join('');
+            
+            quotationList.innerHTML = quotationHtml || '<tr><td colspan="6" class="text-center">No quotations found</td></tr>';
+            
+            // Add event listeners to action buttons
+            document.querySelectorAll('.view-quotation').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const quoteNo = this.getAttribute('data-id');
+                    viewQuotation(quoteNo);
+                });
+            });
+            
+            document.querySelectorAll('.download-quote').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const quoteNo = this.getAttribute('data-id');
+                    downloadQuotation(quoteNo);
+                });
+            });
+            
+            document.querySelectorAll('.email-quote').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const quoteNo = this.getAttribute('data-id');
+                    emailQuotation(quoteNo);
+                });
+            });
+        }
+        
+        // Search quotations
+        quotationSearch.addEventListener('input', loadQuotationList);
+        
+        // View quotation
+        function viewQuotation(quoteNo) {
+            const quotation = appData.quotations.find(q => q.quoteNo === quoteNo);
+            if (quotation) {
+                // Populate form with quotation data
+                document.getElementById('quote-no').value = quotation.quoteNo;
+                document.getElementById('quote-date').value = quotation.date;
+                document.getElementById('client-name').value = quotation.clientName;
+                document.getElementById('client-contact').value = quotation.clientContact;
+                document.getElementById('quote-status').value = quotation.status;
+                document.getElementById('quote-total').value = quotation.totalAmount.toFixed(2);
+                
+                // Clear and populate services
+                quotationServices.innerHTML = '';
+                quotation.services.forEach(service => {
+                    const serviceElement = document.createElement('div');
+                    serviceElement.className = 'quotation-service row mb-2';
+                    serviceElement.innerHTML = `
+                        <div class="col-md-7">
+                            <input type="text" class="form-control service-name" placeholder="Service name" value="${service.name}" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="number" class="form-control service-price" placeholder="Price" min="0" step="0.01" value="${service.price}" readonly>
+                        </div>
+                        <div class="col-md-1">
+                            <button type="button" class="btn btn-sm btn-danger remove-service" disabled>
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                    quotationServices.appendChild(serviceElement);
+                });
+                
+                // Show form, hide list
+                quotationFormSection.classList.remove('d-none');
+                quotationListSection.classList.add('d-none');
+                
+                // Disable form for viewing
+                quotationForm.querySelectorAll('input, select, button').forEach(el => {
+                    if (el.id !== 'cancel-quotation-btn') {
+                        el.setAttribute('disabled', 'disabled');
+                    }
+                });
+                
+                // Change form title
+                quotationFormSection.querySelector('h4').textContent = 'View Quotation';
+            }
+        }
+        
+        // Download quotation
+        function downloadQuotation(quoteNo) {
+            const quotation = appData.quotations.find(q => q.quoteNo === quoteNo);
+            if (quotation) {
+                // Create a JSON representation of the quotation
+                const dataStr = JSON.stringify(quotation, null, 2);
+                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                
+                // Create download link
+                const exportFileDefaultName = `quotation_${quoteNo}.json`;
+                
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileDefaultName);
+                linkElement.click();
+                
+                showNotification('Quotation downloaded', 'success');
+            }
+        }
+        
+        // Email quotation
+        function emailQuotation(quoteNo) {
+            const quotation = appData.quotations.find(q => q.quoteNo === quoteNo);
+            if (quotation) {
+                // In a real application, this would send an email
+                // For demo purposes, we'll just show a notification
+                showNotification(`Quotation ${quoteNo} sent to ${quotation.clientContact}`, 'success');
+            }
+        }
+        
+        // Online Order functions
+        const newOrderBtn = document.getElementById('new-order-btn');
+        const orderFormSection = document.getElementById('order-form-section');
+        const orderListSection = document.getElementById('order-list-section');
+        const orderForm = document.getElementById('order-form');
+        const cancelOrderBtn = document.getElementById('cancel-order-btn');
+        const addOrderItemBtn = document.getElementById('add-order-item-btn');
+        const orderItems = document.getElementById('order-items');
+        const orderSearch = document.getElementById('order-search');
+        
+        // Show new order form
+        newOrderBtn.addEventListener('click', function() {
+            // Generate order number
+            const orderNo = 'ORD-' + Date.now();
+            document.getElementById('order-no').value = orderNo;
+            
+            // Set current date
+            document.getElementById('order-date').value = new Date().toISOString().split('T')[0];
+            
+            // Populate crew dropdown
+            const crewDropdown = document.getElementById('assign-crew');
+            crewDropdown.innerHTML = '<option value="">Select crew member</option>';
+            
+            appData.crew.forEach(crew => {
+                const option = document.createElement('option');
+                option.value = crew.name;
+                option.textContent = crew.name;
+                crewDropdown.appendChild(option);
+            });
+            
+            // Reset form
+            orderForm.reset();
+            document.getElementById('order-no').value = orderNo;
+            document.getElementById('order-date').value = new Date().toISOString().split('T')[0];
+            
+            // Reset items
+            orderItems.innerHTML = `
+                <div class="order-item row mb-2">
+                    <div class="col-md-7">
+                        <input type="text" class="form-control order-item-name" placeholder="Item name" required>
+                    </div>
+                    <div class="col-md-4">
+                        <input type="number" class="form-control order-item-quantity" placeholder="Qty" min="1" value="1" required>
+                    </div>
+                    <div class="col-md-1">
+                        <button type="button" class="btn btn-sm btn-danger remove-order-item">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Show form, hide list
+            orderFormSection.classList.remove('d-none');
+            orderListSection.classList.add('d-none');
+            
+            // Add event listeners to remove buttons
+            addRemoveOrderItemListeners();
+        });
+        
+        // Cancel order form
+        cancelOrderBtn.addEventListener('click', function() {
+            orderFormSection.classList.add('d-none');
+            orderListSection.classList.remove('d-none');
+        });
+        
+        // Add item to order
+        addOrderItemBtn.addEventListener('click', function() {
+            const newItem = document.createElement('div');
+            newItem.className = 'order-item row mb-2';
+            newItem.innerHTML = `
+                <div class="col-md-7">
+                    <input type="text" class="form-control order-item-name" placeholder="Item name" required>
+                </div>
+                <div class="col-md-4">
+                    <input type="number" class="form-control order-item-quantity" placeholder="Qty" min="1" value="1" required>
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-sm btn-danger remove-order-item">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            `;
+            orderItems.appendChild(newItem);
+            
+            // Add event listener to remove button
+            newItem.querySelector('.remove-order-item').addEventListener('click', function() {
+                newItem.remove();
+            });
+        });
+        
+        // Add event listeners to remove buttons
+        function addRemoveOrderItemListeners() {
+            document.querySelectorAll('.remove-order-item').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.closest('.order-item').remove();
+                });
+            });
+        }
+        
+        // Submit order form
+        orderForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const orderNo = document.getElementById('order-no').value;
+            const date = document.getElementById('order-date').value;
+            const customerName = document.getElementById('order-customer').value;
+            const customerContact = document.getElementById('order-contact').value;
+            const status = document.getElementById('order-status').value;
+            const assignedTo = document.getElementById('assign-crew').value;
+            
+            // Get items
+            const items = [];
+            document.querySelectorAll('.order-item').forEach(item => {
+                const name = item.querySelector('.order-item-name').value;
+                const quantity = parseInt(item.querySelector('.order-item-quantity').value);
+                
+                items.push({
+                    name,
+                    quantity
+                });
+            });
+            
+            // Create order object
+            const order = {
+                orderNo,
+                date,
+                customerName,
+                customerContact,
+                status,
+                assignedTo,
+                items,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Add to orders array
+            appData.onlineOrders.push(order);
+            
+            // Save data
+            saveData();
+            
+            // Show list, hide form
+            orderFormSection.classList.add('d-none');
+            orderListSection.classList.remove('d-none');
+            
+            // Reload order list
+            loadOrderList();
+            
+            // Show notification
+            showNotification('Order saved successfully', 'success');
+        });
+        
+        // Load order list
+        function loadOrderList() {
+            const orderList = document.getElementById('order-list');
+            const searchTerm = orderSearch.value.toLowerCase();
+            
+            // Filter orders based on search term
+            const filteredOrders = appData.onlineOrders.filter(order => 
+                order.orderNo.toLowerCase().includes(searchTerm) ||
+                order.customerName.toLowerCase().includes(searchTerm) ||
+                order.status.toLowerCase().includes(searchTerm)
+            );
+            
+            // Generate HTML for order list
+            const orderHtml = filteredOrders.map(order => {
+                const itemsText = order.items.map(item => `${item.name} (${item.quantity})`).join(', ');
+                
+                let actions = '';
+                
+                if (userRole === 'Admin') {
+                    actions = `
+                        <button class="btn btn-sm btn-primary view-order" data-id="${order.orderNo}"><i class="bi bi-eye"></i></button>
+                        <button class="btn btn-sm btn-warning edit-order" data-id="${order.orderNo}"><i class="bi bi-pencil"></i></button>
+                        <button class="btn btn-sm btn-danger delete-order" data-id="${order.orderNo}"><i class="bi bi-trash"></i></button>
+                    `;
+                } else if (userRole === 'Crew' && order.assignedTo === currentUser.name && order.status !== 'Fulfilled') {
+                    actions = `
+                        <button class="btn btn-sm btn-primary view-order" data-id="${order.orderNo}"><i class="bi bi-eye"></i></button>
+                        <button class="btn btn-sm btn-success create-cashbill" data-id="${order.orderNo}"><i class="bi bi-receipt"></i> Create Cashbill</button>
+                    `;
+                } else {
+                    actions = `<button class="btn btn-sm btn-primary view-order" data-id="${order.orderNo}"><i class="bi bi-eye"></i></button>`;
+                }
+                
+                return `
+                    <tr>
+                        <td>${order.orderNo}</td>
+                        <td>${order.customerName}</td>
+                        <td>${order.date}</td>
+                        <td>${itemsText}</td>
+                        <td>${order.status}</td>
+                        <td>${order.assignedTo || 'Unassigned'}</td>
+                        <td>${actions}</td>
+                    </tr>
+                `;
+            }).join('');
+            
+            orderList.innerHTML = orderHtml || '<tr><td colspan="7" class="text-center">No orders found</td></tr>';
+            
+            // Add event listeners to action buttons
+            document.querySelectorAll('.view-order').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const orderNo = this.getAttribute('data-id');
+                    viewOrder(orderNo);
+                });
+            });
+            
+            document.querySelectorAll('.edit-order').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const orderNo = this.getAttribute('data-id');
+                    editOrder(orderNo);
+                });
+            });
+            
+            document.querySelectorAll('.delete-order').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const orderNo = this.getAttribute('data-id');
+                    deleteOrder(orderNo);
+                });
+            });
+            
+            document.querySelectorAll('.create-cashbill').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const orderNo = this.getAttribute('data-id');
+                    createCashbillFromOrder(orderNo);
+                });
+            });
+        }
+        
+        // Search orders
+        orderSearch.addEventListener('input', loadOrderList);
+        
+        // View order
+        function viewOrder(orderNo) {
+            const order = appData.onlineOrders.find(o => o.orderNo === orderNo);
+            if (order) {
+                // Populate form with order data
+                document.getElementById('order-no').value = order.orderNo;
+                document.getElementById('order-date').value = order.date;
+                document.getElementById('order-customer').value = order.customerName;
+                document.getElementById('order-contact').value = order.customerContact;
+                document.getElementById('order-status').value = order.status;
+                document.getElementById('assign-crew').value = order.assignedTo || '';
+                
+                // Clear and populate items
+                orderItems.innerHTML = '';
+                order.items.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'order-item row mb-2';
+                    itemElement.innerHTML = `
+                        <div class="col-md-7">
+                            <input type="text" class="form-control order-item-name" placeholder="Item name" value="${item.name}" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="number" class="form-control order-item-quantity" placeholder="Qty" min="1" value="${item.quantity}" readonly>
+                        </div>
+                        <div class="col-md-1">
+                            <button type="button" class="btn btn-sm btn-danger remove-order-item" disabled>
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                    orderItems.appendChild(itemElement);
+                });
+                
+                // Show form, hide list
+                orderFormSection.classList.remove('d-none');
+                orderListSection.classList.add('d-none');
+                
+                // Disable form for viewing
+                orderForm.querySelectorAll('input, select, button').forEach(el => {
+                    if (el.id !== 'cancel-order-btn') {
+                        el.setAttribute('disabled', 'disabled');
+                    }
+                });
+                
+                // Change form title
+                orderFormSection.querySelector('h4').textContent = 'View Order';
+            }
+        }
+        
+        // Edit order
+        function editOrder(orderNo) {
+            const order = appData.onlineOrders.find(o => o.orderNo === orderNo);
+            if (order) {
+                // Populate form with order data
+                document.getElementById('order-no').value = order.orderNo;
+                document.getElementById('order-date').value = order.date;
+                document.getElementById('order-customer').value = order.customerName;
+                document.getElementById('order-contact').value = order.customerContact;
+                document.getElementById('order-status').value = order.status;
+                document.getElementById('assign-crew').value = order.assignedTo || '';
+                
+                // Clear and populate items
+                orderItems.innerHTML = '';
+                order.items.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'order-item row mb-2';
+                    itemElement.innerHTML = `
+                        <div class="col-md-7">
+                            <input type="text" class="form-control order-item-name" placeholder="Item name" value="${item.name}">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="number" class="form-control order-item-quantity" placeholder="Qty" min="1" value="${item.quantity}">
+                        </div>
+                        <div class="col-md-1">
+                            <button type="button" class="btn btn-sm btn-danger remove-order-item">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                    orderItems.appendChild(itemElement);
+                });
+                
+                // Show form, hide list
+                orderFormSection.classList.remove('d-none');
+                orderListSection.classList.add('d-none');
+                
+                // Enable form for editing
+                orderForm.querySelectorAll('input, select, button').forEach(el => {
+                    el.removeAttribute('disabled');
+                });
+                
+                // Change form title
+                orderFormSection.querySelector('h4').textContent = 'Edit Order';
+                
+                // Change submit button text
+                orderForm.querySelector('button[type="submit"]').innerHTML = '<i class="bi bi-check-circle me-1"></i> Update Order';
+                
+                // Store original order number for updating
+                orderForm.setAttribute('data-edit-order', orderNo);
+            }
+        }
+        
+        // Delete order
+        function deleteOrder(orderNo) {
+            if (confirm('Are you sure you want to delete this order?')) {
+                // Find and remove order
+                const index = appData.onlineOrders.findIndex(o => o.orderNo === orderNo);
+                if (index !== -1) {
+                    appData.onlineOrders.splice(index, 1);
+                    
+                    // Save data
+                    saveData();
+                    
+                    // Reload order list
+                    loadOrderList();
+                    
+                    // Show notification
+                    showNotification('Order deleted', 'success');
+                }
+            }
+        }
+        
+        // Create cashbill from order
+        function createCashbillFromOrder(orderNo) {
+            const order = appData.onlineOrders.find(o => o.orderNo === orderNo);
+            if (order) {
+                // Switch to cashbill page
+                document.querySelector('[data-page="cashbill"]').click();
+                
+                // Wait for page to load, then populate form
+                setTimeout(() => {
+                    // Generate invoice number
+                    const invoiceNo = 'INV-' + Date.now();
+                    document.getElementById('invoice-no').value = invoiceNo;
+                    
+                    // Set current date
+                    document.getElementById('cashbill-date').value = new Date().toISOString().split('T')[0];
+                    
+                    // Set customer name from order
+                    document.getElementById('customer-name').value = order.customerName;
+                    
+                    // Set crew name
+                    document.getElementById('crew-name').value = currentUser.name;
+                    
+                    // Clear and populate items from order
+                    cashbillItems.innerHTML = '';
+                    order.items.forEach(item => {
+                        const itemElement = document.createElement('div');
+                        itemElement.className = 'cashbill-item row mb-2';
+                        itemElement.innerHTML = `
+                            <div class="col-md-5">
+                                <input type="text" class="form-control item-name" placeholder="Item name" value="${item.name}" required>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="number" class="form-control item-quantity" placeholder="Qty" min="1" value="${item.quantity}" required>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="number" class="form-control item-price" placeholder="Price" min="0" step="0.01" required>
+                            </div>
+                            <div class="col-md-1">
+                                <button type="button" class="btn btn-sm btn-danger remove-item">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        `;
+                        cashbillItems.appendChild(itemElement);
+                    });
+                    
+                    // Add event listeners to remove buttons
+                    addRemoveItemListeners();
+                    
+                    // Show form, hide list
+                    cashbillFormSection.classList.remove('d-none');
+                    cashbillListSection.classList.add('d-none');
+                    
+                    // Store order reference for updating status after cashbill creation
+                    cashbillForm.setAttribute('data-from-order', orderNo);
+                    
+                    // Show notification
+                    showNotification('Order data loaded into cashbill form', 'info');
+                }, 100);
+            }
+        }
+        
+        // Crew Management functions
+        const newCrewBtn = document.getElementById('new-crew-btn');
         const crewFormSection = document.getElementById('crew-form-section');
         const crewListSection = document.getElementById('crew-list-section');
         const crewForm = document.getElementById('crew-form');
+        const cancelCrewBtn = document.getElementById('cancel-crew-btn');
         const crewSearch = document.getElementById('crew-search');
-
-        function showCrewForm(editId = null) {
+        
+        // Show new crew form
+        newCrewBtn.addEventListener('click', function() {
+            // Reset form
+            crewForm.reset();
+            
+            // Show form, hide list
             crewFormSection.classList.remove('d-none');
             crewListSection.classList.add('d-none');
-            crewForm.reset();
-            if (editId) {
-                editCrew(editId);
-            } else {
-                crewForm.querySelectorAll('input, select, button').forEach(el => el.removeAttribute('disabled'));
-                crewFormSection.querySelector('h4').textContent = 'Add Crew Member';
-                crewForm.querySelector('button[type="submit"]').innerHTML = '<i class="fas fa-check-circle me-1"></i> Save Crew';
-                crewForm.removeAttribute('data-edit-id');
-            }
-        }
-
-        function cancelCrewForm() {
+        });
+        
+        // Cancel crew form
+        cancelCrewBtn.addEventListener('click', function() {
             crewFormSection.classList.add('d-none');
             crewListSection.classList.remove('d-none');
+        });
+        
+        // Submit crew form
+        crewForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const id = document.getElementById('crew-id').value;
+            const name = document.getElementById('crew-name').value;
+            const role = document.getElementById('crew-role').value;
+            const contact = document.getElementById('crew-contact').value;
+            const password = document.getElementById('crew-password').value;
+            
+            // Check if crew ID already exists
+            const existingCrew = appData.crew.find(c => c.id === id);
+            if (existingCrew) {
+                showNotification('Crew ID already exists', 'error');
+                return;
+            }
+            
+            // Create crew object
+            const crew = {
+                id,
+                name,
+                role,
+                contact,
+                password
+            };
+            
+            // Add to crew array
+            appData.crew.push(crew);
+            
+            // Save data
+            saveData();
+            
+            // Show list, hide form
+            crewFormSection.classList.add('d-none');
+            crewListSection.classList.remove('d-none');
+            
+            // Reload crew list
             loadCrewList();
-        }
-
+            
+            // Show notification
+            showNotification('Crew member saved successfully', 'success');
+        });
+        
+        // Load crew list
         function loadCrewList() {
             const crewList = document.getElementById('crew-list');
             const searchTerm = crewSearch.value.toLowerCase();
+            
+            // Filter crew based on search term
             const filteredCrew = appData.crew.filter(crew => 
                 crew.id.toLowerCase().includes(searchTerm) ||
                 crew.name.toLowerCase().includes(searchTerm) ||
                 crew.role.toLowerCase().includes(searchTerm)
             );
+            
+            // Generate HTML for crew list
             const crewHtml = filteredCrew.map(crew => {
-                const amendmentStatus = crew.committed ? 
-                    '<span class="amendment-status committed">Committed</span>' : 
-                    '<span class="amendment-status uncommitted">Uncommitted</span>';
-                const actions = userRole === 'Admin' ? 
-                    `<button class="btn btn-sm btn-primary view-crew" data-id="${crew.id}"><i class="fas fa-eye"></i></button>
-                     <button class="btn btn-sm btn-warning edit-crew" data-id="${crew.id}"><i class="fas fa-pencil-alt"></i></button>
-                     ${crew.committed ? `<button class="btn btn-sm btn-secondary uncommit-crew" data-id="${crew.id}"><i class="fas fa-undo"></i> Uncommit</button>` : ''}
-                     <button class="btn btn-sm btn-danger delete-crew" data-id="${crew.id}"><i class="fas fa-trash"></i></button>` :
-                    `<button class="btn btn-sm btn-primary view-crew" data-id="${crew.id}"><i class="fas fa-eye"></i></button>`;
+                const actions = 
+                    `<button class="btn btn-sm btn-primary view-crew" data-id="${crew.id}"><i class="bi bi-eye"></i></button>
+                     <button class="btn btn-sm btn-warning edit-crew" data-id="${crew.id}"><i class="bi bi-pencil"></i></button>
+                     <button class="btn btn-sm btn-danger delete-crew" data-id="${crew.id}"><i class="bi bi-trash"></i></button>`;
+                
                 return `
                     <tr>
                         <td>${crew.id}</td>
                         <td>${crew.name}</td>
                         <td>${crew.role}</td>
                         <td>${crew.contact}</td>
-                        <td>${amendmentStatus}</td>
                         <td>${actions}</td>
                     </tr>
                 `;
             }).join('');
-            crewList.innerHTML = crewHtml || '<tr><td colspan="6" class="text-center">No crew members found</td></tr>';
+            
+            crewList.innerHTML = crewHtml || '<tr><td colspan="5" class="text-center">No crew members found</td></tr>';
+            
+            // Add event listeners to action buttons
             document.querySelectorAll('.view-crew').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    viewCrew(this.getAttribute('data-id'));
+                    const crewId = this.getAttribute('data-id');
+                    viewCrew(crewId);
                 });
             });
+            
             document.querySelectorAll('.edit-crew').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    showCrewForm(this.getAttribute('data-id'));
+                    const crewId = this.getAttribute('data-id');
+                    editCrew(crewId);
                 });
             });
+            
             document.querySelectorAll('.delete-crew').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    deleteCrew(this.getAttribute('data-id'));
-                });
-            });
-            document.querySelectorAll('.uncommit-crew').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    uncommitCrew(this.getAttribute('data-id'));
+                    const crewId = this.getAttribute('data-id');
+                    deleteCrew(crewId);
                 });
             });
         }
-
+        
+        // Search crew
         crewSearch.addEventListener('input', loadCrewList);
-
-        crewForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const id = document.getElementById('crew-id').value;
-            const name = document.getElementById('crew-name-input').value;
-            const role = document.getElementById('crew-role').value;
-            const contact = document.getElementById('crew-contact').value;
-            const password = document.getElementById('crew-password').value;
-            const crew = { id, name, role, contact, password, committed: true };
-            const editId = crewForm.getAttribute('data-edit-id');
-            if (editId) {
-                const existingIndex = appData.crew.findIndex(c => c.id === editId);
-                if (existingIndex !== -1) {
-                    logAmendment('crew', editId, appData.crew[existingIndex], crew, currentUser.name);
-                    appData.crew[existingIndex] = crew;
-                }
-            } else {
-                appData.crew.push(crew);
-            }
-            saveData();
-            crewFormSection.classList.add('d-none');
-            crewListSection.classList.remove('d-none');
-            loadCrewList();
-            showNotification('Crew member saved successfully', 'success');
-            crewForm.removeAttribute('data-edit-id');
-        });
-
-        function viewCrew(id) {
-            const crew = appData.crew.find(c => c.id === id);
+        
+        // View crew
+        function viewCrew(crewId) {
+            const crew = appData.crew.find(c => c.id === crewId);
             if (crew) {
+                // Populate form with crew data
                 document.getElementById('crew-id').value = crew.id;
-                document.getElementById('crew-name-input').value = crew.name;
+                document.getElementById('crew-name').value = crew.name;
                 document.getElementById('crew-role').value = crew.role;
                 document.getElementById('crew-contact').value = crew.contact;
                 document.getElementById('crew-password').value = crew.password;
+                
+                // Show form, hide list
                 crewFormSection.classList.remove('d-none');
                 crewListSection.classList.add('d-none');
-                if (crew.committed) {
-                    crewForm.querySelectorAll('input, select, button').forEach(el => {
-                        if (el.id !== 'cancel-crew-btn') el.setAttribute('disabled', 'disabled');
-                    });
-                    crewFormSection.querySelector('h4').textContent = 'View Crew Member';
-                } else {
-                    crewForm.querySelectorAll('input, select, button').forEach(el => el.removeAttribute('disabled'));
-                    crewFormSection.querySelector('h4').textContent = 'Edit Crew Member';
-                    crewForm.querySelector('button[type="submit"]').innerHTML = '<i class="fas fa-check-circle me-1"></i> Update Crew';
-                    crewForm.setAttribute('data-edit-id', id);
-                }
-            }
-        }
-
-        function editCrew(id) {
-            const crew = appData.crew.find(c => c.id === id);
-            if (crew && !crew.committed) {
-                document.getElementById('crew-id').value = crew.id;
-                document.getElementById('crew-name-input').value = crew.name;
-                document.getElementById('crew-role').value = crew.role;
-                document.getElementById('crew-contact').value = crew.contact;
-                document.getElementById('crew-password').value = crew.password;
-                crewFormSection.classList.remove('d-none');
-                crewListSection.classList.add('d-none');
-                crewForm.querySelectorAll('input, select, button').forEach(el => el.removeAttribute('disabled'));
-                crewFormSection.querySelector('h4').textContent = 'Edit Crew Member';
-                crewForm.querySelector('button[type="submit"]').innerHTML = '<i class="fas fa-check-circle me-1"></i> Update Crew';
-                crewForm.setAttribute('data-edit-id', id);
-            } else {
-                showNotification('Cannot edit committed crew member', 'error');
-            }
-        }
-
-        function deleteCrew(id) {
-            if (userRole !== 'Admin') {
-                showNotification('Only admins can delete records', 'error');
-                return;
-            }
-            if (confirm('Are you sure you want to delete this crew member?')) {
-                appData.crew = appData.crew.filter(c => c.id !== id);
-                saveData();
-                loadCrewList();
-                showNotification('Crew member deleted successfully', 'success');
-            }
-        }
-
-        function uncommitCrew(id) {
-            if (userRole !== 'Admin') {
-                showNotification('Only admins can uncommit records', 'error');
-                return;
-            }
-            if (confirm('Are you sure you want to uncommit this crew member?')) {
-                const crew = appData.crew.find(c => c.id === id);
-                if (crew) {
-                    crew.committed = false;
-                    logAmendment('crew', id, crew, crew, currentUser.name);
-                    saveData();
-                    loadCrewList();
-                    showNotification('Crew member uncommitted successfully', 'success');
-                }
-            }
-        }
-
-        // Amendment History
-        function logAmendment(recordType, recordId, originalData, newData, adminName) {
-            const amendment = {
-                recordType,
-                recordId,
-                originalData: JSON.parse(JSON.stringify(originalData)),
-                newData: JSON.parse(JSON.stringify(newData)),
-                modifiedBy: adminName,
-                timestamp: new Date().toISOString()
-            };
-            appData.amendments.push(amendment);
-            saveData();
-        }
-
-        function loadAmendmentHistory() {
-            const amendmentList = document.getElementById('amendment-list');
-            const searchTerm = document.getElementById('amendment-search').value.toLowerCase();
-            const filteredAmendments = appData.amendments.filter(amendment => 
-                amendment.recordType.toLowerCase().includes(searchTerm) ||
-                amendment.recordId.toLowerCase().includes(searchTerm) ||
-                amendment.modifiedBy.toLowerCase().includes(searchTerm)
-            );
-            const amendmentHtml = filteredAmendments.map(amendment => `
-                <tr>
-                    <td>${amendment.recordType}</td>
-                    <td>${amendment.recordId}</td>
-                    <td>${amendment.modifiedBy}</td>
-                    <td>${new Date(amendment.timestamp).toLocaleString()}</td>
-                    <td>
-                        <button class="btn btn-sm btn-info view-amendment" data-id="${amendment.timestamp}"><i class="fas fa-eye"></i></button>
-                    </td>
-                </tr>
-            `).join('');
-            amendmentList.innerHTML = amendmentHtml || '<tr><td colspan="5" class="text-center">No amendments found</td></tr>';
-            document.querySelectorAll('.view-amendment').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    viewAmendment(this.getAttribute('data-id'));
-                });
-            });
-        }
-
-        document.getElementById('amendment-search').addEventListener('input', loadAmendmentHistory);
-
-        function viewAmendment(timestamp) {
-            const amendment = appData.amendments.find(a => a.timestamp === timestamp);
-            if (amendment) {
-                const detailsBody = document.getElementById('amendment-details');
-                let detailsHtml = '';
-                Object.keys(amendment.newData).forEach(key => {
-                    if (key !== 'timestamp' && key !== 'committed') {
-                        const oldValue = JSON.stringify(amendment.originalData[key] || '');
-                        const newValue = JSON.stringify(amendment.newData[key] || '');
-                        if (oldValue !== newValue) {
-                            detailsHtml += `
-                                <tr>
-                                    <td>${key}</td>
-                                    <td class="removed">${oldValue}</td>
-                                    <td class="added">${newValue}</td>
-                                </tr>
-                            `;
-                        }
+                
+                // Disable form for viewing
+                crewForm.querySelectorAll('input, select, button').forEach(el => {
+                    if (el.id !== 'cancel-crew-btn') {
+                        el.setAttribute('disabled', 'disabled');
                     }
                 });
-                detailsBody.innerHTML = detailsHtml || '<tr><td colspan="3" class="text-center">No changes recorded</td></tr>';
-                const modal = new bootstrap.Modal(document.getElementById('amendment-details-modal'));
-                modal.show();
+                
+                // Change form title
+                crewFormSection.querySelector('h4').textContent = 'View Crew Member';
             }
         }
-
-        // Initialize
-        function init() {
-            loadData();
-            applyRolePermissions();
-            updateDashboard();
-            loadCashbillList();
-            loadLogbookList();
-            loadCrewList();
-            loadAmendmentHistory();
+        
+        // Edit crew
+        function editCrew(crewId) {
+            const crew = appData.crew.find(c => c.id === crewId);
+            if (crew) {
+                // Populate form with crew data
+                document.getElementById('crew-id').value = crew.id;
+                document.getElementById('crew-name').value = crew.name;
+                document.getElementById('crew-role').value = crew.role;
+                document.getElementById('crew-contact').value = crew.contact;
+                document.getElementById('crew-password').value = crew.password;
+                
+                // Show form, hide list
+                crewFormSection.classList.remove('d-none');
+                crewListSection.classList.add('d-none');
+                
+                // Enable form for editing
+                crewForm.querySelectorAll('input, select, button').forEach(el => {
+                    el.removeAttribute('disabled');
+                });
+                
+                // Change form title
+                crewFormSection.querySelector('h4').textContent = 'Edit Crew Member';
+                
+                // Change submit button text
+                crewForm.querySelector('button[type="submit"]').innerHTML = '<i class="bi bi-check-circle me-1"></i> Update Crew';
+                
+                // Store original crew ID for updating
+                crewForm.setAttribute('data-edit-crew', crewId);
+            }
         }
-
+        
+        // Delete crew
+        function deleteCrew(crewId) {
+            if (confirm('Are you sure you want to delete this crew member?')) {
+                // Find and remove crew
+                const index = appData.crew.findIndex(c => c.id === crewId);
+                if (index !== -1) {
+                    appData.crew.splice(index, 1);
+                    
+                    // Save data
+                    saveData();
+                    
+                    // Reload crew list
+                    loadCrewList();
+                    
+                    // Show notification
+                    showNotification('Crew member deleted', 'success');
+                }
+            }
+        }
+        
+        // Stock Management functions
+        const newStockBtn = document.getElementById('new-stock-btn');
+        const stockFormSection = document.getElementById('stock-form-section');
+        const stockListSection = document.getElementById('stock-list-section');
+        const stockForm = document.getElementById('stock-form');
+        const cancelStockBtn = document.getElementById('cancel-stock-btn');
+        const stockSearch = document.getElementById('stock-search');
+        
+        // Show new stock form
+        newStockBtn.addEventListener('click', function() {
+            // Reset form
+            stockForm.reset();
+            
+            // Show form, hide list
+            stockFormSection.classList.remove('d-none');
+            stockListSection.classList.add('d-none');
+        });
+        
+        // Cancel stock form
+        cancelStockBtn.addEventListener('click', function() {
+            stockFormSection.classList.add('d-none');
+            stockListSection.classList.remove('d-none');
+        });
+        
+        // Submit stock form
+        stockForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const id = document.getElementById('stock-id').value;
+            const name = document.getElementById('stock-name').value;
+            const quantity = parseInt(document.getElementById('stock-quantity').value);
+            const unit = document.getElementById('stock-unit').value;
+            const status = document.getElementById('stock-status').value;
+            
+            // Check if stock ID already exists
+            const existingStock = appData.stock.find(s => s.id === id);
+            if (existingStock) {
+                showNotification('Stock ID already exists', 'error');
+                return;
+            }
+            
+            // Create stock object
+            const stock = {
+                id,
+                name,
+                quantity,
+                unit,
+                status
+            };
+            
+            // Add to stock array
+            appData.stock.push(stock);
+            
+            // Save data
+            saveData();
+            
+            // Show list, hide form
+            stockFormSection.classList.add('d-none');
+            stockListSection.classList.remove('d-none');
+            
+            // Reload stock list
+            loadStockList();
+            
+            // Show notification
+            showNotification('Stock item saved successfully', 'success');
+        });
+        
+        // Load stock list
+        function loadStockList() {
+            const stockList = document.getElementById('stock-list');
+            const searchTerm = stockSearch.value.toLowerCase();
+            
+            // Filter stock based on search term
+            const filteredStock = appData.stock.filter(stock => 
+                stock.id.toLowerCase().includes(searchTerm) ||
+                stock.name.toLowerCase().includes(searchTerm) ||
+                stock.status.toLowerCase().includes(searchTerm)
+            );
+            
+            // Generate HTML for stock list
+            const stockHtml = filteredStock.map(stock => {
+                const actions = userRole === 'Admin' ? 
+                    `<button class="btn btn-sm btn-primary view-stock" data-id="${stock.id}"><i class="bi bi-eye"></i></button>
+                     <button class="btn btn-sm btn-warning edit-stock" data-id="${stock.id}"><i class="bi bi-pencil"></i></button>
+                     <button class="btn btn-sm btn-danger delete-stock" data-id="${stock.id}"><i class="bi bi-trash"></i></button>` :
+                    `<button class="btn btn-sm btn-primary view-stock" data-id="${stock.id}"><i class="bi bi-eye"></i></button>`;
+                
+                return `
+                    <tr>
+                        <td>${stock.id}</td>
+                        <td>${stock.name}</td>
+                        <td>${stock.quantity}</td>
+                        <td>${stock.unit}</td>
+                        <td>${stock.status}</td>
+                        <td>${actions}</td>
+                    </tr>
+                `;
+            }).join('');
+            
+            stockList.innerHTML = stockHtml || '<tr><td colspan="6" class="text-center">No stock items found</td></tr>';
+            
+            // Add event listeners to action buttons
+            document.querySelectorAll('.view-stock').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const stockId = this.getAttribute('data-id');
+                    viewStock(stockId);
+                });
+            });
+            
+            document.querySelectorAll('.edit-stock').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const stockId = this.getAttribute('data-id');
+                    editStock(stockId);
+                });
+            });
+            
+            document.querySelectorAll('.delete-stock').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const stockId = this.getAttribute('data-id');
+                    deleteStock(stockId);
+                });
+            });
+        }
+        
+        // Search stock
+        stockSearch.addEventListener('input', loadStockList);
+        
+        // View stock
+        function viewStock(stockId) {
+            const stock = appData.stock.find(s => s.id === stockId);
+            if (stock) {
+                // Populate form with stock data
+                document.getElementById('stock-id').value = stock.id;
+                document.getElementById('stock-name').value = stock.name;
+                document.getElementById('stock-quantity').value = stock.quantity;
+                document.getElementById('stock-unit').value = stock.unit;
+                document.getElementById('stock-status').value = stock.status;
+                
+                // Show form, hide list
+                stockFormSection.classList.remove('d-none');
+                stockListSection.classList.add('d-none');
+                
+                // Disable form for viewing
+                stockForm.querySelectorAll('input, select, button').forEach(el => {
+                    if (el.id !== 'cancel-stock-btn') {
+                        el.setAttribute('disabled', 'disabled');
+                    }
+                });
+                
+                // Change form title
+                stockFormSection.querySelector('h4').textContent = 'View Stock Item';
+            }
+        }
+        
+        // Edit stock
+        function editStock(stockId) {
+            const stock = appData.stock.find(s => s.id === stockId);
+            if (stock) {
+                // Populate form with stock data
+                document.getElementById('stock-id').value = stock.id;
+                document.getElementById('stock-name').value = stock.name;
+                document.getElementById('stock-quantity').value = stock.quantity;
+                document.getElementById('stock-unit').value = stock.unit;
+                document.getElementById('stock-status').value = stock.status;
+                
+                // Show form, hide list
+                stockFormSection.classList.remove('d-none');
+                stockListSection.classList.add('d-none');
+                
+                // Enable form for editing
+                stockForm.querySelectorAll('input, select, button').forEach(el => {
+                    el.removeAttribute('disabled');
+                });
+                
+                // Change form title
+                stockFormSection.querySelector('h4').textContent = 'Edit Stock Item';
+                
+                // Change submit button text
+                stockForm.querySelector('button[type="submit"]').innerHTML = '<i class="bi bi-check-circle me-1"></i> Update Stock';
+                
+                // Store original stock ID for updating
+                stockForm.setAttribute('data-edit-stock', stockId);
+            }
+        }
+        
+        // Delete stock
+        function deleteStock(stockId) {
+            if (confirm('Are you sure you want to delete this stock item?')) {
+                // Find and remove stock
+                const index = appData.stock.findIndex(s => s.id === stockId);
+                if (index !== -1) {
+                    appData.stock.splice(index, 1);
+                    
+                    // Save data
+                    saveData();
+                    
+                    // Reload stock list
+                    loadStockList();
+                    
+                    // Show notification
+                    showNotification('Stock item deleted', 'success');
+                }
+            }
+        }
+        
+        // Initialize the application
+        function init() {
+            // Apply role permissions
+            applyRolePermissions();
+            
+            // Load dashboard
+            updateDashboard();
+        }
+        
+        // Initialize when DOM is loaded
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
