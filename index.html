@@ -1,8 +1,3 @@
-improve my html can? 
-
-add features uncommit and amendment adjustments features for admin
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,19 +8,24 @@ add features uncommit and amendment adjustments features for admin
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
         :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
             --success-color: #27ae60;
             --danger-color: #e74c3c;
             --warning-color: #f39c12;
-            --light-color: #ecf0f1;
+            --light-color: #f8f9fa;
             --dark-color: #2c3e50;
+            --white-color: #ffffff;
+            --sidebar-bg: #f8f9fa;
+            --sidebar-text: #495057;
+            --sidebar-hover: #e9ecef;
+            --sidebar-active: #dee2e6;
         }
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
+            background-color: var(--white-color);
+            color: var(--dark-color);
         }
         
         /* Login Page Styles */
@@ -41,8 +41,9 @@ add features uncommit and amendment adjustments features for admin
             width: 100%;
             max-width: 400px;
             border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             overflow: hidden;
+            background-color: var(--white-color);
         }
         
         .login-header {
@@ -59,8 +60,10 @@ add features uncommit and amendment adjustments features for admin
         /* Dashboard Styles */
         .dashboard-card {
             border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             transition: transform 0.3s;
+            background-color: var(--white-color);
+            border: 1px solid #e9ecef;
         }
         
         .dashboard-card:hover {
@@ -80,10 +83,11 @@ add features uncommit and amendment adjustments features for admin
             left: 0;
             z-index: 100;
             padding-top: 60px;
-            background-color: var(--primary-color);
-            color: white;
+            background-color: var(--sidebar-bg);
+            color: var(--sidebar-text);
             transition: all 0.3s;
             width: 250px;
+            border-right: 1px solid #dee2e6;
         }
         
         .sidebar.collapsed {
@@ -92,7 +96,7 @@ add features uncommit and amendment adjustments features for admin
         
         .sidebar-header {
             padding: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid #dee2e6;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -103,7 +107,7 @@ add features uncommit and amendment adjustments features for admin
         }
         
         .sidebar-menu .nav-link {
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--sidebar-text);
             padding: 12px 20px;
             display: flex;
             align-items: center;
@@ -111,14 +115,14 @@ add features uncommit and amendment adjustments features for admin
         }
         
         .sidebar-menu .nav-link:hover {
-            color: white;
-            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--primary-color);
+            background-color: var(--sidebar-hover);
         }
         
         .sidebar-menu .nav-link.active {
-            color: white;
-            background-color: var(--secondary-color);
-            border-left: 4px solid var(--warning-color);
+            color: var(--primary-color);
+            background-color: var(--sidebar-active);
+            border-left: 4px solid var(--primary-color);
         }
         
         .sidebar-menu .nav-link i {
@@ -137,18 +141,20 @@ add features uncommit and amendment adjustments features for admin
             left: 0;
             right: 0;
             z-index: 99;
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background-color: var(--white-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             padding: 15px 30px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            border-bottom: 1px solid #dee2e6;
         }
         
         .main-content {
             margin-left: 250px;
             padding: 80px 20px 20px;
             transition: all 0.3s;
+            background-color: #f8f9fa;
         }
         
         .main-content.expanded {
@@ -172,10 +178,10 @@ add features uncommit and amendment adjustments features for admin
         
         /* Tables */
         .data-table {
-            background-color: white;
+            background-color: var(--white-color);
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
         
         .data-table thead {
@@ -192,27 +198,28 @@ add features uncommit and amendment adjustments features for admin
         
         /* Forms */
         .form-section {
-            background-color: white;
+            background-color: var(--white-color);
             border-radius: 10px;
             padding: 25px;
             margin-bottom: 30px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e9ecef;
         }
         
         .form-control:focus {
-            border-color: var(--secondary-color);
+            border-color: var(--primary-color);
             box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
         }
         
         /* Buttons */
         .btn-primary {
-            background-color: var(--secondary-color);
-            border-color: var(--secondary-color);
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
         }
         
         .btn-primary:hover {
-            background-color: #2980b9;
-            border-color: #2980b9;
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
         }
         
         .btn-success {
@@ -279,7 +286,7 @@ add features uncommit and amendment adjustments features for admin
             padding: 15px 20px;
             border-radius: 5px;
             color: white;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             z-index: 1000;
             opacity: 0;
             transform: translateY(-20px);
@@ -300,7 +307,48 @@ add features uncommit and amendment adjustments features for admin
         }
         
         .notification.info {
-            background-color: var(--secondary-color);
+            background-color: var(--primary-color);
+        }
+        
+        /* Desktop version view */
+        @media (min-width: 992px) {
+            .desktop-view {
+                display: block;
+            }
+        }
+        
+        /* Uncommit and amendment features for admin */
+        .admin-feature {
+            display: none;
+        }
+        
+        .admin-feature.visible {
+            display: inline-block;
+        }
+        
+        /* Remarks section */
+        .remarks-section {
+            margin-top: 15px;
+        }
+        
+        /* Created by and assigned to sections */
+        .meta-info {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 10px;
+        }
+        
+        /* Sidebar toggle button styling */
+        #sidebar-toggle {
+            background-color: var(--white-color);
+            border: 1px solid #dee2e6;
+            color: var(--dark-color);
+            padding: 0.25rem 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        #sidebar-toggle:hover {
+            background-color: #f8f9fa;
         }
     </style>
 </head>
@@ -325,33 +373,31 @@ add features uncommit and amendment adjustments features for admin
                         <button type="submit" class="btn btn-primary">Login</button>
                     </div>
                     <div class="mt-3 text-center text-muted">
-                        <small>Admin: 0001 / Dd1234</small>
+                        <small>Admin: 0001 / 0000</small>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-
     <!-- Main Application -->
     <div id="main-app" class="d-none">
         <!-- Top Navigation -->
         <nav class="top-navbar">
             <div class="d-flex align-items-center">
-                <button id="sidebar-toggle" class="btn btn-sm btn-light me-3">
+                <button id="sidebar-toggle" class="btn btn-sm me-3" title="Toggle Sidebar">
                     <i class="bi bi-list"></i>
                 </button>
                 <h4 class="mb-0">Business Management System</h4>
             </div>
             <div class="d-flex align-items-center">
                 <div class="me-3">
-                    <span class="badge bg-secondary" id="user-role-badge">Admin</span>
+                    <span class="badge bg-primary" id="user-role-badge">Admin</span>
                 </div>
                 <button id="logout-btn" class="btn btn-sm btn-outline-danger">
                     <i class="bi bi-box-arrow-right me-1"></i> Logout
                 </button>
             </div>
         </nav>
-
         <!-- Sidebar -->
         <div class="sidebar" id="sidebar">
             <div class="sidebar-header">
@@ -402,7 +448,6 @@ add features uncommit and amendment adjustments features for admin
                 </li>
             </ul>
         </div>
-
         <!-- Main Content -->
         <div class="main-content" id="main-content">
             <!-- Dashboard Page -->
@@ -509,7 +554,6 @@ add features uncommit and amendment adjustments features for admin
                     </div>
                 </div>
             </div>
-
             <!-- Cashbill Page -->
             <div id="cashbill-page" class="page">
                 <div class="page-header">
@@ -583,13 +627,15 @@ add features uncommit and amendment adjustments features for admin
                             <div id="cashbill-items">
                                 <div class="cashbill-item row mb-2">
                                     <div class="col-md-5">
-                                        <input type="text" class="form-control item-name" placeholder="Item name" required>
+                                        <select class="form-control item-name" required>
+                                            <option value="">Select item</option>
+                                        </select>
                                     </div>
                                     <div class="col-md-3">
                                         <input type="number" class="form-control item-quantity" placeholder="Qty" min="1" value="1" required>
                                     </div>
                                     <div class="col-md-3">
-                                        <input type="number" class="form-control item-price" placeholder="Price" min="0" step="0.01" required>
+                                        <input type="number" class="form-control item-price" placeholder="Price" min="0" step="0.01" readonly>
                                     </div>
                                     <div class="col-md-1">
                                         <button type="button" class="btn btn-sm btn-danger remove-item">
@@ -620,8 +666,34 @@ add features uncommit and amendment adjustments features for admin
                             </div>
                         </div>
                         
-                        <div class="d-flex justify-content-between">
-                            <button type="button" id="cancel-cashbill-btn" class="btn btn-secondary">Cancel</button>
+                        <div class="row mb-3 remarks-section">
+                            <div class="col-md-12">
+                                <label for="cashbill-remarks" class="form-label">Remarks</label>
+                                <textarea class="form-control" id="cashbill-remarks" rows="2"></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="meta-info">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <span>Created by: <span id="created-by">-</span></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <span>Assigned to: <span id="assigned-to">-</span></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mt-3">
+                            <div>
+                                <button type="button" id="cancel-cashbill-btn" class="btn btn-secondary">Cancel</button>
+                                <button type="button" id="uncommit-cashbill-btn" class="btn btn-warning admin-feature ms-2">
+                                    <i class="bi bi-arrow-counterclockwise me-1"></i> Uncommit
+                                </button>
+                                <button type="button" id="amend-cashbill-btn" class="btn btn-info admin-feature ms-2">
+                                    <i class="bi bi-pencil-square me-1"></i> Amend
+                                </button>
+                            </div>
                             <div>
                                 <button type="button" id="print-cashbill-btn" class="btn btn-info me-2">
                                     <i class="bi bi-printer me-1"></i> Print
@@ -637,7 +709,6 @@ add features uncommit and amendment adjustments features for admin
                     </form>
                 </div>
             </div>
-
             <!-- Logbook Page -->
             <div id="logbook-page" class="page">
                 <div class="page-header">
@@ -720,7 +791,6 @@ add features uncommit and amendment adjustments features for admin
                     </form>
                 </div>
             </div>
-
             <!-- Quotation Page -->
             <div id="quotation-page" class="page">
                 <div class="page-header">
@@ -843,7 +913,6 @@ add features uncommit and amendment adjustments features for admin
                     </form>
                 </div>
             </div>
-
             <!-- Online Order Page -->
             <div id="online-order-page" class="page">
                 <div class="page-header">
@@ -952,7 +1021,15 @@ add features uncommit and amendment adjustments features for admin
                             </div>
                         </div>
                         
-                        <div class="d-flex justify-content-between">
+                        <div class="meta-info">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <span>Assigned Online Order by: <span id="assigned-by">0001</span></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mt-3">
                             <button type="button" id="cancel-order-btn" class="btn btn-secondary">Cancel</button>
                             <button type="submit" class="btn btn-success">
                                 <i class="bi bi-check-circle me-1"></i> Save Order
@@ -961,7 +1038,6 @@ add features uncommit and amendment adjustments features for admin
                     </form>
                 </div>
             </div>
-
             <!-- Crew Management Page -->
             <div id="crew-management-page" class="page admin-only">
                 <div class="page-header">
@@ -988,7 +1064,8 @@ add features uncommit and amendment adjustments features for admin
                                         <tr>
                                             <th>ID</th>
                                             <th>Name</th>
-                                            <th>Role</th>
+                                            <th>Position</th>
+                                            <th>Outlet</th>
                                             <th>Contact</th>
                                             <th>Actions</th>
                                         </tr>
@@ -1019,9 +1096,13 @@ add features uncommit and amendment adjustments features for admin
                         
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label for="crew-role" class="form-label">Role</label>
-                                <select class="form-select" id="crew-role" required>
-                                    <option value="">Select role</option>
+                                <label for="crew-position" class="form-label">Position</label>
+                                <select class="form-select" id="crew-position" required>
+                                    <option value="">Select position</option>
+                                    <option value="Head IT(Admin)">Head IT(Admin)</option>
+                                    <option value="Director/Business Manager">Director/Business Manager</option>
+                                    <option value="Business Development Manager">Business Development Manager</option>
+                                    <option value="Business Marketing Manager">Business Marketing Manager</option>
                                     <option value="Technician">Technician</option>
                                     <option value="Driver">Driver</option>
                                     <option value="Sales">Sales</option>
@@ -1029,14 +1110,24 @@ add features uncommit and amendment adjustments features for admin
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label for="crew-contact" class="form-label">Contact</label>
-                                <input type="text" class="form-control" id="crew-contact" required>
+                                <label for="crew-outlet" class="form-label">Outlet</label>
+                                <select class="form-select" id="crew-outlet" required>
+                                    <option value="">Select outlet</option>
+                                    <option value="HQ">HQ</option>
+                                    <option value="BLM">BLM (Bandar Laguna Merbok)</option>
+                                </select>
                             </div>
                         </div>
                         
-                        <div class="mb-3">
-                            <label for="crew-password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="crew-password" required>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="crew-contact" class="form-label">Contact</label>
+                                <input type="text" class="form-control" id="crew-contact" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="crew-password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="crew-password" value="0000" required>
+                            </div>
                         </div>
                         
                         <div class="d-flex justify-content-between">
@@ -1048,7 +1139,6 @@ add features uncommit and amendment adjustments features for admin
                     </form>
                 </div>
             </div>
-
             <!-- Stock Management Page -->
             <div id="stock-management-page" class="page">
                 <div class="page-header">
@@ -1077,6 +1167,7 @@ add features uncommit and amendment adjustments features for admin
                                             <th>Name</th>
                                             <th>Quantity</th>
                                             <th>Unit</th>
+                                            <th>Price</th>
                                             <th>Status</th>
                                             <th>Actions</th>
                                         </tr>
@@ -1121,11 +1212,26 @@ add features uncommit and amendment adjustments features for admin
                                 </select>
                             </div>
                             <div class="col-md-4">
+                                <label for="stock-price" class="form-label">Price</label>
+                                <input type="number" class="form-control" id="stock-price" min="0" step="0.01" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
                                 <label for="stock-status" class="form-label">Status</label>
                                 <select class="form-select" id="stock-status" required>
                                     <option value="In Stock">In Stock</option>
                                     <option value="Low Stock">Low Stock</option>
                                     <option value="Out of Stock">Out of Stock</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="stock-outlet" class="form-label">Outlet</label>
+                                <select class="form-select" id="stock-outlet" required>
+                                    <option value="">Select outlet</option>
+                                    <option value="HQ">HQ</option>
+                                    <option value="BLM">BLM (Bandar Laguna Merbok)</option>
                                 </select>
                             </div>
                         </div>
@@ -1141,10 +1247,8 @@ add features uncommit and amendment adjustments features for admin
             </div>
         </div>
     </div>
-
     <!-- Notification -->
     <div id="notification" class="notification"></div>
-
     <script>
         // Initialize data structure
         let appData = {
@@ -1153,27 +1257,30 @@ add features uncommit and amendment adjustments features for admin
             quotations: [],
             onlineOrders: [],
             crew: [
-                { id: "0001", name: "Admin User", role: "Administrator", contact: "admin@example.com", password: "Dd1234" },
-                { id: "0002", name: "John Doe", role: "Technician", contact: "john@example.com", password: "password1" },
-                { id: "0003", name: "Jane Smith", role: "Driver", contact: "jane@example.com", password: "password2" }
+                { id: "0001", name: "Danial Danish", position: "Head IT(Admin)", outlet: "HQ", contact: "danial@example.com", password: "0000" },
+                { id: "0002", name: "Aida", position: "Director/Business Manager", outlet: "HQ", contact: "aida@example.com", password: "0000" },
+                { id: "0003", name: "Putri Erinna", position: "Business Development Manager", outlet: "HQ", contact: "erinna@example.com", password: "0000" },
+                { id: "0004", name: "Putri Farah", position: "Business Marketing Manager", outlet: "HQ", contact: "farah@example.com", password: "0000" }
             ],
-            stock: []
+            stock: [],
+            nextInvoiceId: 1,
+            nextOrderId: 1
         };
-
+        
         // Load data from localStorage if available
         if (localStorage.getItem('businessAppData')) {
             appData = JSON.parse(localStorage.getItem('businessAppData'));
         }
-
+        
         // Save data to localStorage
         function saveData() {
             localStorage.setItem('businessAppData', JSON.stringify(appData));
         }
-
+        
         // Current user and role
         let currentUser = null;
         let userRole = null;
-
+        
         // DOM elements
         const loginPage = document.getElementById('login-page');
         const mainApp = document.getElementById('main-app');
@@ -1184,7 +1291,7 @@ add features uncommit and amendment adjustments features for admin
         const mainContent = document.getElementById('main-content');
         const userRoleBadge = document.getElementById('user-role-badge');
         const notification = document.getElementById('notification');
-
+        
         // Login functionality
         loginForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -1217,7 +1324,7 @@ add features uncommit and amendment adjustments features for admin
                 showNotification('Invalid user ID or password', 'error');
             }
         });
-
+        
         // Logout functionality
         logoutBtn.addEventListener('click', function() {
             currentUser = null;
@@ -1233,13 +1340,13 @@ add features uncommit and amendment adjustments features for admin
             // Show notification
             showNotification('Logged out successfully', 'info');
         });
-
+        
         // Sidebar toggle
         sidebarToggle.addEventListener('click', function() {
             sidebar.classList.toggle('collapsed');
             mainContent.classList.toggle('expanded');
         });
-
+        
         // Navigation
         document.querySelectorAll('.sidebar-menu .nav-link').forEach(link => {
             link.addEventListener('click', function(e) {
@@ -1255,7 +1362,7 @@ add features uncommit and amendment adjustments features for admin
                 this.classList.add('active');
             });
         });
-
+        
         // Show page function
         function showPage(pageName) {
             // Hide all pages
@@ -1273,6 +1380,7 @@ add features uncommit and amendment adjustments features for admin
                     break;
                 case 'cashbill':
                     loadCashbillList();
+                    loadStockItems();
                     break;
                 case 'logbook':
                     loadLogbookList();
@@ -1291,13 +1399,18 @@ add features uncommit and amendment adjustments features for admin
                     break;
             }
         }
-
+        
         // Apply role-based permissions
         function applyRolePermissions() {
             if (userRole === 'Crew') {
                 // Hide admin-only elements
                 document.querySelectorAll('.admin-only').forEach(el => {
                     el.style.display = 'none';
+                });
+                
+                // Hide admin features
+                document.querySelectorAll('.admin-feature').forEach(el => {
+                    el.classList.remove('visible');
                 });
                 
                 // Disable edit/delete functionality for crew
@@ -1309,9 +1422,14 @@ add features uncommit and amendment adjustments features for admin
                 document.querySelectorAll('.admin-only').forEach(el => {
                     el.style.display = '';
                 });
+                
+                // Show admin features
+                document.querySelectorAll('.admin-feature').forEach(el => {
+                    el.classList.add('visible');
+                });
             }
         }
-
+        
         // Show notification
         function showNotification(message, type) {
             notification.textContent = message;
@@ -1322,7 +1440,7 @@ add features uncommit and amendment adjustments features for admin
                 notification.classList.remove('show');
             }, 3000);
         }
-
+        
         // Dashboard functions
         function updateDashboard() {
             // Update counts
@@ -1338,7 +1456,7 @@ add features uncommit and amendment adjustments features for admin
                     <td>${cashbill.invoiceNo}</td>
                     <td>${cashbill.customerName}</td>
                     <td>${cashbill.date}</td>
-                    <td>$${cashbill.totalAmount.toFixed(2)}</td>
+                    <td>RM${cashbill.totalAmount.toFixed(2)}</td>
                 </tr>
             `).join('');
             document.getElementById('recent-cashbills').innerHTML = recentCashbillsHtml || '<tr><td colspan="4" class="text-center">No cashbills found</td></tr>';
@@ -1354,7 +1472,7 @@ add features uncommit and amendment adjustments features for admin
             `).join('');
             document.getElementById('recent-logbook').innerHTML = recentLogHtml || '<tr><td colspan="3" class="text-center">No log entries found</td></tr>';
         }
-
+        
         // Cashbill functions
         const newCashbillBtn = document.getElementById('new-cashbill-btn');
         const cashbillFormSection = document.getElementById('cashbill-form-section');
@@ -1364,11 +1482,13 @@ add features uncommit and amendment adjustments features for admin
         const addItemBtn = document.getElementById('add-item-btn');
         const cashbillItems = document.getElementById('cashbill-items');
         const cashbillSearch = document.getElementById('cashbill-search');
+        const uncommitCashbillBtn = document.getElementById('uncommit-cashbill-btn');
+        const amendCashbillBtn = document.getElementById('amend-cashbill-btn');
         
         // Show new cashbill form
         newCashbillBtn.addEventListener('click', function() {
             // Generate invoice number
-            const invoiceNo = 'INV-' + Date.now();
+            const invoiceNo = 'INV-' + String(appData.nextInvoiceId++).padStart(4, '0');
             document.getElementById('invoice-no').value = invoiceNo;
             
             // Set current date
@@ -1377,23 +1497,31 @@ add features uncommit and amendment adjustments features for admin
             // Set crew name
             document.getElementById('crew-name').value = currentUser.name;
             
+            // Set created by and assigned to
+            document.getElementById('created-by').textContent = currentUser.name;
+            document.getElementById('assigned-to').textContent = currentUser.outlet;
+            
             // Reset form
             cashbillForm.reset();
             document.getElementById('invoice-no').value = invoiceNo;
             document.getElementById('cashbill-date').value = new Date().toISOString().split('T')[0];
             document.getElementById('crew-name').value = currentUser.name;
+            document.getElementById('created-by').textContent = currentUser.name;
+            document.getElementById('assigned-to').textContent = currentUser.outlet;
             
             // Reset items
             cashbillItems.innerHTML = `
                 <div class="cashbill-item row mb-2">
                     <div class="col-md-5">
-                        <input type="text" class="form-control item-name" placeholder="Item name" required>
+                        <select class="form-control item-name" required>
+                            <option value="">Select item</option>
+                        </select>
                     </div>
                     <div class="col-md-3">
                         <input type="number" class="form-control item-quantity" placeholder="Qty" min="1" value="1" required>
                     </div>
                     <div class="col-md-3">
-                        <input type="number" class="form-control item-price" placeholder="Price" min="0" step="0.01" required>
+                        <input type="number" class="form-control item-price" placeholder="Price" min="0" step="0.01" readonly>
                     </div>
                     <div class="col-md-1">
                         <button type="button" class="btn btn-sm btn-danger remove-item">
@@ -1403,6 +1531,9 @@ add features uncommit and amendment adjustments features for admin
                 </div>
             `;
             
+            // Populate stock items
+            populateStockItems();
+            
             // Show form, hide list
             cashbillFormSection.classList.remove('d-none');
             cashbillListSection.classList.add('d-none');
@@ -1411,10 +1542,80 @@ add features uncommit and amendment adjustments features for admin
             addRemoveItemListeners();
         });
         
+        // Populate stock items dropdown
+        function populateStockItems() {
+            const itemSelects = document.querySelectorAll('.item-name');
+            
+            itemSelects.forEach(select => {
+                // Clear existing options except the first one
+                while (select.children.length > 1) {
+                    select.removeChild(select.lastChild);
+                }
+                
+                // Add stock items
+                appData.stock.forEach(stock => {
+                    const option = document.createElement('option');
+                    option.value = stock.id;
+                    option.textContent = `${stock.name} - RM${stock.price.toFixed(2)}`;
+                    option.setAttribute('data-price', stock.price);
+                    select.appendChild(option);
+                });
+                
+                // Add event listener to update price when item is selected
+                select.addEventListener('change', function() {
+                    const priceInput = this.closest('.cashbill-item').querySelector('.item-price');
+                    const selectedOption = this.options[this.selectedIndex];
+                    if (selectedOption.getAttribute('data-price')) {
+                        priceInput.value = selectedOption.getAttribute('data-price');
+                        calculateTotal();
+                    }
+                });
+            });
+        }
+        
+        // Load stock items for cashbill
+        function loadStockItems() {
+            // This function is called when cashbill page is loaded
+            // It ensures stock items are available for selection
+            if (appData.stock.length === 0) {
+                // Initialize with some default stock items if none exist
+                appData.stock = [
+                    { id: "STK001", name: "Product A", quantity: 100, unit: "Pieces", price: 10.50, status: "In Stock", outlet: "HQ" },
+                    { id: "STK002", name: "Product B", quantity: 50, unit: "Pieces", price: 15.75, status: "In Stock", outlet: "HQ" },
+                    { id: "STK003", name: "Product C", quantity: 25, unit: "Kg", price: 8.25, status: "Low Stock", outlet: "BLM" },
+                    { id: "STK004", name: "Service X", quantity: 1, unit: "Hours", price: 50.00, status: "In Stock", outlet: "HQ" }
+                ];
+                saveData();
+            }
+        }
+        
         // Cancel cashbill form
         cancelCashbillBtn.addEventListener('click', function() {
             cashbillFormSection.classList.add('d-none');
             cashbillListSection.classList.remove('d-none');
+        });
+        
+        // Uncommit cashbill
+        uncommitCashbillBtn.addEventListener('click', function() {
+            if (confirm('Are you sure you want to uncommit this cashbill? This will revert any changes.')) {
+                // Reset form
+                cashbillForm.reset();
+                
+                // Show notification
+                showNotification('Cashbill uncommitted', 'info');
+            }
+        });
+        
+        // Amend cashbill
+        amendCashbillBtn.addEventListener('click', function() {
+            // Enable form fields for editing
+            cashbillForm.querySelectorAll('input, select, textarea').forEach(el => {
+                el.removeAttribute('readonly');
+                el.removeAttribute('disabled');
+            });
+            
+            // Show notification
+            showNotification('Cashbill amendment mode enabled', 'info');
         });
         
         // Add item to cashbill
@@ -1423,13 +1624,15 @@ add features uncommit and amendment adjustments features for admin
             newItem.className = 'cashbill-item row mb-2';
             newItem.innerHTML = `
                 <div class="col-md-5">
-                    <input type="text" class="form-control item-name" placeholder="Item name" required>
+                    <select class="form-control item-name" required>
+                        <option value="">Select item</option>
+                    </select>
                 </div>
                 <div class="col-md-3">
                     <input type="number" class="form-control item-quantity" placeholder="Qty" min="1" value="1" required>
                 </div>
                 <div class="col-md-3">
-                    <input type="number" class="form-control item-price" placeholder="Price" min="0" step="0.01" required>
+                    <input type="number" class="form-control item-price" placeholder="Price" min="0" step="0.01" readonly>
                 </div>
                 <div class="col-md-1">
                     <button type="button" class="btn btn-sm btn-danger remove-item">
@@ -1439,10 +1642,24 @@ add features uncommit and amendment adjustments features for admin
             `;
             cashbillItems.appendChild(newItem);
             
+            // Populate stock items
+            populateStockItems();
+            
             // Add event listener to remove button
             newItem.querySelector('.remove-item').addEventListener('click', function() {
                 newItem.remove();
                 calculateTotal();
+            });
+            
+            // Add event listener to update price when item is selected
+            const itemSelect = newItem.querySelector('.item-name');
+            itemSelect.addEventListener('change', function() {
+                const priceInput = this.closest('.cashbill-item').querySelector('.item-price');
+                const selectedOption = this.options[this.selectedIndex];
+                if (selectedOption.getAttribute('data-price')) {
+                    priceInput.value = selectedOption.getAttribute('data-price');
+                    calculateTotal();
+                }
             });
         });
         
@@ -1469,7 +1686,7 @@ add features uncommit and amendment adjustments features for admin
         
         // Add event listeners to calculate total when item price/quantity changes
         cashbillItems.addEventListener('input', function(e) {
-            if (e.target.classList.contains('item-quantity') || e.target.classList.contains('item-price')) {
+            if (e.target.classList.contains('item-quantity')) {
                 calculateTotal();
             }
         });
@@ -1485,16 +1702,20 @@ add features uncommit and amendment adjustments features for admin
             const crewName = document.getElementById('crew-name').value;
             const paymentType = document.getElementById('payment-type').value;
             const totalAmount = parseFloat(document.getElementById('total-amount').value);
+            const remarks = document.getElementById('cashbill-remarks').value;
+            const createdBy = document.getElementById('created-by').textContent;
+            const assignedTo = document.getElementById('assigned-to').textContent;
             
             // Get items
             const items = [];
             document.querySelectorAll('.cashbill-item').forEach(item => {
-                const name = item.querySelector('.item-name').value;
+                const itemSelect = item.querySelector('.item-name');
+                const itemName = itemSelect.options[itemSelect.selectedIndex].text.split(' - ')[0];
                 const quantity = parseFloat(item.querySelector('.item-quantity').value);
                 const price = parseFloat(item.querySelector('.item-price').value);
                 
                 items.push({
-                    name,
+                    name: itemName,
                     quantity,
                     price,
                     total: quantity * price
@@ -1509,6 +1730,9 @@ add features uncommit and amendment adjustments features for admin
                 crewName,
                 paymentType,
                 totalAmount,
+                remarks,
+                createdBy,
+                assignedTo,
                 items,
                 timestamp: new Date().toISOString()
             };
@@ -1568,7 +1792,7 @@ add features uncommit and amendment adjustments features for admin
                         <td>${cashbill.invoiceNo}</td>
                         <td>${cashbill.date}</td>
                         <td>${cashbill.customerName}</td>
-                        <td>$${cashbill.totalAmount.toFixed(2)}</td>
+                        <td>RM${cashbill.totalAmount.toFixed(2)}</td>
                         <td>${cashbill.crewName}</td>
                         <td>${cashbill.paymentType}</td>
                         <td>${actions}</td>
@@ -1622,6 +1846,9 @@ add features uncommit and amendment adjustments features for admin
                 document.getElementById('crew-name').value = cashbill.crewName;
                 document.getElementById('payment-type').value = cashbill.paymentType;
                 document.getElementById('total-amount').value = cashbill.totalAmount.toFixed(2);
+                document.getElementById('cashbill-remarks').value = cashbill.remarks || '';
+                document.getElementById('created-by').textContent = cashbill.createdBy;
+                document.getElementById('assigned-to').textContent = cashbill.assignedTo;
                 
                 // Clear and populate items
                 cashbillItems.innerHTML = '';
@@ -1630,13 +1857,13 @@ add features uncommit and amendment adjustments features for admin
                     itemElement.className = 'cashbill-item row mb-2';
                     itemElement.innerHTML = `
                         <div class="col-md-5">
-                            <input type="text" class="form-control item-name" placeholder="Item name" value="${item.name}" readonly>
+                            <input type="text" class="form-control item-name" value="${item.name}" readonly>
                         </div>
                         <div class="col-md-3">
-                            <input type="number" class="form-control item-quantity" placeholder="Qty" min="1" value="${item.quantity}" readonly>
+                            <input type="number" class="form-control item-quantity" value="${item.quantity}" readonly>
                         </div>
                         <div class="col-md-3">
-                            <input type="number" class="form-control item-price" placeholder="Price" min="0" step="0.01" value="${item.price}" readonly>
+                            <input type="number" class="form-control item-price" value="${item.price}" readonly>
                         </div>
                         <div class="col-md-1">
                             <button type="button" class="btn btn-sm btn-danger remove-item" disabled>
@@ -1677,8 +1904,8 @@ add features uncommit and amendment adjustments features for admin
                         <tr>
                             <td>${item.name}</td>
                             <td>${item.quantity}</td>
-                            <td>$${item.price.toFixed(2)}</td>
-                            <td>$${item.total.toFixed(2)}</td>
+                            <td>RM${item.price.toFixed(2)}</td>
+                            <td>RM${item.total.toFixed(2)}</td>
                         </tr>
                     `;
                 });
@@ -1695,6 +1922,7 @@ add features uncommit and amendment adjustments features for admin
                             .invoice-table th, .invoice-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
                             .invoice-table th { background-color: #f2f2f2; }
                             .invoice-total { text-align: right; font-weight: bold; }
+                            .remarks { margin-top: 20px; }
                         </style>
                     </head>
                     <body>
@@ -1708,6 +1936,8 @@ add features uncommit and amendment adjustments features for admin
                             <p><strong>Customer:</strong> ${cashbill.customerName}</p>
                             <p><strong>Crew:</strong> ${cashbill.crewName}</p>
                             <p><strong>Payment Type:</strong> ${cashbill.paymentType}</p>
+                            <p><strong>Created By:</strong> ${cashbill.createdBy}</p>
+                            <p><strong>Assigned To:</strong> ${cashbill.assignedTo}</p>
                         </div>
                         
                         <table class="invoice-table">
@@ -1725,8 +1955,10 @@ add features uncommit and amendment adjustments features for admin
                         </table>
                         
                         <div class="invoice-total">
-                            <p>Total Amount: $${cashbill.totalAmount.toFixed(2)}</p>
+                            <p>Total Amount: RM${cashbill.totalAmount.toFixed(2)}</p>
                         </div>
+                        
+                        ${cashbill.remarks ? `<div class="remarks"><p><strong>Remarks:</strong> ${cashbill.remarks}</p></div>` : ''}
                     </body>
                     </html>
                 `;
@@ -2174,7 +2406,7 @@ add features uncommit and amendment adjustments features for admin
                         <td>${quotation.quoteNo}</td>
                         <td>${quotation.clientName}</td>
                         <td>${quotation.date}</td>
-                        <td>$${quotation.totalAmount.toFixed(2)}</td>
+                        <td>RM${quotation.totalAmount.toFixed(2)}</td>
                         <td>${quotation.status}</td>
                         <td>${actions}</td>
                     </tr>
@@ -2228,10 +2460,10 @@ add features uncommit and amendment adjustments features for admin
                     serviceElement.className = 'quotation-service row mb-2';
                     serviceElement.innerHTML = `
                         <div class="col-md-7">
-                            <input type="text" class="form-control service-name" placeholder="Service name" value="${service.name}" readonly>
+                            <input type="text" class="form-control service-name" value="${service.name}" readonly>
                         </div>
                         <div class="col-md-4">
-                            <input type="number" class="form-control service-price" placeholder="Price" min="0" step="0.01" value="${service.price}" readonly>
+                            <input type="number" class="form-control service-price" value="${service.price}" readonly>
                         </div>
                         <div class="col-md-1">
                             <button type="button" class="btn btn-sm btn-danger remove-service" disabled>
@@ -2301,11 +2533,14 @@ add features uncommit and amendment adjustments features for admin
         // Show new order form
         newOrderBtn.addEventListener('click', function() {
             // Generate order number
-            const orderNo = 'ORD-' + Date.now();
+            const orderNo = 'ORD-' + String(appData.nextOrderId++).padStart(4, '0');
             document.getElementById('order-no').value = orderNo;
             
             // Set current date
             document.getElementById('order-date').value = new Date().toISOString().split('T')[0];
+            
+            // Set assigned by
+            document.getElementById('assigned-by').textContent = currentUser.id;
             
             // Populate crew dropdown
             const crewDropdown = document.getElementById('assign-crew');
@@ -2314,7 +2549,7 @@ add features uncommit and amendment adjustments features for admin
             appData.crew.forEach(crew => {
                 const option = document.createElement('option');
                 option.value = crew.name;
-                option.textContent = crew.name;
+                option.textContent = `${crew.name} (${crew.outlet})`;
                 crewDropdown.appendChild(option);
             });
             
@@ -2322,6 +2557,7 @@ add features uncommit and amendment adjustments features for admin
             orderForm.reset();
             document.getElementById('order-no').value = orderNo;
             document.getElementById('order-date').value = new Date().toISOString().split('T')[0];
+            document.getElementById('assigned-by').textContent = currentUser.id;
             
             // Reset items
             orderItems.innerHTML = `
@@ -2399,6 +2635,7 @@ add features uncommit and amendment adjustments features for admin
             const customerContact = document.getElementById('order-contact').value;
             const status = document.getElementById('order-status').value;
             const assignedTo = document.getElementById('assign-crew').value;
+            const assignedBy = document.getElementById('assigned-by').textContent;
             
             // Get items
             const items = [];
@@ -2420,6 +2657,7 @@ add features uncommit and amendment adjustments features for admin
                 customerContact,
                 status,
                 assignedTo,
+                assignedBy,
                 items,
                 timestamp: new Date().toISOString()
             };
@@ -2533,6 +2771,7 @@ add features uncommit and amendment adjustments features for admin
                 document.getElementById('order-contact').value = order.customerContact;
                 document.getElementById('order-status').value = order.status;
                 document.getElementById('assign-crew').value = order.assignedTo || '';
+                document.getElementById('assigned-by').textContent = order.assignedBy;
                 
                 // Clear and populate items
                 orderItems.innerHTML = '';
@@ -2541,10 +2780,10 @@ add features uncommit and amendment adjustments features for admin
                     itemElement.className = 'order-item row mb-2';
                     itemElement.innerHTML = `
                         <div class="col-md-7">
-                            <input type="text" class="form-control order-item-name" placeholder="Item name" value="${item.name}" readonly>
+                            <input type="text" class="form-control order-item-name" value="${item.name}" readonly>
                         </div>
                         <div class="col-md-4">
-                            <input type="number" class="form-control order-item-quantity" placeholder="Qty" min="1" value="${item.quantity}" readonly>
+                            <input type="number" class="form-control order-item-quantity" value="${item.quantity}" readonly>
                         </div>
                         <div class="col-md-1">
                             <button type="button" class="btn btn-sm btn-danger remove-order-item" disabled>
@@ -2575,6 +2814,17 @@ add features uncommit and amendment adjustments features for admin
         function editOrder(orderNo) {
             const order = appData.onlineOrders.find(o => o.orderNo === orderNo);
             if (order) {
+                // Populate crew dropdown
+                const crewDropdown = document.getElementById('assign-crew');
+                crewDropdown.innerHTML = '<option value="">Select crew member</option>';
+                
+                appData.crew.forEach(crew => {
+                    const option = document.createElement('option');
+                    option.value = crew.name;
+                    option.textContent = `${crew.name} (${crew.outlet})`;
+                    crewDropdown.appendChild(option);
+                });
+                
                 // Populate form with order data
                 document.getElementById('order-no').value = order.orderNo;
                 document.getElementById('order-date').value = order.date;
@@ -2582,6 +2832,7 @@ add features uncommit and amendment adjustments features for admin
                 document.getElementById('order-contact').value = order.customerContact;
                 document.getElementById('order-status').value = order.status;
                 document.getElementById('assign-crew').value = order.assignedTo || '';
+                document.getElementById('assigned-by').textContent = order.assignedBy;
                 
                 // Clear and populate items
                 orderItems.innerHTML = '';
@@ -2590,10 +2841,10 @@ add features uncommit and amendment adjustments features for admin
                     itemElement.className = 'order-item row mb-2';
                     itemElement.innerHTML = `
                         <div class="col-md-7">
-                            <input type="text" class="form-control order-item-name" placeholder="Item name" value="${item.name}">
+                            <input type="text" class="form-control order-item-name" value="${item.name}">
                         </div>
                         <div class="col-md-4">
-                            <input type="number" class="form-control order-item-quantity" placeholder="Qty" min="1" value="${item.quantity}">
+                            <input type="number" class="form-control order-item-quantity" value="${item.quantity}">
                         </div>
                         <div class="col-md-1">
                             <button type="button" class="btn btn-sm btn-danger remove-order-item">
@@ -2654,7 +2905,7 @@ add features uncommit and amendment adjustments features for admin
                 // Wait for page to load, then populate form
                 setTimeout(() => {
                     // Generate invoice number
-                    const invoiceNo = 'INV-' + Date.now();
+                    const invoiceNo = 'INV-' + String(appData.nextInvoiceId++).padStart(4, '0');
                     document.getElementById('invoice-no').value = invoiceNo;
                     
                     // Set current date
@@ -2666,6 +2917,10 @@ add features uncommit and amendment adjustments features for admin
                     // Set crew name
                     document.getElementById('crew-name').value = currentUser.name;
                     
+                    // Set created by and assigned to
+                    document.getElementById('created-by').textContent = currentUser.name;
+                    document.getElementById('assigned-to').textContent = currentUser.outlet;
+                    
                     // Clear and populate items from order
                     cashbillItems.innerHTML = '';
                     order.items.forEach(item => {
@@ -2673,10 +2928,10 @@ add features uncommit and amendment adjustments features for admin
                         itemElement.className = 'cashbill-item row mb-2';
                         itemElement.innerHTML = `
                             <div class="col-md-5">
-                                <input type="text" class="form-control item-name" placeholder="Item name" value="${item.name}" required>
+                                <input type="text" class="form-control item-name" value="${item.name}" required>
                             </div>
                             <div class="col-md-3">
-                                <input type="number" class="form-control item-quantity" placeholder="Qty" min="1" value="${item.quantity}" required>
+                                <input type="number" class="form-control item-quantity" value="${item.quantity}" required>
                             </div>
                             <div class="col-md-3">
                                 <input type="number" class="form-control item-price" placeholder="Price" min="0" step="0.01" required>
@@ -2719,6 +2974,9 @@ add features uncommit and amendment adjustments features for admin
             // Reset form
             crewForm.reset();
             
+            // Set default password
+            document.getElementById('crew-password').value = "0000";
+            
             // Show form, hide list
             crewFormSection.classList.remove('d-none');
             crewListSection.classList.add('d-none');
@@ -2737,7 +2995,8 @@ add features uncommit and amendment adjustments features for admin
             // Get form data
             const id = document.getElementById('crew-id').value;
             const name = document.getElementById('crew-name').value;
-            const role = document.getElementById('crew-role').value;
+            const position = document.getElementById('crew-position').value;
+            const outlet = document.getElementById('crew-outlet').value;
             const contact = document.getElementById('crew-contact').value;
             const password = document.getElementById('crew-password').value;
             
@@ -2752,7 +3011,8 @@ add features uncommit and amendment adjustments features for admin
             const crew = {
                 id,
                 name,
-                role,
+                position,
+                outlet,
                 contact,
                 password
             };
@@ -2783,7 +3043,8 @@ add features uncommit and amendment adjustments features for admin
             const filteredCrew = appData.crew.filter(crew => 
                 crew.id.toLowerCase().includes(searchTerm) ||
                 crew.name.toLowerCase().includes(searchTerm) ||
-                crew.role.toLowerCase().includes(searchTerm)
+                crew.position.toLowerCase().includes(searchTerm) ||
+                crew.outlet.toLowerCase().includes(searchTerm)
             );
             
             // Generate HTML for crew list
@@ -2797,14 +3058,15 @@ add features uncommit and amendment adjustments features for admin
                     <tr>
                         <td>${crew.id}</td>
                         <td>${crew.name}</td>
-                        <td>${crew.role}</td>
+                        <td>${crew.position}</td>
+                        <td>${crew.outlet}</td>
                         <td>${crew.contact}</td>
                         <td>${actions}</td>
                     </tr>
                 `;
             }).join('');
             
-            crewList.innerHTML = crewHtml || '<tr><td colspan="5" class="text-center">No crew members found</td></tr>';
+            crewList.innerHTML = crewHtml || '<tr><td colspan="6" class="text-center">No crew members found</td></tr>';
             
             // Add event listeners to action buttons
             document.querySelectorAll('.view-crew').forEach(btn => {
@@ -2839,7 +3101,8 @@ add features uncommit and amendment adjustments features for admin
                 // Populate form with crew data
                 document.getElementById('crew-id').value = crew.id;
                 document.getElementById('crew-name').value = crew.name;
-                document.getElementById('crew-role').value = crew.role;
+                document.getElementById('crew-position').value = crew.position;
+                document.getElementById('crew-outlet').value = crew.outlet;
                 document.getElementById('crew-contact').value = crew.contact;
                 document.getElementById('crew-password').value = crew.password;
                 
@@ -2866,7 +3129,8 @@ add features uncommit and amendment adjustments features for admin
                 // Populate form with crew data
                 document.getElementById('crew-id').value = crew.id;
                 document.getElementById('crew-name').value = crew.name;
-                document.getElementById('crew-role').value = crew.role;
+                document.getElementById('crew-position').value = crew.position;
+                document.getElementById('crew-outlet').value = crew.outlet;
                 document.getElementById('crew-contact').value = crew.contact;
                 document.getElementById('crew-password').value = crew.password;
                 
@@ -2943,7 +3207,9 @@ add features uncommit and amendment adjustments features for admin
             const name = document.getElementById('stock-name').value;
             const quantity = parseInt(document.getElementById('stock-quantity').value);
             const unit = document.getElementById('stock-unit').value;
+            const price = parseFloat(document.getElementById('stock-price').value);
             const status = document.getElementById('stock-status').value;
+            const outlet = document.getElementById('stock-outlet').value;
             
             // Check if stock ID already exists
             const existingStock = appData.stock.find(s => s.id === id);
@@ -2958,7 +3224,9 @@ add features uncommit and amendment adjustments features for admin
                 name,
                 quantity,
                 unit,
-                status
+                price,
+                status,
+                outlet
             };
             
             // Add to stock array
@@ -2987,7 +3255,8 @@ add features uncommit and amendment adjustments features for admin
             const filteredStock = appData.stock.filter(stock => 
                 stock.id.toLowerCase().includes(searchTerm) ||
                 stock.name.toLowerCase().includes(searchTerm) ||
-                stock.status.toLowerCase().includes(searchTerm)
+                stock.status.toLowerCase().includes(searchTerm) ||
+                stock.outlet.toLowerCase().includes(searchTerm)
             );
             
             // Generate HTML for stock list
@@ -3004,13 +3273,14 @@ add features uncommit and amendment adjustments features for admin
                         <td>${stock.name}</td>
                         <td>${stock.quantity}</td>
                         <td>${stock.unit}</td>
+                        <td>RM${stock.price.toFixed(2)}</td>
                         <td>${stock.status}</td>
                         <td>${actions}</td>
                     </tr>
                 `;
             }).join('');
             
-            stockList.innerHTML = stockHtml || '<tr><td colspan="6" class="text-center">No stock items found</td></tr>';
+            stockList.innerHTML = stockHtml || '<tr><td colspan="7" class="text-center">No stock items found</td></tr>';
             
             // Add event listeners to action buttons
             document.querySelectorAll('.view-stock').forEach(btn => {
@@ -3047,7 +3317,9 @@ add features uncommit and amendment adjustments features for admin
                 document.getElementById('stock-name').value = stock.name;
                 document.getElementById('stock-quantity').value = stock.quantity;
                 document.getElementById('stock-unit').value = stock.unit;
+                document.getElementById('stock-price').value = stock.price;
                 document.getElementById('stock-status').value = stock.status;
+                document.getElementById('stock-outlet').value = stock.outlet;
                 
                 // Show form, hide list
                 stockFormSection.classList.remove('d-none');
@@ -3074,7 +3346,9 @@ add features uncommit and amendment adjustments features for admin
                 document.getElementById('stock-name').value = stock.name;
                 document.getElementById('stock-quantity').value = stock.quantity;
                 document.getElementById('stock-unit').value = stock.unit;
+                document.getElementById('stock-price').value = stock.price;
                 document.getElementById('stock-status').value = stock.status;
+                document.getElementById('stock-outlet').value = stock.outlet;
                 
                 // Show form, hide list
                 stockFormSection.classList.remove('d-none');
