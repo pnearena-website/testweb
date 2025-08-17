@@ -28,7 +28,7 @@
             color: var(--dark-color);
         }
         
-        /* Login Page Styles - Updated to white theme */
+        /* Login Page Styles */
         .login-container {
             height: 100vh;
             display: flex;
@@ -165,13 +165,13 @@
             display: none;
         }
         
-        /* Top Navigation - Updated z-index for menu button */
+        /* Top Navigation */
         .top-navbar {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            z-index: 101; /* Increased z-index */
+            z-index: 101;
             background-color: var(--white-color);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             padding: 15px 30px;
@@ -357,14 +357,11 @@
             background-color: var(--primary-color);
         }
         
-        /* Desktop version view */
-        @media (min-width: 992px) {
-            .desktop-view {
-                display: block;
-            }
+        /* Admin features */
+        .admin-only {
+            display: none;
         }
         
-        /* Uncommit and amendment features for admin */
         .admin-feature {
             display: none;
         }
@@ -373,19 +370,7 @@
             display: inline-block;
         }
         
-        /* Remarks section */
-        .remarks-section {
-            margin-top: 15px;
-        }
-        
-        /* Created by and assigned to sections */
-        .meta-info {
-            font-size: 0.9rem;
-            color: #6c757d;
-            margin-top: 10px;
-        }
-        
-        /* Sidebar toggle button styling - Updated for better visibility */
+        /* Sidebar toggle button styling */
         #sidebar-toggle {
             background-color: var(--primary-color);
             border: none;
@@ -395,8 +380,8 @@
             font-weight: bold;
             border-radius: 0.25rem;
             transition: all 0.3s;
-            z-index: 102; /* Higher z-index to ensure visibility */
-            position: relative; /* Ensure z-index is applied */
+            z-index: 102;
+            position: relative;
         }
         
         #sidebar-toggle:hover {
@@ -511,6 +496,40 @@
             color: #6c757d;
             font-size: 0.875rem;
         }
+        
+        /* Status badges */
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+        }
+        
+        .status-unlocked {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        
+        .status-pending {
+            background-color: #17a2b8;
+            color: white;
+        }
+        
+        .status-committed {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        /* Remarks section */
+        .remarks-section {
+            margin-top: 15px;
+        }
+        
+        /* Created by and assigned to sections */
+        .meta-info {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -537,6 +556,7 @@
             </div>
         </div>
     </div>
+    
     <!-- Main Application -->
     <div id="main-app" class="d-none">
         <!-- Top Navigation -->
@@ -602,7 +622,7 @@
                         <span>Crew Management</span>
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item admin-only">
                     <a class="nav-link" href="#" data-page="stock-management">
                         <i class="bi bi-box-seam"></i>
                         <span>Stock Management</span>
@@ -610,6 +630,7 @@
                 </li>
             </ul>
         </div>
+        
         <!-- Main Content -->
         <div class="main-content" id="main-content">
             <!-- Dashboard Page -->
@@ -716,6 +737,7 @@
                     </div>
                 </div>
             </div>
+            
             <!-- Cashbill Page -->
             <div id="cashbill-page" class="page">
                 <div class="page-header">
@@ -746,7 +768,7 @@
                                             <th>Total</th>
                                             <th>Crew</th>
                                             <th>Payment Type</th>
-                                            <th>Version</th>
+                                            <th>Status</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -851,8 +873,8 @@
                         <div class="d-flex justify-content-between mt-3">
                             <div>
                                 <button type="button" id="cancel-cashbill-btn" class="btn btn-secondary">Cancel</button>
-                                <button type="button" id="uncommit-cashbill-btn" class="btn btn-warning admin-feature ms-">
-                                    <i class="bi bi-arrow-counterclockwise me-1"></i> Uncommit
+                                <button type="button" id="uncommit-cashbill-btn" class="btn btn-warning admin-feature ms-2">
+                                    <i class="bi bi-unlock me-1"></i> Unlock for Crew
                                 </button>
                                 <button type="button" id="amend-cashbill-btn" class="btn btn-info admin-feature ms-2">
                                     <i class="bi bi-pencil-square me-1"></i> Amend
@@ -876,6 +898,7 @@
                     </form>
                 </div>
             </div>
+            
             <!-- Logbook Page -->
             <div id="logbook-page" class="page">
                 <div class="page-header">
@@ -958,6 +981,7 @@
                     </form>
                 </div>
             </div>
+            
             <!-- Quotation Page -->
             <div id="quotation-page" class="page">
                 <div class="page-header">
@@ -1080,6 +1104,7 @@
                     </form>
                 </div>
             </div>
+            
             <!-- Online Order Page -->
             <div id="online-order-page" class="page">
                 <div class="page-header">
@@ -1205,6 +1230,7 @@
                     </form>
                 </div>
             </div>
+            
             <!-- Crew Management Page -->
             <div id="crew-management-page" class="page admin-only">
                 <div class="page-header">
@@ -1306,12 +1332,13 @@
                     </form>
                 </div>
             </div>
+            
             <!-- Stock Management Page -->
-            <div id="stock-management-page" class="page">
+            <div id="stock-management-page" class="page admin-only">
                 <div class="page-header">
                     <h2>Stock Management</h2>
                     <p class="text-muted">Manage inventory stock</p>
-                    <button id="new-stock-btn" class="btn btn-primary admin-only">
+                    <button id="new-stock-btn" class="btn btn-primary">
                         <i class="bi bi-plus-circle me-1"></i> Add New Stock
                     </button>
                 </div>
@@ -1349,7 +1376,7 @@
                 </div>
                 
                 <!-- Add/Edit Stock Form (initially hidden) -->
-                <div id="stock-form-section" class="form-section d-none admin-only">
+                <div id="stock-form-section" class="form-section d-none">
                     <h4 class="mb-4">Add New Stock</h4>
                     <form id="stock-form">
                         <div class="row mb-3">
@@ -1475,7 +1502,12 @@
                 { id: "0003", name: "Putri Erinna", position: "Business Development Manager", outlet: "HQ", contact: "erinna@example.com", password: "0000" },
                 { id: "0004", name: "Putri Farah", position: "Business Marketing Manager", outlet: "HQ", contact: "farah@example.com", password: "0000" }
             ],
-            stock: [],
+            stock: [
+                { id: "STK001", name: "Product A", quantity: 100, unit: "Pieces", price: 10.50, status: "In Stock", outlet: "HQ" },
+                { id: "STK002", name: "Product B", quantity: 50, unit: "Pieces", price: 15.75, status: "In Stock", outlet: "HQ" },
+                { id: "STK003", name: "Product C", quantity: 25, unit: "Kg", price: 8.25, status: "Low Stock", outlet: "BLM" },
+                { id: "STK004", name: "Service X", quantity: 1, unit: "Hours", price: 50.00, status: "In Stock", outlet: "HQ" }
+            ],
             nextInvoiceId: 1,
             nextOrderId: 1
         };
@@ -1483,6 +1515,16 @@
         // Load data from localStorage if available
         if (localStorage.getItem('businessAppData')) {
             appData = JSON.parse(localStorage.getItem('businessAppData'));
+            
+            // Initialize status field for existing cashbills if not present
+            appData.cashbills.forEach(cashbill => {
+                if (!cashbill.status) {
+                    cashbill.status = "committed";
+                }
+                if (!cashbill.requestedBy) {
+                    cashbill.requestedBy = null;
+                }
+            });
         }
         
         // Save data to localStorage
@@ -1797,6 +1839,17 @@
             
             // Update commit button text
             commitCashbillBtn.innerHTML = '<i class="bi bi-check-circle me-1"></i> Commit';
+            
+            // Show/hide admin features based on role
+            if (userRole === 'Admin') {
+                document.querySelectorAll('.admin-feature').forEach(el => {
+                    el.classList.add('visible');
+                });
+            } else {
+                document.querySelectorAll('.admin-feature').forEach(el => {
+                    el.classList.remove('visible');
+                });
+            }
         });
         
         // Populate stock items dropdown
@@ -1852,69 +1905,42 @@
             cashbillListSection.classList.remove('d-none');
         });
         
-        // Uncommit cashbill
+        // Uncommit cashbill - Unlock for crew editing
         uncommitCashbillBtn.addEventListener('click', function() {
             const invoiceNo = document.getElementById('invoice-no').value;
             const cashbill = appData.cashbills.find(c => c.invoiceNo === invoiceNo);
             
-            if (cashbill && cashbill.previousVersions && cashbill.previousVersions.length > 0) {
-                if (confirm('Are you sure you want to uncommit this cashbill? This will revert to the previous version.')) {
-                    // Get the previous version (last one in the array)
-                    const previousVersion = cashbill.previousVersions.pop();
-                    
-                    // Restore the previous version
-                    cashbill.date = previousVersion.date;
-                    cashbill.customerName = previousVersion.customerName;
-                    cashbill.paymentType = previousVersion.paymentType;
-                    cashbill.totalAmount = previousVersion.totalAmount;
-                    cashbill.remarks = previousVersion.remarks;
-                    cashbill.items = previousVersion.items;
-                    
-                    // Decrement version number
-                    cashbill.version = Math.max(1, (cashbill.version || 1) - 1);
-                    
-                    // Update the form to reflect the restored data
-                    document.getElementById('cashbill-date').value = cashbill.date;
-                    document.getElementById('customer-name').value = cashbill.customerName;
-                    document.getElementById('payment-type').value = cashbill.paymentType;
-                    document.getElementById('total-amount').value = cashbill.totalAmount.toFixed(2);
-                    document.getElementById('cashbill-remarks').value = cashbill.remarks || '';
-                    
-                    // Clear and populate items
-                    cashbillItems.innerHTML = '';
-                    cashbill.items.forEach(item => {
-                        const itemElement = document.createElement('div');
-                        itemElement.className = 'cashbill-item row mb-2';
-                        itemElement.innerHTML = `
-                            <div class="col-md-5">
-                                <input type="text" class="form-control item-name" value="${item.name}" readonly>
-                            </div>
-                            <div class="col-md-3">
-                                <input type="number" class="form-control item-quantity" value="${item.quantity}" readonly>
-                            </div>
-                            <div class="col-md-3">
-                                <input type="number" class="form-control item-price" value="${item.price}" readonly>
-                            </div>
-                            <div class="col-md-1">
-                                <button type="button" class="btn btn-sm btn-danger remove-item" disabled>
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </div>
-                        `;
-                        cashbillItems.appendChild(itemElement);
-                    });
-                    
-                    // Update version info
-                    updateVersionInfo(cashbill);
+            if (cashbill && cashbill.status === "committed") {
+                if (confirm('Are you sure you want to allow this crew member to edit this cashbill?')) {
+                    // Set status to "unlocked" and track who requested it
+                    cashbill.status = "unlocked";
+                    cashbill.requestedBy = cashbill.crewName; // The original crew member
+                    cashbill.requestedDate = new Date().toISOString();
                     
                     // Save data
                     saveData();
                     
+                    // Add to logbook
+                    const logEntry = {
+                        date: new Date().toISOString().split('T')[0],
+                        description: `Unlocked cashbill #${invoiceNo} for editing by ${cashbill.crewName}`,
+                        crew: currentUser.name,
+                        type: 'Cashbill',
+                        timestamp: new Date().toISOString()
+                    };
+                    appData.logbook.push(logEntry);
+                    
                     // Show notification
-                    showNotification('Cashbill uncommitted to previous version', 'info');
+                    showNotification(`Cashbill unlocked for ${cashbill.crewName} to edit`, 'success');
+                    
+                    // Reload cashbill list to reflect status change
+                    loadCashbillList();
+                    
+                    // Update the form to show the unlocked status
+                    updateCashbillFormStatus(cashbill);
                 }
             } else {
-                showNotification('No previous versions available to uncommit', 'warning');
+                showNotification('This cashbill cannot be unlocked', 'warning');
             }
         });
         
@@ -1923,7 +1949,7 @@
             const invoiceNo = document.getElementById('invoice-no').value;
             const cashbill = appData.cashbills.find(c => c.invoiceNo === invoiceNo);
             
-            if (cashbill) {
+            if (cashbill && cashbill.status === "committed") {
                 // Populate quick edit modal with current items
                 const quickEditItems = document.getElementById('quick-edit-items');
                 quickEditItems.innerHTML = '';
@@ -1946,6 +1972,8 @@
                 
                 // Store current cashbill for reference
                 quickEditModal._cashbill = cashbill;
+            } else {
+                showNotification('Only committed cashbills can be amended', 'warning');
             }
         });
         
@@ -2191,6 +2219,49 @@
             }
         }
         
+        // Update cashbill form status display
+        function updateCashbillFormStatus(cashbill) {
+            let statusText = '';
+            let statusClass = '';
+            
+            switch(cashbill.status) {
+                case "unlocked":
+                    statusText = 'Unlocked for Editing';
+                    statusClass = 'status-unlocked';
+                    break;
+                case "pending_approval":
+                    statusText = 'Pending Approval';
+                    statusClass = 'status-pending';
+                    break;
+                default:
+                    statusText = 'Committed';
+                    statusClass = 'status-committed';
+            }
+            
+            // Update form title
+            cashbillFormTitle.textContent = `${cashbillFormTitle.textContent.split(' - ')[0]} - ${statusText}`;
+            
+            // Show/hide admin features based on status and role
+            if (userRole === 'Admin') {
+                if (cashbill.status === "committed") {
+                    document.querySelectorAll('.admin-feature').forEach(el => {
+                        el.classList.add('visible');
+                    });
+                } else {
+                    document.querySelectorAll('.admin-feature').forEach(el => {
+                        el.classList.remove('visible');
+                    });
+                }
+            }
+            
+            // Update commit button text based on status
+            if (cashbill.status === "unlocked" && userRole === "Crew") {
+                commitCashbillBtn.innerHTML = '<i class="bi bi-check-circle me-1"></i> Submit for Approval';
+            } else if (userRole === "Admin") {
+                commitCashbillBtn.innerHTML = '<i class="bi bi-check-circle me-1"></i> Commit';
+            }
+        }
+        
         // Enable form fields for editing
         function enableFormFields() {
             cashbillForm.querySelectorAll('input, select, textarea, button').forEach(el => {
@@ -2322,41 +2393,69 @@
                 // We're updating an existing cashbill
                 const existingCashbill = appData.cashbills[existingCashbillIndex];
                 
-                // Create a copy of the current cashbill to store in previous versions
-                const previousVersion = {...existingCashbill};
-                
-                // Initialize previousVersions array if it doesn't exist
-                if (!existingCashbill.previousVersions) {
-                    existingCashbill.previousVersions = [];
+                // Check if this is a crew member editing an unlocked cashbill
+                if (existingCashbill.status === "unlocked" && userRole === "Crew") {
+                    // Crew member is committing changes - set to pending approval
+                    existingCashbill.status = "pending_approval";
+                    existingCashbill.date = date;
+                    existingCashbill.customerName = customerName;
+                    existingCashbill.paymentType = paymentType;
+                    existingCashbill.totalAmount = totalAmount;
+                    existingCashbill.remarks = remarks;
+                    existingCashbill.items = items;
+                    existingCashbill.lastModified = new Date().toISOString();
+                    existingCashbill.lastModifiedBy = currentUser.name;
+                    
+                    // Add to logbook
+                    const logEntry = {
+                        date: new Date().toISOString().split('T')[0],
+                        description: `Submitted changes for cashbill #${invoiceNo} pending admin approval`,
+                        crew: crewName,
+                        type: 'Cashbill',
+                        timestamp: new Date().toISOString()
+                    };
+                    appData.logbook.push(logEntry);
+                    
+                    showNotification('Changes submitted for admin approval', 'info');
+                } else if (userRole === "Admin") {
+                    // Admin is making changes - directly commit
+                    // Create a copy of the current cashbill to store in previous versions
+                    const previousVersion = {...existingCashbill};
+                    
+                    // Initialize previousVersions array if it doesn't exist
+                    if (!existingCashbill.previousVersions) {
+                        existingCashbill.previousVersions = [];
+                    }
+                    
+                    // Add current version to previous versions
+                    existingCashbill.previousVersions.push(previousVersion);
+                    
+                    // Update the cashbill with new data
+                    existingCashbill.date = date;
+                    existingCashbill.customerName = customerName;
+                    existingCashbill.paymentType = paymentType;
+                    existingCashbill.totalAmount = totalAmount;
+                    existingCashbill.remarks = remarks;
+                    existingCashbill.items = items;
+                    existingCashbill.lastModified = new Date().toISOString();
+                    existingCashbill.lastModifiedBy = currentUser.name;
+                    existingCashbill.status = "committed"; // Set status back to committed
+                    
+                    // Increment version number
+                    existingCashbill.version = (existingCashbill.version || 1) + 1;
+                    
+                    // Add to logbook
+                    const logEntry = {
+                        date: new Date().toISOString().split('T')[0],
+                        description: `Amended cashbill #${invoiceNo} for ${customerName} (Version ${existingCashbill.version})`,
+                        crew: crewName,
+                        type: 'Cashbill',
+                        timestamp: new Date().toISOString()
+                    };
+                    appData.logbook.push(logEntry);
+                    
+                    showNotification('Cashbill amended successfully', 'success');
                 }
-                
-                // Add current version to previous versions
-                existingCashbill.previousVersions.push(previousVersion);
-                
-                // Update the cashbill with new data
-                existingCashbill.date = date;
-                existingCashbill.customerName = customerName;
-                existingCashbill.paymentType = paymentType;
-                existingCashbill.totalAmount = totalAmount;
-                existingCashbill.remarks = remarks;
-                existingCashbill.items = items;
-                existingCashbill.lastModified = new Date().toISOString();
-                existingCashbill.lastModifiedBy = currentUser.name;
-                
-                // Increment version number
-                existingCashbill.version = (existingCashbill.version || 1) + 1;
-                
-                // Add to logbook
-                const logEntry = {
-                    date: new Date().toISOString().split('T')[0],
-                    description: `Amended cashbill #${invoiceNo} for ${customerName} (Version ${existingCashbill.version})`,
-                    crew: crewName,
-                    type: 'Cashbill',
-                    timestamp: new Date().toISOString()
-                };
-                appData.logbook.push(logEntry);
-                
-                showNotification('Cashbill amended successfully', 'success');
             } else {
                 // We're creating a new cashbill
                 const cashbill = {
@@ -2372,6 +2471,7 @@
                     items,
                     version: 1,
                     previousVersions: [],
+                    status: "committed", // New cashbills are committed by default
                     timestamp: new Date().toISOString()
                 };
                 
@@ -2416,39 +2516,84 @@
             
             // Generate HTML for cashbill list
             const cashbillHtml = filteredCashbills.map(cashbill => {
-                const versionBadge = cashbill.version && cashbill.version > 1 ? 
-                    `<span class="badge bg-info">v${cashbill.version}</span>` : 
-                    `<span class="badge bg-secondary">v1</span>`;
+                let statusBadge = '';
+                let actions = '';
                 
-                const actions = userRole === 'Admin' ? 
-                    `<div class="action-buttons">
-                        <button class="btn btn-sm btn-primary view-cashbill" data-id="${cashbill.invoiceNo}" title="View">
-                            <i class="bi bi-eye"></i>
-                        </button>
-                        <button class="btn btn-sm btn-info amend-cashbill" data-id="${cashbill.invoiceNo}" title="Amend">
+                // Determine status badge
+                switch(cashbill.status) {
+                    case "unlocked":
+                        statusBadge = `<span class="badge bg-warning">Unlocked</span>`;
+                        break;
+                    case "pending_approval":
+                        statusBadge = `<span class="badge bg-info">Pending Approval</span>`;
+                        break;
+                    default:
+                        statusBadge = cashbill.version && cashbill.version > 1 ? 
+                            `<span class="badge bg-success">Committed v${cashbill.version}</span>` : 
+                            `<span class="badge bg-success">Committed v1</span>`;
+                }
+                
+                // Determine actions based on user role and cashbill status
+                if (userRole === 'Admin') {
+                    actions = `<div class="action-buttons">`;
+                    
+                    // View button
+                    actions += `<button class="btn btn-sm btn-primary view-cashbill" data-id="${cashbill.invoiceNo}" title="View">
+                        <i class="bi bi-eye"></i>
+                    </button>`;
+                    
+                    // Edit button for committed cashbills
+                    if (cashbill.status === "committed") {
+                        actions += `<button class="btn btn-sm btn-info amend-cashbill" data-id="${cashbill.invoiceNo}" title="Amend">
                             <i class="bi bi-pencil-square"></i>
-                        </button>
-                        <button class="btn btn-sm btn-warning print-cashbill" data-id="${cashbill.invoiceNo}" title="Print">
-                            <i class="bi bi-printer"></i>
-                        </button>
-                        <button class="btn btn-sm btn-outline-warning download-cashbill" data-id="${cashbill.invoiceNo}" title="Download">
-                            <i class="bi bi-download"></i>
-                        </button>
-                        <button class="btn btn-sm btn-danger delete-cashbill" data-id="${cashbill.invoiceNo}" title="Delete">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </div>` :
-                    `<div class="action-buttons">
-                        <button class="btn btn-sm btn-primary view-cashbill" data-id="${cashbill.invoiceNo}" title="View">
-                            <i class="bi bi-eye"></i>
-                        </button>
-                        <button class="btn btn-sm btn-warning print-cashbill" data-id="${cashbill.invoiceNo}" title="Print">
-                            <i class="bi bi-printer"></i>
-                        </button>
-                        <button class="btn btn-sm btn-outline-warning download-cashbill" data-id="${cashbill.invoiceNo}" title="Download">
-                            <i class="bi bi-download"></i>
-                        </button>
-                    </div>`;
+                        </button>`;
+                    }
+                    
+                    // Uncommit button for committed cashbills
+                    if (cashbill.status === "committed") {
+                        actions += `<button class="btn btn-sm btn-warning uncommit-cashbill" data-id="${cashbill.invoiceNo}" title="Unlock for Crew">
+                            <i class="bi bi-unlock"></i>
+                        </button>`;
+                    }
+                    
+                    // Approve/Reject buttons for pending cashbills
+                    if (cashbill.status === "pending_approval") {
+                        actions += `<button class="btn btn-sm btn-success approve-cashbill" data-id="${cashbill.invoiceNo}" title="Approve">
+                            <i class="bi bi-check-circle"></i>
+                        </button>`;
+                        actions += `<button class="btn btn-sm btn-danger reject-cashbill" data-id="${cashbill.invoiceNo}" title="Reject">
+                            <i class="bi bi-x-circle"></i>
+                        </button>`;
+                    }
+                    
+                    // Print and download buttons
+                    actions += `<button class="btn btn-sm btn-outline-warning print-cashbill" data-id="${cashbill.invoiceNo}" title="Print">
+                        <i class="bi bi-printer"></i>
+                    </button>`;
+                    
+                    actions += `</div>`;
+                } else if (userRole === 'Crew') {
+                    actions = `<div class="action-buttons">`;
+                    
+                    // View button
+                    actions += `<button class="btn btn-sm btn-primary view-cashbill" data-id="${cashbill.invoiceNo}" title="View">
+                        <i class="bi bi-eye"></i>
+                    </button>`;
+                    
+                    // Edit button only for unlocked cashbills assigned to current user
+                    if (cashbill.status === "unlocked" && cashbill.crewName === currentUser.name) {
+                        actions += `<button class="btn btn-sm btn-info edit-cashbill" data-id="${cashbill.invoiceNo}" title="Edit">
+                            <i class="bi bi-pencil"></i>
+                        </button>`;
+                    }
+                    
+                    // Print button
+                    actions += `<button class="btn btn-sm btn-outline-warning print-cashbill" data-id="${cashbill.invoiceNo}" title="Print">
+                        <i class="bi bi-printer"></i>
+                    </button>`;
+                    
+                    actions += `</div>`;
+                }
                 
                 return `
                     <tr>
@@ -2458,7 +2603,7 @@
                         <td>RM${cashbill.totalAmount.toFixed(2)}</td>
                         <td>${cashbill.crewName}</td>
                         <td>${cashbill.paymentType}</td>
-                        <td>${versionBadge}</td>
+                        <td>${statusBadge}</td>
                         <td>${actions}</td>
                     </tr>
                 `;
@@ -2481,91 +2626,40 @@
                 });
             });
             
+            document.querySelectorAll('.uncommit-cashbill').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const invoiceNo = this.getAttribute('data-id');
+                    viewCashbill(invoiceNo);
+                });
+            });
+            
+            document.querySelectorAll('.edit-cashbill').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const invoiceNo = this.getAttribute('data-id');
+                    editUnlockedCashbill(invoiceNo);
+                });
+            });
+            
+            document.querySelectorAll('.approve-cashbill').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const invoiceNo = this.getAttribute('data-id');
+                    approveCashbill(invoiceNo);
+                });
+            });
+            
+            document.querySelectorAll('.reject-cashbill').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const invoiceNo = this.getAttribute('data-id');
+                    rejectCashbill(invoiceNo);
+                });
+            });
+            
             document.querySelectorAll('.print-cashbill').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const invoiceNo = this.getAttribute('data-id');
                     printCashbill(invoiceNo);
                 });
             });
-            
-            document.querySelectorAll('.download-cashbill').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const invoiceNo = this.getAttribute('data-id');
-                    downloadCashbill(invoiceNo);
-                });
-            });
-            
-            document.querySelectorAll('.delete-cashbill').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const invoiceNo = this.getAttribute('data-id');
-                    deleteCashbill(invoiceNo);
-                });
-            });
-        }
-        
-        // Amend cashbill from list
-        function amendCashbillFromList(invoiceNo) {
-            const cashbill = appData.cashbills.find(c => c.invoiceNo === invoiceNo);
-            if (cashbill) {
-                // Populate form with cashbill data
-                document.getElementById('invoice-no').value = cashbill.invoiceNo;
-                document.getElementById('cashbill-date').value = cashbill.date;
-                document.getElementById('customer-name').value = cashbill.customerName;
-                document.getElementById('crew-name').value = cashbill.crewName;
-                document.getElementById('payment-type').value = cashbill.paymentType;
-                document.getElementById('total-amount').value = cashbill.totalAmount.toFixed(2);
-                document.getElementById('cashbill-remarks').value = cashbill.remarks || '';
-                document.getElementById('created-by').textContent = cashbill.createdBy;
-                document.getElementById('assigned-to').textContent = cashbill.assignedTo;
-                
-                // Clear and populate items
-                cashbillItems.innerHTML = '';
-                cashbill.items.forEach(item => {
-                    const itemElement = document.createElement('div');
-                    itemElement.className = 'cashbill-item row mb-2';
-                    itemElement.innerHTML = `
-                        <div class="col-md-5">
-                            <input type="text" class="form-control item-name" value="${item.name}" readonly>
-                        </div>
-                        <div class="col-md-3">
-                            <input type="number" class="form-control item-quantity" value="${item.quantity}" readonly>
-                        </div>
-                        <div class="col-md-3">
-                            <input type="number" class="form-control item-price" value="${item.price}" readonly>
-                        </div>
-                        <div class="col-md-1">
-                            <button type="button" class="btn btn-sm btn-danger remove-item" disabled>
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </div>
-                    `;
-                    cashbillItems.appendChild(itemElement);
-                });
-                
-                // Show form, hide list
-                cashbillFormSection.classList.remove('d-none');
-                cashbillListSection.classList.add('d-none');
-                
-                // Update form title and version info
-                cashbillFormTitle.textContent = `Amend Cashbill #${invoiceNo}`;
-                updateVersionInfo(cashbill);
-                
-                // Show admin features if user is admin
-                if (userRole === 'Admin') {
-                    document.querySelectorAll('.admin-feature').forEach(el => {
-                        el.classList.add('visible');
-                    });
-                }
-                
-                // Enable form for editing
-                enableFormFields();
-                
-                // Update commit button text
-                commitCashbillBtn.innerHTML = '<i class="bi bi-check-circle me-1"></i> Commit Changes';
-                
-                // Show notification
-                showNotification('Cashbill loaded for amendment', 'info');
-            }
         }
         
         // Search cashbills
@@ -2626,19 +2720,221 @@
                     }
                 });
                 
-                // Update form title and version info
+                // Update form title and status
                 cashbillFormTitle.textContent = `View Cashbill #${invoiceNo}`;
+                updateCashbillFormStatus(cashbill);
+                updateVersionInfo(cashbill);
+            }
+        }
+        
+        // Amend cashbill from list
+        function amendCashbillFromList(invoiceNo) {
+            const cashbill = appData.cashbills.find(c => c.invoiceNo === invoiceNo);
+            if (cashbill && cashbill.status === "committed") {
+                // Populate form with cashbill data
+                document.getElementById('invoice-no').value = cashbill.invoiceNo;
+                document.getElementById('cashbill-date').value = cashbill.date;
+                document.getElementById('customer-name').value = cashbill.customerName;
+                document.getElementById('crew-name').value = cashbill.crewName;
+                document.getElementById('payment-type').value = cashbill.paymentType;
+                document.getElementById('total-amount').value = cashbill.totalAmount.toFixed(2);
+                document.getElementById('cashbill-remarks').value = cashbill.remarks || '';
+                document.getElementById('created-by').textContent = cashbill.createdBy;
+                document.getElementById('assigned-to').textContent = cashbill.assignedTo;
+                
+                // Clear and populate items
+                cashbillItems.innerHTML = '';
+                cashbill.items.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'cashbill-item row mb-2';
+                    itemElement.innerHTML = `
+                        <div class="col-md-5">
+                            <input type="text" class="form-control item-name" value="${item.name}" readonly>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" class="form-control item-quantity" value="${item.quantity}" readonly>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" class="form-control item-price" value="${item.price}" readonly>
+                        </div>
+                        <div class="col-md-1">
+                            <button type="button" class="btn btn-sm btn-danger remove-item" disabled>
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                    cashbillItems.appendChild(itemElement);
+                });
+                
+                // Show form, hide list
+                cashbillFormSection.classList.remove('d-none');
+                cashbillListSection.classList.add('d-none');
+                
+                // Update form title and status
+                cashbillFormTitle.textContent = `Amend Cashbill #${invoiceNo}`;
+                updateCashbillFormStatus(cashbill);
                 updateVersionInfo(cashbill);
                 
-                // Show admin features if user is admin
-                if (userRole === 'Admin') {
-                    document.querySelectorAll('.admin-feature').forEach(el => {
-                        el.classList.add('visible');
-                    });
-                }
+                // Enable form for editing
+                enableFormFields();
                 
                 // Update commit button text
-                commitCashbillBtn.innerHTML = '<i class="bi bi-check-circle me-1"></i> Commit';
+                commitCashbillBtn.innerHTML = '<i class="bi bi-check-circle me-1"></i> Commit Changes';
+                
+                // Show notification
+                showNotification('Cashbill loaded for amendment', 'info');
+            }
+        }
+        
+        // Edit unlocked cashbill (for crew members)
+        function editUnlockedCashbill(invoiceNo) {
+            const cashbill = appData.cashbills.find(c => c.invoiceNo === invoiceNo);
+            if (cashbill && cashbill.status === "unlocked" && cashbill.crewName === currentUser.name) {
+                // Populate form with cashbill data
+                document.getElementById('invoice-no').value = cashbill.invoiceNo;
+                document.getElementById('cashbill-date').value = cashbill.date;
+                document.getElementById('customer-name').value = cashbill.customerName;
+                document.getElementById('crew-name').value = cashbill.crewName;
+                document.getElementById('payment-type').value = cashbill.paymentType;
+                document.getElementById('total-amount').value = cashbill.totalAmount.toFixed(2);
+                document.getElementById('cashbill-remarks').value = cashbill.remarks || '';
+                document.getElementById('created-by').textContent = cashbill.createdBy;
+                document.getElementById('assigned-to').textContent = cashbill.assignedTo;
+                
+                // Clear and populate items
+                cashbillItems.innerHTML = '';
+                cashbill.items.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'cashbill-item row mb-2';
+                    itemElement.innerHTML = `
+                        <div class="col-md-5">
+                            <select class="form-control item-name" required>
+                                <option value="">Select item</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" class="form-control item-quantity" value="${item.quantity}" required>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" class="form-control item-price" value="${item.price}" required>
+                        </div>
+                        <div class="col-md-1">
+                            <button type="button" class="btn btn-sm btn-danger remove-item">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                    cashbillItems.appendChild(itemElement);
+                });
+                
+                // Populate stock items dropdowns
+                populateStockItems();
+                
+                // Show form, hide list
+                cashbillFormSection.classList.remove('d-none');
+                cashbillListSection.classList.add('d-none');
+                
+                // Update form title and status
+                cashbillFormTitle.textContent = `Edit Cashbill #${invoiceNo}`;
+                updateCashbillFormStatus(cashbill);
+                
+                // Enable form for editing
+                enableFormFields();
+                
+                // Update commit button text
+                commitCashbillBtn.innerHTML = '<i class="bi bi-check-circle me-1"></i> Submit for Approval';
+                
+                // Show notification
+                showNotification('Cashbill loaded for editing. Submit for approval when done.', 'info');
+            } else {
+                showNotification('You are not authorized to edit this cashbill', 'error');
+            }
+        }
+        
+        // Approve a pending cashbill (for admins)
+        function approveCashbill(invoiceNo) {
+            const cashbill = appData.cashbills.find(c => c.invoiceNo === invoiceNo);
+            if (cashbill && cashbill.status === "pending_approval") {
+                // Create a copy of the current cashbill to store in previous versions
+                const previousVersion = {...cashbill};
+                
+                // Initialize previousVersions array if it doesn't exist
+                if (!cashbill.previousVersions) {
+                    cashbill.previousVersions = [];
+                }
+                
+                // Add current version to previous versions
+                cashbill.previousVersions.push(previousVersion);
+                
+                // Update status and increment version
+                cashbill.status = "committed";
+                cashbill.version = (cashbill.version || 1) + 1;
+                cashbill.approvedBy = currentUser.name;
+                cashbill.approvedDate = new Date().toISOString();
+                
+                // Save data
+                saveData();
+                
+                // Add to logbook
+                const logEntry = {
+                    date: new Date().toISOString().split('T')[0],
+                    description: `Approved changes for cashbill #${invoiceNo} (Version ${cashbill.version})`,
+                    crew: currentUser.name,
+                    type: 'Cashbill',
+                    timestamp: new Date().toISOString()
+                };
+                appData.logbook.push(logEntry);
+                
+                // Reload cashbill list
+                loadCashbillList();
+                
+                // Show notification
+                showNotification('Cashbill changes approved successfully', 'success');
+            }
+        }
+        
+        // Reject a pending cashbill (for admins)
+        function rejectCashbill(invoiceNo) {
+            const cashbill = appData.cashbills.find(c => c.invoiceNo === invoiceNo);
+            if (cashbill && cashbill.status === "pending_approval") {
+                // Get the previous version (last one in the array)
+                if (cashbill.previousVersions && cashbill.previousVersions.length > 0) {
+                    const previousVersion = cashbill.previousVersions[cashbill.previousVersions.length - 1];
+                    
+                    // Restore the previous version
+                    cashbill.date = previousVersion.date;
+                    cashbill.customerName = previousVersion.customerName;
+                    cashbill.paymentType = previousVersion.paymentType;
+                    cashbill.totalAmount = previousVersion.totalAmount;
+                    cashbill.remarks = previousVersion.remarks;
+                    cashbill.items = previousVersion.items;
+                    
+                    // Update status
+                    cashbill.status = "committed";
+                    cashbill.rejectedBy = currentUser.name;
+                    cashbill.rejectedDate = new Date().toISOString();
+                    
+                    // Save data
+                    saveData();
+                    
+                    // Add to logbook
+                    const logEntry = {
+                        date: new Date().toISOString().split('T')[0],
+                        description: `Rejected changes for cashbill #${invoiceNo}. Restored to previous version.`,
+                        crew: currentUser.name,
+                        type: 'Cashbill',
+                        timestamp: new Date().toISOString()
+                    };
+                    appData.logbook.push(logEntry);
+                    
+                    // Reload cashbill list
+                    loadCashbillList();
+                    
+                    // Show notification
+                    showNotification('Cashbill changes rejected. Previous version restored.', 'info');
+                } else {
+                    showNotification('No previous version available to restore', 'error');
+                }
             }
         }
         
@@ -2676,12 +2972,17 @@
                             .invoice-total { text-align: right; font-weight: bold; }
                             .remarks { margin-top: 20px; }
                             .version-info { font-size: 0.8rem; color: #666; margin-top: 10px; }
+                            .status-badge { display: inline-block; padding: 0.25rem 0.5rem; font-size: 0.75rem; border-radius: 4px; margin-bottom: 10px; }
+                            .status-committed { background-color: #28a745; color: white; }
+                            .status-unlocked { background-color: #ffc107; color: #212529; }
+                            .status-pending { background-color: #17a2b8; color: white; }
                         </style>
                     </head>
                     <body>
                         <div class="invoice-header">
                             <h1>INVOICE</h1>
                             <h2>${cashbill.invoiceNo}</h2>
+                            <div class="status-badge ${getStatusClass(cashbill.status)}">${getStatusText(cashbill.status)}</div>
                             <div class="version-info">Version ${cashbill.version || 1}</div>
                         </div>
                         
@@ -2727,6 +3028,24 @@
             }
         }
         
+        // Helper function to get status class
+        function getStatusClass(status) {
+            switch(status) {
+                case "unlocked": return "status-unlocked";
+                case "pending_approval": return "status-pending";
+                default: return "status-committed";
+            }
+        }
+        
+        // Helper function to get status text
+        function getStatusText(status) {
+            switch(status) {
+                case "unlocked": return "Unlocked for Editing";
+                case "pending_approval": return "Pending Approval";
+                default: return "Committed";
+            }
+        }
+        
         // Download cashbill
         function downloadCashbill(invoiceNo) {
             const cashbill = appData.cashbills.find(c => c.invoiceNo === invoiceNo);
@@ -2744,26 +3063,6 @@
                 linkElement.click();
                 
                 showNotification('Cashbill downloaded', 'success');
-            }
-        }
-        
-        // Delete cashbill
-        function deleteCashbill(invoiceNo) {
-            if (confirm('Are you sure you want to delete this cashbill?')) {
-                // Find and remove cashbill
-                const index = appData.cashbills.findIndex(c => c.invoiceNo === invoiceNo);
-                if (index !== -1) {
-                    appData.cashbills.splice(index, 1);
-                    
-                    // Save data
-                    saveData();
-                    
-                    // Reload cashbill list
-                    loadCashbillList();
-                    
-                    // Show notification
-                    showNotification('Cashbill deleted', 'success');
-                }
             }
         }
         
