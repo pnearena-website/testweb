@@ -273,6 +273,16 @@
             border-color: #c0392b;
         }
         
+        .btn-commit {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+        
+        .btn-commit:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+        
         /* Utility Classes */
         .text-primary {
             color: var(--primary-color) !important;
@@ -306,6 +316,12 @@
             
             .top-navbar {
                 padding: 15px;
+            }
+            
+            /* Make action buttons more compact on mobile */
+            .action-buttons .btn {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.875rem;
             }
         }
         
@@ -401,6 +417,99 @@
         
         .sidebar-overlay.show {
             display: block;
+        }
+        
+        /* Version info styling */
+        .version-info {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        
+        /* Version history modal */
+        .version-history-modal .modal-body {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .version-item {
+            border-bottom: 1px solid #dee2e6;
+            padding: 10px 0;
+        }
+        
+        .version-item:last-child {
+            border-bottom: none;
+        }
+        
+        .version-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        
+        .version-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        /* Action buttons styling */
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+            flex-wrap: nowrap;
+        }
+        
+        .action-buttons .btn {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+        }
+        
+        /* Price adjustment styling */
+        .price-adjustment {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .price-adjustment h6 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .price-adjustment .form-control {
+            background-color: #fff;
+        }
+        
+        /* Quick edit modal */
+        .quick-edit-modal .modal-body {
+            padding: 20px;
+        }
+        
+        .quick-edit-modal .price-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .quick-edit-modal .price-row label {
+            flex: 1;
+            margin-bottom: 0;
+            font-weight: 500;
+        }
+        
+        .quick-edit-modal .price-row input {
+            flex: 1;
+            margin-left: 10px;
+        }
+        
+        .quick-edit-modal .price-row .original-price {
+            flex: 1;
+            margin-left: 10px;
+            color: #6c757d;
+            font-size: 0.875rem;
         }
     </style>
 </head>
@@ -637,6 +746,7 @@
                                             <th>Total</th>
                                             <th>Crew</th>
                                             <th>Payment Type</th>
+                                            <th>Version</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -651,7 +761,8 @@
                 
                 <!-- Create/Edit Cashbill Form (initially hidden) -->
                 <div id="cashbill-form-section" class="form-section d-none">
-                    <h4 class="mb-4">Create New Cashbill</h4>
+                    <h4 class="mb-4" id="cashbill-form-title">Create New Cashbill</h4>
+                    <div class="version-info" id="version-info"></div>
                     <form id="cashbill-form">
                         <div class="row mb-3">
                             <div class="col-md-6">
@@ -740,11 +851,14 @@
                         <div class="d-flex justify-content-between mt-3">
                             <div>
                                 <button type="button" id="cancel-cashbill-btn" class="btn btn-secondary">Cancel</button>
-                                <button type="button" id="uncommit-cashbill-btn" class="btn btn-warning admin-feature ms-2">
+                                <button type="button" id="uncommit-cashbill-btn" class="btn btn-warning admin-feature ms-">
                                     <i class="bi bi-arrow-counterclockwise me-1"></i> Uncommit
                                 </button>
                                 <button type="button" id="amend-cashbill-btn" class="btn btn-info admin-feature ms-2">
                                     <i class="bi bi-pencil-square me-1"></i> Amend
+                                </button>
+                                <button type="button" id="view-version-history-btn" class="btn btn-outline-primary admin-feature ms-2">
+                                    <i class="bi bi-clock-history me-1"></i> Version History
                                 </button>
                             </div>
                             <div>
@@ -754,8 +868,8 @@
                                 <button type="button" id="download-cashbill-btn" class="btn btn-warning me-2">
                                     <i class="bi bi-download me-1"></i> Download
                                 </button>
-                                <button type="submit" class="btn btn-success">
-                                    <i class="bi bi-check-circle me-1"></i> Save Cashbill
+                                <button type="submit" class="btn btn-commit" id="commit-cashbill-btn">
+                                    <i class="bi bi-check-circle me-1"></i> Commit
                                 </button>
                             </div>
                         </div>
@@ -1300,8 +1414,54 @@
             </div>
         </div>
     </div>
+    
+    <!-- Quick Edit Modal -->
+    <div class="modal fade" id="quickEditModal" tabindex="-1" aria-labelledby="quickEditModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg quick-edit-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="quickEditModalLabel">Quick Price Adjustment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="price-adjustment">
+                        <h6><i class="bi bi-exclamation-triangle me-1"></i> Price Adjustment Mode</h6>
+                        <p class="mb-0">Adjust item prices if they don't tally with the actual amount.</p>
+                    </div>
+                    <div id="quick-edit-items">
+                        <!-- Items will be populated here -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="save-quick-edit">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Version History Modal -->
+    <div class="modal fade" id="versionHistoryModal" tabindex="-1" aria-labelledby="versionHistoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg version-history-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="versionHistoryModalLabel">Version History</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="version-history-content">
+                    <!-- Version history will be populated here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- Notification -->
     <div id="notification" class="notification"></div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Initialize data structure
         let appData = {
@@ -1345,6 +1505,12 @@
         const mainContent = document.getElementById('main-content');
         const userRoleBadge = document.getElementById('user-role-badge');
         const notification = document.getElementById('notification');
+        
+        // Version history modal
+        const versionHistoryModal = new bootstrap.Modal(document.getElementById('versionHistoryModal'));
+        
+        // Quick edit modal
+        const quickEditModal = new bootstrap.Modal(document.getElementById('quickEditModal'));
         
         // Login functionality
         loginForm.addEventListener('submit', function(e) {
@@ -1555,12 +1721,16 @@
         const cashbillFormSection = document.getElementById('cashbill-form-section');
         const cashbillListSection = document.getElementById('cashbill-list-section');
         const cashbillForm = document.getElementById('cashbill-form');
+        const cashbillFormTitle = document.getElementById('cashbill-form-title');
+        const versionInfo = document.getElementById('version-info');
         const cancelCashbillBtn = document.getElementById('cancel-cashbill-btn');
         const addItemBtn = document.getElementById('add-item-btn');
         const cashbillItems = document.getElementById('cashbill-items');
         const cashbillSearch = document.getElementById('cashbill-search');
         const uncommitCashbillBtn = document.getElementById('uncommit-cashbill-btn');
         const amendCashbillBtn = document.getElementById('amend-cashbill-btn');
+        const viewVersionHistoryBtn = document.getElementById('view-version-history-btn');
+        const commitCashbillBtn = document.getElementById('commit-cashbill-btn');
         
         // Show new cashbill form
         newCashbillBtn.addEventListener('click', function() {
@@ -1615,8 +1785,18 @@
             cashbillFormSection.classList.remove('d-none');
             cashbillListSection.classList.add('d-none');
             
+            // Reset form title and version info
+            cashbillFormTitle.textContent = 'Create New Cashbill';
+            versionInfo.textContent = '';
+            
             // Add event listeners to remove buttons
             addRemoveItemListeners();
+            
+            // Enable all form fields
+            enableFormFields();
+            
+            // Update commit button text
+            commitCashbillBtn.innerHTML = '<i class="bi bi-check-circle me-1"></i> Commit';
         });
         
         // Populate stock items dropdown
@@ -1674,26 +1854,362 @@
         
         // Uncommit cashbill
         uncommitCashbillBtn.addEventListener('click', function() {
-            if (confirm('Are you sure you want to uncommit this cashbill? This will revert any changes.')) {
-                // Reset form
-                cashbillForm.reset();
-                
-                // Show notification
-                showNotification('Cashbill uncommitted', 'info');
+            const invoiceNo = document.getElementById('invoice-no').value;
+            const cashbill = appData.cashbills.find(c => c.invoiceNo === invoiceNo);
+            
+            if (cashbill && cashbill.previousVersions && cashbill.previousVersions.length > 0) {
+                if (confirm('Are you sure you want to uncommit this cashbill? This will revert to the previous version.')) {
+                    // Get the previous version (last one in the array)
+                    const previousVersion = cashbill.previousVersions.pop();
+                    
+                    // Restore the previous version
+                    cashbill.date = previousVersion.date;
+                    cashbill.customerName = previousVersion.customerName;
+                    cashbill.paymentType = previousVersion.paymentType;
+                    cashbill.totalAmount = previousVersion.totalAmount;
+                    cashbill.remarks = previousVersion.remarks;
+                    cashbill.items = previousVersion.items;
+                    
+                    // Decrement version number
+                    cashbill.version = Math.max(1, (cashbill.version || 1) - 1);
+                    
+                    // Update the form to reflect the restored data
+                    document.getElementById('cashbill-date').value = cashbill.date;
+                    document.getElementById('customer-name').value = cashbill.customerName;
+                    document.getElementById('payment-type').value = cashbill.paymentType;
+                    document.getElementById('total-amount').value = cashbill.totalAmount.toFixed(2);
+                    document.getElementById('cashbill-remarks').value = cashbill.remarks || '';
+                    
+                    // Clear and populate items
+                    cashbillItems.innerHTML = '';
+                    cashbill.items.forEach(item => {
+                        const itemElement = document.createElement('div');
+                        itemElement.className = 'cashbill-item row mb-2';
+                        itemElement.innerHTML = `
+                            <div class="col-md-5">
+                                <input type="text" class="form-control item-name" value="${item.name}" readonly>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="number" class="form-control item-quantity" value="${item.quantity}" readonly>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="number" class="form-control item-price" value="${item.price}" readonly>
+                            </div>
+                            <div class="col-md-1">
+                                <button type="button" class="btn btn-sm btn-danger remove-item" disabled>
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        `;
+                        cashbillItems.appendChild(itemElement);
+                    });
+                    
+                    // Update version info
+                    updateVersionInfo(cashbill);
+                    
+                    // Save data
+                    saveData();
+                    
+                    // Show notification
+                    showNotification('Cashbill uncommitted to previous version', 'info');
+                }
+            } else {
+                showNotification('No previous versions available to uncommit', 'warning');
             }
         });
         
-        // Amend cashbill
+        // Amend cashbill - Quick price adjustment
         amendCashbillBtn.addEventListener('click', function() {
-            // Enable form fields for editing
-            cashbillForm.querySelectorAll('input, select, textarea').forEach(el => {
-                el.removeAttribute('readonly');
-                el.removeAttribute('disabled');
+            const invoiceNo = document.getElementById('invoice-no').value;
+            const cashbill = appData.cashbills.find(c => c.invoiceNo === invoiceNo);
+            
+            if (cashbill) {
+                // Populate quick edit modal with current items
+                const quickEditItems = document.getElementById('quick-edit-items');
+                quickEditItems.innerHTML = '';
+                
+                cashbill.items.forEach((item, index) => {
+                    const itemRow = document.createElement('div');
+                    itemRow.className = 'price-row';
+                    itemRow.innerHTML = `
+                        <label>${item.name} (Qty: ${item.quantity})</label>
+                        <input type="number" class="form-control adjusted-price" 
+                               value="${item.price}" min="0" step="0.01" 
+                               data-index="${index}">
+                        <span class="original-price">Original: RM${item.price.toFixed(2)}</span>
+                    `;
+                    quickEditItems.appendChild(itemRow);
+                });
+                
+                // Show quick edit modal
+                quickEditModal.show();
+                
+                // Store current cashbill for reference
+                quickEditModal._cashbill = cashbill;
+            }
+        });
+        
+        // Save quick edit changes
+        document.getElementById('save-quick-edit').addEventListener('click', function() {
+            const cashbill = quickEditModal._cashbill;
+            
+            // Get adjusted prices
+            const adjustedPrices = document.querySelectorAll('.adjusted-price');
+            let hasChanges = false;
+            
+            adjustedPrices.forEach(input => {
+                const index = parseInt(input.getAttribute('data-index'));
+                const newPrice = parseFloat(input.value);
+                
+                if (newPrice !== cashbill.items[index].price) {
+                    cashbill.items[index].price = newPrice;
+                    cashbill.items[index].total = newPrice * cashbill.items[index].quantity;
+                    hasChanges = true;
+                }
             });
             
-            // Show notification
-            showNotification('Cashbill amendment mode enabled', 'info');
+            if (hasChanges) {
+                // Recalculate total
+                cashbill.totalAmount = cashbill.items.reduce((sum, item) => sum + item.total, 0);
+                
+                // Create a copy of the current cashbill to store in previous versions
+                const previousVersion = {...cashbill};
+                
+                // Initialize previousVersions array if it doesn't exist
+                if (!cashbill.previousVersions) {
+                    cashbill.previousVersions = [];
+                }
+                
+                // Add current version to previous versions
+                cashbill.previousVersions.push(previousVersion);
+                
+                // Update version info
+                cashbill.version = (cashbill.version || 1) + 1;
+                cashbill.lastModified = new Date().toISOString();
+                cashbill.lastModifiedBy = currentUser.name;
+                
+                // Update the form to reflect the changes
+                document.getElementById('total-amount').value = cashbill.totalAmount.toFixed(2);
+                
+                // Update items display
+                cashbillItems.innerHTML = '';
+                cashbill.items.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'cashbill-item row mb-2';
+                    itemElement.innerHTML = `
+                        <div class="col-md-5">
+                            <input type="text" class="form-control item-name" value="${item.name}" readonly>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" class="form-control item-quantity" value="${item.quantity}" readonly>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" class="form-control item-price" value="${item.price}" readonly>
+                        </div>
+                        <div class="col-md-1">
+                            <button type="button" class="btn btn-sm btn-danger remove-item" disabled>
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                    cashbillItems.appendChild(itemElement);
+                });
+                
+                // Update version info
+                updateVersionInfo(cashbill);
+                
+                // Save data
+                saveData();
+                
+                // Add to logbook
+                const logEntry = {
+                    date: new Date().toISOString().split('T')[0],
+                    description: `Adjusted prices for cashbill #${cashbill.invoiceNo} (Version ${cashbill.version})`,
+                    crew: cashbill.crewName,
+                    type: 'Cashbill',
+                    timestamp: new Date().toISOString()
+                };
+                appData.logbook.push(logEntry);
+                
+                // Show notification
+                showNotification('Prices adjusted successfully', 'success');
+            }
+            
+            // Close modal
+            quickEditModal.hide();
         });
+        
+        // View version history
+        viewVersionHistoryBtn.addEventListener('click', function() {
+            const invoiceNo = document.getElementById('invoice-no').value;
+            const cashbill = appData.cashbills.find(c => c.invoiceNo === invoiceNo);
+            
+            if (cashbill) {
+                displayVersionHistory(cashbill);
+                versionHistoryModal.show();
+            }
+        });
+        
+        // Display version history in modal
+        function displayVersionHistory(cashbill) {
+            const versionHistoryContent = document.getElementById('version-history-content');
+            let html = '';
+            
+            // Current version
+            html += `
+                <div class="version-item">
+                    <div class="version-header">
+                        <strong>Version ${cashbill.version || 1} (Current)</strong>
+                        <span class="badge bg-primary">Current</span>
+                    </div>
+                    <div class="version-details">
+                        <p><strong>Date:</strong> ${cashbill.date}</p>
+                        <p><strong>Customer:</strong> ${cashbill.customerName}</p>
+                        <p><strong>Total:</strong> RM${cashbill.totalAmount.toFixed(2)}</p>
+                        <p><strong>Last Modified:</strong> ${cashbill.lastModified ? new Date(cashbill.lastModified).toLocaleString() : 'N/A'}</p>
+                        <p><strong>Last Modified By:</strong> ${cashbill.lastModifiedBy || 'N/A'}</p>
+                    </div>
+                </div>
+            `;
+            
+            // Previous versions
+            if (cashbill.previousVersions && cashbill.previousVersions.length > 0) {
+                cashbill.previousVersions.forEach((version, index) => {
+                    const versionNumber = (cashbill.version || 1) - (index + 1);
+                    html += `
+                        <div class="version-item">
+                            <div class="version-header">
+                                <strong>Version ${versionNumber}</strong>
+                                <div class="version-actions">
+                                    <button class="btn btn-sm btn-outline-primary restore-version" data-version-index="${index}">
+                                        <i class="bi bi-arrow-counterclockwise"></i> Restore
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="version-details">
+                                <p><strong>Date:</strong> ${version.date}</p>
+                                <p><strong>Customer:</strong> ${version.customerName}</p>
+                                <p><strong>Total:</strong> RM${version.totalAmount.toFixed(2)}</p>
+                                <p><strong>Last Modified:</strong> ${version.lastModified ? new Date(version.lastModified).toLocaleString() : 'N/A'}</p>
+                                <p><strong>Last Modified By:</strong> ${version.lastModifiedBy || 'N/A'}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                html += '<p class="text-center text-muted">No previous versions available</p>';
+            }
+            
+            versionHistoryContent.innerHTML = html;
+            
+            // Add event listeners to restore buttons
+            document.querySelectorAll('.restore-version').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const versionIndex = parseInt(this.getAttribute('data-version-index'));
+                    restoreVersion(cashbill, versionIndex);
+                    versionHistoryModal.hide();
+                });
+            });
+        }
+        
+        // Restore a specific version
+        function restoreVersion(cashbill, versionIndex) {
+            if (confirm('Are you sure you want to restore this version? This will replace the current version.')) {
+                // Create a copy of the current version to store in previous versions
+                const currentVersion = {...cashbill};
+                
+                // Initialize previousVersions array if it doesn't exist
+                if (!cashbill.previousVersions) {
+                    cashbill.previousVersions = [];
+                }
+                
+                // Add current version to previous versions
+                cashbill.previousVersions.push(currentVersion);
+                
+                // Restore the selected version
+                const restoredVersion = cashbill.previousVersions[versionIndex];
+                cashbill.date = restoredVersion.date;
+                cashbill.customerName = restoredVersion.customerName;
+                cashbill.paymentType = restoredVersion.paymentType;
+                cashbill.totalAmount = restoredVersion.totalAmount;
+                cashbill.remarks = restoredVersion.remarks;
+                cashbill.items = restoredVersion.items;
+                cashbill.lastModified = restoredVersion.lastModified;
+                cashbill.lastModifiedBy = restoredVersion.lastModifiedBy;
+                
+                // Remove the restored version from previous versions
+                cashbill.previousVersions.splice(versionIndex, 1);
+                
+                // Update the form to reflect the restored data
+                document.getElementById('cashbill-date').value = cashbill.date;
+                document.getElementById('customer-name').value = cashbill.customerName;
+                document.getElementById('payment-type').value = cashbill.paymentType;
+                document.getElementById('total-amount').value = cashbill.totalAmount.toFixed(2);
+                document.getElementById('cashbill-remarks').value = cashbill.remarks || '';
+                
+                // Clear and populate items
+                cashbillItems.innerHTML = '';
+                cashbill.items.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'cashbill-item row mb-2';
+                    itemElement.innerHTML = `
+                        <div class="col-md-5">
+                            <input type="text" class="form-control item-name" value="${item.name}" readonly>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" class="form-control item-quantity" value="${item.quantity}" readonly>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" class="form-control item-price" value="${item.price}" readonly>
+                        </div>
+                        <div class="col-md-1">
+                            <button type="button" class="btn btn-sm btn-danger remove-item" disabled>
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                    cashbillItems.appendChild(itemElement);
+                });
+                
+                // Update version info
+                updateVersionInfo(cashbill);
+                
+                // Save data
+                saveData();
+                
+                // Show notification
+                showNotification('Cashbill restored to selected version', 'success');
+            }
+        }
+        
+        // Update version info display
+        function updateVersionInfo(cashbill) {
+            if (cashbill.version && cashbill.version > 1) {
+                versionInfo.textContent = `Version ${cashbill.version} of ${cashbill.version + (cashbill.previousVersions ? cashbill.previousVersions.length : 0)}`;
+            } else {
+                versionInfo.textContent = '';
+            }
+        }
+        
+        // Enable form fields for editing
+        function enableFormFields() {
+            cashbillForm.querySelectorAll('input, select, textarea, button').forEach(el => {
+                if (el.id !== 'invoice-no' && 
+                    el.id !== 'crew-name' && 
+                    el.id !== 'created-by' && 
+                    el.id !== 'assigned-to' && 
+                    el.id !== 'total-amount' &&
+                    !el.classList.contains('remove-item')) {
+                    el.removeAttribute('disabled');
+                    el.removeAttribute('readonly');
+                }
+            });
+            
+            // Enable remove item buttons
+            document.querySelectorAll('.remove-item').forEach(btn => {
+                btn.removeAttribute('disabled');
+            });
+        }
         
         // Add item to cashbill
         addItemBtn.addEventListener('click', function() {
@@ -1799,33 +2315,81 @@
                 });
             });
             
-            // Create cashbill object
-            const cashbill = {
-                invoiceNo,
-                date,
-                customerName,
-                crewName,
-                paymentType,
-                totalAmount,
-                remarks,
-                createdBy,
-                assignedTo,
-                items,
-                timestamp: new Date().toISOString()
-            };
+            // Check if we're editing an existing cashbill or creating a new one
+            const existingCashbillIndex = appData.cashbills.findIndex(c => c.invoiceNo === invoiceNo);
             
-            // Add to cashbills array
-            appData.cashbills.push(cashbill);
-            
-            // Add to logbook
-            const logEntry = {
-                date: new Date().toISOString().split('T')[0],
-                description: `Created cashbill #${invoiceNo} for ${customerName}`,
-                crew: crewName,
-                type: 'Cashbill',
-                timestamp: new Date().toISOString()
-            };
-            appData.logbook.push(logEntry);
+            if (existingCashbillIndex !== -1) {
+                // We're updating an existing cashbill
+                const existingCashbill = appData.cashbills[existingCashbillIndex];
+                
+                // Create a copy of the current cashbill to store in previous versions
+                const previousVersion = {...existingCashbill};
+                
+                // Initialize previousVersions array if it doesn't exist
+                if (!existingCashbill.previousVersions) {
+                    existingCashbill.previousVersions = [];
+                }
+                
+                // Add current version to previous versions
+                existingCashbill.previousVersions.push(previousVersion);
+                
+                // Update the cashbill with new data
+                existingCashbill.date = date;
+                existingCashbill.customerName = customerName;
+                existingCashbill.paymentType = paymentType;
+                existingCashbill.totalAmount = totalAmount;
+                existingCashbill.remarks = remarks;
+                existingCashbill.items = items;
+                existingCashbill.lastModified = new Date().toISOString();
+                existingCashbill.lastModifiedBy = currentUser.name;
+                
+                // Increment version number
+                existingCashbill.version = (existingCashbill.version || 1) + 1;
+                
+                // Add to logbook
+                const logEntry = {
+                    date: new Date().toISOString().split('T')[0],
+                    description: `Amended cashbill #${invoiceNo} for ${customerName} (Version ${existingCashbill.version})`,
+                    crew: crewName,
+                    type: 'Cashbill',
+                    timestamp: new Date().toISOString()
+                };
+                appData.logbook.push(logEntry);
+                
+                showNotification('Cashbill amended successfully', 'success');
+            } else {
+                // We're creating a new cashbill
+                const cashbill = {
+                    invoiceNo,
+                    date,
+                    customerName,
+                    crewName,
+                    paymentType,
+                    totalAmount,
+                    remarks,
+                    createdBy,
+                    assignedTo,
+                    items,
+                    version: 1,
+                    previousVersions: [],
+                    timestamp: new Date().toISOString()
+                };
+                
+                // Add to cashbills array
+                appData.cashbills.push(cashbill);
+                
+                // Add to logbook
+                const logEntry = {
+                    date: new Date().toISOString().split('T')[0],
+                    description: `Created cashbill #${invoiceNo} for ${customerName}`,
+                    crew: crewName,
+                    type: 'Cashbill',
+                    timestamp: new Date().toISOString()
+                };
+                appData.logbook.push(logEntry);
+                
+                showNotification('Cashbill committed successfully', 'success');
+            }
             
             // Save data
             saveData();
@@ -1836,9 +2400,6 @@
             
             // Reload cashbill list
             loadCashbillList();
-            
-            // Show notification
-            showNotification('Cashbill saved successfully', 'success');
         });
         
         // Load cashbill list
@@ -1855,14 +2416,39 @@
             
             // Generate HTML for cashbill list
             const cashbillHtml = filteredCashbills.map(cashbill => {
+                const versionBadge = cashbill.version && cashbill.version > 1 ? 
+                    `<span class="badge bg-info">v${cashbill.version}</span>` : 
+                    `<span class="badge bg-secondary">v1</span>`;
+                
                 const actions = userRole === 'Admin' ? 
-                    `<button class="btn btn-sm btn-primary view-cashbill" data-id="${cashbill.invoiceNo}"><i class="bi bi-eye"></i></button>
-                     <button class="btn btn-sm btn-info print-cashbill" data-id="${cashbill.invoiceNo}"><i class="bi bi-printer"></i></button>
-                     <button class="btn btn-sm btn-warning download-cashbill" data-id="${cashbill.invoiceNo}"><i class="bi bi-download"></i></button>
-                     <button class="btn btn-sm btn-danger delete-cashbill" data-id="${cashbill.invoiceNo}"><i class="bi bi-trash"></i></button>` :
-                    `<button class="btn btn-sm btn-primary view-cashbill" data-id="${cashbill.invoiceNo}"><i class="bi bi-eye"></i></button>
-                     <button class="btn btn-sm btn-info print-cashbill" data-id="${cashbill.invoiceNo}"><i class="bi bi-printer"></i></button>
-                     <button class="btn btn-sm btn-warning download-cashbill" data-id="${cashbill.invoiceNo}"><i class="bi bi-download"></i></button>`;
+                    `<div class="action-buttons">
+                        <button class="btn btn-sm btn-primary view-cashbill" data-id="${cashbill.invoiceNo}" title="View">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-info amend-cashbill" data-id="${cashbill.invoiceNo}" title="Amend">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+                        <button class="btn btn-sm btn-warning print-cashbill" data-id="${cashbill.invoiceNo}" title="Print">
+                            <i class="bi bi-printer"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-warning download-cashbill" data-id="${cashbill.invoiceNo}" title="Download">
+                            <i class="bi bi-download"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger delete-cashbill" data-id="${cashbill.invoiceNo}" title="Delete">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>` :
+                    `<div class="action-buttons">
+                        <button class="btn btn-sm btn-primary view-cashbill" data-id="${cashbill.invoiceNo}" title="View">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-warning print-cashbill" data-id="${cashbill.invoiceNo}" title="Print">
+                            <i class="bi bi-printer"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-warning download-cashbill" data-id="${cashbill.invoiceNo}" title="Download">
+                            <i class="bi bi-download"></i>
+                        </button>
+                    </div>`;
                 
                 return `
                     <tr>
@@ -1872,18 +2458,26 @@
                         <td>RM${cashbill.totalAmount.toFixed(2)}</td>
                         <td>${cashbill.crewName}</td>
                         <td>${cashbill.paymentType}</td>
+                        <td>${versionBadge}</td>
                         <td>${actions}</td>
                     </tr>
                 `;
             }).join('');
             
-            cashbillList.innerHTML = cashbillHtml || '<tr><td colspan="7" class="text-center">No cashbills found</td></tr>';
+            cashbillList.innerHTML = cashbillHtml || '<tr><td colspan="8" class="text-center">No cashbills found</td></tr>';
             
             // Add event listeners to action buttons
             document.querySelectorAll('.view-cashbill').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const invoiceNo = this.getAttribute('data-id');
                     viewCashbill(invoiceNo);
+                });
+            });
+            
+            document.querySelectorAll('.amend-cashbill').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const invoiceNo = this.getAttribute('data-id');
+                    amendCashbillFromList(invoiceNo);
                 });
             });
             
@@ -1907,6 +2501,71 @@
                     deleteCashbill(invoiceNo);
                 });
             });
+        }
+        
+        // Amend cashbill from list
+        function amendCashbillFromList(invoiceNo) {
+            const cashbill = appData.cashbills.find(c => c.invoiceNo === invoiceNo);
+            if (cashbill) {
+                // Populate form with cashbill data
+                document.getElementById('invoice-no').value = cashbill.invoiceNo;
+                document.getElementById('cashbill-date').value = cashbill.date;
+                document.getElementById('customer-name').value = cashbill.customerName;
+                document.getElementById('crew-name').value = cashbill.crewName;
+                document.getElementById('payment-type').value = cashbill.paymentType;
+                document.getElementById('total-amount').value = cashbill.totalAmount.toFixed(2);
+                document.getElementById('cashbill-remarks').value = cashbill.remarks || '';
+                document.getElementById('created-by').textContent = cashbill.createdBy;
+                document.getElementById('assigned-to').textContent = cashbill.assignedTo;
+                
+                // Clear and populate items
+                cashbillItems.innerHTML = '';
+                cashbill.items.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'cashbill-item row mb-2';
+                    itemElement.innerHTML = `
+                        <div class="col-md-5">
+                            <input type="text" class="form-control item-name" value="${item.name}" readonly>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" class="form-control item-quantity" value="${item.quantity}" readonly>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" class="form-control item-price" value="${item.price}" readonly>
+                        </div>
+                        <div class="col-md-1">
+                            <button type="button" class="btn btn-sm btn-danger remove-item" disabled>
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                    cashbillItems.appendChild(itemElement);
+                });
+                
+                // Show form, hide list
+                cashbillFormSection.classList.remove('d-none');
+                cashbillListSection.classList.add('d-none');
+                
+                // Update form title and version info
+                cashbillFormTitle.textContent = `Amend Cashbill #${invoiceNo}`;
+                updateVersionInfo(cashbill);
+                
+                // Show admin features if user is admin
+                if (userRole === 'Admin') {
+                    document.querySelectorAll('.admin-feature').forEach(el => {
+                        el.classList.add('visible');
+                    });
+                }
+                
+                // Enable form for editing
+                enableFormFields();
+                
+                // Update commit button text
+                commitCashbillBtn.innerHTML = '<i class="bi bi-check-circle me-1"></i> Commit Changes';
+                
+                // Show notification
+                showNotification('Cashbill loaded for amendment', 'info');
+            }
         }
         
         // Search cashbills
@@ -1957,13 +2616,29 @@
                 
                 // Disable form for viewing
                 cashbillForm.querySelectorAll('input, select, button').forEach(el => {
-                    if (el.id !== 'cancel-cashbill-btn') {
+                    if (el.id !== 'cancel-cashbill-btn' && 
+                        el.id !== 'uncommit-cashbill-btn' && 
+                        el.id !== 'amend-cashbill-btn' &&
+                        el.id !== 'view-version-history-btn' &&
+                        el.id !== 'print-cashbill-btn' &&
+                        el.id !== 'download-cashbill-btn') {
                         el.setAttribute('disabled', 'disabled');
                     }
                 });
                 
-                // Change form title
-                cashbillFormSection.querySelector('h4').textContent = 'View Cashbill';
+                // Update form title and version info
+                cashbillFormTitle.textContent = `View Cashbill #${invoiceNo}`;
+                updateVersionInfo(cashbill);
+                
+                // Show admin features if user is admin
+                if (userRole === 'Admin') {
+                    document.querySelectorAll('.admin-feature').forEach(el => {
+                        el.classList.add('visible');
+                    });
+                }
+                
+                // Update commit button text
+                commitCashbillBtn.innerHTML = '<i class="bi bi-check-circle me-1"></i> Commit';
             }
         }
         
@@ -2000,12 +2675,14 @@
                             .invoice-table th { background-color: #f2f2f2; }
                             .invoice-total { text-align: right; font-weight: bold; }
                             .remarks { margin-top: 20px; }
+                            .version-info { font-size: 0.8rem; color: #666; margin-top: 10px; }
                         </style>
                     </head>
                     <body>
                         <div class="invoice-header">
                             <h1>INVOICE</h1>
                             <h2>${cashbill.invoiceNo}</h2>
+                            <div class="version-info">Version ${cashbill.version || 1}</div>
                         </div>
                         
                         <div class="invoice-details">
@@ -2015,6 +2692,8 @@
                             <p><strong>Payment Type:</strong> ${cashbill.paymentType}</p>
                             <p><strong>Created By:</strong> ${cashbill.createdBy}</p>
                             <p><strong>Assigned To:</strong> ${cashbill.assignedTo}</p>
+                            ${cashbill.lastModified ? `<p><strong>Last Modified:</strong> ${new Date(cashbill.lastModified).toLocaleString()}</p>` : ''}
+                            ${cashbill.lastModifiedBy ? `<p><strong>Last Modified By:</strong> ${cashbill.lastModifiedBy}</p>` : ''}
                         </div>
                         
                         <table class="invoice-table">
@@ -2474,9 +3153,17 @@
             // Generate HTML for quotation list
             const quotationHtml = filteredQuotations.map(quotation => {
                 const actions = 
-                    `<button class="btn btn-sm btn-primary view-quotation" data-id="${quotation.quoteNo}"><i class="bi bi-eye"></i></button>
-                     <button class="btn btn-sm btn-warning download-quote" data-id="${quotation.quoteNo}"><i class="bi bi-download"></i></button>
-                     <button class="btn btn-sm btn-info email-quote" data-id="${quotation.quoteNo}"><i class="bi bi-envelope"></i></button>`;
+                    `<div class="action-buttons">
+                        <button class="btn btn-sm btn-primary view-quotation" data-id="${quotation.quoteNo}" title="View">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-warning download-quote" data-id="${quotation.quoteNo}" title="Download">
+                            <i class="bi bi-download"></i>
+                        </button>
+                        <button class="btn btn-sm btn-info email-quote" data-id="${quotation.quoteNo}" title="Email">
+                            <i class="bi bi-envelope"></i>
+                        </button>
+                    </div>`;
                 
                 return `
                     <tr>
@@ -2776,17 +3463,37 @@
                 
                 if (userRole === 'Admin') {
                     actions = `
-                        <button class="btn btn-sm btn-primary view-order" data-id="${order.orderNo}"><i class="bi bi-eye"></i></button>
-                        <button class="btn btn-sm btn-warning edit-order" data-id="${order.orderNo}"><i class="bi bi-pencil"></i></button>
-                        <button class="btn btn-sm btn-danger delete-order" data-id="${order.orderNo}"><i class="bi bi-trash"></i></button>
+                        <div class="action-buttons">
+                            <button class="btn btn-sm btn-primary view-order" data-id="${order.orderNo}" title="View">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning edit-order" data-id="${order.orderNo}" title="Edit">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger delete-order" data-id="${order.orderNo}" title="Delete">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
                     `;
                 } else if (userRole === 'Crew' && order.assignedTo === currentUser.name && order.status !== 'Fulfilled') {
                     actions = `
-                        <button class="btn btn-sm btn-primary view-order" data-id="${order.orderNo}"><i class="bi bi-eye"></i></button>
-                        <button class="btn btn-sm btn-success create-cashbill" data-id="${order.orderNo}"><i class="bi bi-receipt"></i> Create Cashbill</button>
+                        <div class="action-buttons">
+                            <button class="btn btn-sm btn-primary view-order" data-id="${order.orderNo}" title="View">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-success create-cashbill" data-id="${order.orderNo}" title="Create Cashbill">
+                                <i class="bi bi-receipt"></i>
+                            </button>
+                        </div>
                     `;
                 } else {
-                    actions = `<button class="btn btn-sm btn-primary view-order" data-id="${order.orderNo}"><i class="bi bi-eye"></i></button>`;
+                    actions = `
+                        <div class="action-buttons">
+                            <button class="btn btn-sm btn-primary view-order" data-id="${order.orderNo}" title="View">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                    `;
                 }
                 
                 return `
@@ -3127,9 +3834,17 @@
             // Generate HTML for crew list
             const crewHtml = filteredCrew.map(crew => {
                 const actions = 
-                    `<button class="btn btn-sm btn-primary view-crew" data-id="${crew.id}"><i class="bi bi-eye"></i></button>
-                     <button class="btn btn-sm btn-warning edit-crew" data-id="${crew.id}"><i class="bi bi-pencil"></i></button>
-                     <button class="btn btn-sm btn-danger delete-crew" data-id="${crew.id}"><i class="bi bi-trash"></i></button>`;
+                    `<div class="action-buttons">
+                        <button class="btn btn-sm btn-primary view-crew" data-id="${crew.id}" title="View">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-warning edit-crew" data-id="${crew.id}" title="Edit">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger delete-crew" data-id="${crew.id}" title="Delete">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>`;
                 
                 return `
                     <tr>
@@ -3339,10 +4054,22 @@
             // Generate HTML for stock list
             const stockHtml = filteredStock.map(stock => {
                 const actions = userRole === 'Admin' ? 
-                    `<button class="btn btn-sm btn-primary view-stock" data-id="${stock.id}"><i class="bi bi-eye"></i></button>
-                     <button class="btn btn-sm btn-warning edit-stock" data-id="${stock.id}"><i class="bi bi-pencil"></i></button>
-                     <button class="btn btn-sm btn-danger delete-stock" data-id="${stock.id}"><i class="bi bi-trash"></i></button>` :
-                    `<button class="btn btn-sm btn-primary view-stock" data-id="${stock.id}"><i class="bi bi-eye"></i></button>`;
+                    `<div class="action-buttons">
+                        <button class="btn btn-sm btn-primary view-stock" data-id="${stock.id}" title="View">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-warning edit-stock" data-id="${stock.id}" title="Edit">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger delete-stock" data-id="${stock.id}" title="Delete">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>` :
+                    `<div class="action-buttons">
+                        <button class="btn btn-sm btn-primary view-stock" data-id="${stock.id}" title="View">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>`;
                 
                 return `
                     <tr>
