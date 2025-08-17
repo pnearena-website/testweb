@@ -28,13 +28,13 @@
             color: var(--dark-color);
         }
         
-        /* Login Page Styles */
+        /* Login Page Styles - Updated to white theme */
         .login-container {
             height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background-color: #f5f7fa;
         }
         
         .login-card {
@@ -47,14 +47,40 @@
         }
         
         .login-header {
-            background-color: var(--primary-color);
-            color: white;
+            background-color: var(--white-color);
+            color: var(--dark-color);
             padding: 20px;
             text-align: center;
+            border-bottom: 1px solid #e9ecef;
         }
         
         .login-body {
             padding: 30px;
+            background-color: var(--white-color);
+        }
+        
+        .login-body .form-control {
+            border: 1px solid #e9ecef;
+            padding: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .login-body .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
+        }
+        
+        .login-body .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            padding: 12px;
+            font-weight: 600;
+            width: 100%;
+        }
+        
+        .login-body .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
         }
         
         /* Dashboard Styles */
@@ -88,6 +114,11 @@
             transition: all 0.3s;
             width: 250px;
             border-right: 1px solid #dee2e6;
+            transform: translateX(-100%);
+        }
+        
+        .sidebar.show {
+            transform: translateX(0);
         }
         
         .sidebar.collapsed {
@@ -134,13 +165,13 @@
             display: none;
         }
         
-        /* Top Navigation */
+        /* Top Navigation - Updated z-index for menu button */
         .top-navbar {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            z-index: 99;
+            z-index: 101; /* Increased z-index */
             background-color: var(--white-color);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             padding: 15px 30px;
@@ -151,14 +182,14 @@
         }
         
         .main-content {
-            margin-left: 250px;
+            margin-left: 0;
             padding: 80px 20px 20px;
             transition: all 0.3s;
             background-color: #f8f9fa;
         }
         
         .main-content.expanded {
-            margin-left: 70px;
+            margin-left: 250px;
         }
         
         /* Page Content */
@@ -270,7 +301,7 @@
             }
             
             .main-content {
-                margin-left: 70px;
+                margin-left: 0;
             }
             
             .top-navbar {
@@ -338,17 +369,38 @@
             margin-top: 10px;
         }
         
-        /* Sidebar toggle button styling */
+        /* Sidebar toggle button styling - Updated for better visibility */
         #sidebar-toggle {
-            background-color: var(--white-color);
-            border: 1px solid #dee2e6;
-            color: var(--dark-color);
-            padding: 0.25rem 0.5rem;
-            font-size: 1.2rem;
+            background-color: var(--primary-color);
+            border: none;
+            color: white;
+            padding: 0.375rem 0.75rem;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 0.25rem;
+            transition: all 0.3s;
+            z-index: 102; /* Higher z-index to ensure visibility */
+            position: relative; /* Ensure z-index is applied */
         }
         
         #sidebar-toggle:hover {
-            background-color: #f8f9fa;
+            background-color: var(--secondary-color);
+        }
+        
+        /* Overlay for sidebar on mobile */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 99;
+            display: none;
+        }
+        
+        .sidebar-overlay.show {
+            display: block;
         }
     </style>
 </head>
@@ -372,9 +424,6 @@
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-primary">Login</button>
                     </div>
-                    <div class="mt-3 text-center text-muted">
-                        <small>Admin: 0001 / 0000</small>
-                    </div>
                 </form>
             </div>
         </div>
@@ -385,7 +434,7 @@
         <nav class="top-navbar">
             <div class="d-flex align-items-center">
                 <button id="sidebar-toggle" class="btn btn-sm me-3" title="Toggle Sidebar">
-                    <i class="bi bi-list"></i>
+                    MENU
                 </button>
                 <h4 class="mb-0">Business Management System</h4>
             </div>
@@ -398,6 +447,10 @@
                 </button>
             </div>
         </nav>
+        
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+        
         <!-- Sidebar -->
         <div class="sidebar" id="sidebar">
             <div class="sidebar-header">
@@ -1288,6 +1341,7 @@
         const logoutBtn = document.getElementById('logout-btn');
         const sidebarToggle = document.getElementById('sidebar-toggle');
         const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
         const mainContent = document.getElementById('main-content');
         const userRoleBadge = document.getElementById('user-role-badge');
         const notification = document.getElementById('notification');
@@ -1343,9 +1397,27 @@
         
         // Sidebar toggle
         sidebarToggle.addEventListener('click', function() {
-            sidebar.classList.toggle('collapsed');
-            mainContent.classList.toggle('expanded');
+            toggleSidebar();
         });
+        
+        // Close sidebar when clicking on overlay
+        sidebarOverlay.addEventListener('click', function() {
+            toggleSidebar();
+        });
+        
+        // Toggle sidebar function
+        function toggleSidebar() {
+            sidebar.classList.toggle('show');
+            sidebarOverlay.classList.toggle('show');
+            mainContent.classList.toggle('expanded');
+            
+            // Change button text
+            if (sidebar.classList.contains('show')) {
+                sidebarToggle.textContent = 'X';
+            } else {
+                sidebarToggle.textContent = 'MENU';
+            }
+        }
         
         // Navigation
         document.querySelectorAll('.sidebar-menu .nav-link').forEach(link => {
@@ -1360,6 +1432,11 @@
                     item.classList.remove('active');
                 });
                 this.classList.add('active');
+                
+                // Close sidebar on mobile after navigation
+                if (window.innerWidth < 992) {
+                    toggleSidebar();
+                }
             });
         });
         
