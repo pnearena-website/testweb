@@ -94,7 +94,7 @@
             min-height: 100vh;
             padding: 20px;
             background-color: var(--white);
-            background-image: linear-gradient(120deg, #f8f9fa 0%, #e9ecef 100%);
+            background-image: linear-gradient(120deg, #ffffff 0%, #f8f9fa 100%);
         }
         .login-card {
             background-color: var(--white);
@@ -2041,8 +2041,9 @@
     </div>
     
     <script>
-        // API Configuration
-        const API_URL = "https://script.google.com/macros/s/AKfycbwy1MbqlkKjTjLLqMeZWqBaaKtyFzzAojKmSTYsgZUm6vTYuQaIsZF0tHZsfTzrICQmwg/exec";
+        // Google Sheets API configuration
+        const SHEET_ID = '1-LMjHMoRDXDWYmKhIsPOwEeu99xJXmd-615W-zMc_Qs';
+        const API_KEY = 'AIzaSyC_sRsMzK5itPBF43H8_AGKldeak8Fu9Mw';
         
         // App State
         const app = {
@@ -2125,33 +2126,8 @@
             receivingFilter: document.getElementById('receivingFilter')
         };
         
-        // API Helper Function
-        async function callGoogleSheetsAPI(sheet, action, data = {}) {
-            const params = new URLSearchParams({
-                sheet: sheet,
-                action: action,
-                data: JSON.stringify(data)
-            });
-
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    body: params
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                return await response.json();
-            } catch (error) {
-                console.error('API call failed:', error);
-                throw error;
-            }
-        }
-        
         // Initialize App
-        async function initApp() {
+        function initApp() {
             // Check if user is logged in
             const savedUser = localStorage.getItem('pneUser');
             if (savedUser) {
@@ -2162,12 +2138,7 @@
             }
             
             // Load data from Google Sheets
-            try {
-                await loadData();
-            } catch (error) {
-                console.error('Error loading data:', error);
-                showNotification('Error loading data from server', 'error');
-            }
+            loadDataFromSheets();
             
             // Set up event listeners
             setupEventListeners();
@@ -2314,8 +2285,160 @@
             });
         }
         
+        // Load data from Google Sheets
+        async function loadDataFromSheets() {
+            try {
+                // Load users
+                app.users = await loadSheetData('Users');
+                
+                // Load cashbills
+                app.cashbills = await loadSheetData('Cashbills');
+                
+                // Load log entries
+                app.logEntries = await loadSheetData('LogEntries');
+                
+                // Load orders
+                app.orders = await loadSheetData('Orders');
+                
+                // Load crew members
+                app.crewMembers = await loadSheetData('CrewMembers');
+                
+                // Load stock items
+                app.stockItems = await loadSheetData('StockItems');
+                
+                // Load schedules
+                const schedulesData = await loadSheetData('Schedules');
+                app.schedules = {};
+                schedulesData.forEach(schedule => {
+                    const weekKey = `${schedule.startDate}_${schedule.endDate}`;
+                    if (!app.schedules[weekKey]) {
+                        app.schedules[weekKey] = {
+                            week: weekKey,
+                            startDate: schedule.startDate,
+                            endDate: schedule.endDate,
+                            entries: []
+                        };
+                    }
+                    app.schedules[weekKey].entries.push(schedule);
+                });
+                
+                // Load activity logs
+                app.activityLogs = await loadSheetData('ActivityLogs');
+                
+                // Load attendance records
+                app.attendanceRecords = await loadSheetData('AttendanceRecords');
+                
+                // Load stock receiving records
+                app.stockReceivingRecords = await loadSheetData('StockReceivingRecords');
+                
+                // If no crew members, initialize with default data
+                if (app.crewMembers.length === 0) {
+                    app.crewMembers = [
+                        { id: '0001', name: 'Danial Danish', role: 'Head IT (Admin)', outlet: 'HQ', status: 'Active' },
+                        { id: '0002', name: 'Aida', role: 'Director/Business Manager', outlet: 'HQ', status: 'Active' },
+                        { id: '0003', name: 'Putri Erinna', role: 'Business Development Manager', outlet: 'HQ', status: 'Active' },
+                        { id: '0004', name: 'Putri Farah', role: 'Business Marketing Manager', outlet: 'HQ', status: 'Active' }
+                    ];
+                    await saveSheetData('CrewMembers', app.crewMembers);
+                }
+                
+                // If no stock items, initialize with sample data
+                if (app.stockItems.length === 0) {
+                    app.stockItems = [
+                        { code: 'ITEM001', name: 'Sample Item 1', description: 'Description for item 1', price: 10.00, quantity: 50, outlet: 'HQ' },
+                        { code: 'ITEM002', name: 'Sample Item 2', description: 'Description for item 2', price: 20.00, quantity: 30, outlet: 'HQ' },
+                        { code: 'ITEM003', name: 'Sample Item 3', description: 'Description for item 3', price: 15.00, quantity: 25, outlet: 'BLM' }
+                    ];
+                    await saveSheetData('StockItems', app.stockItems);
+                }
+                
+                // If no users, initialize with default data
+                if (app.users.length === 0) {
+                    app.users = [
+                        { id: '0001', name: 'Danial Danish', role: 'Head IT (Admin)', outlet: 'HQ', isAdmin: true },
+                        { id: '0002', name: 'Aida', role: 'Director/Business Manager', outlet: 'HQ', isAdmin: false },
+                        { id: '0003', name: 'Putri Erinna', role: 'Business Development Manager', outlet: 'HQ', isAdmin: false },
+                        { id: '0004', name: 'Putri Farah', role: 'Business Marketing Manager', outlet: 'HQ', isAdmin: false }
+                    ];
+                    await saveSheetData('Users', app.users);
+                }
+                
+            } catch (error) {
+                console.error('Error loading data from Google Sheets:', error);
+                showNotification('Error loading data. Please try again later.', 'error');
+            }
+        }
+        
+        // Load data from a specific sheet
+        async function loadSheetData(sheetName) {
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${sheetName}?key=${API_KEY}`;
+            
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.values && data.values.length > 0) {
+                    const headers = data.values[0];
+                    const rows = data.values.slice(1);
+                    
+                    return rows.map(row => {
+                        const obj = {};
+                        headers.forEach((header, index) => {
+                            obj[header] = row[index] || '';
+                        });
+                        return obj;
+                    });
+                }
+                
+                return [];
+            } catch (error) {
+                console.error(`Error loading data from sheet ${sheetName}:`, error);
+                return [];
+            }
+        }
+        
+        // Save data to a specific sheet
+        async function saveSheetData(sheetName, data) {
+            // Convert data to 2D array
+            const headers = Object.keys(data[0] || {});
+            const values = [headers];
+            
+            data.forEach(item => {
+                const row = headers.map(header => item[header] || '');
+                values.push(row);
+            });
+            
+            const body = {
+                values: values
+            };
+            
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${sheetName}:append?valueInputOption=USER_ENTERDED&key=${API_KEY}`;
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(body)
+                });
+                
+                const result = await response.json();
+                
+                if (result.error) {
+                    console.error(`Error saving data to sheet ${sheetName}:`, result.error);
+                    return false;
+                }
+                
+                return true;
+            } catch (error) {
+                console.error(`Error saving data to sheet ${sheetName}:`, error);
+                return false;
+            }
+        }
+        
         // Handle login
-        async function handleLogin(e) {
+        function handleLogin(e) {
             e.preventDefault();
             
             const userId = document.getElementById('userId').value;
@@ -2327,38 +2450,25 @@
                 return;
             }
             
-            // Get user data from API
-            try {
-                const users = await callGoogleSheetsAPI('Users', 'get');
-                const user = users.find(u => u.id === userId);
-                
-                if (!user) {
-                    showLoginAlert('User ID not found');
-                    return;
-                }
-                
-                // Save user to app state and localStorage
-                app.user = user;
-                localStorage.setItem('pneUser', JSON.stringify(user));
-                
-                // Show app
-                showApp();
-                showNotification('Login successful', 'success');
-            } catch (error) {
-                console.error('Error during login:', error);
-                showLoginAlert('Error during login');
+            // Get user data
+            const user = getUserById(userId);
+            if (!user) {
+                showLoginAlert('User ID not found');
+                return;
             }
+            
+            // Save user to app state and localStorage
+            app.user = user;
+            localStorage.setItem('pneUser', JSON.stringify(user));
+            
+            // Show app
+            showApp();
+            showNotification('Login successful', 'success');
         }
         
-        // Get user by ID (now uses API)
-        async function getUserById(id) {
-            try {
-                const users = await callGoogleSheetsAPI('Users', 'get');
-                return users.find(user => user.id === id);
-            } catch (error) {
-                console.error('Error fetching user:', error);
-                return null;
-            }
+        // Get user by ID
+        function getUserById(id) {
+            return app.users.find(user => user.id === id);
         }
         
         // Handle logout
@@ -2488,7 +2598,7 @@
             elements.currentTime.textContent = now.toLocaleTimeString('en-US', timeOptions);
         }
         
-        // Check today's schedule (Improved version)
+        // Check today's schedule
         function checkTodaySchedule() {
             const today = new Date();
             const todayStr = formatDate(today);
@@ -2562,7 +2672,7 @@
         }
         
         // Handle punch in/out
-        async function handlePunch(action) {
+        function handlePunch(action) {
             // Check if user has a schedule for today
             const today = new Date();
             const todayStr = formatDate(today);
@@ -2612,65 +2722,57 @@
                 }
             }
             
-            try {
-                // Save to Google Sheets
-                await callGoogleSheetsAPI('ActivityLogs', 'post', activity);
-                
-                // Add to app state
-                app.activityLogs.push(activity);
-                
-                // Update UI
-                switch (action) {
-                    case 'in':
-                        app.punchStatus = 'in';
-                        elements.punchInBtn.disabled = true;
-                        elements.punchOutBtn.disabled = false;
-                        elements.breakBtn.disabled = false;
-                        showNotification('Punched in successfully', 'success');
-                        break;
-                    case 'out':
-                        app.punchStatus = 'out';
-                        elements.punchInBtn.disabled = false;
-                        elements.punchOutBtn.disabled = true;
-                        elements.breakBtn.disabled = true;
-                        elements.resumeBtn.style.display = 'none';
-                        showNotification('Punched out successfully', 'success');
-                        break;
-                    case 'break':
-                        app.punchStatus = 'break';
-                        elements.punchInBtn.disabled = true;
-                        elements.punchOutBtn.disabled = true;
-                        elements.breakBtn.disabled = true;
-                        elements.resumeBtn.style.display = 'inline-flex';
-                        showNotification('Break started', 'success');
-                        break;
-                    case 'resume':
-                        app.punchStatus = 'in';
-                        elements.punchInBtn.disabled = true;
-                        elements.punchOutBtn.disabled = false;
-                        elements.breakBtn.disabled = false;
-                        elements.resumeBtn.style.display = 'none';
-                        showNotification('Resumed work', 'success');
-                        break;
-                }
-                
-                // Reload activity logs if on that page
-                if (app.currentPage === 'activity') {
-                    loadActivityLogs();
-                }
-                
-                // Reload dashboard activities if on dashboard
-                if (app.currentPage === 'dashboard') {
-                    loadDashboardActivities();
-                }
-                
-                // Reload attendance records if on that page
-                if (app.currentPage === 'attendance') {
-                    loadAttendanceRecords();
-                }
-            } catch (error) {
-                console.error('Error recording activity:', error);
-                showNotification('Error recording activity', 'error');
+            app.activityLogs.push(activity);
+            saveSheetData('ActivityLogs', app.activityLogs);
+            
+            // Update UI
+            switch (action) {
+                case 'in':
+                    app.punchStatus = 'in';
+                    elements.punchInBtn.disabled = true;
+                    elements.punchOutBtn.disabled = false;
+                    elements.breakBtn.disabled = false;
+                    showNotification('Punched in successfully', 'success');
+                    break;
+                case 'out':
+                    app.punchStatus = 'out';
+                    elements.punchInBtn.disabled = false;
+                    elements.punchOutBtn.disabled = true;
+                    elements.breakBtn.disabled = true;
+                    elements.resumeBtn.style.display = 'none';
+                    showNotification('Punched out successfully', 'success');
+                    break;
+                case 'break':
+                    app.punchStatus = 'break';
+                    elements.punchInBtn.disabled = true;
+                    elements.punchOutBtn.disabled = true;
+                    elements.breakBtn.disabled = true;
+                    elements.resumeBtn.style.display = 'inline-flex';
+                    showNotification('Break started', 'success');
+                    break;
+                case 'resume':
+                    app.punchStatus = 'in';
+                    elements.punchInBtn.disabled = true;
+                    elements.punchOutBtn.disabled = false;
+                    elements.breakBtn.disabled = false;
+                    elements.resumeBtn.style.display = 'none';
+                    showNotification('Resumed work', 'success');
+                    break;
+            }
+            
+            // Reload activity logs if on that page
+            if (app.currentPage === 'activity') {
+                loadActivityLogs();
+            }
+            
+            // Reload dashboard activities if on dashboard
+            if (app.currentPage === 'dashboard') {
+                loadDashboardActivities();
+            }
+            
+            // Reload attendance records if on that page
+            if (app.currentPage === 'attendance') {
+                loadAttendanceRecords();
             }
         }
         
@@ -2720,71 +2822,6 @@
         // Hide notification
         function hideNotification() {
             elements.notification.classList.remove('show');
-        }
-        
-        // Load data from Google Sheets
-        async function loadData() {
-            try {
-                // Load all data in parallel
-                const [
-                    cashbillsData,
-                    logEntriesData,
-                    ordersData,
-                    crewMembersData,
-                    stockItemsData,
-                    schedulesData,
-                    activityLogsData,
-                    attendanceRecordsData,
-                    stockReceivingRecordsData
-                ] = await Promise.all([
-                    callGoogleSheetsAPI('Cashbills', 'get'),
-                    callGoogleSheetsAPI('LogEntries', 'get'),
-                    callGoogleSheetsAPI('Orders', 'get'),
-                    callGoogleSheetsAPI('CrewMembers', 'get'),
-                    callGoogleSheetsAPI('StockItems', 'get'),
-                    callGoogleSheetsAPI('Schedules', 'get'),
-                    callGoogleSheetsAPI('ActivityLogs', 'get'),
-                    callGoogleSheetsAPI('AttendanceRecords', 'get'),
-                    callGoogleSheetsAPI('StockReceivingRecords', 'get')
-                ]);
-
-                // Parse JSON fields if needed
-                app.cashbills = cashbillsData.map(cashbill => ({
-                    ...cashbill,
-                    items: cashbill.items ? JSON.parse(cashbill.items) : []
-                }));
-
-                app.logEntries = logEntriesData.map(entry => ({
-                    ...entry,
-                    crewInvolved: entry.crewInvolved ? JSON.parse(entry.crewInvolved) : []
-                }));
-
-                app.orders = ordersData.map(order => ({
-                    ...order,
-                    items: order.items ? JSON.parse(order.items) : []
-                }));
-
-                app.crewMembers = crewMembersData;
-                app.stockItems = stockItemsData;
-                app.schedules = schedulesData.reduce((acc, schedule) => {
-                    acc[schedule.week] = {
-                        ...schedule,
-                        entries: schedule.entries ? JSON.parse(schedule.entries) : []
-                    };
-                    return acc;
-                }, {});
-                
-                app.activityLogs = activityLogsData;
-                app.attendanceRecords = attendanceRecordsData;
-                app.stockReceivingRecords = stockReceivingRecordsData.map(record => ({
-                    ...record,
-                    items: record.items ? JSON.parse(record.items) : []
-                }));
-
-            } catch (error) {
-                console.error('Error loading data:', error);
-                showNotification('Error loading data from server', 'error');
-            }
         }
         
         // Load dashboard activities with enhanced details
@@ -3034,49 +3071,36 @@
         }
         
         // Cashbill Functions
-        async function loadCashbills() {
+        function loadCashbills() {
             const tbody = document.getElementById('cashbillTableBody');
             tbody.innerHTML = '';
             
-            try {
-                const cashbillsData = await callGoogleSheetsAPI('Cashbills', 'get');
-                
-                // Parse JSON items field
-                app.cashbills = cashbillsData.map(cashbill => ({
-                    ...cashbill,
-                    items: cashbill.items ? JSON.parse(cashbill.items) : []
-                }));
-                
-                if (app.cashbills.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="7" class="no-schedule">No cashbills found</td></tr>';
-                    return;
-                }
-                
-                app.cashbills.forEach(cashbill => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${cashbill.invoiceNo}</td>
-                        <td>${cashbill.date}</td>
-                        <td>${cashbill.customerName}</td>
-                        <td>${cashbill.customerPhone}</td>
-                        <td>RM${parseFloat(cashbill.totalAmount).toFixed(2)}</td>
-                        <td><span class="status-badge ${cashbill.status === 'Committed' ? 'status-active' : 'status-inactive'}">${cashbill.status}</span></td>
-                        <td>
-                            <button class="btn btn-sm btn-primary" onclick="viewCashbill('${cashbill.invoiceNo}')">View</button>
-                            ${cashbill.status === 'Draft' ? 
-                                `<button class="btn btn-sm btn-warning" onclick="editCashbill('${cashbill.invoiceNo}')">Edit</button>
-                                 <button class="btn btn-sm btn-danger" onclick="deleteCashbill('${cashbill.invoiceNo}')">Delete</button>` : 
-                                ''}
-                            ${app.user.isAdmin && cashbill.status === 'Committed' ? 
-                                `<button class="btn btn-sm btn-danger" onclick="uncommitCashbill('${cashbill.invoiceNo}')">Uncommit</button>` : ''}
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            } catch (error) {
-                console.error('Error loading cashbills:', error);
-                tbody.innerHTML = '<tr><td colspan="7" class="no-schedule">Error loading data</td></tr>';
+            if (app.cashbills.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="no-schedule">No cashbills found</td></tr>';
+                return;
             }
+            
+            app.cashbills.forEach(cashbill => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${cashbill.invoiceNo}</td>
+                    <td>${cashbill.date}</td>
+                    <td>${cashbill.customerName}</td>
+                    <td>${cashbill.customerPhone}</td>
+                    <td>RM${cashbill.totalAmount.toFixed(2)}</td>
+                    <td><span class="status-badge ${cashbill.status === 'Committed' ? 'status-active' : 'status-inactive'}">${cashbill.status}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="viewCashbill('${cashbill.invoiceNo}')">View</button>
+                        ${cashbill.status === 'Draft' ? 
+                            `<button class="btn btn-sm btn-warning" onclick="editCashbill('${cashbill.invoiceNo}')">Edit</button>
+                             <button class="btn btn-sm btn-danger" onclick="deleteCashbill('${cashbill.invoiceNo}')">Delete</button>` : 
+                            ''}
+                        ${app.user.isAdmin && cashbill.status === 'Committed' ? 
+                            `<button class="btn btn-sm btn-danger" onclick="uncommitCashbill('${cashbill.invoiceNo}')">Uncommit</button>` : ''}
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
         }
         
         function openCashbillModal() {
@@ -3239,7 +3263,7 @@
             document.getElementById('totalAmount').value = total.toFixed(2);
         }
         
-        async function saveCashbill(status) {
+        function saveCashbill(status) {
             // Get form data
             const customerName = document.getElementById('customerName').value;
             const customerPhone = document.getElementById('customerPhone').value;
@@ -3267,44 +3291,39 @@
             
             // Create cashbill object
             const cashbill = {
-                id: invoiceNo, // Using invoiceNo as ID
                 invoiceNo,
                 date,
                 customerName,
                 customerPhone,
-                items: JSON.stringify(items), // Convert to JSON string for storage
+                items,
                 totalAmount,
                 status: status === 'commit' ? 'Committed' : 'Draft',
                 createdBy: app.user.id,
                 createdAt: new Date().toISOString()
             };
             
-            try {
-                // Check if we're editing an existing cashbill
-                const existingIndex = app.cashbills.findIndex(c => c.invoiceNo === invoiceNo);
-                
-                if (existingIndex !== -1) {
-                    // Update existing cashbill
-                    await callGoogleSheetsAPI('Cashbills', 'put', cashbill);
-                    app.cashbills[existingIndex] = {...cashbill, items: items}; // Keep items as array in app state
-                } else {
-                    // Add new cashbill
-                    await callGoogleSheetsAPI('Cashbills', 'post', cashbill);
-                    app.cashbills.push({...cashbill, items: items}); // Keep items as array in app state
-                }
-                
-                // Close modal
-                closeCashbillModal();
-                
-                // Reload cashbills
-                loadCashbills();
-                
-                // Show notification
-                showNotification(`Cashbill ${status === 'commit' ? 'committed' : 'saved as draft'} successfully`, 'success');
-            } catch (error) {
-                console.error('Error saving cashbill:', error);
-                showNotification('Error saving cashbill', 'error');
+            // Check if we're editing an existing cashbill
+            const existingIndex = app.cashbills.findIndex(c => c.invoiceNo === invoiceNo);
+            
+            if (existingIndex !== -1) {
+                // Update existing cashbill
+                app.cashbills[existingIndex] = cashbill;
+            } else {
+                // Add new cashbill
+                app.cashbills.push(cashbill);
             }
+            
+            // Save to Google Sheets
+            saveSheetData('Cashbills', app.cashbills);
+            
+            // Close modal
+            closeCashbillModal();
+            
+            // Reload cashbills
+            loadCashbills();
+            
+            // Show notification
+            showNotification(`Cashbill ${status === 'commit' ? 'committed' : 'saved as draft'} successfully`, 'success');
         }
         
         function viewCashbill(invoiceNo) {
@@ -3366,11 +3385,7 @@
             const itemSelects = document.querySelectorAll('.item-select');
             itemSelects.forEach((select, index) => {
                 if (cashbill.items[index]) {
-                    // Try to find matching item by name
-                    const stockItem = app.stockItems.find(si => si.name === cashbill.items[index].name);
-                    if (stockItem) {
-                        select.value = stockItem.code;
-                    }
+                    select.value = cashbill.items[index].code;
                 }
             });
             
@@ -3459,61 +3474,46 @@
             const itemSelects = document.querySelectorAll('.item-select');
             itemSelects.forEach((select, index) => {
                 if (cashbill.items[index]) {
-                    // Try to find matching item by name
-                    const stockItem = app.stockItems.find(si => si.name === cashbill.items[index].name);
-                    if (stockItem) {
-                        select.value = stockItem.code;
-                    }
+                    select.value = cashbill.items[index].code;
                 }
             });
         }
         
-        async function deleteCashbill(invoiceNo) {
+        function deleteCashbill(invoiceNo) {
             if (confirm('Are you sure you want to delete this cashbill?')) {
-                try {
-                    await callGoogleSheetsAPI('Cashbills', 'delete', {id: invoiceNo});
-                    
-                    // Remove from app state
-                    app.cashbills = app.cashbills.filter(c => c.invoiceNo !== invoiceNo);
-                    
-                    // Reload cashbills
-                    loadCashbills();
-                    
-                    // Show notification
-                    showNotification('Cashbill deleted successfully', 'success');
-                } catch (error) {
-                    console.error('Error deleting cashbill:', error);
-                    showNotification('Error deleting cashbill', 'error');
-                }
-            }
-        }
-        
-        async function uncommitCashbill(invoiceNo) {
-            try {
-                const cashbill = app.cashbills.find(c => c.invoiceNo === invoiceNo);
-                if (!cashbill) return;
+                // Find and remove cashbill
+                const cashbillIndex = app.cashbills.findIndex(c => c.invoiceNo === invoiceNo);
+                if (cashbillIndex === -1) return;
                 
-                // Update status to Draft
-                await callGoogleSheetsAPI('Cashbills', 'put', {
-                    id: invoiceNo,
-                    status: 'Draft'
-                });
+                app.cashbills.splice(cashbillIndex, 1);
                 
-                // Update in app state
-                const index = app.cashbills.findIndex(c => c.invoiceNo === invoiceNo);
-                if (index !== -1) {
-                    app.cashbills[index].status = 'Draft';
-                }
+                // Save to Google Sheets
+                saveSheetData('Cashbills', app.cashbills);
                 
                 // Reload cashbills
                 loadCashbills();
                 
                 // Show notification
-                showNotification('Cashbill uncommitted successfully', 'success');
-            } catch (error) {
-                console.error('Error uncommitting cashbill:', error);
-                showNotification('Error uncommitting cashbill', 'error');
+                showNotification('Cashbill deleted successfully', 'success');
             }
+        }
+        
+        function uncommitCashbill(invoiceNo) {
+            // Find cashbill
+            const cashbillIndex = app.cashbills.findIndex(c => c.invoiceNo === invoiceNo);
+            if (cashbillIndex === -1) return;
+            
+            // Update status
+            app.cashbills[cashbillIndex].status = 'Draft';
+            
+            // Save to Google Sheets
+            saveSheetData('Cashbills', app.cashbills);
+            
+            // Reload cashbills
+            loadCashbills();
+            
+            // Show notification
+            showNotification('Cashbill uncommitted successfully', 'success');
         }
         
         function printCashbill() {
@@ -3522,42 +3522,34 @@
         }
         
         // Logbook Functions
-        async function loadLogEntries() {
+        function loadLogEntries() {
             const tbody = document.getElementById('logbookTableBody');
             tbody.innerHTML = '';
             
-            try {
-                const logEntriesData = await callGoogleSheetsAPI('LogEntries', 'get');
-                
-                // Parse JSON crewInvolved field
-                app.logEntries = logEntriesData.map(entry => ({
-                    ...entry,
-                    crewInvolved: entry.crewInvolved ? JSON.parse(entry.crewInvolved) : []
-                }));
-                
-                app.logEntries.forEach(entry => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${entry.date}</td>
-                        <td>${entry.description}</td>
-                        <td>${entry.crewInvolved.join(', ')}</td>
-                        <td><span class="status-badge ${entry.status === 'Committed' ? 'status-active' : 'status-inactive'}">${entry.status}</span></td>
-                        <td>
-                            <button class="btn btn-sm btn-primary" onclick="viewLogEntry('${entry.id}')">View</button>
-                            ${entry.status === 'Draft' ? 
-                                `<button class="btn btn-sm btn-warning" onclick="editLogEntry('${entry.id}')">Edit</button>
-                                 <button class="btn btn-sm btn-danger" onclick="deleteLogEntry('${entry.id}')">Delete</button>` : 
-                                ''}
-                            ${app.user.isAdmin && entry.status === 'Committed' ? 
-                                `<button class="btn btn-sm btn-danger" onclick="uncommitLogEntry('${entry.id}')">Uncommit</button>` : ''}
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            } catch (error) {
-                console.error('Error loading log entries:', error);
-                tbody.innerHTML = '<tr><td colspan="5" class="no-schedule">Error loading data</td></tr>';
+            if (app.logEntries.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="no-schedule">No log entries found</td></tr>';
+                return;
             }
+            
+            app.logEntries.forEach(entry => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${entry.date}</td>
+                    <td>${entry.description}</td>
+                    <td>${entry.crewInvolved.join(', ')}</td>
+                    <td><span class="status-badge ${entry.status === 'Committed' ? 'status-active' : 'status-inactive'}">${entry.status}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="viewLogEntry('${entry.id}')">View</button>
+                        ${entry.status === 'Draft' ? 
+                            `<button class="btn btn-sm btn-warning" onclick="editLogEntry('${entry.id}')">Edit</button>
+                             <button class="btn btn-sm btn-danger" onclick="deleteLogEntry('${entry.id}')">Delete</button>` : 
+                            ''}
+                        ${app.user.isAdmin && entry.status === 'Committed' ? 
+                            `<button class="btn btn-sm btn-danger" onclick="uncommitLogEntry('${entry.id}')">Uncommit</button>` : ''}
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
         }
         
         function openLogbookModal() {
@@ -3586,7 +3578,7 @@
             elements.logbookModal.classList.remove('active');
         }
         
-        async function saveLogEntry(status) {
+        function saveLogEntry(status) {
             // Get form data
             const date = document.getElementById('logDate').value;
             const description = document.getElementById('logDescription').value;
@@ -3600,38 +3592,34 @@
                 id: generateId(),
                 date,
                 description,
-                crewInvolved: JSON.stringify(crewInvolved),
+                crewInvolved,
                 status: status === 'commit' ? 'Committed' : 'Draft',
                 createdBy: app.user.id,
                 createdAt: new Date().toISOString()
             };
             
-            try {
-                // Check if we're editing an existing log entry
-                const existingIndex = app.logEntries.findIndex(e => e.id === logEntry.id);
-                
-                if (existingIndex !== -1) {
-                    // Update existing log entry
-                    await callGoogleSheetsAPI('LogEntries', 'put', logEntry);
-                    app.logEntries[existingIndex] = {...logEntry, crewInvolved: crewInvolved};
-                } else {
-                    // Add new log entry
-                    await callGoogleSheetsAPI('LogEntries', 'post', logEntry);
-                    app.logEntries.push({...logEntry, crewInvolved: crewInvolved});
-                }
-                
-                // Close modal
-                closeLogbookModal();
-                
-                // Reload log entries
-                loadLogEntries();
-                
-                // Show notification
-                showNotification(`Log entry ${status === 'commit' ? 'committed' : 'saved as draft'} successfully`, 'success');
-            } catch (error) {
-                console.error('Error saving log entry:', error);
-                showNotification('Error saving log entry', 'error');
+            // Check if we're editing an existing log entry
+            const existingIndex = app.logEntries.findIndex(e => e.id === logEntry.id);
+            
+            if (existingIndex !== -1) {
+                // Update existing log entry
+                app.logEntries[existingIndex] = logEntry;
+            } else {
+                // Add new log entry
+                app.logEntries.push(logEntry);
             }
+            
+            // Save to Google Sheets
+            saveSheetData('LogEntries', app.logEntries);
+            
+            // Close modal
+            closeLogbookModal();
+            
+            // Reload log entries
+            loadLogEntries();
+            
+            // Show notification
+            showNotification(`Log entry ${status === 'commit' ? 'committed' : 'saved as draft'} successfully`, 'success');
         }
         
         function viewLogEntry(id) {
@@ -3706,52 +3694,41 @@
             });
         }
         
-        async function deleteLogEntry(id) {
+        function deleteLogEntry(id) {
             if (confirm('Are you sure you want to delete this log entry?')) {
-                try {
-                    await callGoogleSheetsAPI('LogEntries', 'delete', {id});
-                    
-                    // Remove from app state
-                    app.logEntries = app.logEntries.filter(e => e.id !== id);
-                    
-                    // Reload log entries
-                    loadLogEntries();
-                    
-                    // Show notification
-                    showNotification('Log entry deleted successfully', 'success');
-                } catch (error) {
-                    console.error('Error deleting log entry:', error);
-                    showNotification('Error deleting log entry', 'error');
-                }
-            }
-        }
-        
-        async function uncommitLogEntry(id) {
-            try {
-                const logEntry = app.logEntries.find(e => e.id === id);
-                if (!logEntry) return;
+                // Find and remove log entry
+                const logEntryIndex = app.logEntries.findIndex(e => e.id === id);
+                if (logEntryIndex === -1) return;
                 
-                // Update status to Draft
-                await callGoogleSheetsAPI('LogEntries', 'put', {
-                    id,
-                    status: 'Draft'
-                });
+                app.logEntries.splice(logEntryIndex, 1);
                 
-                // Update in app state
-                const index = app.logEntries.findIndex(e => e.id === id);
-                if (index !== -1) {
-                    app.logEntries[index].status = 'Draft';
-                }
+                // Save to Google Sheets
+                saveSheetData('LogEntries', app.logEntries);
                 
                 // Reload log entries
                 loadLogEntries();
                 
                 // Show notification
-                showNotification('Log entry uncommitted successfully', 'success');
-            } catch (error) {
-                console.error('Error uncommitting log entry:', error);
-                showNotification('Error uncommitting log entry', 'error');
+                showNotification('Log entry deleted successfully', 'success');
             }
+        }
+        
+        function uncommitLogEntry(id) {
+            // Find log entry
+            const logEntryIndex = app.logEntries.findIndex(e => e.id === id);
+            if (logEntryIndex === -1) return;
+            
+            // Update status
+            app.logEntries[logEntryIndex].status = 'Draft';
+            
+            // Save to Google Sheets
+            saveSheetData('LogEntries', app.logEntries);
+            
+            // Reload log entries
+            loadLogEntries();
+            
+            // Show notification
+            showNotification('Log entry uncommitted successfully', 'success');
         }
         
         // Schedule Functions
@@ -3845,10 +3822,10 @@
             loadSchedule();
         }
         
-        async function createSchedule() {
+        function createSchedule() {
             // Create empty schedule
             const weekKey = getWeekKey(app.currentWeek);
-            const scheduleData = {
+            app.schedules[weekKey] = {
                 week: weekKey,
                 startDate: formatDate(app.currentWeek.start),
                 endDate: formatDate(app.currentWeek.end),
@@ -3861,7 +3838,7 @@
                     const date = new Date(app.currentWeek.start);
                     date.setDate(date.getDate() + i);
                     
-                    scheduleData.entries.push({
+                    app.schedules[weekKey].entries.push({
                         crewId: crew.id,
                         crewName: crew.name,
                         crewRole: crew.role,
@@ -3875,53 +3852,31 @@
                 }
             });
             
-            try {
-                // Save to Google Sheets
-                await callGoogleSheetsAPI('Schedules', 'post', scheduleData);
-                
-                // Add to app state
-                app.schedules[weekKey] = {
-                    ...scheduleData,
-                    entries: scheduleData.entries
-                };
-                
-                // Enter edit mode
-                app.scheduleEditMode = true;
-                updateScheduleControls();
-                
-                // Render schedule
-                renderSchedule(app.schedules[weekKey]);
-            } catch (error) {
-                console.error('Error creating schedule:', error);
-                showNotification('Error creating schedule', 'error');
-            }
+            // Enter edit mode
+            app.scheduleEditMode = true;
+            updateScheduleControls();
+            
+            // Render schedule
+            renderSchedule(app.schedules[weekKey]);
         }
         
-        async function saveSchedule() {
-            const weekKey = getWeekKey(app.currentWeek);
-            const schedule = app.schedules[weekKey];
+        function saveSchedule() {
+            // Save to Google Sheets
+            const allScheduleEntries = [];
+            Object.keys(app.schedules).forEach(weekKey => {
+                const schedule = app.schedules[weekKey];
+                if (schedule && schedule.entries) {
+                    allScheduleEntries.push(...schedule.entries);
+                }
+            });
+            saveSheetData('Schedules', allScheduleEntries);
             
-            if (!schedule) return;
+            // Exit edit mode
+            app.scheduleEditMode = false;
+            updateScheduleControls();
             
-            try {
-                // Save to Google Sheets
-                await callGoogleSheetsAPI('Schedules', 'put', {
-                    week: weekKey,
-                    startDate: schedule.startDate,
-                    endDate: schedule.endDate,
-                    entries: schedule.entries
-                });
-                
-                // Exit edit mode
-                app.scheduleEditMode = false;
-                updateScheduleControls();
-                
-                // Show notification
-                showNotification('Schedule saved successfully', 'success');
-            } catch (error) {
-                console.error('Error saving schedule:', error);
-                showNotification('Error saving schedule', 'error');
-            }
+            // Show notification
+            showNotification('Schedule saved successfully', 'success');
         }
         
         function updateScheduleControls() {
@@ -4148,74 +4103,62 @@
         }
         
         // Orders Functions
-        async function loadOrders() {
+        function loadOrders() {
             const tbody = document.getElementById('ordersTableBody');
             tbody.innerHTML = '';
             
-            try {
-                const ordersData = await callGoogleSheetsAPI('Orders', 'get');
-                
-                // Parse JSON items field
-                app.orders = ordersData.map(order => ({
-                    ...order,
-                    items: order.items ? JSON.parse(order.items) : []
-                }));
-                
-                if (app.orders.length === 0) {
-                    // Initialize with sample orders
-                    app.orders = [
-                        {
-                            id: 'ORD-0001',
-                            date: getCurrentDateStr(),
-                            customer: 'John Doe',
-                            items: [
-                                { name: 'Sample Item 1', quantity: 2, price: 10.00 },
-                                { name: 'Sample Item 2', quantity: 1, price: 20.00 }
-                            ],
-                            total: 40.00,
-                            outlet: 'HQ',
-                            status: 'Pending',
-                            assignedTo: ''
-                        },
-                        {
-                            id: 'ORD-0002',
-                            date: getCurrentDateStr(),
-                            customer: 'Jane Smith',
-                            items: [
-                                { name: 'Sample Item 3', quantity: 3, price: 15.00 }
-                            ],
-                            total: 45.00,
-                            outlet: 'BLM',
-                            status: 'Assigned',
-                            assignedTo: '0003'
-                        }
-                    ];
-                }
-                
-                app.orders.forEach(order => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${order.id}</td>
-                        <td>${order.date}</td>
-                        <td>${order.customer}</td>
-                        <td>${order.items.map(i => `${i.name} (x${i.quantity})`).join(', ')}</td>
-                        <td>RM${order.total.toFixed(2)}</td>
-                        <td>${order.outlet}</td>
-                        <td><span class="status-badge ${order.status === 'Pending' ? 'status-inactive' : 'status-active'}">${order.status}</span></td>
-                        <td>
-                            ${app.user.isAdmin ? 
-                                `<button class="btn btn-sm btn-danger" onclick="assignOrder('${order.id}')">Assign</button>` : 
-                                order.assignedTo === app.user.id ? 
-                                `<button class="btn btn-sm btn-primary" onclick="generateCashbillFromOrder('${order.id}')">Generate Cashbill</button>` : 
-                                ''}
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            } catch (error) {
-                console.error('Error loading orders:', error);
-                tbody.innerHTML = '<tr><td colspan="8" class="no-schedule">Error loading data</td></tr>';
+            if (app.orders.length === 0) {
+                // Initialize with sample orders
+                app.orders = [
+                    {
+                        id: 'ORD-0001',
+                        date: getCurrentDateStr(),
+                        customer: 'John Doe',
+                        items: [
+                            { name: 'Sample Item 1', quantity: 2, price: 10.00 },
+                            { name: 'Sample Item 2', quantity: 1, price: 20.00 }
+                        ],
+                        total: 40.00,
+                        outlet: 'HQ',
+                        status: 'Pending',
+                        assignedTo: ''
+                    },
+                    {
+                        id: 'ORD-0002',
+                        date: getCurrentDateStr(),
+                        customer: 'Jane Smith',
+                        items: [
+                            { name: 'Sample Item 3', quantity: 3, price: 15.00 }
+                        ],
+                        total: 45.00,
+                        outlet: 'BLM',
+                        status: 'Assigned',
+                        assignedTo: '0003'
+                    }
+                ];
+                saveSheetData('Orders', app.orders);
             }
+            
+            app.orders.forEach(order => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${order.id}</td>
+                    <td>${order.date}</td>
+                    <td>${order.customer}</td>
+                    <td>${order.items.map(i => `${i.name} (x${i.quantity})`).join(', ')}</td>
+                    <td>RM${order.total.toFixed(2)}</td>
+                    <td>${order.outlet}</td>
+                    <td><span class="status-badge ${order.status === 'Pending' ? 'status-inactive' : 'status-active'}">${order.status}</span></td>
+                    <td>
+                        ${app.user.isAdmin ? 
+                            `<button class="btn btn-sm btn-danger" onclick="assignOrder('${order.id}')">Assign</button>` : 
+                            order.assignedTo === app.user.id ? 
+                            `<button class="btn btn-sm btn-primary" onclick="generateCashbillFromOrder('${order.id}')">Generate Cashbill</button>` : 
+                            ''}
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
         }
         
         function openOrderModal() {
@@ -4354,7 +4297,7 @@
             document.getElementById('orderTotal').value = total.toFixed(2);
         }
         
-        async function saveOrder() {
+        function saveOrder() {
             // Get form data
             const customer = document.getElementById('orderCustomer').value;
             const phone = document.getElementById('orderPhone').value;
@@ -4386,32 +4329,27 @@
                 date,
                 customer,
                 phone,
-                items: JSON.stringify(items),
+                items,
                 total,
                 outlet,
                 status: 'Pending',
                 assignedTo: ''
             };
             
-            try {
-                // Add to app state
-                app.orders.push({...order, items: items});
-                
-                // Save to Google Sheets
-                await callGoogleSheetsAPI('Orders', 'post', order);
-                
-                // Close modal
-                closeOrderModal();
-                
-                // Reload orders
-                loadOrders();
-                
-                // Show notification
-                showNotification('Order created successfully', 'success');
-            } catch (error) {
-                console.error('Error saving order:', error);
-                showNotification('Error saving order', 'error');
-            }
+            // Add to app state
+            app.orders.push(order);
+            
+            // Save to Google Sheets
+            saveSheetData('Orders', app.orders);
+            
+            // Close modal
+            closeOrderModal();
+            
+            // Reload orders
+            loadOrders();
+            
+            // Show notification
+            showNotification('Order created successfully', 'success');
         }
         
         function generateOrderId() {
@@ -4462,7 +4400,7 @@
             });
         }
         
-        async function confirmAssignOrder() {
+        function confirmAssignOrder() {
             const orderId = document.getElementById('confirmAssignOrderBtn').dataset.orderId;
             const outlet = document.getElementById('assignOrderOutlet').value;
             const crewId = document.getElementById('assignOrderCrew').value;
@@ -4471,32 +4409,22 @@
             const orderIndex = app.orders.findIndex(o => o.id === orderId);
             if (orderIndex === -1) return;
             
-            try {
-                // Update order
-                await callGoogleSheetsAPI('Orders', 'put', {
-                    id: orderId,
-                    outlet,
-                    assignedTo: crewId,
-                    status: 'Assigned'
-                });
-                
-                // Update in app state
-                app.orders[orderIndex].outlet = outlet;
-                app.orders[orderIndex].assignedTo = crewId;
-                app.orders[orderIndex].status = 'Assigned';
-                
-                // Close modal
-                closeAssignOrderModal();
-                
-                // Reload orders
-                loadOrders();
-                
-                // Show notification
-                showNotification('Order assigned successfully', 'success');
-            } catch (error) {
-                console.error('Error assigning order:', error);
-                showNotification('Error assigning order', 'error');
-            }
+            // Update order
+            app.orders[orderIndex].outlet = outlet;
+            app.orders[orderIndex].assignedTo = crewId;
+            app.orders[orderIndex].status = 'Assigned';
+            
+            // Save to Google Sheets
+            saveSheetData('Orders', app.orders);
+            
+            // Close modal
+            closeAssignOrderModal();
+            
+            // Reload orders
+            loadOrders();
+            
+            // Show notification
+            showNotification('Order assigned successfully', 'success');
         }
         
         function generateCashbillFromOrder(orderId) {
@@ -4587,7 +4515,7 @@
             loadAttendanceRecords();
         }
         
-        async function loadAttendanceRecords() {
+        function loadAttendanceRecords() {
             const date = elements.attendanceDate.value;
             const crewId = elements.crewFilter.value;
             
@@ -4770,7 +4698,7 @@
             }
         }
         
-        async function saveAttendanceEdit() {
+        function saveAttendanceEdit() {
             const recordId = document.getElementById('saveAttendanceEditBtn').dataset.recordId;
             
             // Find attendance record
@@ -4878,52 +4806,39 @@
                 }
             }
             
-            try {
-                // Save to Google Sheets
-                await callGoogleSheetsAPI('AttendanceRecords', 'put', app.attendanceRecords[recordIndex] || app.attendanceRecords[app.attendanceRecords.length - 1]);
-                
-                // Close modal
-                closeAttendanceEditModal();
-                
-                // Reload attendance records
-                loadAttendanceRecords();
-                
-                // Show notification
-                showNotification('Attendance record updated successfully', 'success');
-            } catch (error) {
-                console.error('Error saving attendance record:', error);
-                showNotification('Error saving attendance record', 'error');
-            }
+            // Save to Google Sheets
+            saveSheetData('AttendanceRecords', app.attendanceRecords);
+            
+            // Close modal
+            closeAttendanceEditModal();
+            
+            // Reload attendance records
+            loadAttendanceRecords();
+            
+            // Show notification
+            showNotification('Attendance record updated successfully', 'success');
         }
         
         // Crew Management Functions
-        async function loadCrewMembers() {
+        function loadCrewMembers() {
             const tbody = document.getElementById('crewTableBody');
             tbody.innerHTML = '';
             
-            try {
-                const crewMembersData = await callGoogleSheetsAPI('CrewMembers', 'get');
-                app.crewMembers = crewMembersData;
-                
-                app.crewMembers.forEach(crew => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${crew.id}</td>
-                        <td>${crew.name}</td>
-                        <td>${crew.role}</td>
-                        <td>${crew.outlet}</td>
-                        <td><span class="status-badge ${crew.status === 'Active' ? 'status-active' : 'status-inactive'}">${crew.status}</span></td>
-                        <td>
-                            <button class="btn btn-sm btn-primary" onclick="editCrew('${crew.id}')">Edit</button>
-                            <button class="btn btn-sm btn-danger" onclick="deleteCrew('${crew.id}')">Delete</button>
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            } catch (error) {
-                console.error('Error loading crew members:', error);
-                tbody.innerHTML = '<tr><td colspan="6" class="no-schedule">Error loading data</td></tr>';
-            }
+            app.crewMembers.forEach(crew => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${crew.id}</td>
+                    <td>${crew.name}</td>
+                    <td>${crew.role}</td>
+                    <td>${crew.outlet}</td>
+                    <td><span class="status-badge ${crew.status === 'Active' ? 'status-active' : 'status-inactive'}">${crew.status}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="editCrew('${crew.id}')">Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteCrew('${crew.id}')">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
         }
         
         function openCrewModal() {
@@ -4941,48 +4856,46 @@
             elements.crewModal.classList.remove('active');
         }
         
-        async function saveCrew() {
+        function saveCrew() {
             // Get form data
             const id = document.getElementById('crewId').value;
             const name = document.getElementById('crewName').value;
             const role = document.getElementById('crewRole').value;
             const outlet = document.getElementById('crewOutlet').value;
             
-            const crewData = {
-                id,
-                name,
-                role,
-                outlet,
-                status: 'Active'
-            };
+            // Check if crew member already exists
+            const existingCrewIndex = app.crewMembers.findIndex(c => c.id === id);
             
-            try {
-                // Check if crew member already exists
-                const existingCrew = app.crewMembers.find(c => c.id === id);
-                
-                if (existingCrew) {
-                    // Update existing crew member
-                    await callGoogleSheetsAPI('CrewMembers', 'put', crewData);
-                    const index = app.crewMembers.findIndex(c => c.id === id);
-                    app.crewMembers[index] = crewData;
-                } else {
-                    // Add new crew member
-                    await callGoogleSheetsAPI('CrewMembers', 'post', crewData);
-                    app.crewMembers.push(crewData);
-                }
-                
-                // Close modal
-                closeCrewModal();
-                
-                // Reload crew members
-                loadCrewMembers();
-                
-                // Show notification
-                showNotification('Crew member saved successfully', 'success');
-            } catch (error) {
-                console.error('Error saving crew member:', error);
-                showNotification('Error saving crew member', 'error');
+            if (existingCrewIndex !== -1) {
+                // Update existing crew member
+                app.crewMembers[existingCrewIndex] = {
+                    ...app.crewMembers[existingCrewIndex],
+                    name,
+                    role,
+                    outlet
+                };
+            } else {
+                // Add new crew member
+                app.crewMembers.push({
+                    id,
+                    name,
+                    role,
+                    outlet,
+                    status: 'Active'
+                });
             }
+            
+            // Save to Google Sheets
+            saveSheetData('CrewMembers', app.crewMembers);
+            
+            // Close modal
+            closeCrewModal();
+            
+            // Reload crew members
+            loadCrewMembers();
+            
+            // Show notification
+            showNotification('Crew member saved successfully', 'success');
         }
         
         function editCrew(id) {
@@ -5004,57 +4917,48 @@
             document.getElementById('crewOutlet').value = crew.outlet;
         }
         
-        async function deleteCrew(id) {
+        function deleteCrew(id) {
             if (confirm('Are you sure you want to delete this crew member?')) {
-                try {
-                    await callGoogleSheetsAPI('CrewMembers', 'delete', {id});
-                    
-                    // Remove from app state
-                    app.crewMembers = app.crewMembers.filter(c => c.id !== id);
-                    
-                    // Reload crew members
-                    loadCrewMembers();
-                    
-                    // Show notification
-                    showNotification('Crew member deleted successfully', 'success');
-                } catch (error) {
-                    console.error('Error deleting crew member:', error);
-                    showNotification('Error deleting crew member', 'error');
-                }
+                // Find and remove crew member
+                const crewIndex = app.crewMembers.findIndex(c => c.id === id);
+                if (crewIndex === -1) return;
+                
+                app.crewMembers.splice(crewIndex, 1);
+                
+                // Save to Google Sheets
+                saveSheetData('CrewMembers', app.crewMembers);
+                
+                // Reload crew members
+                loadCrewMembers();
+                
+                // Show notification
+                showNotification('Crew member deleted successfully', 'success');
             }
         }
         
         // Stock Management Functions
-        async function loadStockItems() {
+        function loadStockItems() {
             const tbody = document.getElementById('stockTableBody');
             tbody.innerHTML = '';
             
-            try {
-                const stockItemsData = await callGoogleSheetsAPI('StockItems', 'get');
-                app.stockItems = stockItemsData;
-                
-                app.stockItems.forEach(item => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${item.code}</td>
-                        <td>${item.name}</td>
-                        <td>${item.description}</td>
-                        <td>RM${parseFloat(item.price).toFixed(2)}</td>
-                        <td>${item.quantity}</td>
-                        <td>${item.outlet}</td>
-                        <td>
-                            ${app.user.isAdmin ? 
-                                `<button class="btn btn-sm btn-primary" onclick="editStock('${item.code}')">Edit</button>
-                                 <button class="btn btn-sm btn-danger" onclick="deleteStock('${item.code}')">Delete</button>` : 
-                                ''}
-                        </td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-            } catch (error) {
-                console.error('Error loading stock items:', error);
-                tbody.innerHTML = '<tr><td colspan="7" class="no-schedule">Error loading data</td></tr>';
-            }
+            app.stockItems.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.code}</td>
+                    <td>${item.name}</td>
+                    <td>${item.description}</td>
+                    <td>RM${item.price.toFixed(2)}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.outlet}</td>
+                    <td>
+                        ${app.user.isAdmin ? 
+                            `<button class="btn btn-sm btn-primary" onclick="editStock('${item.code}')">Edit</button>
+                             <button class="btn btn-sm btn-danger" onclick="deleteStock('${item.code}')">Delete</button>` : 
+                            ''}
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
         }
         
         function openStockModal() {
@@ -5072,7 +4976,7 @@
             elements.stockModal.classList.remove('active');
         }
         
-        async function saveStock() {
+        function saveStock() {
             // Get form data
             const code = document.getElementById('itemCode').value;
             const name = document.getElementById('itemName').value;
@@ -5081,42 +4985,42 @@
             const quantity = parseInt(document.getElementById('itemQuantity').value);
             const outlet = document.getElementById('itemOutlet').value;
             
-            const stockData = {
-                code,
-                name,
-                description,
-                price,
-                quantity,
-                outlet
-            };
+            // Check if stock item already exists
+            const existingStockIndex = app.stockItems.findIndex(s => s.code === code);
             
-            try {
-                // Check if stock item already exists
-                const existingStock = app.stockItems.find(s => s.code === code);
-                
-                if (existingStock) {
-                    // Update existing stock item
-                    await callGoogleSheetsAPI('StockItems', 'put', stockData);
-                    const index = app.stockItems.findIndex(s => s.code === code);
-                    app.stockItems[index] = stockData;
-                } else {
-                    // Add new stock item
-                    await callGoogleSheetsAPI('StockItems', 'post', stockData);
-                    app.stockItems.push(stockData);
-                }
-                
-                // Close modal
-                closeStockModal();
-                
-                // Reload stock items
-                loadStockItems();
-                
-                // Show notification
-                showNotification('Stock item saved successfully', 'success');
-            } catch (error) {
-                console.error('Error saving stock item:', error);
-                showNotification('Error saving stock item', 'error');
+            if (existingStockIndex !== -1) {
+                // Update existing stock item
+                app.stockItems[existingStockIndex] = {
+                    ...app.stockItems[existingStockIndex],
+                    name,
+                    description,
+                    price,
+                    quantity,
+                    outlet
+                };
+            } else {
+                // Add new stock item
+                app.stockItems.push({
+                    code,
+                    name,
+                    description,
+                    price,
+                    quantity,
+                    outlet
+                });
             }
+            
+            // Save to Google Sheets
+            saveSheetData('StockItems', app.stockItems);
+            
+            // Close modal
+            closeStockModal();
+            
+            // Reload stock items
+            loadStockItems();
+            
+            // Show notification
+            showNotification('Stock item saved successfully', 'success');
         }
         
         function editStock(code) {
@@ -5140,23 +5044,22 @@
             document.getElementById('itemOutlet').value = stock.outlet;
         }
         
-        async function deleteStock(code) {
+        function deleteStock(code) {
             if (confirm('Are you sure you want to delete this stock item?')) {
-                try {
-                    await callGoogleSheetsAPI('StockItems', 'delete', {id: code});
-                    
-                    // Remove from app state
-                    app.stockItems = app.stockItems.filter(s => s.code !== code);
-                    
-                    // Reload stock items
-                    loadStockItems();
-                    
-                    // Show notification
-                    showNotification('Stock item deleted successfully', 'success');
-                } catch (error) {
-                    console.error('Error deleting stock item:', error);
-                    showNotification('Error deleting stock item', 'error');
-                }
+                // Find and remove stock item
+                const stockIndex = app.stockItems.findIndex(s => s.code === code);
+                if (stockIndex === -1) return;
+                
+                app.stockItems.splice(stockIndex, 1);
+                
+                // Save to Google Sheets
+                saveSheetData('StockItems', app.stockItems);
+                
+                // Reload stock items
+                loadStockItems();
+                
+                // Show notification
+                showNotification('Stock item deleted successfully', 'success');
             }
         }
         
@@ -5236,6 +5139,9 @@
             
             // Populate dropdown
             populateReceivingItemDropdown();
+            
+            // Show/hide remove buttons
+            updateReceivingRemoveButtons();
         }
         
         function removeReceivingItem(item) {
@@ -5354,7 +5260,7 @@
             showNotification('Preview functionality would be implemented here', 'success');
         }
         
-        async function saveReceiving() {
+        function saveReceiving() {
             // Validate form
             const date = elements.receivingDate.value;
             const supplier = elements.supplierName.value;
@@ -5407,46 +5313,34 @@
                 date,
                 supplier,
                 invoiceNumber,
-                items: JSON.stringify(items),
+                items,
                 totalCost,
                 receivedBy,
                 notes,
                 createdAt: new Date().toISOString()
             };
             
-            try {
-                // Add to app state
-                app.stockReceivingRecords.push({...receivingRecord, items: items});
-                
-                // Save to Google Sheets
-                await callGoogleSheetsAPI('StockReceivingRecords', 'post', receivingRecord);
-                
-                // Update stock items
-                for (const item of items) {
-                    const stockIndex = app.stockItems.findIndex(si => si.code === item.code);
-                    if (stockIndex !== -1) {
-                        await callGoogleSheetsAPI('StockItems', 'put', app.stockItems[stockIndex]);
-                    }
-                }
-                
-                // Show notification
-                showNotification('Stock received and inventory updated successfully', 'success');
-                
-                // Reset form
-                document.getElementById('stockReceivingForm').reset();
-                elements.receivingDate.value = getCurrentDateStr();
-                elements.receivedBy.value = app.user.name;
-                resetReceivingItems();
-                
-                // Reload records
-                loadReceivingRecords();
-            } catch (error) {
-                console.error('Error saving receiving record:', error);
-                showNotification('Error saving receiving record', 'error');
-            }
+            // Add to app state
+            app.stockReceivingRecords.push(receivingRecord);
+            
+            // Save to Google Sheets
+            saveSheetData('StockReceivingRecords', app.stockReceivingRecords);
+            saveSheetData('StockItems', app.stockItems);
+            
+            // Show notification
+            showNotification('Stock received and inventory updated successfully', 'success');
+            
+            // Reset form
+            document.getElementById('stockReceivingForm').reset();
+            elements.receivingDate.value = getCurrentDateStr();
+            elements.receivedBy.value = app.user.name;
+            resetReceivingItems();
+            
+            // Reload records
+            loadReceivingRecords();
         }
         
-        async function loadReceivingRecords() {
+        function loadReceivingRecords() {
             const tbody = document.getElementById('receivingTableBody');
             if (!tbody) return;
             
@@ -5531,23 +5425,22 @@
             alert(`Viewing record #${record.invoiceNumber || 'N/A'} from ${record.supplier}`);
         }
         
-        async function deleteReceivingRecord(id) {
+        function deleteReceivingRecord(id) {
             if (confirm('Are you sure you want to delete this receiving record? This will NOT revert the stock quantities.')) {
-                try {
-                    await callGoogleSheetsAPI('StockReceivingRecords', 'delete', {id});
-                    
-                    // Remove from app state
-                    app.stockReceivingRecords = app.stockReceivingRecords.filter(r => r.id !== id);
-                    
-                    // Reload records
-                    loadReceivingRecords();
-                    
-                    // Show notification
-                    showNotification('Receiving record deleted successfully', 'success');
-                } catch (error) {
-                    console.error('Error deleting receiving record:', error);
-                    showNotification('Error deleting receiving record', 'error');
-                }
+                // Find and remove record
+                const recordIndex = app.stockReceivingRecords.findIndex(r => r.id === id);
+                if (recordIndex === -1) return;
+                
+                app.stockReceivingRecords.splice(recordIndex, 1);
+                
+                // Save to Google Sheets
+                saveSheetData('StockReceivingRecords', app.stockReceivingRecords);
+                
+                // Reload records
+                loadReceivingRecords();
+                
+                // Show notification
+                showNotification('Receiving record deleted successfully', 'success');
             }
         }
         
