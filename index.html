@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PNE Arena - Portal</title>
+<title>PNE Arena - Plan Flow Portal</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
 * {
@@ -939,6 +939,19 @@ font-weight: bold;
 .btn-close-day-log:hover {
 background-color: #c0392b;
 }
+/* Loading indicator */
+.loading {
+display: inline-block;
+width: 20px;
+height: 20px;
+border: 3px solid rgba(255,255,255,.3);
+border-radius: 50%;
+border-top-color: #fff;
+animation: spin 1s ease-in-out infinite;
+}
+@keyframes spin {
+to { transform: rotate(360deg); }
+}
 </style>
 </head>
 <body>
@@ -958,6 +971,7 @@ background-color: #c0392b;
 <div id="errorMessage" class="error-message">Invalid Crew ID or Password</div>
 </div>
 </div>
+
 <!-- Dashboard -->
 <div id="dashboardContainer" class="dashboard-container">
 <!-- Top Bar -->
@@ -968,6 +982,7 @@ background-color: #c0392b;
 <button class="btn-logout" onclick="logout()">Logout</button>
 </div>
 </div>
+
 <!-- Main Container -->
 <div class="main-container">
 <!-- Sidebar -->
@@ -1002,6 +1017,7 @@ background-color: #c0392b;
 </div>
 </div>
 </div>
+
 <!-- Content Area -->
 <div class="content">
 <!-- Dashboard Page -->
@@ -1010,9 +1026,11 @@ background-color: #c0392b;
 <div class="announcement-bar">
 <i class="fas fa-info-circle"></i> Any bugs or any adjustment contact Danial (Admin/IT)
 </div>
+
 <div class="page-header">
 <h1 class="page-title">Dashboard</h1>
 </div>
+
 <div class="stats-container">
 <div class="stat-card">
 <div class="stat-title">Total Cashbills</div>
@@ -1039,6 +1057,7 @@ background-color: #c0392b;
 <div class="stat-value" id="totalDailyLogsClosed">0</div>
 </div>
 </div>
+
 <div class="dashboard-content">
 <p>Welcome to PNE Arena Plan Flow Portal. Select an option from the sidebar to get started.</p>
 <!-- Daily Log Status Section -->
@@ -1049,6 +1068,7 @@ background-color: #c0392b;
 </div>
 </div>
 </div>
+
 <!-- Admin Panel -->
 <div class="admin-panel" id="adminPanel" style="display: none;">
 <h2 class="admin-title">Admin Panel</h2>
@@ -1085,6 +1105,7 @@ background-color: #c0392b;
 </div>
 </div>
 </div>
+
 <!-- Cashbill List Page -->
 <div id="cashbillPage" class="page">
 <div class="page-header">
@@ -1093,6 +1114,7 @@ background-color: #c0392b;
 <i class="fas fa-plus"></i> Create Cashbill
 </button>
 </div>
+
 <!-- Search Bar -->
 <div class="search-bar">
 <input type="text" id="cashbillSearch" class="search-input" placeholder="Search by cashbill number, customer name, or salesperson...">
@@ -1103,6 +1125,7 @@ background-color: #c0392b;
 <i class="fas fa-times"></i>
 </button>
 </div>
+
 <!-- Cashbill List -->
 <div class="cashbill-list">
 <h2>Cashbill Records</h2>
@@ -1111,6 +1134,7 @@ background-color: #c0392b;
 </div>
 </div>
 </div>
+
 <!-- Cashbill Form Page -->
 <div id="cashbillformPage" class="page">
 <button class="btn-back" onclick="showPage('cashbill')">
@@ -1119,6 +1143,7 @@ background-color: #c0392b;
 <div class="page-header">
 <h1 class="page-title">Create New Cashbill</h1>
 </div>
+
 <!-- User Info Display -->
 <div class="user-info-display">
 <div class="user-info-title">Logged in as:</div>
@@ -1126,6 +1151,7 @@ background-color: #c0392b;
 <span id="loggedInUserInfo">Loading...</span>
 </div>
 </div>
+
 <!-- Cashbill Form -->
 <div class="cashbill-form">
 <div class="form-row">
@@ -1207,6 +1233,7 @@ background-color: #c0392b;
 </div>
 </div>
 </div>
+
 <!-- Logbook List Page -->
 <div id="logbookPage" class="page">
 <div class="page-header">
@@ -1215,6 +1242,7 @@ background-color: #c0392b;
 <i class="fas fa-plus"></i> Create Log Entry
 </button>
 </div>
+
 <!-- Search Bar -->
 <div class="search-bar">
 <input type="text" id="logbookSearch" class="search-input" placeholder="Search by content, type, or tracking number...">
@@ -1225,6 +1253,7 @@ background-color: #c0392b;
 <i class="fas fa-times"></i>
 </button>
 </div>
+
 <!-- Logbook List -->
 <div class="logbook-list">
 <h2>Logbook Entries</h2>
@@ -1233,6 +1262,7 @@ background-color: #c0392b;
 </div>
 </div>
 </div>
+
 <!-- Logbook Form Page -->
 <div id="logbookformPage" class="page">
 <button class="btn-back" onclick="showPage('logbook')">
@@ -1241,6 +1271,7 @@ background-color: #c0392b;
 <div class="page-header">
 <h1 class="page-title">Create New Log Entry</h1>
 </div>
+
 <!-- Logbook Form -->
 <div class="logbook-form">
 <div class="form-group">
@@ -1277,6 +1308,7 @@ background-color: #c0392b;
 </div>
 </div>
 </div>
+
 <!-- Edit Logbook Form Page -->
 <div id="editlogbookformPage" class="page">
 <button class="btn-back" onclick="showPage('logbook')">
@@ -1285,6 +1317,7 @@ background-color: #c0392b;
 <div class="page-header">
 <h1 class="page-title">Edit Log Entry</h1>
 </div>
+
 <!-- Edit Logbook Form -->
 <div class="edit-logbook-form">
 <div class="form-group">
@@ -1321,6 +1354,7 @@ background-color: #c0392b;
 </div>
 </div>
 </div>
+
 <!-- Daily Log List Page -->
 <div id="dailylogPage" class="page">
 <div class="page-header">
@@ -1329,6 +1363,7 @@ background-color: #c0392b;
 <i class="fas fa-plus"></i> Create Daily Log
 </button>
 </div>
+
 <!-- Search Bar -->
 <div class="search-bar">
 <input type="text" id="dailylogSearch" class="search-input" placeholder="Search by date or notes...">
@@ -1339,6 +1374,7 @@ background-color: #c0392b;
 <i class="fas fa-times"></i>
 </button>
 </div>
+
 <!-- Daily Log List -->
 <div class="dailylog-list">
 <h2>Daily Log Entries</h2>
@@ -1347,6 +1383,7 @@ background-color: #c0392b;
 </div>
 </div>
 </div>
+
 <!-- Daily Log Form Page -->
 <div id="dailylogformPage" class="page">
 <button class="btn-back" onclick="showPage('dailylog')">
@@ -1355,6 +1392,7 @@ background-color: #c0392b;
 <div class="page-header">
 <h1 class="page-title">Create Daily Log</h1>
 </div>
+
 <!-- User Info Display -->
 <div class="user-info-display">
 <div class="user-info-title">Logged in as:</div>
@@ -1362,6 +1400,7 @@ background-color: #c0392b;
 <span id="loggedInUserInfoDaily">Loading...</span>
 </div>
 </div>
+
 <!-- Daily Log Form -->
 <div class="dailylog-form">
 <div class="form-group">
@@ -1392,6 +1431,7 @@ background-color: #c0392b;
 </div>
 </div>
 </div>
+
 <!-- Edit Daily Log Form Page -->
 <div id="editdailylogformPage" class="page">
 <button class="btn-back" onclick="showPage('dailylog')">
@@ -1400,6 +1440,7 @@ background-color: #c0392b;
 <div class="page-header">
 <h1 class="page-title">Edit Daily Log</h1>
 </div>
+
 <!-- Edit Daily Log Form -->
 <div class="dailylog-form">
 <div class="form-group">
@@ -1430,11 +1471,13 @@ background-color: #c0392b;
 </div>
 </div>
 </div>
+
 <!-- Bank Records Page -->
 <div id="bankrecordsPage" class="page">
 <div class="page-header">
 <h1 class="page-title">Bank Records</h1>
 </div>
+
 <div class="bank-summary">
 <div class="summary-card">
 <div class="summary-title">Total Deposits (RM)</div>
@@ -1465,6 +1508,7 @@ background-color: #c0392b;
 <div class="summary-value" id="qrOthersTransactions">0.00</div>
 </div>
 </div>
+
 <!-- Date Selector -->
 <div class="bank-date-selector">
 <div class="date-picker-container">
@@ -1473,10 +1517,12 @@ background-color: #c0392b;
 <button class="view-today-btn" onclick="viewTodayBankRecords()">View Today</button>
 </div>
 </div>
+
 <!-- Payment Method Boxes -->
 <div class="payment-method-boxes" id="paymentMethodBoxes">
 <!-- Payment method boxes will be dynamically added here -->
 </div>
+
 <!-- Bank Records List -->
 <div class="bank-records-list">
 <h2 class="bank-records-title">Transaction Details</h2>
@@ -1484,6 +1530,7 @@ background-color: #c0392b;
 <!-- Bank records will be dynamically added here -->
 </div>
 </div>
+
 <!-- Close Day Section -->
 <div class="close-day-section">
 <button id="closeDayBtn" class="btn-close-day" onclick="openCloseDayModal()" style="display: none;">
@@ -1491,6 +1538,7 @@ Close Day
 </button>
 </div>
 </div>
+
 <!-- User Management Page -->
 <div id="usermanagementPage" class="page">
 <div class="page-header">
@@ -1499,6 +1547,7 @@ Close Day
 <i class="fas fa-plus"></i> Add User
 </button>
 </div>
+
 <!-- User List -->
 <div class="user-list">
 <h2>User Accounts</h2>
@@ -1507,6 +1556,7 @@ Close Day
 </div>
 </div>
 </div>
+
 <!-- User Form Page -->
 <div id="userformPage" class="page">
 <button class="btn-back" onclick="showPage('usermanagement')">
@@ -1515,6 +1565,7 @@ Close Day
 <div class="page-header">
 <h1 class="page-title">Add New User</h1>
 </div>
+
 <!-- User Form -->
 <div class="user-form">
 <div class="form-row">
@@ -1554,6 +1605,7 @@ Close Day
 </div>
 </div>
 </div>
+
 <!-- Edit User Form Page -->
 <div id="edituserformPage" class="page">
 <button class="btn-back" onclick="showPage('usermanagement')">
@@ -1562,6 +1614,7 @@ Close Day
 <div class="page-header">
 <h1 class="page-title">Edit User</h1>
 </div>
+
 <!-- Edit User Form -->
 <div class="user-form">
 <div class="form-row">
@@ -1604,6 +1657,7 @@ Close Day
 </div>
 </div>
 </div>
+
 <!-- Close Day Confirmation Modal -->
 <div id="closeDayModal" class="modal">
 <div class="modal-content">
@@ -1628,6 +1682,7 @@ Close Day
 </div>
 </div>
 </div>
+
 <!-- Uncommit Confirmation Modal -->
 <div id="uncommitModal" class="modal">
 <div class="modal-content">
@@ -1656,8 +1711,10 @@ Close Day
 </div>
 </div>
 </div>
+
 <!-- Notification -->
 <div id="notification" class="notification"></div>
+
 <script>
 // Google Sheets API URL
 const GOOGLE_SHEETS_API_URL = "https://script.google.com/macros/s/AKfycbxSU8yXh8Y_yQf2fzz7SsNzcb80vOOsGKbstWBIgUSFV_oXy0oFqvTRAIuGP3qxHRABEA/exec";
@@ -1672,12 +1729,12 @@ let dailyLogs = [];
 let sidebarCollapsed = false;
 let cashbillCounter = 1;
 let itemPrices = {
-"Event Ticket": 50.00,
-"VIP Pass": 150.00,
-"Merchandise T-Shirt": 45.00,
-"Merchandise Cap": 35.00,
-"Food & Beverage": 15.00,
-"Parking Pass": 20.00
+    "Event Ticket": 50.00,
+    "VIP Pass": 150.00,
+    "Merchandise T-Shirt": 45.00,
+    "Merchandise Cap": 35.00,
+    "Food & Beverage": 15.00,
+    "Parking Pass": 20.00
 };
 let dayToClose = null;
 let editingLogEntryId = null;
@@ -1685,27 +1742,84 @@ let currentBankDate = null;
 let editingDailyLogId = null;
 let uncommitEntryType = null;
 let uncommitEntryId = null;
+let isLoading = false;
 
 // API Helper Function
 async function callGoogleSheetsAPI(sheet, action, data = null) {
-  const url = `${GOOGLE_SHEETS_API_URL}?sheet=${sheet}&action=${action}`;
-  
-  const options = {
-    method: data ? 'POST' : 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: data ? JSON.stringify(data) : null,
-  };
+    if (isLoading) {
+        showNotification('Another operation is in progress. Please wait.', 'error');
+        return { result: 'error', message: 'Operation in progress' };
+    }
+    
+    isLoading = true;
+    showLoadingIndicator();
+    
+    const url = `${GOOGLE_SHEETS_API_URL}?sheet=${sheet}&action=${action}`;
+    
+    const options = {
+        method: data ? 'POST' : 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: data ? JSON.stringify(data) : null,
+    };
+    
+    try {
+        const response = await fetch(url, options);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        hideLoadingIndicator();
+        isLoading = false;
+        return result;
+    } catch (error) {
+        console.error('Error calling Google Sheets API:', error);
+        hideLoadingIndicator();
+        isLoading = false;
+        return { result: 'error', message: error.message };
+    }
+}
 
-  try {
-    const response = await fetch(url, options);
-    const result = await response.json();
-    return result;
-  } catch (error) {
-    console.error('Error calling Google Sheets API:', error);
-    return { result: 'error', message: error.message };
-  }
+// Show loading indicator
+function showLoadingIndicator() {
+    // Add a loading indicator to the page
+    const existingIndicator = document.getElementById('loadingIndicator');
+    if (!existingIndicator) {
+        const indicator = document.createElement('div');
+        indicator.id = 'loadingIndicator';
+        indicator.style.position = 'fixed';
+        indicator.style.top = '0';
+        indicator.style.left = '0';
+        indicator.style.width = '100%';
+        indicator.style.height = '100%';
+        indicator.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+        indicator.style.display = 'flex';
+        indicator.style.justifyContent = 'center';
+        indicator.style.alignItems = 'center';
+        indicator.style.zIndex = '9999';
+        
+        const spinner = document.createElement('div');
+        spinner.className = 'loading';
+        spinner.style.width = '50px';
+        spinner.style.height = '50px';
+        spinner.style.border = '5px solid rgba(255,255,255,.3)';
+        spinner.style.borderRadius = '50%';
+        spinner.style.borderTopColor = '#3498db';
+        
+        indicator.appendChild(spinner);
+        document.body.appendChild(indicator);
+    }
+}
+
+// Hide loading indicator
+function hideLoadingIndicator() {
+    const indicator = document.getElementById('loadingIndicator');
+    if (indicator) {
+        document.body.removeChild(indicator);
+    }
 }
 
 // Check for saved login state when page loads
@@ -1739,9 +1853,15 @@ async function checkSavedLogin() {
 
 // Login function
 async function login() {
-    const crewId = document.getElementById('crewId').value;
-    const password = document.getElementById('password').value;
+    const crewId = document.getElementById('crewId').value.trim();
+    const password = document.getElementById('password').value.trim();
     const errorMessage = document.getElementById('errorMessage');
+    
+    if (!crewId || !password) {
+        errorMessage.textContent = 'Please enter both Crew ID and Password';
+        errorMessage.style.display = 'block';
+        return;
+    }
     
     // Load users from Google Sheets
     await loadUsers();
@@ -1763,6 +1883,7 @@ async function login() {
         
         showDashboard();
     } else {
+        errorMessage.textContent = 'Invalid Crew ID or Password';
         errorMessage.style.display = 'block';
     }
 }
@@ -1912,13 +2033,17 @@ function formatDateForInput(date) {
 // Update logged in user info
 function updateLoggedInUserInfo() {
     const userInfoElement = document.getElementById('loggedInUserInfo');
-    userInfoElement.textContent = `${currentUser.name} (${currentUser.id}) - ${currentUser.role}`;
+    if (userInfoElement) {
+        userInfoElement.textContent = `${currentUser.name} (${currentUser.id}) - ${currentUser.role}`;
+    }
 }
 
 // Update logged in user info for daily log
 function updateLoggedInUserInfoDaily() {
     const userInfoElement = document.getElementById('loggedInUserInfoDaily');
-    userInfoElement.textContent = `${currentUser.name} (${currentUser.id}) - ${currentUser.role}`;
+    if (userInfoElement) {
+        userInfoElement.textContent = `${currentUser.name} (${currentUser.id}) - ${currentUser.role}`;
+    }
 }
 
 // Toggle log type fields
@@ -1946,6 +2071,8 @@ function toggleEditLogTypeFields() {
 // Populate salesperson filter
 async function populateSalespersonFilter() {
     const salespersonSelect = document.getElementById('salespersonId');
+    if (!salespersonSelect) return;
+    
     salespersonSelect.innerHTML = '<option value="">Select Salesperson</option>';
     
     // Ensure users are loaded
@@ -1986,7 +2113,7 @@ function calculateTotal() {
 
 // Save cashbill
 async function saveCashbill(status) {
-    const customerName = document.getElementById('customerName').value;
+    const customerName = document.getElementById('customerName').value.trim();
     const salespersonId = document.getElementById('salespersonId').value;
     const itemSelect = document.getElementById('itemSelect');
     const item = itemSelect.options[itemSelect.selectedIndex].text.split(' - ')[0];
@@ -2161,9 +2288,9 @@ function uncommitBankRecord(id) {
 
 // Confirm uncommit action
 async function confirmUncommit() {
-    const reason = document.getElementById('uncommitReason').value;
-    const adminId = document.getElementById('confirmAdminId').value;
-    const password = document.getElementById('confirmAdminPassword').value;
+    const reason = document.getElementById('uncommitReason').value.trim();
+    const adminId = document.getElementById('confirmAdminId').value.trim();
+    const password = document.getElementById('confirmAdminPassword').value.trim();
     
     if (!reason) {
         showNotification('Please provide a reason for uncommitting', 'error');
@@ -2391,10 +2518,12 @@ async function loadCashbills() {
     try {
         const result = await callGoogleSheetsAPI('Cashbills', 'get');
         if (result.result === 'success') {
-            cashbills = result.data;
+            cashbills = result.data || [];
             console.log(`Loaded ${cashbills.length} cashbills from Google Sheets`);
             
             const container = document.getElementById('cashbillListContainer');
+            if (!container) return;
+            
             container.innerHTML = '';
             
             let filteredCashbills = cashbills;
@@ -2510,14 +2639,14 @@ function formatPaymentType(paymentType) {
 // Create log entry
 async function createLogEntry() {
     const logType = document.getElementById('logType').value;
-    const logContent = document.getElementById('logContent').value;
+    const logContent = document.getElementById('logContent').value.trim();
     let courierCompany = '';
     let trackingNumber = '';
     
     // Get courier info if applicable
     if (logType === 'courier') {
         courierCompany = document.getElementById('courierCompany').value;
-        trackingNumber = document.getElementById('trackingNumber').value;
+        trackingNumber = document.getElementById('trackingNumber').value.trim();
         if (!trackingNumber) {
             showNotification('Tracking number is required for courier logs', 'error');
             return;
@@ -2582,14 +2711,14 @@ async function updateLogEntry() {
     }
     
     const logType = document.getElementById('editLogType').value;
-    const logContent = document.getElementById('editLogContent').value;
+    const logContent = document.getElementById('editLogContent').value.trim();
     let courierCompany = '';
     let trackingNumber = '';
     
     // Get courier info if applicable
     if (logType === 'courier') {
         courierCompany = document.getElementById('editCourierCompany').value;
-        trackingNumber = document.getElementById('editTrackingNumber').value;
+        trackingNumber = document.getElementById('editTrackingNumber').value.trim();
         if (!trackingNumber) {
             showNotification('Tracking number is required for courier logs', 'error');
             return;
@@ -2725,10 +2854,12 @@ async function loadLogbookEntries() {
     try {
         const result = await callGoogleSheetsAPI('Logbook', 'get');
         if (result.result === 'success') {
-            logbookEntries = result.data;
+            logbookEntries = result.data || [];
             console.log(`Loaded ${logbookEntries.length} logbook entries from Google Sheets`);
             
             const container = document.getElementById('logbookListContainer');
+            if (!container) return;
+            
             container.innerHTML = '';
             
             let filteredEntries = logbookEntries;
@@ -2810,7 +2941,7 @@ async function createDailyLog() {
     const date = document.getElementById('dailyLogDate').value;
     const openingBalance = parseFloat(document.getElementById('openingBalance').value) || 0;
     const closingBalance = parseFloat(document.getElementById('closingBalance').value) || 0;
-    const notes = document.getElementById('dailyLogNotes').value;
+    const notes = document.getElementById('dailyLogNotes').value.trim();
     
     if (!date) {
         showNotification('Please select a date', 'error');
@@ -2860,10 +2991,12 @@ async function loadDailyLogs() {
     try {
         const result = await callGoogleSheetsAPI('Daily Logs', 'get');
         if (result.result === 'success') {
-            dailyLogs = result.data;
+            dailyLogs = result.data || [];
             console.log(`Loaded ${dailyLogs.length} daily logs from Google Sheets`);
             
             const container = document.getElementById('dailylogListContainer');
+            if (!container) return;
+            
             container.innerHTML = '';
             
             let filteredLogs = dailyLogs;
@@ -2958,7 +3091,7 @@ async function updateDailyLog() {
     const date = document.getElementById('editDailyLogDate').value;
     const openingBalance = parseFloat(document.getElementById('editOpeningBalance').value) || 0;
     const closingBalance = parseFloat(document.getElementById('editClosingBalance').value) || 0;
-    const notes = document.getElementById('editDailyLogNotes').value;
+    const notes = document.getElementById('editDailyLogNotes').value.trim();
     
     if (!date) {
         showNotification('Please select a date', 'error');
@@ -3188,6 +3321,8 @@ async function loadBankRecordsForDate() {
 // Display payment method boxes
 function displayPaymentMethodBoxes(recordsByPaymentType, dayClosed) {
     const container = document.getElementById('paymentMethodBoxes');
+    if (!container) return;
+    
     container.innerHTML = '';
     
     // Payment types to display
@@ -3225,6 +3360,8 @@ function displayPaymentMethodBoxes(recordsByPaymentType, dayClosed) {
 // Display bank records list
 function displayBankRecordsList(records) {
     const container = document.getElementById('bankListContainer');
+    if (!container) return;
+    
     container.innerHTML = '';
     
     if (records.length === 0) {
@@ -3278,7 +3415,7 @@ async function loadBankRecords() {
     try {
         const result = await callGoogleSheetsAPI('Bank Records', 'get');
         if (result.result === 'success') {
-            bankRecords = result.data;
+            bankRecords = result.data || [];
             console.log(`Loaded ${bankRecords.length} bank records from Google Sheets`);
         } else {
             console.error('Error loading bank records:', result.message);
@@ -3315,7 +3452,10 @@ function openCloseDayModal() {
 
 // Close modal
 function closeModal(modalId) {
-    document.getElementById(modalId).style.display = 'none';
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.style.display = 'none';
+    }
     dayToClose = null;
     uncommitEntryType = null;
     uncommitEntryId = null;
@@ -3323,8 +3463,8 @@ function closeModal(modalId) {
 
 // Confirm close day
 async function confirmCloseDay() {
-    const crewId = document.getElementById('confirmCrewId').value;
-    const password = document.getElementById('confirmPassword').value;
+    const crewId = document.getElementById('confirmCrewId').value.trim();
+    const password = document.getElementById('confirmPassword').value.trim();
     
     // Validate credentials
     let isValid = false;
@@ -3391,13 +3531,26 @@ function updateBankSummary() {
         }
     });
     
-    document.getElementById('totalDeposits').textContent = totalDeposits.toFixed(2);
-    document.getElementById('cashTransactions').textContent = cashTransactions.toFixed(2);
-    document.getElementById('cardTransactions').textContent = cardTransactions.toFixed(2);
-    document.getElementById('bankTransfers').textContent = bankTransfers.toFixed(2);
-    document.getElementById('qrMaybankTransactions').textContent = qrMaybankTransactions.toFixed(2);
-    document.getElementById('qrCimbTransactions').textContent = qrCimbTransactions.toFixed(2);
-    document.getElementById('qrOthersTransactions').textContent = qrOthersTransactions.toFixed(2);
+    const totalDepositsElement = document.getElementById('totalDeposits');
+    if (totalDepositsElement) totalDepositsElement.textContent = totalDeposits.toFixed(2);
+    
+    const cashTransactionsElement = document.getElementById('cashTransactions');
+    if (cashTransactionsElement) cashTransactionsElement.textContent = cashTransactions.toFixed(2);
+    
+    const cardTransactionsElement = document.getElementById('cardTransactions');
+    if (cardTransactionsElement) cardTransactionsElement.textContent = cardTransactions.toFixed(2);
+    
+    const bankTransfersElement = document.getElementById('bankTransfers');
+    if (bankTransfersElement) bankTransfersElement.textContent = bankTransfers.toFixed(2);
+    
+    const qrMaybankTransactionsElement = document.getElementById('qrMaybankTransactions');
+    if (qrMaybankTransactionsElement) qrMaybankTransactionsElement.textContent = qrMaybankTransactions.toFixed(2);
+    
+    const qrCimbTransactionsElement = document.getElementById('qrCimbTransactions');
+    if (qrCimbTransactionsElement) qrCimbTransactionsElement.textContent = qrCimbTransactions.toFixed(2);
+    
+    const qrOthersTransactionsElement = document.getElementById('qrOthersTransactions');
+    if (qrOthersTransactionsElement) qrOthersTransactionsElement.textContent = qrOthersTransactions.toFixed(2);
 }
 
 // Filter bank records (legacy function)
@@ -3437,7 +3590,8 @@ function updateDashboardStats() {
     if (currentUser.role === 'Crew') {
         totalCashbills = cashbills.filter(cb => cb.crewId === currentUser.id).length;
     }
-    document.getElementById('totalCashbills').textContent = totalCashbills;
+    const totalCashbillsElement = document.getElementById('totalCashbills');
+    if (totalCashbillsElement) totalCashbillsElement.textContent = totalCashbills;
     
     // Total sales
     let totalSales = 0;
@@ -3450,19 +3604,22 @@ function updateDashboardStats() {
             .filter(cb => cb.crewId === currentUser.id && cb.status === 'committed')
             .reduce((sum, cb) => sum + cb.totalAmount, 0);
     }
-    document.getElementById('totalSales').textContent = totalSales.toFixed(2);
+    const totalSalesElement = document.getElementById('totalSales');
+    if (totalSalesElement) totalSalesElement.textContent = totalSales.toFixed(2);
     
     // Total log entries
     let totalLogEntries = logbookEntries.length;
     if (currentUser.role === 'Crew') {
         totalLogEntries = logbookEntries.filter(le => le.crewId === currentUser.id).length;
     }
-    document.getElementById('totalLogEntries').textContent = totalLogEntries;
+    const totalLogEntriesElement = document.getElementById('totalLogEntries');
+    if (totalLogEntriesElement) totalLogEntriesElement.textContent = totalLogEntries;
     
     // Active crew
     const activeCrew = currentUser.role === 'Admin' ?
         users.filter(user => user.role === 'Crew').length : 1;
-    document.getElementById('activeCrew').textContent = activeCrew;
+    const activeCrewElement = document.getElementById('activeCrew');
+    if (activeCrewElement) activeCrewElement.textContent = activeCrew;
     
     // Daily logs stats
     let totalDailyLogsCreated = 0;
@@ -3475,14 +3632,17 @@ function updateDashboardStats() {
         totalDailyLogsCreated = crewLogs.length;
         totalDailyLogsClosed = crewLogs.filter(log => log.status === 'closed').length;
     }
-    document.getElementById('totalDailyLogsCreated').textContent = totalDailyLogsCreated;
-    document.getElementById('totalDailyLogsClosed').textContent = totalDailyLogsClosed;
+    const totalDailyLogsCreatedElement = document.getElementById('totalDailyLogsCreated');
+    if (totalDailyLogsCreatedElement) totalDailyLogsCreatedElement.textContent = totalDailyLogsCreated;
+    
+    const totalDailyLogsClosedElement = document.getElementById('totalDailyLogsClosed');
+    if (totalDailyLogsClosedElement) totalDailyLogsClosedElement.textContent = totalDailyLogsClosed;
     
     // Update daily log status section
     updateDailyLogStatusSection();
     
     // Update bank summary if on bank records page
-    if (document.getElementById('bankrecordsPage').classList.contains('active')) {
+    if (document.getElementById('bankrecordsPage') && document.getElementById('bankrecordsPage').classList.contains('active')) {
         updateBankSummary();
     }
 }
@@ -3521,10 +3681,10 @@ function updatePerformanceTable() {
 
 // Create user
 async function createUser() {
-    const userId = document.getElementById('newUserId').value;
-    const userName = document.getElementById('newUserName').value;
+    const userId = document.getElementById('newUserId').value.trim();
+    const userName = document.getElementById('newUserName').value.trim();
     const userRole = document.getElementById('newUserRole').value;
-    const userPassword = document.getElementById('newUserPassword').value;
+    const userPassword = document.getElementById('newUserPassword').value.trim();
     
     if (!userId || !userName || !userPassword) {
         showNotification('Please fill in all fields', 'error');
@@ -3564,7 +3724,7 @@ async function loadUsers() {
     try {
         const result = await callGoogleSheetsAPI('Users', 'get');
         if (result.result === 'success') {
-            users = result.data;
+            users = result.data || [];
             console.log(`Loaded ${users.length} users from Google Sheets`);
             
             const container = document.getElementById('userListContainer');
@@ -3648,9 +3808,9 @@ function editUser(userId) {
 // Update user
 async function updateUser() {
     const userId = document.getElementById('editUserId').value;
-    const userName = document.getElementById('editUserName').value;
+    const userName = document.getElementById('editUserName').value.trim();
     const userRole = document.getElementById('editUserRole').value;
-    const userPassword = document.getElementById('editUserPassword').value;
+    const userPassword = document.getElementById('editUserPassword').value.trim();
     
     if (!userId || !userName) {
         showNotification('User ID and Name are required', 'error');
@@ -3688,20 +3848,25 @@ async function resetPassword(userId) {
     }
     
     const newPassword = prompt('Enter new password:');
-    if (newPassword) {
-        const user = users.find(u => u.id === userId);
-        if (user) {
-            user.password = newPassword;
-            
-            // Update in Google Sheets
-            const result = await callGoogleSheetsAPI('Users', 'update', user);
-            
-            if (result.result === 'success') {
-                await loadUsers();
-                showNotification('Password reset successfully!', 'success');
-            } else {
-                showNotification('Error resetting password: ' + result.message, 'error');
+    if (newPassword !== null) {
+        const trimmedPassword = newPassword.trim();
+        if (trimmedPassword) {
+            const user = users.find(u => u.id === userId);
+            if (user) {
+                user.password = trimmedPassword;
+                
+                // Update in Google Sheets
+                const result = await callGoogleSheetsAPI('Users', 'update', user);
+                
+                if (result.result === 'success') {
+                    await loadUsers();
+                    showNotification('Password reset successfully!', 'success');
+                } else {
+                    showNotification('Error resetting password: ' + result.message, 'error');
+                }
             }
+        } else {
+            showNotification('Password cannot be empty', 'error');
         }
     }
 }
@@ -3841,6 +4006,8 @@ async function exportData(type) {
 // Show notification
 function showNotification(message, type) {
     const notification = document.getElementById('notification');
+    if (!notification) return;
+    
     notification.textContent = message;
     notification.className = `notification ${type}`;
     notification.style.display = 'block';
