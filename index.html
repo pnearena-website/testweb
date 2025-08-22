@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PNE Arena - Plan Test Portal</title>
+<title>PNE Arena - Plan Flow Portal</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
 * {
@@ -996,10 +996,6 @@ background-color: #c0392b;
 <i class="fas fa-university"></i>
 <span>Bank Records</span>
 </div>
-<div class="menu-item" onclick="showPage('usermanagement')" style="display: none;" id="userManagementMenu">
-<i class="fas fa-users"></i>
-<span>User Management</span>
-</div>
 </div>
 </div>
 <!-- Content Area -->
@@ -1057,7 +1053,6 @@ background-color: #c0392b;
 <button class="btn-primary" onclick="showPage('logbook')">View All Logbook Entries</button>
 <button class="btn-primary" onclick="showPage('dailylog')">View Daily Logs</button>
 <button class="btn-primary" onclick="showPage('bankrecords')">View Bank Records</button>
-<button class="btn-primary" onclick="showPage('usermanagement')">Manage Users</button>
 </div>
 <div class="export-buttons">
 <button class="btn-export" onclick="exportData('cashbill')">Export Cashbills</button>
@@ -1491,116 +1486,6 @@ Close Day
 </button>
 </div>
 </div>
-<!-- User Management Page -->
-<div id="usermanagementPage" class="page">
-<div class="page-header">
-<h1 class="page-title">User Management</h1>
-<button class="btn-create" onclick="showPage('userform')">
-<i class="fas fa-plus"></i> Add User
-</button>
-</div>
-<!-- User List -->
-<div class="user-list">
-<h2>User Accounts</h2>
-<div id="userListContainer">
-<!-- User items will be dynamically added here -->
-</div>
-</div>
-</div>
-<!-- User Form Page -->
-<div id="userformPage" class="page">
-<button class="btn-back" onclick="showPage('usermanagement')">
-<i class="fas fa-arrow-left"></i> Back to User List
-</button>
-<div class="page-header">
-<h1 class="page-title">Add New User</h1>
-</div>
-<!-- User Form -->
-<div class="user-form">
-<div class="form-row">
-<div class="form-col">
-<div class="form-group">
-<label for="newUserId">User ID</label>
-<input type="text" id="newUserId" placeholder="Enter User ID">
-</div>
-</div>
-<div class="form-col">
-<div class="form-group">
-<label for="newUserName">User Name</label>
-<input type="text" id="newUserName" placeholder="Enter User Name">
-</div>
-</div>
-</div>
-<div class="form-row">
-<div class="form-col">
-<div class="form-group">
-<label for="newUserRole">User Role</label>
-<select id="newUserRole">
-<option value="Crew">Crew</option>
-<option value="Admin">Admin</option>
-</select>
-</div>
-</div>
-<div class="form-col">
-<div class="form-group">
-<label for="newUserPassword">Password</label>
-<input type="password" id="newUserPassword" placeholder="Enter Password">
-</div>
-</div>
-</div>
-<div class="form-group">
-<button class="btn-primary" onclick="createUser()">Create User</button>
-<button class="btn-secondary" onclick="clearUserForm()">Clear</button>
-</div>
-</div>
-</div>
-<!-- Edit User Form Page -->
-<div id="edituserformPage" class="page">
-<button class="btn-back" onclick="showPage('usermanagement')">
-<i class="fas fa-arrow-left"></i> Back to User List
-</button>
-<div class="page-header">
-<h1 class="page-title">Edit User</h1>
-</div>
-<!-- Edit User Form -->
-<div class="user-form">
-<div class="form-row">
-<div class="form-col">
-<div class="form-group">
-<label for="editUserId">User ID</label>
-<input type="text" id="editUserId" readonly>
-</div>
-</div>
-<div class="form-col">
-<div class="form-group">
-<label for="editUserName">User Name</label>
-<input type="text" id="editUserName" placeholder="Enter User Name">
-</div>
-</div>
-</div>
-<div class="form-row">
-<div class="form-col">
-<div class="form-group">
-<label for="editUserRole">User Role</label>
-<select id="editUserRole">
-<option value="Crew">Crew</option>
-<option value="Admin">Admin</option>
-</select>
-</div>
-</div>
-<div class="form-col">
-<div class="form-group">
-<label for="editUserPassword">New Password (leave blank to keep current)</label>
-<input type="password" id="editUserPassword" placeholder="Enter New Password">
-</div>
-</div>
-</div>
-<div class="form-group">
-<button class="btn-primary" onclick="updateUser()">Update User</button>
-<button class="btn-secondary" onclick="showPage('usermanagement')">Cancel</button>
-</div>
-</div>
-</div>
 </div>
 </div>
 </div>
@@ -1659,12 +1544,20 @@ Close Day
 <!-- Notification -->
 <div id="notification" class="notification"></div>
 <script>
-// Airtable configuration
+// Hardcoded user credentials (not stored in Airtable)
+const users = [
+    { id: '1001', name: 'Administrator', role: 'Admin', password: 'admin123' },
+    { id: '1002', name: 'Crew 1002', role: 'Crew', password: 'crew123' },
+    { id: '1003', name: 'Crew 1003', role: 'Crew', password: 'crew123' },
+    { id: '1004', name: 'Crew 1004', role: 'Crew', password: 'crew123' },
+    { id: '1005', name: 'Crew 1005', role: 'Crew', password: 'crew123' }
+];
+
+// Airtable configuration (only for data, not users)
 const AIRTABLE_API_KEY = 'patrPGNYBDHnK63b6.d3f38932bdcfc0c54e30d0dcd07e1c7403861b2efbb933491a6f6703d8817114';
 const AIRTABLE_BASE_ID = 'appqFzsFbYgf4ASa2';
 
 const AIRTABLE = {
-    users: `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Users`,
     cashbills: `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Cashbills`,
     logbook: `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Logbook`,
     bankRecords: `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/BankRecords`,
@@ -1676,7 +1569,6 @@ let currentUser = null;
 let cashbills = [];
 let logbookEntries = [];
 let bankRecords = [];
-let users = [];
 let dailyLogs = [];
 let sidebarCollapsed = false;
 let cashbillCounter = 1;
@@ -1785,15 +1677,13 @@ async function deleteFromAirtable(table, recordId) {
 async function loadAllData() {
     try {
         // Load all data in parallel
-        const [usersData, cashbillsData, logbookData, bankRecordsData, dailyLogsData] = await Promise.all([
-            fetchFromAirtable('users'),
+        const [cashbillsData, logbookData, bankRecordsData, dailyLogsData] = await Promise.all([
             fetchFromAirtable('cashbills'),
             fetchFromAirtable('logbook'),
             fetchFromAirtable('bankRecords'),
             fetchFromAirtable('dailyLogs')
         ]);
         
-        users = usersData;
         cashbills = cashbillsData;
         logbookEntries = logbookData;
         bankRecords = bankRecordsData;
@@ -1820,50 +1710,6 @@ async function loadAllData() {
 // Initialize sample data (only if Airtable is empty)
 async function initializeSampleData() {
     try {
-        // Check if users table is empty
-        const existingUsers = await fetchFromAirtable('users');
-        
-        if (existingUsers.length === 0) {
-            // Create sample users
-            await createInAirtable('users', {
-                ID: '1001',
-                Name: 'Administrator',
-                Role: 'Admin',
-                Password: 'admin123'
-            });
-            
-            await createInAirtable('users', {
-                ID: '1002',
-                Name: 'Crew 1002',
-                Role: 'Crew',
-                Password: 'crew123'
-            });
-            
-            await createInAirtable('users', {
-                ID: '1003',
-                Name: 'Crew 1003',
-                Role: 'Crew',
-                Password: 'crew123'
-            });
-            
-            await createInAirtable('users', {
-                ID: '1004',
-                Name: 'Crew 1004',
-                Role: 'Crew',
-                Password: 'crew123'
-            });
-            
-            await createInAirtable('users', {
-                ID: '1005',
-                Name: 'Crew 1005',
-                Role: 'Crew',
-                Password: 'crew123'
-            });
-            
-            // Reload users
-            users = await fetchFromAirtable('users');
-        }
-        
         // Check if cashbills table is empty
         const existingCashbills = await fetchFromAirtable('cashbills');
         
@@ -2113,7 +1959,7 @@ window.onload = function() {
 };
 
 // Check if there's a saved login state
-async function checkSavedLogin() {
+function checkSavedLogin() {
     const savedUser = localStorage.getItem('pneArenaUser');
     if (savedUser) {
         try {
@@ -2121,7 +1967,7 @@ async function checkSavedLogin() {
             // Validate the saved user data
             if (userData.id && userData.role && userData.name) {
                 currentUser = userData;
-                await showDashboard();
+                showDashboard();
                 return;
             }
         } catch (e) {
@@ -2135,32 +1981,46 @@ async function checkSavedLogin() {
 }
 
 // Login function
-async function login() {
-    const crewId = document.getElementById('crewId').value;
-    const password = document.getElementById('password').value;
+function login() {
+    const crewId = document.getElementById('crewId').value.trim();
+    const password = document.getElementById('password').value.trim();
     const errorMessage = document.getElementById('errorMessage');
     
-    try {
-        // Load users from Airtable
-        users = await fetchFromAirtable('users');
-        
-        // Find user with matching credentials
-        const user = users.find(u => u.ID === crewId && u.Password === password);
-        
-        if (user) {
-            currentUser = {
-                id: user.ID,
-                role: user.Role,
-                name: user.Name
-            };
-            // Save login state to localStorage
-            localStorage.setItem('pneArenaUser', JSON.stringify(currentUser));
-            await showDashboard();
-        } else {
-            errorMessage.style.display = 'block';
-        }
-    } catch (error) {
-        console.error('Error during login:', error);
+    // Reset error states
+    document.getElementById('crewId').classList.remove('input-error');
+    document.getElementById('password').classList.remove('input-error');
+    
+    // Client-side validation
+    if (!crewId) {
+        errorMessage.textContent = 'Crew ID is required';
+        errorMessage.style.display = 'block';
+        document.getElementById('crewId').classList.add('input-error');
+        document.getElementById('crewId').focus();
+        return;
+    }
+    
+    if (!password) {
+        errorMessage.textContent = 'Password is required';
+        errorMessage.style.display = 'block';
+        document.getElementById('password').classList.add('input-error');
+        document.getElementById('password').focus();
+        return;
+    }
+    
+    // Find user with matching credentials
+    const user = users.find(u => u.id === crewId && u.password === password);
+    
+    if (user) {
+        currentUser = {
+            id: user.id,
+            role: user.role,
+            name: user.name
+        };
+        // Save login state to localStorage
+        localStorage.setItem('pneArenaUser', JSON.stringify(currentUser));
+        showDashboard();
+    } else {
+        errorMessage.textContent = 'Invalid Crew ID or Password';
         errorMessage.style.display = 'block';
     }
 }
@@ -2174,7 +2034,6 @@ async function showDashboard() {
     // Show admin menus for admin only
     if (currentUser.role === 'Admin') {
         document.getElementById('bankRecordsMenu').style.display = 'flex';
-        document.getElementById('userManagementMenu').style.display = 'flex';
         document.getElementById('adminPanel').style.display = 'block';
     }
     
@@ -2186,10 +2045,8 @@ async function showDashboard() {
     loadCashbills();
     loadLogbookEntries();
     loadBankRecords();
-    loadUsers();
     loadDailyLogs();
     updatePerformanceTable();
-    populateCrewFilter();
     populateSalespersonFilter();
     showNotification('Login successful!', 'success');
 }
@@ -2243,7 +2100,6 @@ function showPage(pageName) {
     else if (pageName === 'logbook' || pageName === 'logbookform' || pageName === 'editlogbookform') menuItemText = 'Logbook';
     else if (pageName === 'dailylog' || pageName === 'dailylogform' || pageName === 'editdailylogform') menuItemText = 'Daily Log';
     else if (pageName === 'bankrecords') menuItemText = 'Bank Records';
-    else if (pageName === 'usermanagement' || pageName === 'userform' || pageName === 'edituserform') menuItemText = 'User Management';
     
     menuItems.forEach(item => {
         if (item.textContent.trim().includes(menuItemText)) {
@@ -2260,8 +2116,6 @@ function showPage(pageName) {
         loadDailyLogs();
     } else if (pageName === 'bankrecords') {
         initializeBankRecordsPage();
-    } else if (pageName === 'usermanagement') {
-        loadUsers();
     } else if (pageName === 'cashbillform') {
         populateSalespersonFilter();
         updateLoggedInUserInfo();
@@ -2345,23 +2199,15 @@ function toggleEditLogTypeFields() {
 }
 
 // Populate salesperson filter
-async function populateSalespersonFilter() {
-    try {
-        // Load users from Airtable
-        users = await fetchFromAirtable('users');
-        
-        const salespersonSelect = document.getElementById('salespersonId');
-        salespersonSelect.innerHTML = '<option value="">Select Salesperson</option>';
-        users.forEach(user => {
-            const option = document.createElement('option');
-            option.value = user.ID;
-            option.textContent = `${user.ID} - ${user.Name}`;
-            salespersonSelect.appendChild(option);
-        });
-    } catch (error) {
-        console.error('Error populating salesperson filter:', error);
-        showNotification('Error loading salespersons. Please try again.', 'error');
-    }
+function populateSalespersonFilter() {
+    const salespersonSelect = document.getElementById('salespersonId');
+    salespersonSelect.innerHTML = '<option value="">Select Salesperson</option>';
+    users.forEach(user => {
+        const option = document.createElement('option');
+        option.value = user.id;
+        option.textContent = `${user.id} - ${user.name}`;
+        salespersonSelect.appendChild(option);
+    });
 }
 
 // Update item price when selected from dropdown
@@ -2404,8 +2250,8 @@ async function saveCashbill(status) {
     }
     
     // Get salesperson name
-    const salesperson = users.find(u => u.ID === salespersonId);
-    const salespersonName = salesperson ? salesperson.Name : 'Unknown';
+    const salesperson = users.find(u => u.id === salespersonId);
+    const salespersonName = salesperson ? salesperson.name : 'Unknown';
     
     // Generate cashbill number
     const cashbillNumber = `#INV-${String(cashbillCounter).padStart(4, '0')}`;
@@ -3793,33 +3639,6 @@ function filterBankRecords() {
     // The main bank records page now uses date-based filtering
 }
 
-// Populate crew filter
-async function populateCrewFilter() {
-    try {
-        // Load users from Airtable
-        users = await fetchFromAirtable('users');
-        
-        const crewFilter = document.getElementById('filterCrew');
-        if (!crewFilter) return;
-        
-        crewFilter.innerHTML = '<option value="all">All Crew</option>';
-        
-        // Get unique crew IDs
-        const crewIds = [...new Set(users.map(user => user.ID))];
-        
-        crewIds.forEach(crewId => {
-            const crewName = users.find(user => user.ID === crewId).Name;
-            const option = document.createElement('option');
-            option.value = crewId;
-            option.textContent = crewName;
-            crewFilter.appendChild(option);
-        });
-    } catch (error) {
-        console.error('Error populating crew filter:', error);
-        showNotification('Error loading crew. Please try again.', 'error');
-    }
-}
-
 // Update dashboard stats
 async function updateDashboardStats() {
     try {
@@ -3863,7 +3682,7 @@ async function updateDashboardStats() {
         
         // Active crew
         const activeCrew = currentUser.role === 'Admin' ?
-            users.filter(user => user.Role === 'Crew').length : 1;
+            users.filter(user => user.role === 'Crew').length : 1;
         document.getElementById('activeCrew').textContent = activeCrew;
         
         // Daily logs stats
@@ -3896,15 +3715,13 @@ async function updateDashboardStats() {
 // Update performance table
 async function updatePerformanceTable() {
     try {
-        // Load users and cashbills from Airtable
-        const [usersData, cashbillsData, logbookData, dailyLogsData] = await Promise.all([
-            fetchFromAirtable('users'),
+        // Load cashbills and logbook from Airtable
+        const [cashbillsData, logbookData, dailyLogsData] = await Promise.all([
             fetchFromAirtable('cashbills'),
             fetchFromAirtable('logbook'),
             fetchFromAirtable('dailyLogs')
         ]);
         
-        users = usersData;
         cashbills = cashbillsData;
         logbookEntries = logbookData;
         dailyLogs = dailyLogsData;
@@ -3915,20 +3732,20 @@ async function updatePerformanceTable() {
         tableBody.innerHTML = '';
         
         // Get all crew users
-        const crewUsers = users.filter(user => user.Role === 'Crew');
+        const crewUsers = users.filter(user => user.role === 'Crew');
         
         crewUsers.forEach(user => {
             // Calculate stats for this crew
-            const crewCashbills = cashbills.filter(cb => cb.SalespersonID === user.ID);
+            const crewCashbills = cashbills.filter(cb => cb.SalespersonID === user.id);
             const crewCommittedCashbills = crewCashbills.filter(cb => cb.Status === 'committed');
             const crewSales = crewCommittedCashbills.reduce((sum, cb) => sum + cb.TotalAmount, 0);
-            const crewLogEntries = logbookEntries.filter(le => le.CrewID === user.ID).length;
-            const crewDailyLogs = dailyLogs.filter(dl => dl.CrewID === user.ID).length;
+            const crewLogEntries = logbookEntries.filter(le => le.CrewID === user.id).length;
+            const crewDailyLogs = dailyLogs.filter(dl => dl.CrewID === user.id).length;
             
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${user.ID}</td>
-                <td>${user.Name}</td>
+                <td>${user.id}</td>
+                <td>${user.name}</td>
                 <td>${crewCommittedCashbills.length}</td>
                 <td>RM ${crewSales.toFixed(2)}</td>
                 <td>${crewLogEntries}</td>
@@ -3941,224 +3758,6 @@ async function updatePerformanceTable() {
         console.error('Error updating performance table:', error);
         showNotification('Error updating performance table. Please try again.', 'error');
     }
-}
-
-// Create user
-async function createUser() {
-    const userId = document.getElementById('newUserId').value;
-    const userName = document.getElementById('newUserName').value;
-    const userRole = document.getElementById('newUserRole').value;
-    const userPassword = document.getElementById('newUserPassword').value;
-    
-    if (!userId || !userName || !userPassword) {
-        showNotification('Please fill in all fields', 'error');
-        return;
-    }
-    
-    // Check if user ID already exists
-    if (users.find(user => user.ID === userId)) {
-        showNotification('User ID already exists', 'error');
-        return;
-    }
-    
-    // Create user in Airtable
-    const newUser = await createInAirtable('users', {
-        ID: userId,
-        Name: userName,
-        Role: userRole,
-        Password: userPassword
-    });
-    
-    users.push(newUser);
-    
-    showPage('usermanagement');
-    updateDashboardStats();
-    showNotification('User created successfully!', 'success');
-}
-
-// Load users
-async function loadUsers() {
-    try {
-        // Load users from Airtable
-        users = await fetchFromAirtable('users');
-        
-        const container = document.getElementById('userListContainer');
-        if (!container) return;
-        
-        container.innerHTML = '';
-        
-        if (users.length === 0) {
-            container.innerHTML = '<div class="no-results">No users found.</div>';
-            return;
-        }
-        
-        users.forEach(user => {
-            const userElement = document.createElement('div');
-            userElement.className = 'user-item';
-            const roleClass = user.Role === 'Admin' ? 'role-admin' : 'role-crew';
-            
-            userElement.innerHTML = `
-                <div class="user-header">
-                    <div class="user-id">${user.ID} - ${user.Name}</div>
-                    <div class="user-role-badge ${roleClass}">${user.Role}</div>
-                </div>
-                <div class="user-details">
-                    <div class="detail-item">
-                        <span class="detail-label">User ID:</span>
-                        <span>${user.ID}</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Name:</span>
-                        <span>${user.Name}</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Role:</span>
-                        <span>${user.Role}</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Password:</span>
-                        <span>${currentUser.role === 'Admin' ? user.Password : '••••••••'}</span>
-                    </div>
-                </div>
-                <div class="action-buttons">
-                    ${currentUser.role === 'Admin' ?
-                        `<button class="btn-edit" onclick="editUser('${user.ID}')">Edit</button>
-                         <button class="btn-reset" onclick="resetPassword('${user.ID}')">Reset Password</button>
-                         <button class="btn-delete" onclick="deleteUser('${user.ID}')">Delete User</button>` :
-                        ''}
-                </div>
-            `;
-            
-            container.appendChild(userElement);
-        });
-    } catch (error) {
-        console.error('Error loading users:', error);
-        showNotification('Error loading users. Please try again.', 'error');
-    }
-}
-
-// Edit user
-function editUser(userId) {
-    if (currentUser.role !== 'Admin') {
-        showNotification('Only admin can edit users', 'error');
-        return;
-    }
-    
-    const user = users.find(u => u.ID === userId);
-    if (user) {
-        // Populate edit form
-        document.getElementById('editUserId').value = user.ID;
-        document.getElementById('editUserName').value = user.Name;
-        document.getElementById('editUserRole').value = user.Role;
-        document.getElementById('editUserPassword').value = '';
-        
-        showPage('edituserform');
-    }
-}
-
-// Update user
-async function updateUser() {
-    const userId = document.getElementById('editUserId').value;
-    const userName = document.getElementById('editUserName').value;
-    const userRole = document.getElementById('editUserRole').value;
-    const userPassword = document.getElementById('editUserPassword').value;
-    
-    if (!userId || !userName) {
-        showNotification('User ID and Name are required', 'error');
-        return;
-    }
-    
-    try {
-        // Update user in Airtable
-        const updateFields = {
-            Name: userName,
-            Role: userRole
-        };
-        
-        if (userPassword) {
-            updateFields.Password = userPassword;
-        }
-        
-        await updateInAirtable('users', userId, updateFields);
-        
-        const user = users.find(u => u.ID === userId);
-        if (user) {
-            user.Name = userName;
-            user.Role = userRole;
-            
-            // Update password if provided
-            if (userPassword) {
-                user.Password = userPassword;
-            }
-        }
-        
-        showPage('usermanagement');
-        loadUsers();
-        showNotification('User updated successfully!', 'success');
-    } catch (error) {
-        console.error('Error updating user:', error);
-        showNotification('Error updating user. Please try again.', 'error');
-    }
-}
-
-// Reset password
-async function resetPassword(userId) {
-    if (currentUser.role !== 'Admin') {
-        showNotification('Only admin can reset passwords', 'error');
-        return;
-    }
-    
-    const newPassword = prompt('Enter new password:');
-    if (newPassword) {
-        try {
-            // Update user password in Airtable
-            await updateInAirtable('users', userId, {
-                Password: newPassword
-            });
-            
-            const user = users.find(u => u.ID === userId);
-            if (user) {
-                user.Password = newPassword;
-            }
-            
-            loadUsers();
-            showNotification('Password reset successfully!', 'success');
-        } catch (error) {
-            console.error('Error resetting password:', error);
-            showNotification('Error resetting password. Please try again.', 'error');
-        }
-    }
-}
-
-// Delete user
-async function deleteUser(userId) {
-    if (currentUser.role !== 'Admin') {
-        showNotification('Only admin can delete users', 'error');
-        return;
-    }
-    
-    if (confirm('Are you sure you want to delete this user?')) {
-        try {
-            // Delete user from Airtable
-            await deleteFromAirtable('users', userId);
-            
-            users = users.filter(u => u.ID !== userId);
-            loadUsers();
-            updateDashboardStats();
-            showNotification('User deleted successfully!', 'success');
-        } catch (error) {
-            console.error('Error deleting user:', error);
-            showNotification('Error deleting user. Please try again.', 'error');
-        }
-    }
-}
-
-// Clear user form
-function clearUserForm() {
-    document.getElementById('newUserId').value = '';
-    document.getElementById('newUserName').value = '';
-    document.getElementById('newUserRole').value = 'Crew';
-    document.getElementById('newUserPassword').value = '';
 }
 
 // Export data
