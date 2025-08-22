@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PNE Arena(Test Portal)</title>
+    <title>PNE Arena Test Flow Portal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
@@ -1044,7 +1044,7 @@
         
         // Google Sheets configuration
         const GOOGLE_SHEETS_CONFIG = {
-            webAppUrl: 'https://script.google.com/macros/s/AKfycbzDmwRAuWvM05ykUWdCUb0rug_uNRI_y4ZubxSrMNSZaaW6lqmAy7RpkGgp4XGHeKHu/exec'
+            webAppUrl: 'https://script.google.com/macros/s/AKfycbzrRbVLdTFzGa-um-1XCEp9Q4AYlDDLh0qDQCYQqM9yh0smgpOKDosBs7hTczp68Q/exec'
         };
         
         // Login function
@@ -1832,15 +1832,24 @@
             showSyncStatus('Loading cashbills from Google Sheets...');
             
             fetch(`${GOOGLE_SHEETS_CONFIG.webAppUrl}?action=get&sheet=cashbill`)
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(data => {
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    
                     cashbills = data;
                     
                     // Set cashbill counter
                     if (cashbills.length > 0) {
                         const lastCashbill = cashbills.reduce((prev, current) => {
-                            const prevNum = parseInt(prev.cashbill_number.replace('#INV-', ''));
-                            const currentNum = parseInt(current.cashbill_number.replace('#INV-', ''));
+                            const prevNum = parseInt(prev.cashbill_number ? prev.cashbill_number.replace('#INV-', '') : '0');
+                            const currentNum = parseInt(current.cashbill_number ? current.cashbill_number.replace('#INV-', '') : '0');
                             return prevNum > currentNum ? prev : current;
                         });
                         cashbillCounter = parseInt(lastCashbill.cashbill_number.replace('#INV-', '')) + 1;
@@ -1852,7 +1861,7 @@
                 })
                 .catch(error => {
                     console.error('Error loading cashbills:', error);
-                    showSyncStatus('Error loading cashbills', 'error');
+                    showSyncStatus('Error loading cashbills: ' + error.message, 'error');
                     
                     // Fallback to localStorage
                     const storedCashbills = localStorage.getItem('pne_cashbills');
@@ -1879,19 +1888,24 @@
                     'Content-Type': 'application/json'
                 }
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showSyncStatus('Cashbill saved successfully', 'success');
-                    // Also save to localStorage as backup
-                    localStorage.setItem('pne_cashbills', JSON.stringify(cashbills));
-                } else {
-                    showSyncStatus('Error saving cashbill', 'error');
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
                 }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error || !data.success) {
+                    throw new Error(data.error || 'Unknown error');
+                }
+                
+                showSyncStatus('Cashbill saved successfully', 'success');
+                // Also save to localStorage as backup
+                localStorage.setItem('pne_cashbills', JSON.stringify(cashbills));
             })
             .catch(error => {
                 console.error('Error saving cashbill:', error);
-                showSyncStatus('Error saving cashbill', 'error');
+                showSyncStatus('Error saving cashbill: ' + error.message, 'error');
                 // Fallback to localStorage
                 localStorage.setItem('pne_cashbills', JSON.stringify(cashbills));
             });
@@ -1913,19 +1927,24 @@
                     'Content-Type': 'application/json'
                 }
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showSyncStatus('Cashbill updated successfully', 'success');
-                    // Also save to localStorage as backup
-                    localStorage.setItem('pne_cashbills', JSON.stringify(cashbills));
-                } else {
-                    showSyncStatus('Error updating cashbill', 'error');
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
                 }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error || !data.success) {
+                    throw new Error(data.error || 'Unknown error');
+                }
+                
+                showSyncStatus('Cashbill updated successfully', 'success');
+                // Also save to localStorage as backup
+                localStorage.setItem('pne_cashbills', JSON.stringify(cashbills));
             })
             .catch(error => {
                 console.error('Error updating cashbill:', error);
-                showSyncStatus('Error updating cashbill', 'error');
+                showSyncStatus('Error updating cashbill: ' + error.message, 'error');
                 // Fallback to localStorage
                 localStorage.setItem('pne_cashbills', JSON.stringify(cashbills));
             });
@@ -1936,8 +1955,17 @@
             showSyncStatus('Loading logbook from Google Sheets...');
             
             fetch(`${GOOGLE_SHEETS_CONFIG.webAppUrl}?action=get&sheet=logbook`)
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(data => {
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    
                     logbookEntries = data;
                     showSyncStatus('Logbook loaded successfully', 'success');
                     updateDashboardStats();
@@ -1945,7 +1973,7 @@
                 })
                 .catch(error => {
                     console.error('Error loading logbook:', error);
-                    showSyncStatus('Error loading logbook', 'error');
+                    showSyncStatus('Error loading logbook: ' + error.message, 'error');
                     
                     // Fallback to localStorage
                     const storedLogbook = localStorage.getItem('pne_logbook');
@@ -1972,19 +2000,24 @@
                     'Content-Type': 'application/json'
                 }
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showSyncStatus('Log entry saved successfully', 'success');
-                    // Also save to localStorage as backup
-                    localStorage.setItem('pne_logbook', JSON.stringify(logbookEntries));
-                } else {
-                    showSyncStatus('Error saving log entry', 'error');
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
                 }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error || !data.success) {
+                    throw new Error(data.error || 'Unknown error');
+                }
+                
+                showSyncStatus('Log entry saved successfully', 'success');
+                // Also save to localStorage as backup
+                localStorage.setItem('pne_logbook', JSON.stringify(logbookEntries));
             })
             .catch(error => {
                 console.error('Error saving log entry:', error);
-                showSyncStatus('Error saving log entry', 'error');
+                showSyncStatus('Error saving log entry: ' + error.message, 'error');
                 // Fallback to localStorage
                 localStorage.setItem('pne_logbook', JSON.stringify(logbookEntries));
             });
@@ -2006,19 +2039,24 @@
                     'Content-Type': 'application/json'
                 }
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showSyncStatus('Log entry updated successfully', 'success');
-                    // Also save to localStorage as backup
-                    localStorage.setItem('pne_logbook', JSON.stringify(logbookEntries));
-                } else {
-                    showSyncStatus('Error updating log entry', 'error');
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
                 }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error || !data.success) {
+                    throw new Error(data.error || 'Unknown error');
+                }
+                
+                showSyncStatus('Log entry updated successfully', 'success');
+                // Also save to localStorage as backup
+                localStorage.setItem('pne_logbook', JSON.stringify(logbookEntries));
             })
             .catch(error => {
                 console.error('Error updating log entry:', error);
-                showSyncStatus('Error updating log entry', 'error');
+                showSyncStatus('Error updating log entry: ' + error.message, 'error');
                 // Fallback to localStorage
                 localStorage.setItem('pne_logbook', JSON.stringify(logbookEntries));
             });
@@ -2039,19 +2077,24 @@
                     'Content-Type': 'application/json'
                 }
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showSyncStatus('Log entry deleted successfully', 'success');
-                    // Also save to localStorage as backup
-                    localStorage.setItem('pne_logbook', JSON.stringify(logbookEntries));
-                } else {
-                    showSyncStatus('Error deleting log entry', 'error');
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
                 }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error || !data.success) {
+                    throw new Error(data.error || 'Unknown error');
+                }
+                
+                showSyncStatus('Log entry deleted successfully', 'success');
+                // Also save to localStorage as backup
+                localStorage.setItem('pne_logbook', JSON.stringify(logbookEntries));
             })
             .catch(error => {
                 console.error('Error deleting log entry:', error);
-                showSyncStatus('Error deleting log entry', 'error');
+                showSyncStatus('Error deleting log entry: ' + error.message, 'error');
                 // Fallback to localStorage
                 localStorage.setItem('pne_logbook', JSON.stringify(logbookEntries));
             });
