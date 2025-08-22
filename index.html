@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PNE Arena - TestPortal</title>
+<title>PNE Arena - Plan Test Portal</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <style>
 * {
@@ -1659,10 +1659,18 @@ Close Day
 <!-- Notification -->
 <div id="notification" class="notification"></div>
 <script>
-    
-// Google Apps Script URL - Replace with your actual URL
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzgAI30nmtNS_nxpGFaRTGuwHmiToZ20m22-AaqzWmHdYLe3X4jlnpC637WE4v55LiGDA/exec";
-    
+// Airtable configuration
+const AIRTABLE_API_KEY = 'patrPGNYBDHnK63b6.d3f38932bdcfc0c54e30d0dcd07e1c7403861b2efbb933491a6f6703d8817114';
+const AIRTABLE_BASE_ID = 'appqFzsFbYgf4ASa2';
+
+const AIRTABLE = {
+    users: `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Users`,
+    cashbills: `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Cashbills`,
+    logbook: `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Logbook`,
+    bankRecords: `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/BankRecords`,
+    dailyLogs: `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/DailyLogs`
+};
+
 // Global variables
 let currentUser = null;
 let cashbills = [];
@@ -1687,13 +1695,425 @@ let editingDailyLogId = null;
 let uncommitEntryType = null;
 let uncommitEntryId = null;
 
+// Function to fetch data from Airtable
+async function fetchFromAirtable(table, params = {}) {
+    const url = new URL(AIRTABLE[table]);
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+    
+    const response = await fetch(url, {
+        headers: {
+            'Authorization': `Bearer ${AIRTABLE_API_KEY}`
+        }
+    });
+    
+    if (!response.ok) {
+        throw new Error(`Error fetching from ${table}: ${response.statusText}`);
+    }
+    
+    const data = await response.json();
+    return data.records.map(record => ({
+        id: record.id,
+        ...record.fields
+    }));
+}
+
+// Function to create a record in Airtable
+async function createInAirtable(table, fields) {
+    const response = await fetch(AIRTABLE[table], {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${AIRTABLE_API_KEY}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            fields: fields
+        })
+    });
+    
+    if (!response.ok) {
+        throw new Error(`Error creating in ${table}: ${response.statusText}`);
+    }
+    
+    const data = await response.json();
+    return {
+        id: data.id,
+        ...data.fields
+    };
+}
+
+// Function to update a record in Airtable
+async function updateInAirtable(table, recordId, fields) {
+    const response = await fetch(`${AIRTABLE[table]}/${recordId}`, {
+        method: 'PATCH',
+        headers: {
+            'Authorization': `Bearer ${AIRTABLE_API_KEY}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            fields: fields
+        })
+    });
+    
+    if (!response.ok) {
+        throw new Error(`Error updating in ${table}: ${response.statusText}`);
+    }
+    
+    const data = await response.json();
+    return {
+        id: data.id,
+        ...data.fields
+    };
+}
+
+// Function to delete a record in Airtable
+async function deleteFromAirtable(table, recordId) {
+    const response = await fetch(`${AIRTABLE[table]}/${recordId}`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${AIRTABLE_API_KEY}`
+        }
+    });
+    
+    if (!response.ok) {
+        throw new Error(`Error deleting from ${table}: ${response.statusText}`);
+    }
+    
+    return true;
+}
+
+// Load data from Airtable
+async function loadAllData() {
+    try {
+        // Load all data in parallel
+        const [usersData, cashbillsData, logbookData, bankRecordsData, dailyLogsData] = await Promise.all([
+            fetchFromAirtable('users'),
+            fetchFromAirtable('cashbills'),
+            fetchFromAirtable('logbook'),
+            fetchFromAirtable('bankRecords'),
+            fetchFromAirtable('dailyLogs')
+        ]);
+        
+        users = usersData;
+        cashbills = cashbillsData;
+        logbookEntries = logbookData;
+        bankRecords = bankRecordsData;
+        dailyLogs = dailyLogsData;
+        
+        // Update cashbill counter
+        if (cashbills.length > 0) {
+            const lastCashbill = cashbills.reduce((prev, current) => 
+                (prev.cashbillNumber > current.cashbillNumber) ? prev : current
+            );
+            const lastNumber = parseInt(lastCashbill.cashbillNumber.replace('#INV-', ''));
+            cashbillCounter = lastNumber + 1;
+        }
+        
+        // Update dashboard stats
+        updateDashboardStats();
+        
+    } catch (error) {
+        console.error('Error loading data from Airtable:', error);
+        showNotification('Error loading data. Please try again.', 'error');
+    }
+}
+
+// Initialize sample data (only if Airtable is empty)
+async function initializeSampleData() {
+    try {
+        // Check if users table is empty
+        const existingUsers = await fetchFromAirtable('users');
+        
+        if (existingUsers.length === 0) {
+            // Create sample users
+            await createInAirtable('users', {
+                ID: '1001',
+                Name: 'Administrator',
+                Role: 'Admin',
+                Password: 'admin123'
+            });
+            
+            await createInAirtable('users', {
+                ID: '1002',
+                Name: 'Crew 1002',
+                Role: 'Crew',
+                Password: 'crew123'
+            });
+            
+            await createInAirtable('users', {
+                ID: '1003',
+                Name: 'Crew 1003',
+                Role: 'Crew',
+                Password: 'crew123'
+            });
+            
+            await createInAirtable('users', {
+                ID: '1004',
+                Name: 'Crew 1004',
+                Role: 'Crew',
+                Password: 'crew123'
+            });
+            
+            await createInAirtable('users', {
+                ID: '1005',
+                Name: 'Crew 1005',
+                Role: 'Crew',
+                Password: 'crew123'
+            });
+            
+            // Reload users
+            users = await fetchFromAirtable('users');
+        }
+        
+        // Check if cashbills table is empty
+        const existingCashbills = await fetchFromAirtable('cashbills');
+        
+        if (existingCashbills.length === 0) {
+            // Get today's date for sample data
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+            const twoDaysAgo = new Date(today);
+            twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+            
+            // Format dates as strings
+            const todayString = today.toISOString().split('T')[0];
+            const yesterdayString = yesterday.toISOString().split('T')[0];
+            const twoDaysAgoString = twoDaysAgo.toISOString().split('T')[0];
+            
+            // Create sample cashbills
+            await createInAirtable('cashbills', {
+                ID: generateId(),
+                CashbillNumber: '#INV-0001',
+                CrewID: '1002',
+                CrewName: 'Crew 1002',
+                SalespersonID: '1003',
+                SalespersonName: 'Crew 1003',
+                CustomerName: 'John Doe',
+                Item: 'Event Ticket',
+                Quantity: 2,
+                Price: 50.00,
+                TotalAmount: 100.00,
+                PaymentType: 'card',
+                Status: 'committed',
+                Date: twoDaysAgoString,
+                DateOnly: twoDaysAgoString
+            });
+            
+            await createInAirtable('cashbills', {
+                ID: generateId(),
+                CashbillNumber: '#INV-0002',
+                CrewID: '1003',
+                CrewName: 'Crew 1003',
+                SalespersonID: '1004',
+                SalespersonName: 'Crew 1004',
+                CustomerName: 'Jane Smith',
+                Item: 'Merchandise T-Shirt',
+                Quantity: 1,
+                Price: 45.00,
+                TotalAmount: 45.00,
+                PaymentType: 'qr-maybank',
+                Status: 'draft',
+                Date: yesterdayString,
+                DateOnly: yesterdayString
+            });
+            
+            await createInAirtable('cashbills', {
+                ID: generateId(),
+                CashbillNumber: '#INV-0003',
+                CrewID: '1004',
+                CrewName: 'Crew 1004',
+                SalespersonID: '1005',
+                SalespersonName: 'Crew 1005',
+                CustomerName: 'Bob Johnson',
+                Item: 'Food & Beverage',
+                Quantity: 3,
+                Price: 15.00,
+                TotalAmount: 45.00,
+                PaymentType: 'qr-cimb',
+                Status: 'committed',
+                Date: todayString,
+                DateOnly: todayString
+            });
+            
+            // Set cashbill counter
+            cashbillCounter = 4;
+            
+            // Reload cashbills
+            cashbills = await fetchFromAirtable('cashbills');
+        }
+        
+        // Check if logbook table is empty
+        const existingLogbook = await fetchFromAirtable('logbook');
+        
+        if (existingLogbook.length === 0) {
+            // Get today's date for sample data
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+            const twoDaysAgo = new Date(today);
+            twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+            
+            // Format dates as strings
+            const todayString = today.toISOString().split('T')[0];
+            const yesterdayString = yesterday.toISOString().split('T')[0];
+            const twoDaysAgoString = twoDaysAgo.toISOString().split('T')[0];
+            
+            // Create sample logbook entries
+            await createInAirtable('logbook', {
+                ID: generateId(),
+                CrewID: '1002',
+                CrewName: 'Crew 1002',
+                Type: 'courier',
+                Content: 'Delivered event tickets to VIP client at downtown office.',
+                Date: twoDaysAgoString,
+                CourierCompany: 'Poslaju',
+                TrackingNumber: 'MY123456789',
+                Status: 'committed'
+            });
+            
+            await createInAirtable('logbook', {
+                ID: generateId(),
+                CrewID: '1003',
+                CrewName: 'Crew 1003',
+                Type: 'customer-visit',
+                Content: 'Met with corporate client to discuss upcoming event requirements.',
+                Date: yesterdayString,
+                Status: 'committed'
+            });
+            
+            await createInAirtable('logbook', {
+                ID: generateId(),
+                CrewID: '1004',
+                CrewName: 'Crew 1004',
+                Type: 'maintenance',
+                Content: 'Performed routine maintenance on audio equipment in Hall A.',
+                Date: todayString,
+                Status: 'committed'
+            });
+            
+            // Reload logbook entries
+            logbookEntries = await fetchFromAirtable('logbook');
+        }
+        
+        // Check if bank records table is empty
+        const existingBankRecords = await fetchFromAirtable('bankRecords');
+        
+        if (existingBankRecords.length === 0) {
+            // Get today's date for sample data
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+            const twoDaysAgo = new Date(today);
+            twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+            
+            // Format dates as strings
+            const todayString = today.toISOString().split('T')[0];
+            const twoDaysAgoString = twoDaysAgo.toISOString().split('T')[0];
+            
+            // Create sample bank records
+            await createInAirtable('bankRecords', {
+                ID: generateId(),
+                CashbillID: cashbills[0].ID,
+                CashbillNumber: cashbills[0].CashbillNumber,
+                CrewID: '1002',
+                CrewName: 'Crew 1002',
+                SalespersonID: '1003',
+                SalespersonName: 'Crew 1003',
+                Amount: 100.00,
+                PaymentType: 'card',
+                Date: twoDaysAgoString,
+                Description: 'Payment for Event Ticket - John Doe',
+                DayClosed: true,
+                Status: 'committed'
+            });
+            
+            await createInAirtable('bankRecords', {
+                ID: generateId(),
+                CashbillID: cashbills[2].ID,
+                CashbillNumber: cashbills[2].CashbillNumber,
+                CrewID: '1004',
+                CrewName: 'Crew 1004',
+                SalespersonID: '1005',
+                SalespersonName: 'Crew 1005',
+                Amount: 45.00,
+                PaymentType: 'qr-cimb',
+                Date: todayString,
+                Description: 'Payment for Food & Beverage - Bob Johnson',
+                DayClosed: false,
+                Status: 'committed'
+            });
+            
+            // Reload bank records
+            bankRecords = await fetchFromAirtable('bankRecords');
+        }
+        
+        // Check if daily logs table is empty
+        const existingDailyLogs = await fetchFromAirtable('dailyLogs');
+        
+        if (existingDailyLogs.length === 0) {
+            // Get today's date for sample data
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+            const twoDaysAgo = new Date(today);
+            twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+            
+            // Format dates as strings
+            const todayString = today.toISOString().split('T')[0];
+            const yesterdayString = yesterday.toISOString().split('T')[0];
+            const twoDaysAgoString = twoDaysAgo.toISOString().split('T')[0];
+            
+            // Create sample daily logs
+            await createInAirtable('dailyLogs', {
+                ID: generateId(),
+                CrewID: '1002',
+                CrewName: 'Crew 1002',
+                Date: twoDaysAgoString,
+                OpeningBalance: 100.00,
+                ClosingBalance: 250.00,
+                Notes: 'Busy day with many customers.',
+                Status: 'closed'
+            });
+            
+            await createInAirtable('dailyLogs', {
+                ID: generateId(),
+                CrewID: '1003',
+                CrewName: 'Crew 1003',
+                Date: yesterdayString,
+                OpeningBalance: 150.00,
+                ClosingBalance: 300.00,
+                Notes: 'Good sales today.',
+                Status: 'closed'
+            });
+            
+            await createInAirtable('dailyLogs', {
+                ID: generateId(),
+                CrewID: '1004',
+                CrewName: 'Crew 1004',
+                Date: todayString,
+                OpeningBalance: 200.00,
+                ClosingBalance: 0, // Not closed yet
+                Notes: 'Day in progress.',
+                Status: 'open'
+            });
+            
+            // Reload daily logs
+            dailyLogs = await fetchFromAirtable('dailyLogs');
+        }
+        
+    } catch (error) {
+        console.error('Error initializing sample data:', error);
+        showNotification('Error initializing data. Please try again.', 'error');
+    }
+}
+
 // Check for saved login state when page loads
 window.onload = function() {
     checkSavedLogin();
 };
 
 // Check if there's a saved login state
-function checkSavedLogin() {
+async function checkSavedLogin() {
     const savedUser = localStorage.getItem('pneArenaUser');
     if (savedUser) {
         try {
@@ -1701,7 +2121,7 @@ function checkSavedLogin() {
             // Validate the saved user data
             if (userData.id && userData.role && userData.name) {
                 currentUser = userData;
-                showDashboard();
+                await showDashboard();
                 return;
             }
         } catch (e) {
@@ -1715,31 +2135,32 @@ function checkSavedLogin() {
 }
 
 // Login function
-function login() {
+async function login() {
     const crewId = document.getElementById('crewId').value;
     const password = document.getElementById('password').value;
     const errorMessage = document.getElementById('errorMessage');
     
-    // Validate credentials
-    if (crewId === '1001' && password === 'admin123') {
-        currentUser = {
-            id: '1001',
-            role: 'Admin',
-            name: 'Administrator'
-        };
-        // Save login state to localStorage
-        localStorage.setItem('pneArenaUser', JSON.stringify(currentUser));
-        showDashboard();
-    } else if (crewId >= '1002' && crewId <= '1005' && password === 'crew123') {
-        currentUser = {
-            id: crewId,
-            role: 'Crew',
-            name: `Crew ${crewId}`
-        };
-        // Save login state to localStorage
-        localStorage.setItem('pneArenaUser', JSON.stringify(currentUser));
-        showDashboard();
-    } else {
+    try {
+        // Load users from Airtable
+        users = await fetchFromAirtable('users');
+        
+        // Find user with matching credentials
+        const user = users.find(u => u.ID === crewId && u.Password === password);
+        
+        if (user) {
+            currentUser = {
+                id: user.ID,
+                role: user.Role,
+                name: user.Name
+            };
+            // Save login state to localStorage
+            localStorage.setItem('pneArenaUser', JSON.stringify(currentUser));
+            await showDashboard();
+        } else {
+            errorMessage.style.display = 'block';
+        }
+    } catch (error) {
+        console.error('Error during login:', error);
         errorMessage.style.display = 'block';
     }
 }
@@ -1757,14 +2178,8 @@ async function showDashboard() {
         document.getElementById('adminPanel').style.display = 'block';
     }
     
-    // Initialize with sample data if empty
-    if (users.length === 0) {
-        initializeSampleData();
-    } else {
-        // Load data from Google Sheets
-        await loadCashbillsFromGoogleSheets();
-        await loadLogbookFromGoogleSheets();
-    }
+    // Load data from Airtable
+    await loadAllData();
     
     // Load data based on user role
     updateDashboardStats();
@@ -1930,15 +2345,23 @@ function toggleEditLogTypeFields() {
 }
 
 // Populate salesperson filter
-function populateSalespersonFilter() {
-    const salespersonSelect = document.getElementById('salespersonId');
-    salespersonSelect.innerHTML = '<option value="">Select Salesperson</option>';
-    users.forEach(user => {
-        const option = document.createElement('option');
-        option.value = user.id;
-        option.textContent = `${user.id} - ${user.name}`;
-        salespersonSelect.appendChild(option);
-    });
+async function populateSalespersonFilter() {
+    try {
+        // Load users from Airtable
+        users = await fetchFromAirtable('users');
+        
+        const salespersonSelect = document.getElementById('salespersonId');
+        salespersonSelect.innerHTML = '<option value="">Select Salesperson</option>';
+        users.forEach(user => {
+            const option = document.createElement('option');
+            option.value = user.ID;
+            option.textContent = `${user.ID} - ${user.Name}`;
+            salespersonSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error populating salesperson filter:', error);
+        showNotification('Error loading salespersons. Please try again.', 'error');
+    }
 }
 
 // Update item price when selected from dropdown
@@ -1964,200 +2387,6 @@ function calculateTotal() {
     document.getElementById('totalAmount').value = total.toFixed(2);
 }
 
-// Load cashbills from Google Sheets via Apps Script
-async function loadCashbillsFromGoogleSheets() {
-    try {
-        const response = await fetch(`${APPS_SCRIPT_URL}?action=getCashbills`);
-        const data = await response.json();
-        
-        if (response.ok && data.status === 200) {
-            cashbills = JSON.parse(data.message);
-            
-            // Update cashbill counter
-            if (cashbills.length > 0) {
-                const maxId = Math.max(...cashbills.map(cb => parseInt(cb.cashbillNumber.replace('#INV-', ''))));
-                cashbillCounter = maxId + 1;
-            }
-            
-            // Create bank records from committed cashbills
-            bankRecords = [];
-            cashbills.filter(cb => cb.status === 'committed').forEach(cb => {
-                bankRecords.push({
-                    id: generateId(),
-                    cashbillId: cb.id,
-                    cashbillNumber: cb.cashbillNumber,
-                    crewId: cb.crewId,
-                    crewName: cb.crewName,
-                    salespersonId: cb.salespersonId,
-                    salespersonName: cb.salespersonName,
-                    amount: cb.totalAmount,
-                    paymentType: cb.paymentType,
-                    date: cb.dateOnly,
-                    description: `Payment for ${cb.item} - ${cb.customerName}`,
-                    dayClosed: false,
-                    status: 'committed'
-                });
-            });
-        } else {
-            console.error('Error loading cashbills:', data.message);
-            showNotification('Error loading cashbills: ' + data.message, 'error');
-        }
-    } catch (error) {
-        console.error('Error loading cashbills from Google Sheets:', error);
-        showNotification('Error loading cashbills from Google Sheets', 'error');
-    }
-}
-
-// Load logbook from Google Sheets via Apps Script
-async function loadLogbookFromGoogleSheets() {
-    try {
-        const response = await fetch(`${APPS_SCRIPT_URL}?action=getLogbook`);
-        const data = await response.json();
-        
-        if (response.ok && data.status === 200) {
-            logbookEntries = JSON.parse(data.message);
-        } else {
-            console.error('Error loading logbook:', data.message);
-            showNotification('Error loading logbook: ' + data.message, 'error');
-        }
-    } catch (error) {
-        console.error('Error loading logbook from Google Sheets:', error);
-        showNotification('Error loading logbook from Google Sheets', 'error');
-    }
-}
-
-// Save cashbill to Google Sheets via Apps Script
-async function saveCashbillToGoogleSheets(cashbill) {
-    try {
-        const response = await fetch(APPS_SCRIPT_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                action: 'addCashbill',
-                data: cashbill
-            })
-        });
-        
-        const data = await response.json();
-        return response.ok && data.status === 200;
-    } catch (error) {
-        console.error('Error saving cashbill to Google Sheets:', error);
-        return false;
-    }
-}
-
-// Save logbook entry to Google Sheets via Apps Script
-async function saveLogbookToGoogleSheets(entry) {
-    try {
-        const response = await fetch(APPS_SCRIPT_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                action: 'addLogbook',
-                data: entry
-            })
-        });
-        
-        const data = await response.json();
-        return response.ok && data.status === 200;
-    } catch (error) {
-        console.error('Error saving logbook entry to Google Sheets:', error);
-        return false;
-    }
-}
-
-// Update cashbill in Google Sheets via Apps Script
-async function updateCashbillInGoogleSheets(cashbill) {
-    try {
-        const response = await fetch(APPS_SCRIPT_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                action: 'updateCashbill',
-                data: cashbill
-            })
-        });
-        
-        const data = await response.json();
-        return response.ok && data.status === 200;
-    } catch (error) {
-        console.error('Error updating cashbill in Google Sheets:', error);
-        return false;
-    }
-}
-
-// Update logbook entry in Google Sheets via Apps Script
-async function updateLogbookInGoogleSheets(entry) {
-    try {
-        const response = await fetch(APPS_SCRIPT_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                action: 'updateLogbook',
-                data: entry
-            })
-        });
-        
-        const data = await response.json();
-        return response.ok && data.status === 200;
-    } catch (error) {
-        console.error('Error updating logbook entry in Google Sheets:', error);
-        return false;
-    }
-}
-
-// Delete cashbill from Google Sheets via Apps Script
-async function deleteCashbillFromGoogleSheets(id) {
-    try {
-        const response = await fetch(APPS_SCRIPT_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                action: 'deleteCashbill',
-                data: { id: id }
-            })
-        });
-        
-        const data = await response.json();
-        return response.ok && data.status === 200;
-    } catch (error) {
-        console.error('Error deleting cashbill from Google Sheets:', error);
-        return false;
-    }
-}
-
-// Delete logbook entry from Google Sheets via Apps Script
-async function deleteLogbookFromGoogleSheets(id) {
-    try {
-        const response = await fetch(APPS_SCRIPT_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                action: 'deleteLogbook',
-                data: { id: id }
-            })
-        });
-        
-        const data = await response.json();
-        return response.ok && data.status === 200;
-    } catch (error) {
-        console.error('Error deleting logbook entry from Google Sheets:', error);
-        return false;
-    }
-}
-
 // Save cashbill
 async function saveCashbill(status) {
     const customerName = document.getElementById('customerName').value;
@@ -2175,100 +2404,102 @@ async function saveCashbill(status) {
     }
     
     // Get salesperson name
-    const salesperson = users.find(u => u.id === salespersonId);
-    const salespersonName = salesperson ? salesperson.name : 'Unknown';
+    const salesperson = users.find(u => u.ID === salespersonId);
+    const salespersonName = salesperson ? salesperson.Name : 'Unknown';
     
     // Generate cashbill number
     const cashbillNumber = `#INV-${String(cashbillCounter).padStart(4, '0')}`;
     cashbillCounter++;
     
-    const cashbill = {
-        id: generateId(),
-        cashbillNumber: cashbillNumber,
-        crewId: currentUser.id,
-        crewName: currentUser.name,
-        salespersonId: salespersonId,
-        salespersonName: salespersonName,
-        customerName,
-        item,
-        quantity: parseInt(quantity),
-        price: parseFloat(price),
-        totalAmount: parseFloat(totalAmount),
-        paymentType,
-        status: status,
-        date: new Date().toLocaleString(),
-        dateOnly: new Date().toLocaleDateString()
-    };
+    // Get current date
+    const today = new Date();
+    const dateString = today.toISOString().split('T')[0];
     
-    // Save to Google Sheets
-    const success = await saveCashbillToGoogleSheets(cashbill);
+    // Create cashbill in Airtable
+    const cashbill = await createInAirtable('cashbills', {
+        ID: generateId(),
+        CashbillNumber: cashbillNumber,
+        CrewID: currentUser.id,
+        CrewName: currentUser.name,
+        SalespersonID: salespersonId,
+        SalespersonName: salespersonName,
+        CustomerName: customerName,
+        Item: item,
+        Quantity: parseInt(quantity),
+        Price: parseFloat(price),
+        TotalAmount: parseFloat(totalAmount),
+        PaymentType: paymentType,
+        Status: status,
+        Date: dateString,
+        DateOnly: dateString
+    });
     
-    if (success) {
-        // Add to local array
-        cashbills.push(cashbill);
+    cashbills.push(cashbill);
+    
+    // Add to bank records if committed
+    if (status === 'committed') {
+        const bankRecord = await createInAirtable('bankRecords', {
+            ID: generateId(),
+            CashbillID: cashbill.ID,
+            CashbillNumber: cashbillNumber,
+            CrewID: currentUser.id,
+            CrewName: currentUser.name,
+            SalespersonID: salespersonId,
+            SalespersonName: salespersonName,
+            Amount: parseFloat(totalAmount),
+            PaymentType: paymentType,
+            Date: dateString,
+            Description: `Payment for ${item} - ${customerName}`,
+            DayClosed: false,
+            Status: 'committed'
+        });
         
-        // Add to bank records if committed
-        if (status === 'committed') {
-            const bankRecord = {
-                id: generateId(),
-                cashbillId: cashbill.id,
-                cashbillNumber: cashbillNumber,
-                crewId: currentUser.id,
-                crewName: currentUser.name,
-                salespersonId: salespersonId,
-                salespersonName: salespersonName,
-                amount: parseFloat(totalAmount),
-                paymentType: paymentType,
-                date: new Date().toLocaleDateString(),
-                description: `Payment for ${item} - ${customerName}`,
-                dayClosed: false,
-                status: 'committed'
-            };
-            bankRecords.push(bankRecord);
-        }
-        
-        showPage('cashbill');
-        updateDashboardStats();
-        showNotification(`Cashbill ${status === 'committed' ? 'committed' : 'saved as draft'} successfully!`, 'success');
-    } else {
-        showNotification('Failed to save cashbill to Google Sheets', 'error');
+        bankRecords.push(bankRecord);
     }
+    
+    showPage('cashbill');
+    updateDashboardStats();
+    showNotification(`Cashbill ${status === 'committed' ? 'committed' : 'saved as draft'} successfully!`, 'success');
 }
 
 // Commit cashbill
 async function commitCashbill(id) {
-    const cashbill = cashbills.find(cb => cb.id === id);
-    if (cashbill) {
-        cashbill.status = 'committed';
-        
-        // Update in Google Sheets
-        const success = await updateCashbillInGoogleSheets(cashbill);
-        
-        if (success) {
+    try {
+        const cashbill = cashbills.find(cb => cb.ID === id);
+        if (cashbill) {
+            // Update cashbill status in Airtable
+            await updateInAirtable('cashbills', id, {
+                Status: 'committed'
+            });
+            
+            cashbill.Status = 'committed';
+            
             // Add to bank records
-            const bankRecord = {
-                id: generateId(),
-                cashbillId: cashbill.id,
-                cashbillNumber: cashbill.cashbillNumber,
-                crewId: cashbill.crewId,
-                crewName: cashbill.crewName,
-                salespersonId: cashbill.salespersonId,
-                salespersonName: cashbill.salespersonName,
-                amount: cashbill.totalAmount,
-                paymentType: cashbill.paymentType,
-                date: new Date().toLocaleDateString(),
-                description: `Payment for ${cashbill.item} - ${cashbill.customerName}`,
-                dayClosed: false,
-                status: 'committed'
-            };
+            const bankRecord = await createInAirtable('bankRecords', {
+                ID: generateId(),
+                CashbillID: cashbill.ID,
+                CashbillNumber: cashbill.CashbillNumber,
+                CrewID: cashbill.CrewID,
+                CrewName: cashbill.CrewName,
+                SalespersonID: cashbill.SalespersonID,
+                SalespersonName: cashbill.SalespersonName,
+                Amount: cashbill.TotalAmount,
+                PaymentType: cashbill.PaymentType,
+                Date: cashbill.Date,
+                Description: `Payment for ${cashbill.Item} - ${cashbill.CustomerName}`,
+                DayClosed: false,
+                Status: 'committed'
+            });
+            
             bankRecords.push(bankRecord);
             
             loadCashbills();
             updateDashboardStats();
             showNotification('Cashbill committed successfully!', 'success');
-        } else {
-            showNotification('Failed to update cashbill in Google Sheets', 'error');
         }
+    } catch (error) {
+        console.error('Error committing cashbill:', error);
+        showNotification('Error committing cashbill. Please try again.', 'error');
     }
 }
 
@@ -2302,6 +2533,21 @@ function uncommitLogEntry(id) {
     document.getElementById('confirmAdminPassword').value = '';
 }
 
+// Uncommit bank record (admin only)
+function uncommitBankRecord(id) {
+    if (currentUser.role !== 'Admin') {
+        showNotification('Only admin can uncommit bank records', 'error');
+        return;
+    }
+    
+    uncommitEntryType = 'bank';
+    uncommitEntryId = id;
+    document.getElementById('uncommitModal').style.display = 'block';
+    document.getElementById('uncommitReason').value = '';
+    document.getElementById('confirmAdminId').value = '';
+    document.getElementById('confirmAdminPassword').value = '';
+}
+
 // Confirm uncommit action
 async function confirmUncommit() {
     const reason = document.getElementById('uncommitReason').value;
@@ -2324,74 +2570,93 @@ async function confirmUncommit() {
         return;
     }
     
-    // Process uncommit based on entry type
-    if (uncommitEntryType === 'cashbill') {
-        const cashbill = cashbills.find(cb => cb.id === uncommitEntryId);
-        if (cashbill) {
-            cashbill.status = 'draft';
-            
-            // Update in Google Sheets
-            const success = await updateCashbillInGoogleSheets(cashbill);
-            
-            if (success) {
+    try {
+        // Process uncommit based on entry type
+        if (uncommitEntryType === 'cashbill') {
+            const cashbill = cashbills.find(cb => cb.ID === uncommitEntryId);
+            if (cashbill) {
+                // Update cashbill status in Airtable
+                await updateInAirtable('cashbills', uncommitEntryId, {
+                    Status: 'draft'
+                });
+                
+                cashbill.Status = 'draft';
+                
                 // Remove from bank records
-                bankRecords = bankRecords.filter(br => br.cashbillId !== uncommitEntryId);
+                const bankRecord = bankRecords.find(br => br.CashbillID === uncommitEntryId);
+                if (bankRecord) {
+                    await deleteFromAirtable('bankRecords', bankRecord.ID);
+                    bankRecords = bankRecords.filter(br => br.ID !== bankRecord.ID);
+                }
+                
                 loadCashbills();
                 updateDashboardStats();
                 showNotification('Cashbill uncommitted successfully!', 'success');
-            } else {
-                showNotification('Failed to update cashbill in Google Sheets', 'error');
             }
-        }
-    } else if (uncommitEntryType === 'logbook') {
-        const logEntry = logbookEntries.find(le => le.id === uncommitEntryId);
-        if (logEntry) {
-            logEntry.status = 'draft';
-            
-            // Update in Google Sheets
-            const success = await updateLogbookInGoogleSheets(logEntry);
-            
-            if (success) {
+        } else if (uncommitEntryType === 'logbook') {
+            const logEntry = logbookEntries.find(le => le.ID === uncommitEntryId);
+            if (logEntry) {
+                // Update log entry status in Airtable
+                await updateInAirtable('logbook', uncommitEntryId, {
+                    Status: 'draft'
+                });
+                
+                logEntry.Status = 'draft';
                 loadLogbookEntries();
                 updateDashboardStats();
                 showNotification('Logbook entry uncommitted successfully!', 'success');
-            } else {
-                showNotification('Failed to update logbook entry in Google Sheets', 'error');
+            }
+        } else if (uncommitEntryType === 'bank') {
+            const bankRecord = bankRecords.find(br => br.ID === uncommitEntryId);
+            if (bankRecord) {
+                // Update bank record status in Airtable
+                await updateInAirtable('bankRecords', uncommitEntryId, {
+                    Status: 'draft'
+                });
+                
+                bankRecord.Status = 'draft';
+                loadBankRecordsForDate();
+                updateBankSummary();
+                showNotification('Bank record uncommitted successfully!', 'success');
             }
         }
+        
+        closeModal('uncommitModal');
+    } catch (error) {
+        console.error('Error uncommitting entry:', error);
+        showNotification('Error uncommitting entry. Please try again.', 'error');
     }
-    
-    closeModal('uncommitModal');
 }
 
 // Edit cashbill (admin only)
-function editCashbill(id) {
+async function editCashbill(id) {
     if (currentUser.role !== 'Admin') {
         showNotification('Only admin can edit cashbills', 'error');
         return;
     }
     
-    const cashbill = cashbills.find(cb => cb.id === id);
-    if (cashbill && cashbill.status === 'draft') {
+    const cashbill = cashbills.find(cb => cb.ID === id);
+    if (cashbill && cashbill.Status === 'draft') {
         showPage('cashbillform');
-        document.getElementById('customerName').value = cashbill.customerName;
-        document.getElementById('salespersonId').value = cashbill.salespersonId;
-        document.getElementById('quantity').value = cashbill.quantity;
-        document.getElementById('price').value = cashbill.price;
-        document.getElementById('totalAmount').value = cashbill.totalAmount;
-        document.getElementById('paymentType').value = cashbill.paymentType;
+        document.getElementById('customerName').value = cashbill.CustomerName;
+        document.getElementById('salespersonId').value = cashbill.SalespersonID;
+        document.getElementById('quantity').value = cashbill.Quantity;
+        document.getElementById('price').value = cashbill.Price;
+        document.getElementById('totalAmount').value = cashbill.TotalAmount;
+        document.getElementById('paymentType').value = cashbill.PaymentType;
         
         // Set item in dropdown
         const itemSelect = document.getElementById('itemSelect');
         for (let i = 0; i < itemSelect.options.length; i++) {
-            if (itemSelect.options[i].text.split(' - ')[0] === cashbill.item) {
+            if (itemSelect.options[i].text.split(' - ')[0] === cashbill.Item) {
                 itemSelect.selectedIndex = i;
                 break;
             }
         }
         
         // Remove the cashbill from the list
-        cashbills = cashbills.filter(cb => cb.id !== id);
+        await deleteFromAirtable('cashbills', id);
+        cashbills = cashbills.filter(cb => cb.ID !== id);
         loadCashbills();
         showNotification('Cashbill loaded for editing', 'info');
     }
@@ -2412,15 +2677,15 @@ function searchCashbills() {
     
     // If crew user, only show their own cashbills
     if (currentUser.role === 'Crew') {
-        filteredCashbills = cashbills.filter(cb => cb.crewId === currentUser.id);
+        filteredCashbills = cashbills.filter(cb => cb.CrewID === currentUser.id);
     }
     
     // Apply search filter
     filteredCashbills = filteredCashbills.filter(cashbill => {
-        return cashbill.cashbillNumber.toLowerCase().includes(searchTerm) ||
-               cashbill.customerName.toLowerCase().includes(searchTerm) ||
-               cashbill.salespersonName.toLowerCase().includes(searchTerm) ||
-               cashbill.item.toLowerCase().includes(searchTerm);
+        return cashbill.CashbillNumber.toLowerCase().includes(searchTerm) ||
+               cashbill.CustomerName.toLowerCase().includes(searchTerm) ||
+               cashbill.SalespersonName.toLowerCase().includes(searchTerm) ||
+               cashbill.Item.toLowerCase().includes(searchTerm);
     });
     
     if (filteredCashbills.length === 0) {
@@ -2431,61 +2696,61 @@ function searchCashbills() {
     filteredCashbills.forEach(cashbill => {
         const cashbillElement = document.createElement('div');
         cashbillElement.className = 'cashbill-item';
-        const statusClass = cashbill.status === 'committed' ? 'status-committed' : 'status-draft';
-        const statusText = cashbill.status === 'committed' ? 'Committed' : 'Draft';
+        const statusClass = cashbill.Status === 'committed' ? 'status-committed' : 'status-draft';
+        const statusText = cashbill.Status === 'committed' ? 'Committed' : 'Draft';
         
         cashbillElement.innerHTML = `
             <div class="cashbill-header">
-                <div class="cashbill-id">${cashbill.cashbillNumber}</div>
+                <div class="cashbill-id">${cashbill.CashbillNumber}</div>
                 <div class="cashbill-status ${statusClass}">${statusText}</div>
             </div>
             <div class="cashbill-details">
                 <div class="detail-item">
                     <span class="detail-label">Created By:</span>
-                    <span>${cashbill.crewName}</span>
+                    <span>${cashbill.CrewName}</span>
                 </div>
                 <div class="detail-item">
                     <span class="detail-label">Salesperson:</span>
-                    <span>${cashbill.salespersonName} (${cashbill.salespersonId})</span>
+                    <span>${cashbill.SalespersonName} (${cashbill.SalespersonID})</span>
                 </div>
                 <div class="detail-item">
                     <span class="detail-label">Customer:</span>
-                    <span>${cashbill.customerName}</span>
+                    <span>${cashbill.CustomerName}</span>
                 </div>
                 <div class="detail-item">
                     <span class="detail-label">Item:</span>
-                    <span>${cashbill.item}</span>
+                    <span>${cashbill.Item}</span>
                 </div>
                 <div class="detail-item">
                     <span class="detail-label">Quantity:</span>
-                    <span>${cashbill.quantity}</span>
+                    <span>${cashbill.Quantity}</span>
                 </div>
                 <div class="detail-item">
                     <span class="detail-label">Price:</span>
-                    <span>RM ${cashbill.price.toFixed(2)}</span>
+                    <span>RM ${cashbill.Price.toFixed(2)}</span>
                 </div>
                 <div class="detail-item">
                     <span class="detail-label">Payment:</span>
-                    <span>${formatPaymentType(cashbill.paymentType)}</span>
+                    <span>${formatPaymentType(cashbill.PaymentType)}</span>
                 </div>
                 <div class="detail-item">
                     <span class="detail-label">Date:</span>
-                    <span>${cashbill.date}</span>
+                    <span>${cashbill.Date}</span>
                 </div>
                 <div class="detail-item">
                     <span class="detail-label">Total:</span>
-                    <span>RM ${cashbill.totalAmount.toFixed(2)}</span>
+                    <span>RM ${cashbill.TotalAmount.toFixed(2)}</span>
                 </div>
             </div>
             <div class="action-buttons">
-                ${cashbill.status === 'draft' ?
-                    `<button class="btn-commit" onclick="commitCashbill('${cashbill.id}')">Commit</button>` :
+                ${cashbill.Status === 'draft' ?
+                    `<button class="btn-commit" onclick="commitCashbill('${cashbill.ID}')">Commit</button>` :
                     ''}
-                ${currentUser.role === 'Admin' && cashbill.status === 'committed' ?
-                    `<button class="btn-uncommit" onclick="uncommitCashbill('${cashbill.id}')">Uncommit</button>` :
+                ${currentUser.role === 'Admin' && cashbill.Status === 'committed' ?
+                    `<button class="btn-uncommit" onclick="uncommitCashbill('${cashbill.ID}')">Uncommit</button>` :
                     ''}
-                ${currentUser.role === 'Admin' && cashbill.status === 'draft' ?
-                    `<button class="btn-edit" onclick="editCashbill('${cashbill.id}')">Edit</button>` :
+                ${currentUser.role === 'Admin' && cashbill.Status === 'draft' ?
+                    `<button class="btn-edit" onclick="editCashbill('${cashbill.ID}')">Edit</button>` :
                     ''}
             </div>
         `;
@@ -2502,90 +2767,93 @@ function clearCashbillSearch() {
 
 // Load cashbills
 async function loadCashbills() {
-    const container = document.getElementById('cashbillListContainer');
-    container.innerHTML = '<div class="no-results">Loading cashbills...</div>';
-    
-    // Reload from Google Sheets
-    await loadCashbillsFromGoogleSheets();
-    
-    let filteredCashbills = cashbills;
-    
-    // If crew user, only show their own cashbills
-    if (currentUser.role === 'Crew') {
-        filteredCashbills = cashbills.filter(cb => cb.crewId === currentUser.id);
-    }
-    
-    if (filteredCashbills.length === 0) {
-        container.innerHTML = '<div class="no-results">No cashbills found.</div>';
-        return;
-    }
-    
-    container.innerHTML = '';
-    
-    filteredCashbills.forEach(cashbill => {
-        const cashbillElement = document.createElement('div');
-        cashbillElement.className = 'cashbill-item';
-        const statusClass = cashbill.status === 'committed' ? 'status-committed' : 'status-draft';
-        const statusText = cashbill.status === 'committed' ? 'Committed' : 'Draft';
+    try {
+        // Load cashbills from Airtable
+        cashbills = await fetchFromAirtable('cashbills');
         
-        cashbillElement.innerHTML = `
-            <div class="cashbill-header">
-                <div class="cashbill-id">${cashbill.cashbillNumber}</div>
-                <div class="cashbill-status ${statusClass}">${statusText}</div>
-            </div>
-            <div class="cashbill-details">
-                <div class="detail-item">
-                    <span class="detail-label">Created By:</span>
-                    <span>${cashbill.crewName}</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Salesperson:</span>
-                    <span>${cashbill.salespersonName} (${cashbill.salespersonId})</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Customer:</span>
-                    <span>${cashbill.customerName}</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Item:</span>
-                    <span>${cashbill.item}</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Quantity:</span>
-                    <span>${cashbill.quantity}</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Price:</span>
-                    <span>RM ${cashbill.price.toFixed(2)}</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Payment:</span>
-                    <span>${formatPaymentType(cashbill.paymentType)}</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Date:</span>
-                    <span>${cashbill.date}</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Total:</span>
-                    <span>RM ${cashbill.totalAmount.toFixed(2)}</span>
-                </div>
-            </div>
-            <div class="action-buttons">
-                ${cashbill.status === 'draft' ?
-                    `<button class="btn-commit" onclick="commitCashbill('${cashbill.id}')">Commit</button>` :
-                    ''}
-                ${currentUser.role === 'Admin' && cashbill.status === 'committed' ?
-                    `<button class="btn-uncommit" onclick="uncommitCashbill('${cashbill.id}')">Uncommit</button>` :
-                    ''}
-                ${currentUser.role === 'Admin' && cashbill.status === 'draft' ?
-                    `<button class="btn-edit" onclick="editCashbill('${cashbill.id}')">Edit</button>` :
-                    ''}
-            </div>
-        `;
+        const container = document.getElementById('cashbillListContainer');
+        container.innerHTML = '';
         
-        container.appendChild(cashbillElement);
-    });
+        let filteredCashbills = cashbills;
+        
+        // If crew user, only show their own cashbills
+        if (currentUser.role === 'Crew') {
+            filteredCashbills = cashbills.filter(cb => cb.CrewID === currentUser.id);
+        }
+        
+        if (filteredCashbills.length === 0) {
+            container.innerHTML = '<div class="no-results">No cashbills found.</div>';
+            return;
+        }
+        
+        filteredCashbills.forEach(cashbill => {
+            const cashbillElement = document.createElement('div');
+            cashbillElement.className = 'cashbill-item';
+            const statusClass = cashbill.Status === 'committed' ? 'status-committed' : 'status-draft';
+            const statusText = cashbill.Status === 'committed' ? 'Committed' : 'Draft';
+            
+            cashbillElement.innerHTML = `
+                <div class="cashbill-header">
+                    <div class="cashbill-id">${cashbill.CashbillNumber}</div>
+                    <div class="cashbill-status ${statusClass}">${statusText}</div>
+                </div>
+                <div class="cashbill-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Created By:</span>
+                        <span>${cashbill.CrewName}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Salesperson:</span>
+                        <span>${cashbill.SalespersonName} (${cashbill.SalespersonID})</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Customer:</span>
+                        <span>${cashbill.CustomerName}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Item:</span>
+                        <span>${cashbill.Item}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Quantity:</span>
+                        <span>${cashbill.Quantity}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Price:</span>
+                        <span>RM ${cashbill.Price.toFixed(2)}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Payment:</span>
+                        <span>${formatPaymentType(cashbill.PaymentType)}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Date:</span>
+                        <span>${cashbill.Date}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Total:</span>
+                        <span>RM ${cashbill.TotalAmount.toFixed(2)}</span>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    ${cashbill.Status === 'draft' ?
+                        `<button class="btn-commit" onclick="commitCashbill('${cashbill.ID}')">Commit</button>` :
+                        ''}
+                    ${currentUser.role === 'Admin' && cashbill.Status === 'committed' ?
+                        `<button class="btn-uncommit" onclick="uncommitCashbill('${cashbill.ID}')">Uncommit</button>` :
+                        ''}
+                    ${currentUser.role === 'Admin' && cashbill.Status === 'draft' ?
+                        `<button class="btn-edit" onclick="editCashbill('${cashbill.ID}')">Edit</button>` :
+                        ''}
+                </div>
+            `;
+            
+            container.appendChild(cashbillElement);
+        });
+    } catch (error) {
+        console.error('Error loading cashbills:', error);
+        showNotification('Error loading cashbills. Please try again.', 'error');
+    }
 }
 
 // Clear cashbill form
@@ -2634,46 +2902,43 @@ async function createLogEntry() {
         return;
     }
     
-    const logEntry = {
-        id: generateId(),
-        crewId: currentUser.id,
-        crewName: currentUser.name,
-        type: logType,
-        content: logContent,
-        date: new Date().toLocaleString(),
-        courierCompany: courierCompany,
-        trackingNumber: trackingNumber,
-        status: 'committed'
-    };
+    // Get current date
+    const today = new Date();
+    const dateString = today.toISOString().split('T')[0];
     
-    // Save to Google Sheets
-    const success = await saveLogbookToGoogleSheets(logEntry);
+    // Create log entry in Airtable
+    const logEntry = await createInAirtable('logbook', {
+        ID: generateId(),
+        CrewID: currentUser.id,
+        CrewName: currentUser.name,
+        Type: logType,
+        Content: logContent,
+        Date: dateString,
+        CourierCompany: courierCompany,
+        TrackingNumber: trackingNumber,
+        Status: 'committed'
+    });
     
-    if (success) {
-        // Add to local array
-        logbookEntries.push(logEntry);
-        
-        showPage('logbook');
-        updateDashboardStats();
-        showNotification('Log entry created successfully!', 'success');
-    } else {
-        showNotification('Failed to save log entry to Google Sheets', 'error');
-    }
+    logbookEntries.push(logEntry);
+    
+    showPage('logbook');
+    updateDashboardStats();
+    showNotification('Log entry created successfully!', 'success');
 }
 
 // Edit log entry
 function editLogEntry(id) {
-    const logEntry = logbookEntries.find(le => le.id === id);
+    const logEntry = logbookEntries.find(le => le.ID === id);
     if (logEntry) {
         editingLogEntryId = id;
         
         // Populate edit form
-        document.getElementById('editLogType').value = logEntry.type;
-        document.getElementById('editLogContent').value = logEntry.content;
+        document.getElementById('editLogType').value = logEntry.Type;
+        document.getElementById('editLogContent').value = logEntry.Content;
         
-        if (logEntry.type === 'courier') {
-            document.getElementById('editCourierCompany').value = logEntry.courierCompany;
-            document.getElementById('editTrackingNumber').value = logEntry.trackingNumber;
+        if (logEntry.Type === 'courier') {
+            document.getElementById('editCourierCompany').value = logEntry.CourierCompany;
+            document.getElementById('editTrackingNumber').value = logEntry.TrackingNumber;
         }
         
         toggleEditLogTypeFields();
@@ -2708,41 +2973,47 @@ async function updateLogEntry() {
         return;
     }
     
-    const logEntry = logbookEntries.find(le => le.id === editingLogEntryId);
-    if (logEntry) {
-        logEntry.type = logType;
-        logEntry.content = logContent;
-        logEntry.courierCompany = courierCompany;
-        logEntry.trackingNumber = trackingNumber;
+    try {
+        // Update log entry in Airtable
+        await updateInAirtable('logbook', editingLogEntryId, {
+            Type: logType,
+            Content: logContent,
+            CourierCompany: courierCompany,
+            TrackingNumber: trackingNumber
+        });
         
-        // Update in Google Sheets
-        const success = await updateLogbookInGoogleSheets(logEntry);
-        
-        if (success) {
-            editingLogEntryId = null;
-            showPage('logbook');
-            loadLogbookEntries();
-            showNotification('Log entry updated successfully!', 'success');
-        } else {
-            showNotification('Failed to update log entry in Google Sheets', 'error');
+        const logEntry = logbookEntries.find(le => le.ID === editingLogEntryId);
+        if (logEntry) {
+            logEntry.Type = logType;
+            logEntry.Content = logContent;
+            logEntry.CourierCompany = courierCompany;
+            logEntry.TrackingNumber = trackingNumber;
         }
+        
+        editingLogEntryId = null;
+        showPage('logbook');
+        loadLogbookEntries();
+        showNotification('Log entry updated successfully!', 'success');
+    } catch (error) {
+        console.error('Error updating log entry:', error);
+        showNotification('Error updating log entry. Please try again.', 'error');
     }
 }
 
 // Delete log entry
 async function deleteLogEntry(id) {
     if (confirm('Are you sure you want to delete this log entry?')) {
-        // Delete from Google Sheets
-        const success = await deleteLogbookFromGoogleSheets(id);
-        
-        if (success) {
-            // Remove from local array
-            logbookEntries = logbookEntries.filter(le => le.id !== id);
+        try {
+            // Delete log entry from Airtable
+            await deleteFromAirtable('logbook', id);
+            
+            logbookEntries = logbookEntries.filter(le => le.ID !== id);
             loadLogbookEntries();
             updateDashboardStats();
             showNotification('Log entry deleted successfully!', 'success');
-        } else {
-            showNotification('Failed to delete log entry from Google Sheets', 'error');
+        } catch (error) {
+            console.error('Error deleting log entry:', error);
+            showNotification('Error deleting log entry. Please try again.', 'error');
         }
     }
 }
@@ -2762,15 +3033,15 @@ function searchLogbookEntries() {
     
     // If crew user, only show their own entries
     if (currentUser.role === 'Crew') {
-        filteredEntries = logbookEntries.filter(le => le.crewId === currentUser.id);
+        filteredEntries = logbookEntries.filter(le => le.CrewID === currentUser.id);
     }
     
     // Apply search filter
     filteredEntries = filteredEntries.filter(entry => {
-        return entry.content.toLowerCase().includes(searchTerm) ||
-               entry.type.toLowerCase().includes(searchTerm) ||
-               (entry.trackingNumber && entry.trackingNumber.toLowerCase().includes(searchTerm)) ||
-               (entry.courierCompany && entry.courierCompany.toLowerCase().includes(searchTerm));
+        return entry.Content.toLowerCase().includes(searchTerm) ||
+               entry.Type.toLowerCase().includes(searchTerm) ||
+               (entry.TrackingNumber && entry.TrackingNumber.toLowerCase().includes(searchTerm)) ||
+               (entry.CourierCompany && entry.CourierCompany.toLowerCase().includes(searchTerm));
     });
     
     if (filteredEntries.length === 0) {
@@ -2783,38 +3054,38 @@ function searchLogbookEntries() {
         entryElement.className = 'logbook-item';
         
         let courierInfo = '';
-        if (entry.type === 'courier') {
+        if (entry.Type === 'courier') {
             courierInfo = `<div class="detail-item">
                 <span class="detail-label">Courier:</span>
-                <span>${entry.courierCompany}</span>
+                <span>${entry.CourierCompany}</span>
             </div>
             <div class="detail-item">
                 <span class="detail-label">Tracking #:</span>
-                <span>${entry.trackingNumber}</span>
+                <span>${entry.TrackingNumber}</span>
             </div>`;
         }
         
-        const statusClass = entry.status === 'committed' ? 'status-committed' : 'status-draft';
-        const statusText = entry.status === 'committed' ? 'Committed' : 'Draft';
+        const statusClass = entry.Status === 'committed' ? 'status-committed' : 'status-draft';
+        const statusText = entry.Status === 'committed' ? 'Committed' : 'Draft';
         
         entryElement.innerHTML = `
             <div class="logbook-header">
-                <div class="logbook-date">${entry.date}</div>
-                <div class="logbook-type">${entry.type}</div>
+                <div class="logbook-date">${entry.Date}</div>
+                <div class="logbook-type">${entry.Type}</div>
                 <div class="logbook-status ${statusClass}">${statusText}</div>
             </div>
             <div class="logbook-content">
-                <p>${entry.content}</p>
+                <p>${entry.Content}</p>
             </div>
             <div class="logbook-details">
                 ${courierInfo}
             </div>
             <div class="action-buttons">
-                <div style="font-size: 14px; margin-bottom: 5px;">By: ${entry.crewName}</div>
-                <button class="btn-edit" onclick="editLogEntry('${entry.id}')">Edit</button>
-                <button class="btn-delete" onclick="deleteLogEntry('${entry.id}')">Delete</button>
-                ${currentUser.role === 'Admin' && entry.status === 'committed' ?
-                    `<button class="btn-uncommit" onclick="uncommitLogEntry('${entry.id}')">Uncommit</button>` :
+                <div style="font-size: 14px; margin-bottom: 5px;">By: ${entry.CrewName}</div>
+                <button class="btn-edit" onclick="editLogEntry('${entry.ID}')">Edit</button>
+                <button class="btn-delete" onclick="deleteLogEntry('${entry.ID}')">Delete</button>
+                ${currentUser.role === 'Admin' && entry.Status === 'committed' ?
+                    `<button class="btn-uncommit" onclick="uncommitLogEntry('${entry.ID}')">Uncommit</button>` :
                     ''}
             </div>
         `;
@@ -2831,69 +3102,72 @@ function clearLogbookSearch() {
 
 // Load logbook entries
 async function loadLogbookEntries() {
-    const container = document.getElementById('logbookListContainer');
-    container.innerHTML = '<div class="no-results">Loading logbook entries...</div>';
-    
-    // Reload from Google Sheets
-    await loadLogbookFromGoogleSheets();
-    
-    let filteredEntries = logbookEntries;
-    
-    // If crew user, only show their own entries
-    if (currentUser.role === 'Crew') {
-        filteredEntries = logbookEntries.filter(le => le.crewId === currentUser.id);
-    }
-    
-    if (filteredEntries.length === 0) {
-        container.innerHTML = '<div class="no-results">No logbook entries found.</div>';
-        return;
-    }
-    
-    container.innerHTML = '';
-    
-    filteredEntries.forEach(entry => {
-        const entryElement = document.createElement('div');
-        entryElement.className = 'logbook-item';
+    try {
+        // Load logbook entries from Airtable
+        logbookEntries = await fetchFromAirtable('logbook');
         
-        let courierInfo = '';
-        if (entry.type === 'courier') {
-            courierInfo = `<div class="detail-item">
-                <span class="detail-label">Courier:</span>
-                <span>${entry.courierCompany}</span>
-            </div>
-            <div class="detail-item">
-                <span class="detail-label">Tracking #:</span>
-                <span>${entry.trackingNumber}</span>
-            </div>`;
+        const container = document.getElementById('logbookListContainer');
+        container.innerHTML = '';
+        
+        let filteredEntries = logbookEntries;
+        
+        // If crew user, only show their own entries
+        if (currentUser.role === 'Crew') {
+            filteredEntries = logbookEntries.filter(le => le.CrewID === currentUser.id);
         }
         
-        const statusClass = entry.status === 'committed' ? 'status-committed' : 'status-draft';
-        const statusText = entry.status === 'committed' ? 'Committed' : 'Draft';
+        if (filteredEntries.length === 0) {
+            container.innerHTML = '<div class="no-results">No logbook entries found.</div>';
+            return;
+        }
         
-        entryElement.innerHTML = `
-            <div class="logbook-header">
-                <div class="logbook-date">${entry.date}</div>
-                <div class="logbook-type">${entry.type}</div>
-                <div class="logbook-status ${statusClass}">${statusText}</div>
-            </div>
-            <div class="logbook-content">
-                <p>${entry.content}</p>
-            </div>
-            <div class="logbook-details">
-                ${courierInfo}
-            </div>
-            <div class="action-buttons">
-                <div style="font-size: 14px; margin-bottom: 5px;">By: ${entry.crewName}</div>
-                <button class="btn-edit" onclick="editLogEntry('${entry.id}')">Edit</button>
-                <button class="btn-delete" onclick="deleteLogEntry('${entry.id}')">Delete</button>
-                ${currentUser.role === 'Admin' && entry.status === 'committed' ?
-                    `<button class="btn-uncommit" onclick="uncommitLogEntry('${entry.id}')">Uncommit</button>` :
-                    ''}
-            </div>
-        `;
-        
-        container.appendChild(entryElement);
-    });
+        filteredEntries.forEach(entry => {
+            const entryElement = document.createElement('div');
+            entryElement.className = 'logbook-item';
+            
+            let courierInfo = '';
+            if (entry.Type === 'courier') {
+                courierInfo = `<div class="detail-item">
+                    <span class="detail-label">Courier:</span>
+                    <span>${entry.CourierCompany}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Tracking #:</span>
+                    <span>${entry.TrackingNumber}</span>
+                </div>`;
+            }
+            
+            const statusClass = entry.Status === 'committed' ? 'status-committed' : 'status-draft';
+            const statusText = entry.Status === 'committed' ? 'Committed' : 'Draft';
+            
+            entryElement.innerHTML = `
+                <div class="logbook-header">
+                    <div class="logbook-date">${entry.Date}</div>
+                    <div class="logbook-type">${entry.Type}</div>
+                    <div class="logbook-status ${statusClass}">${statusText}</div>
+                </div>
+                <div class="logbook-content">
+                    <p>${entry.Content}</p>
+                </div>
+                <div class="logbook-details">
+                    ${courierInfo}
+                </div>
+                <div class="action-buttons">
+                    <div style="font-size: 14px; margin-bottom: 5px;">By: ${entry.CrewName}</div>
+                    <button class="btn-edit" onclick="editLogEntry('${entry.ID}')">Edit</button>
+                    <button class="btn-delete" onclick="deleteLogEntry('${entry.ID}')">Delete</button>
+                    ${currentUser.role === 'Admin' && entry.Status === 'committed' ?
+                        `<button class="btn-uncommit" onclick="uncommitLogEntry('${entry.ID}')">Uncommit</button>` :
+                        ''}
+                </div>
+            `;
+            
+            container.appendChild(entryElement);
+        });
+    } catch (error) {
+        console.error('Error loading logbook entries:', error);
+        showNotification('Error loading logbook entries. Please try again.', 'error');
+    }
 }
 
 // Clear logbook form
@@ -2906,7 +3180,7 @@ function clearLogbookForm() {
 }
 
 // Create daily log
-function createDailyLog() {
+async function createDailyLog() {
     const date = document.getElementById('dailyLogDate').value;
     const openingBalance = parseFloat(document.getElementById('openingBalance').value) || 0;
     const closingBalance = parseFloat(document.getElementById('closingBalance').value) || 0;
@@ -2919,11 +3193,11 @@ function createDailyLog() {
     
     // Convert date to the same format as used elsewhere
     const selectedDate = new Date(date);
-    const formattedDate = selectedDate.toLocaleDateString();
+    const formattedDate = selectedDate.toISOString().split('T')[0];
     
     // Check if a daily log already exists for this crew and date
     const existingLog = dailyLogs.find(log => 
-        log.crewId === currentUser.id && log.date === formattedDate
+        log.CrewID === currentUser.id && log.Date === formattedDate
     );
     
     if (existingLog) {
@@ -2931,16 +3205,17 @@ function createDailyLog() {
         return;
     }
     
-    const dailyLog = {
-        id: generateId(),
-        crewId: currentUser.id,
-        crewName: currentUser.name,
-        date: formattedDate,
-        openingBalance: openingBalance,
-        closingBalance: closingBalance,
-        notes: notes,
-        status: closingBalance > 0 ? 'closed' : 'open' // If closing balance is provided, mark as closed
-    };
+    // Create daily log in Airtable
+    const dailyLog = await createInAirtable('dailyLogs', {
+        ID: generateId(),
+        CrewID: currentUser.id,
+        CrewName: currentUser.name,
+        Date: formattedDate,
+        OpeningBalance: openingBalance,
+        ClosingBalance: closingBalance,
+        Notes: notes,
+        Status: closingBalance > 0 ? 'closed' : 'open' // If closing balance is provided, mark as closed
+    });
     
     dailyLogs.push(dailyLog);
     
@@ -2950,86 +3225,94 @@ function createDailyLog() {
 }
 
 // Load daily logs
-function loadDailyLogs() {
-    const container = document.getElementById('dailylogListContainer');
-    container.innerHTML = '';
-    
-    let filteredLogs = dailyLogs;
-    
-    // If crew user, only show their own logs
-    if (currentUser.role === 'Crew') {
-        filteredLogs = dailyLogs.filter(log => log.crewId === currentUser.id);
-    }
-    
-    if (filteredLogs.length === 0) {
-        container.innerHTML = '<div class="no-results">No daily logs found.</div>';
-        return;
-    }
-    
-    filteredLogs.forEach(log => {
-        const logElement = document.createElement('div');
-        logElement.className = 'dailylog-item';
-        const statusClass = log.status === 'closed' ? 'status-closed' : 'status-open';
-        const statusText = log.status === 'closed' ? 'Closed' : 'Open';
+async function loadDailyLogs() {
+    try {
+        // Load daily logs from Airtable
+        dailyLogs = await fetchFromAirtable('dailyLogs');
         
-        logElement.innerHTML = `
-            <div class="dailylog-header">
-                <div class="dailylog-date">${log.date}</div>
-                <div class="dailylog-status ${statusClass}">${statusText}</div>
-            </div>
-            <div class="dailylog-details">
-                <div class="detail-item">
-                    <span class="detail-label">Opening Balance:</span>
-                    <span>RM ${log.openingBalance.toFixed(2)}</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Closing Balance:</span>
-                    <span>RM ${log.closingBalance.toFixed(2)}</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Notes:</span>
-                    <span>${log.notes}</span>
-                </div>
-            </div>
-            <div class="action-buttons">
-                ${log.status === 'open' ?
-                    `<button class="btn-edit" onclick="editDailyLog('${log.id}')">Edit</button>
-                     <button class="btn-close-day-log" onclick="closeDailyLog('${log.id}')">Close Day</button>` :
-                    ''}
-                ${currentUser.role === 'Admin' ?
-                    `<button class="btn-edit" onclick="editDailyLog('${log.id}')">Edit</button>` :
-                    ''}
-            </div>
-        `;
+        const container = document.getElementById('dailylogListContainer');
+        container.innerHTML = '';
         
-        container.appendChild(logElement);
-    });
+        let filteredLogs = dailyLogs;
+        
+        // If crew user, only show their own logs
+        if (currentUser.role === 'Crew') {
+            filteredLogs = dailyLogs.filter(log => log.CrewID === currentUser.id);
+        }
+        
+        if (filteredLogs.length === 0) {
+            container.innerHTML = '<div class="no-results">No daily logs found.</div>';
+            return;
+        }
+        
+        filteredLogs.forEach(log => {
+            const logElement = document.createElement('div');
+            logElement.className = 'dailylog-item';
+            const statusClass = log.Status === 'closed' ? 'status-closed' : 'status-open';
+            const statusText = log.Status === 'closed' ? 'Closed' : 'Open';
+            
+            logElement.innerHTML = `
+                <div class="dailylog-header">
+                    <div class="dailylog-date">${log.Date}</div>
+                    <div class="dailylog-status ${statusClass}">${statusText}</div>
+                </div>
+                <div class="dailylog-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Opening Balance:</span>
+                        <span>RM ${log.OpeningBalance.toFixed(2)}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Closing Balance:</span>
+                        <span>RM ${log.ClosingBalance.toFixed(2)}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Notes:</span>
+                        <span>${log.Notes}</span>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    ${log.Status === 'open' ?
+                        `<button class="btn-edit" onclick="editDailyLog('${log.ID}')">Edit</button>
+                         <button class="btn-close-day-log" onclick="closeDailyLog('${log.ID}')">Close Day</button>` :
+                        ''}
+                    ${currentUser.role === 'Admin' ?
+                        `<button class="btn-edit" onclick="editDailyLog('${log.ID}')">Edit</button>` :
+                        ''}
+                </div>
+            `;
+            
+            container.appendChild(logElement);
+        });
+    } catch (error) {
+        console.error('Error loading daily logs:', error);
+        showNotification('Error loading daily logs. Please try again.', 'error');
+    }
 }
 
 // Edit daily log
 function editDailyLog(id) {
-    const dailyLog = dailyLogs.find(log => log.id === id);
+    const dailyLog = dailyLogs.find(log => log.ID === id);
     if (dailyLog) {
         editingDailyLogId = id;
         
         // Convert the date string to a format that the date input can use (YYYY-MM-DD)
-        const dateParts = dailyLog.date.split('/');
-        const month = dateParts[0].padStart(2, '0');
-        const day = dateParts[1].padStart(2, '0');
-        const year = dateParts[2];
+        const dateParts = dailyLog.Date.split('-');
+        const year = dateParts[0];
+        const month = dateParts[1];
+        const day = dateParts[2];
         const formattedDate = `${year}-${month}-${day}`;
         
         document.getElementById('editDailyLogDate').value = formattedDate;
-        document.getElementById('editOpeningBalance').value = dailyLog.openingBalance;
-        document.getElementById('editClosingBalance').value = dailyLog.closingBalance;
-        document.getElementById('editDailyLogNotes').value = dailyLog.notes;
+        document.getElementById('editOpeningBalance').value = dailyLog.OpeningBalance;
+        document.getElementById('editClosingBalance').value = dailyLog.ClosingBalance;
+        document.getElementById('editDailyLogNotes').value = dailyLog.Notes;
         
         showPage('editdailylogform');
     }
 }
 
 // Update daily log
-function updateDailyLog() {
+async function updateDailyLog() {
     if (!editingDailyLogId) {
         showNotification('No daily log selected for editing', 'error');
         return;
@@ -3047,18 +3330,29 @@ function updateDailyLog() {
     
     // Convert date to the same format as used elsewhere
     const selectedDate = new Date(date);
-    const formattedDate = selectedDate.toLocaleDateString();
+    const formattedDate = selectedDate.toISOString().split('T')[0];
     
-    const dailyLog = dailyLogs.find(log => log.id === editingDailyLogId);
-    if (dailyLog) {
-        dailyLog.date = formattedDate;
-        dailyLog.openingBalance = openingBalance;
-        dailyLog.closingBalance = closingBalance;
-        dailyLog.notes = notes;
+    try {
+        // Update daily log in Airtable
+        await updateInAirtable('dailyLogs', editingDailyLogId, {
+            Date: formattedDate,
+            OpeningBalance: openingBalance,
+            ClosingBalance: closingBalance,
+            Notes: notes,
+            Status: closingBalance > 0 ? 'closed' : 'open'
+        });
         
-        // If closing balance is provided and the log was open, mark as closed
-        if (closingBalance > 0 && dailyLog.status === 'open') {
-            dailyLog.status = 'closed';
+        const dailyLog = dailyLogs.find(log => log.ID === editingDailyLogId);
+        if (dailyLog) {
+            dailyLog.Date = formattedDate;
+            dailyLog.OpeningBalance = openingBalance;
+            dailyLog.ClosingBalance = closingBalance;
+            dailyLog.Notes = notes;
+            
+            // If closing balance is provided and the log was open, mark as closed
+            if (closingBalance > 0 && dailyLog.Status === 'open') {
+                dailyLog.Status = 'closed';
+            }
         }
         
         editingDailyLogId = null;
@@ -3066,23 +3360,37 @@ function updateDailyLog() {
         loadDailyLogs();
         updateDashboardStats();
         showNotification('Daily log updated successfully!', 'success');
+    } catch (error) {
+        console.error('Error updating daily log:', error);
+        showNotification('Error updating daily log. Please try again.', 'error');
     }
 }
 
 // Close daily log
-function closeDailyLog(id) {
-    const dailyLog = dailyLogs.find(log => log.id === id);
+async function closeDailyLog(id) {
+    const dailyLog = dailyLogs.find(log => log.ID === id);
     if (dailyLog) {
         // Prompt for closing balance if not provided
-        const closingBalance = prompt('Enter closing balance:', dailyLog.closingBalance);
+        const closingBalance = prompt('Enter closing balance:', dailyLog.ClosingBalance);
         if (closingBalance !== null) {
             const balance = parseFloat(closingBalance);
             if (!isNaN(balance)) {
-                dailyLog.closingBalance = balance;
-                dailyLog.status = 'closed';
-                loadDailyLogs();
-                updateDashboardStats();
-                showNotification('Day closed successfully!', 'success');
+                try {
+                    // Update daily log in Airtable
+                    await updateInAirtable('dailyLogs', id, {
+                        ClosingBalance: balance,
+                        Status: 'closed'
+                    });
+                    
+                    dailyLog.ClosingBalance = balance;
+                    dailyLog.Status = 'closed';
+                    loadDailyLogs();
+                    updateDashboardStats();
+                    showNotification('Day closed successfully!', 'success');
+                } catch (error) {
+                    console.error('Error closing daily log:', error);
+                    showNotification('Error closing daily log. Please try again.', 'error');
+                }
             } else {
                 showNotification('Invalid closing balance', 'error');
             }
@@ -3103,13 +3411,13 @@ function searchDailyLogs() {
     
     let filteredLogs = dailyLogs;
     if (currentUser.role === 'Crew') {
-        filteredLogs = dailyLogs.filter(log => log.crewId === currentUser.id);
+        filteredLogs = dailyLogs.filter(log => log.CrewID === currentUser.id);
     }
     
     // Apply search filter
     filteredLogs = filteredLogs.filter(log => {
-        return log.date.toLowerCase().includes(searchTerm) ||
-               log.notes.toLowerCase().includes(searchTerm);
+        return log.Date.toLowerCase().includes(searchTerm) ||
+               log.Notes.toLowerCase().includes(searchTerm);
     });
     
     if (filteredLogs.length === 0) {
@@ -3120,35 +3428,35 @@ function searchDailyLogs() {
     filteredLogs.forEach(log => {
         const logElement = document.createElement('div');
         logElement.className = 'dailylog-item';
-        const statusClass = log.status === 'closed' ? 'status-closed' : 'status-open';
-        const statusText = log.status === 'closed' ? 'Closed' : 'Open';
+        const statusClass = log.Status === 'closed' ? 'status-closed' : 'status-open';
+        const statusText = log.Status === 'closed' ? 'Closed' : 'Open';
         
         logElement.innerHTML = `
             <div class="dailylog-header">
-                <div class="dailylog-date">${log.date}</div>
+                <div class="dailylog-date">${log.Date}</div>
                 <div class="dailylog-status ${statusClass}">${statusText}</div>
             </div>
             <div class="dailylog-details">
                 <div class="detail-item">
                     <span class="detail-label">Opening Balance:</span>
-                    <span>RM ${log.openingBalance.toFixed(2)}</span>
+                    <span>RM ${log.OpeningBalance.toFixed(2)}</span>
                 </div>
                 <div class="detail-item">
                     <span class="detail-label">Closing Balance:</span>
-                    <span>RM ${log.closingBalance.toFixed(2)}</span>
+                    <span>RM ${log.ClosingBalance.toFixed(2)}</span>
                 </div>
                 <div class="detail-item">
                     <span class="detail-label">Notes:</span>
-                    <span>${log.notes}</span>
+                    <span>${log.Notes}</span>
                 </div>
             </div>
             <div class="action-buttons">
-                ${log.status === 'open' ?
-                    `<button class="btn-edit" onclick="editDailyLog('${log.id}')">Edit</button>
-                     <button class="btn-close-day-log" onclick="closeDailyLog('${log.id}')">Close Day</button>` :
+                ${log.Status === 'open' ?
+                    `<button class="btn-edit" onclick="editDailyLog('${log.ID}')">Edit</button>
+                     <button class="btn-close-day-log" onclick="closeDailyLog('${log.ID}')">Close Day</button>` :
                     ''}
                 ${currentUser.role === 'Admin' ?
-                    `<button class="btn-edit" onclick="editDailyLog('${log.id}')">Edit</button>` :
+                    `<button class="btn-edit" onclick="editDailyLog('${log.ID}')">Edit</button>` :
                     ''}
             </div>
         `;
@@ -3179,17 +3487,17 @@ function updateDailyLogStatusSection() {
     if (!statusSection || !statusContent) return;
     
     // Check if there's a daily log for today for the current user
-    const today = new Date().toLocaleDateString();
+    const today = new Date().toISOString().split('T')[0];
     const todayLog = dailyLogs.find(log => 
-        log.crewId === currentUser.id && log.date === today
+        log.CrewID === currentUser.id && log.Date === today
     );
     
     if (todayLog) {
-        if (todayLog.status === 'open') {
+        if (todayLog.Status === 'open') {
             statusContent.innerHTML = `
                 <p>You have an open daily log for today.</p>
                 <button class="btn-primary" onclick="showPage('dailylogform')">Edit Daily Log</button>
-                <button class="btn-close-day-log" onclick="closeDailyLog('${todayLog.id}')">Close Day</button>
+                <button class="btn-close-day-log" onclick="closeDailyLog('${todayLog.ID}')">Close Day</button>
             `;
         } else {
             statusContent.innerHTML = `
@@ -3206,47 +3514,53 @@ function updateDailyLogStatusSection() {
 }
 
 // Load bank records for a specific date
-function loadBankRecordsForDate() {
-    const dateInput = document.getElementById('bankDateSelect').value;
-    if (!dateInput) return;
-    
-    // Convert input date to display format
-    const inputDate = new Date(dateInput);
-    const displayDate = inputDate.toLocaleDateString();
-    currentBankDate = displayDate;
-    
-    // Get records for the selected date
-    const dayRecords = bankRecords.filter(record => record.date === displayDate);
-    
-    // Group records by payment type
-    const recordsByPaymentType = {};
-    dayRecords.forEach(record => {
-        if (!recordsByPaymentType[record.paymentType]) {
-            recordsByPaymentType[record.paymentType] = [];
+async function loadBankRecordsForDate() {
+    try {
+        const dateInput = document.getElementById('bankDateSelect').value;
+        if (!dateInput) return;
+        
+        // Convert input date to display format
+        const inputDate = new Date(dateInput);
+        const displayDate = inputDate.toISOString().split('T')[0];
+        currentBankDate = displayDate;
+        
+        // Get records for the selected date
+        const allRecords = await fetchFromAirtable('bankRecords');
+        const dayRecords = allRecords.filter(record => record.Date === displayDate);
+        
+        // Group records by payment type
+        const recordsByPaymentType = {};
+        dayRecords.forEach(record => {
+            if (!recordsByPaymentType[record.PaymentType]) {
+                recordsByPaymentType[record.PaymentType] = [];
+            }
+            recordsByPaymentType[record.PaymentType].push(record);
+        });
+        
+        // Check if day is closed
+        let dayClosed = true;
+        dayRecords.forEach(record => {
+            if (!record.DayClosed) {
+                dayClosed = false;
+            }
+        });
+        
+        // Display payment method boxes
+        displayPaymentMethodBoxes(recordsByPaymentType, dayClosed);
+        
+        // Display bank records list
+        displayBankRecordsList(dayRecords);
+        
+        // Show/hide close day button
+        const closeDayBtn = document.getElementById('closeDayBtn');
+        if (currentUser.role === 'Admin' && !dayClosed && dayRecords.length > 0) {
+            closeDayBtn.style.display = 'inline-block';
+        } else {
+            closeDayBtn.style.display = 'none';
         }
-        recordsByPaymentType[record.paymentType].push(record);
-    });
-    
-    // Check if day is closed
-    let dayClosed = true;
-    dayRecords.forEach(record => {
-        if (!record.dayClosed) {
-            dayClosed = false;
-        }
-    });
-    
-    // Display payment method boxes
-    displayPaymentMethodBoxes(recordsByPaymentType, dayClosed);
-    
-    // Display bank records list
-    displayBankRecordsList(dayRecords);
-    
-    // Show/hide close day button
-    const closeDayBtn = document.getElementById('closeDayBtn');
-    if (currentUser.role === 'Admin' && !dayClosed && dayRecords.length > 0) {
-        closeDayBtn.style.display = 'inline-block';
-    } else {
-        closeDayBtn.style.display = 'none';
+    } catch (error) {
+        console.error('Error loading bank records:', error);
+        showNotification('Error loading bank records. Please try again.', 'error');
     }
 }
 
@@ -3262,7 +3576,7 @@ function displayPaymentMethodBoxes(recordsByPaymentType, dayClosed) {
         const records = recordsByPaymentType[paymentType] || [];
         const totalAmount = records.reduce((sum, record) => {
             // Only count committed records
-            return sum + (record.status === 'committed' ? record.amount : 0);
+            return sum + (record.Status === 'committed' ? record.Amount : 0);
         }, 0);
         
         const box = document.createElement('div');
@@ -3300,36 +3614,36 @@ function displayBankRecordsList(records) {
     records.forEach(record => {
         const recordElement = document.createElement('div');
         recordElement.className = 'bank-item';
-        const statusClass = record.status === 'committed' ? 'status-committed' : 'status-draft';
-        const statusText = record.status === 'committed' ? 'Committed' : 'Draft';
+        const statusClass = record.Status === 'committed' ? 'status-committed' : 'status-draft';
+        const statusText = record.Status === 'committed' ? 'Committed' : 'Draft';
         
         recordElement.innerHTML = `
             <div class="bank-header">
-                <div class="bank-id">${record.cashbillNumber}</div>
-                <div class="bank-amount">RM ${record.amount.toFixed(2)}</div>
+                <div class="bank-id">${record.CashbillNumber}</div>
+                <div class="bank-amount">RM ${record.Amount.toFixed(2)}</div>
                 <div class="bank-status ${statusClass}">${statusText}</div>
             </div>
             <div class="bank-details">
                 <div class="detail-item">
                     <span class="detail-label">Created By:</span>
-                    <span>${record.crewName}</span>
+                    <span>${record.CrewName}</span>
                 </div>
                 <div class="detail-item">
                     <span class="detail-label">Salesperson:</span>
-                    <span>${record.salespersonName} (${record.salespersonId})</span>
+                    <span>${record.SalespersonName} (${record.SalespersonID})</span>
                 </div>
                 <div class="detail-item">
                     <span class="detail-label">Payment Type:</span>
-                    <span>${formatPaymentType(record.paymentType)}</span>
+                    <span>${formatPaymentType(record.PaymentType)}</span>
                 </div>
                 <div class="detail-item">
                     <span class="detail-label">Description:</span>
-                    <span>${record.description}</span>
+                    <span>${record.Description}</span>
                 </div>
             </div>
             <div class="action-buttons">
-                ${currentUser.role === 'Admin' && record.status === 'committed' ?
-                    `<button class="btn-uncommit" onclick="uncommitBankRecord('${record.id}')">Uncommit</button>` :
+                ${currentUser.role === 'Admin' && record.Status === 'committed' ?
+                    `<button class="btn-uncommit" onclick="uncommitBankRecord('${record.ID}')">Uncommit</button>` :
                     ''}
             </div>
         `;
@@ -3376,7 +3690,7 @@ function closeModal(modalId) {
 }
 
 // Confirm close day
-function confirmCloseDay() {
+async function confirmCloseDay() {
     const crewId = document.getElementById('confirmCrewId').value;
     const password = document.getElementById('confirmPassword').value;
     
@@ -3398,55 +3712,79 @@ function confirmCloseDay() {
         return;
     }
     
-    // Mark all records for this day as closed
-    bankRecords.forEach(record => {
-        if (record.date === dayToClose) {
-            record.dayClosed = true;
+    try {
+        // Get all bank records for the selected date
+        const allRecords = await fetchFromAirtable('bankRecords');
+        const dayRecords = allRecords.filter(record => record.Date === dayToClose);
+        
+        // Update all records for this day as closed
+        for (const record of dayRecords) {
+            await updateInAirtable('bankRecords', record.ID, {
+                DayClosed: true
+            });
+            
+            // Update local record
+            const localRecord = bankRecords.find(br => br.ID === record.ID);
+            if (localRecord) {
+                localRecord.DayClosed = true;
+            }
         }
-    });
-    
-    closeModal('closeDayModal');
-    loadBankRecordsForDate();
-    showNotification(`Day ${dayToClose} closed successfully!`, 'success');
+        
+        closeModal('closeDayModal');
+        loadBankRecordsForDate();
+        showNotification(`Day ${dayToClose} closed successfully!`, 'success');
+    } catch (error) {
+        console.error('Error closing day:', error);
+        showNotification('Error closing day. Please try again.', 'error');
+    }
 }
 
 // Update bank summary
-function updateBankSummary() {
-    let totalDeposits = 0;
-    let cashTransactions = 0;
-    let cardTransactions = 0;
-    let bankTransfers = 0;
-    let qrMaybankTransactions = 0;
-    let qrCimbTransactions = 0;
-    let qrOthersTransactions = 0;
-    
-    bankRecords.forEach(record => {
-        // Only count committed records
-        if (record.status === 'committed') {
-            totalDeposits += record.amount;
-            if (record.paymentType === 'cash') {
-                cashTransactions += record.amount;
-            } else if (record.paymentType === 'card') {
-                cardTransactions += record.amount;
-            } else if (record.paymentType === 'transfer') {
-                bankTransfers += record.amount;
-            } else if (record.paymentType === 'qr-maybank') {
-                qrMaybankTransactions += record.amount;
-            } else if (record.paymentType === 'qr-cimb') {
-                qrCimbTransactions += record.amount;
-            } else if (record.paymentType === 'qr-others') {
-                qrOthersTransactions += record.amount;
+async function updateBankSummary() {
+    try {
+        // Load bank records from Airtable
+        const bankRecordsData = await fetchFromAirtable('bankRecords');
+        bankRecords = bankRecordsData;
+        
+        let totalDeposits = 0;
+        let cashTransactions = 0;
+        let cardTransactions = 0;
+        let bankTransfers = 0;
+        let qrMaybankTransactions = 0;
+        let qrCimbTransactions = 0;
+        let qrOthersTransactions = 0;
+        
+        bankRecords.forEach(record => {
+            // Only count committed records
+            if (record.Status === 'committed') {
+                totalDeposits += record.Amount;
+                if (record.PaymentType === 'cash') {
+                    cashTransactions += record.Amount;
+                } else if (record.PaymentType === 'card') {
+                    cardTransactions += record.Amount;
+                } else if (record.PaymentType === 'transfer') {
+                    bankTransfers += record.Amount;
+                } else if (record.PaymentType === 'qr-maybank') {
+                    qrMaybankTransactions += record.Amount;
+                } else if (record.PaymentType === 'qr-cimb') {
+                    qrCimbTransactions += record.Amount;
+                } else if (record.PaymentType === 'qr-others') {
+                    qrOthersTransactions += record.Amount;
+                }
             }
-        }
-    });
-    
-    document.getElementById('totalDeposits').textContent = totalDeposits.toFixed(2);
-    document.getElementById('cashTransactions').textContent = cashTransactions.toFixed(2);
-    document.getElementById('cardTransactions').textContent = cardTransactions.toFixed(2);
-    document.getElementById('bankTransfers').textContent = bankTransfers.toFixed(2);
-    document.getElementById('qrMaybankTransactions').textContent = qrMaybankTransactions.toFixed(2);
-    document.getElementById('qrCimbTransactions').textContent = qrCimbTransactions.toFixed(2);
-    document.getElementById('qrOthersTransactions').textContent = qrOthersTransactions.toFixed(2);
+        });
+        
+        document.getElementById('totalDeposits').textContent = totalDeposits.toFixed(2);
+        document.getElementById('cashTransactions').textContent = cashTransactions.toFixed(2);
+        document.getElementById('cardTransactions').textContent = cardTransactions.toFixed(2);
+        document.getElementById('bankTransfers').textContent = bankTransfers.toFixed(2);
+        document.getElementById('qrMaybankTransactions').textContent = qrMaybankTransactions.toFixed(2);
+        document.getElementById('qrCimbTransactions').textContent = qrCimbTransactions.toFixed(2);
+        document.getElementById('qrOthersTransactions').textContent = qrOthersTransactions.toFixed(2);
+    } catch (error) {
+        console.error('Error updating bank summary:', error);
+        showNotification('Error updating bank summary. Please try again.', 'error');
+    }
 }
 
 // Filter bank records (legacy function)
@@ -3456,115 +3794,157 @@ function filterBankRecords() {
 }
 
 // Populate crew filter
-function populateCrewFilter() {
-    const crewFilter = document.getElementById('filterCrew');
-    if (!crewFilter) return;
-    
-    crewFilter.innerHTML = '<option value="all">All Crew</option>';
-    
-    // Get unique crew IDs
-    const crewIds = [...new Set(users.map(user => user.id))];
-    
-    crewIds.forEach(crewId => {
-        const crewName = users.find(user => user.id === crewId).name;
-        const option = document.createElement('option');
-        option.value = crewId;
-        option.textContent = crewName;
-        crewFilter.appendChild(option);
-    });
+async function populateCrewFilter() {
+    try {
+        // Load users from Airtable
+        users = await fetchFromAirtable('users');
+        
+        const crewFilter = document.getElementById('filterCrew');
+        if (!crewFilter) return;
+        
+        crewFilter.innerHTML = '<option value="all">All Crew</option>';
+        
+        // Get unique crew IDs
+        const crewIds = [...new Set(users.map(user => user.ID))];
+        
+        crewIds.forEach(crewId => {
+            const crewName = users.find(user => user.ID === crewId).Name;
+            const option = document.createElement('option');
+            option.value = crewId;
+            option.textContent = crewName;
+            crewFilter.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error populating crew filter:', error);
+        showNotification('Error loading crew. Please try again.', 'error');
+    }
 }
 
 // Update dashboard stats
-function updateDashboardStats() {
-    // Total cashbills
-    let totalCashbills = cashbills.length;
-    if (currentUser.role === 'Crew') {
-        totalCashbills = cashbills.filter(cb => cb.crewId === currentUser.id).length;
-    }
-    document.getElementById('totalCashbills').textContent = totalCashbills;
-    
-    // Total sales
-    let totalSales = 0;
-    if (currentUser.role === 'Admin') {
-        totalSales = cashbills
-            .filter(cb => cb.status === 'committed')
-            .reduce((sum, cb) => sum + cb.totalAmount, 0);
-    } else {
-        totalSales = cashbills
-            .filter(cb => cb.crewId === currentUser.id && cb.status === 'committed')
-            .reduce((sum, cb) => sum + cb.totalAmount, 0);
-    }
-    document.getElementById('totalSales').textContent = totalSales.toFixed(2);
-    
-    // Total log entries
-    let totalLogEntries = logbookEntries.length;
-    if (currentUser.role === 'Crew') {
-        totalLogEntries = logbookEntries.filter(le => le.crewId === currentUser.id).length;
-    }
-    document.getElementById('totalLogEntries').textContent = totalLogEntries;
-    
-    // Active crew
-    const activeCrew = currentUser.role === 'Admin' ?
-        users.filter(user => user.role === 'Crew').length : 1;
-    document.getElementById('activeCrew').textContent = activeCrew;
-    
-    // Daily logs stats
-    let totalDailyLogsCreated = 0;
-    let totalDailyLogsClosed = 0;
-    if (currentUser.role === 'Admin') {
-        totalDailyLogsCreated = dailyLogs.length;
-        totalDailyLogsClosed = dailyLogs.filter(log => log.status === 'closed').length;
-    } else {
-        const crewLogs = dailyLogs.filter(log => log.crewId === currentUser.id);
-        totalDailyLogsCreated = crewLogs.length;
-        totalDailyLogsClosed = crewLogs.filter(log => log.status === 'closed').length;
-    }
-    document.getElementById('totalDailyLogsCreated').textContent = totalDailyLogsCreated;
-    document.getElementById('totalDailyLogsClosed').textContent = totalDailyLogsClosed;
-    
-    // Update daily log status section
-    updateDailyLogStatusSection();
-    
-    // Update bank summary if on bank records page
-    if (document.getElementById('bankrecordsPage').classList.contains('active')) {
-        updateBankSummary();
+async function updateDashboardStats() {
+    try {
+        // Load all data from Airtable
+        const [cashbillsData, logbookData, dailyLogsData] = await Promise.all([
+            fetchFromAirtable('cashbills'),
+            fetchFromAirtable('logbook'),
+            fetchFromAirtable('dailyLogs')
+        ]);
+        
+        cashbills = cashbillsData;
+        logbookEntries = logbookData;
+        dailyLogs = dailyLogsData;
+        
+        // Total cashbills
+        let totalCashbills = cashbills.length;
+        if (currentUser.role === 'Crew') {
+            totalCashbills = cashbills.filter(cb => cb.CrewID === currentUser.id).length;
+        }
+        document.getElementById('totalCashbills').textContent = totalCashbills;
+        
+        // Total sales
+        let totalSales = 0;
+        if (currentUser.role === 'Admin') {
+            totalSales = cashbills
+                .filter(cb => cb.Status === 'committed')
+                .reduce((sum, cb) => sum + cb.TotalAmount, 0);
+        } else {
+            totalSales = cashbills
+                .filter(cb => cb.CrewID === currentUser.id && cb.Status === 'committed')
+                .reduce((sum, cb) => sum + cb.TotalAmount, 0);
+        }
+        document.getElementById('totalSales').textContent = totalSales.toFixed(2);
+        
+        // Total log entries
+        let totalLogEntries = logbookEntries.length;
+        if (currentUser.role === 'Crew') {
+            totalLogEntries = logbookEntries.filter(le => le.CrewID === currentUser.id).length;
+        }
+        document.getElementById('totalLogEntries').textContent = totalLogEntries;
+        
+        // Active crew
+        const activeCrew = currentUser.role === 'Admin' ?
+            users.filter(user => user.Role === 'Crew').length : 1;
+        document.getElementById('activeCrew').textContent = activeCrew;
+        
+        // Daily logs stats
+        let totalDailyLogsCreated = 0;
+        let totalDailyLogsClosed = 0;
+        if (currentUser.role === 'Admin') {
+            totalDailyLogsCreated = dailyLogs.length;
+            totalDailyLogsClosed = dailyLogs.filter(log => log.Status === 'closed').length;
+        } else {
+            const crewLogs = dailyLogs.filter(log => log.CrewID === currentUser.id);
+            totalDailyLogsCreated = crewLogs.length;
+            totalDailyLogsClosed = crewLogs.filter(log => log.Status === 'closed').length;
+        }
+        document.getElementById('totalDailyLogsCreated').textContent = totalDailyLogsCreated;
+        document.getElementById('totalDailyLogsClosed').textContent = totalDailyLogsClosed;
+        
+        // Update daily log status section
+        updateDailyLogStatusSection();
+        
+        // Update bank summary if on bank records page
+        if (document.getElementById('bankrecordsPage').classList.contains('active')) {
+            updateBankSummary();
+        }
+    } catch (error) {
+        console.error('Error updating dashboard stats:', error);
+        showNotification('Error updating dashboard. Please try again.', 'error');
     }
 }
 
 // Update performance table
-function updatePerformanceTable() {
-    const tableBody = document.getElementById('performanceTableBody');
-    if (!tableBody) return;
-    
-    tableBody.innerHTML = '';
-    
-    // Get all crew users
-    const crewUsers = users.filter(user => user.role === 'Crew');
-    
-    crewUsers.forEach(user => {
-        // Calculate stats for this crew
-        const crewCashbills = cashbills.filter(cb => cb.salespersonId === user.id);
-        const crewCommittedCashbills = crewCashbills.filter(cb => cb.status === 'committed');
-        const crewSales = crewCommittedCashbills.reduce((sum, cb) => sum + cb.totalAmount, 0);
-        const crewLogEntries = logbookEntries.filter(le => le.crewId === user.id).length;
-        const crewDailyLogs = dailyLogs.filter(dl => dl.crewId === user.id).length;
+async function updatePerformanceTable() {
+    try {
+        // Load users and cashbills from Airtable
+        const [usersData, cashbillsData, logbookData, dailyLogsData] = await Promise.all([
+            fetchFromAirtable('users'),
+            fetchFromAirtable('cashbills'),
+            fetchFromAirtable('logbook'),
+            fetchFromAirtable('dailyLogs')
+        ]);
         
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${user.id}</td>
-            <td>${user.name}</td>
-            <td>${crewCommittedCashbills.length}</td>
-            <td>RM ${crewSales.toFixed(2)}</td>
-            <td>${crewLogEntries}</td>
-            <td>${crewDailyLogs}</td>
-        `;
+        users = usersData;
+        cashbills = cashbillsData;
+        logbookEntries = logbookData;
+        dailyLogs = dailyLogsData;
         
-        tableBody.appendChild(row);
-    });
+        const tableBody = document.getElementById('performanceTableBody');
+        if (!tableBody) return;
+        
+        tableBody.innerHTML = '';
+        
+        // Get all crew users
+        const crewUsers = users.filter(user => user.Role === 'Crew');
+        
+        crewUsers.forEach(user => {
+            // Calculate stats for this crew
+            const crewCashbills = cashbills.filter(cb => cb.SalespersonID === user.ID);
+            const crewCommittedCashbills = crewCashbills.filter(cb => cb.Status === 'committed');
+            const crewSales = crewCommittedCashbills.reduce((sum, cb) => sum + cb.TotalAmount, 0);
+            const crewLogEntries = logbookEntries.filter(le => le.CrewID === user.ID).length;
+            const crewDailyLogs = dailyLogs.filter(dl => dl.CrewID === user.ID).length;
+            
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${user.ID}</td>
+                <td>${user.Name}</td>
+                <td>${crewCommittedCashbills.length}</td>
+                <td>RM ${crewSales.toFixed(2)}</td>
+                <td>${crewLogEntries}</td>
+                <td>${crewDailyLogs}</td>
+            `;
+            
+            tableBody.appendChild(row);
+        });
+    } catch (error) {
+        console.error('Error updating performance table:', error);
+        showNotification('Error updating performance table. Please try again.', 'error');
+    }
 }
 
 // Create user
-function createUser() {
+async function createUser() {
     const userId = document.getElementById('newUserId').value;
     const userName = document.getElementById('newUserName').value;
     const userRole = document.getElementById('newUserRole').value;
@@ -3576,17 +3956,18 @@ function createUser() {
     }
     
     // Check if user ID already exists
-    if (users.find(user => user.id === userId)) {
+    if (users.find(user => user.ID === userId)) {
         showNotification('User ID already exists', 'error');
         return;
     }
     
-    const newUser = {
-        id: userId,
-        name: userName,
-        role: userRole,
-        password: userPassword
-    };
+    // Create user in Airtable
+    const newUser = await createInAirtable('users', {
+        ID: userId,
+        Name: userName,
+        Role: userRole,
+        Password: userPassword
+    });
     
     users.push(newUser);
     
@@ -3596,56 +3977,64 @@ function createUser() {
 }
 
 // Load users
-function loadUsers() {
-    const container = document.getElementById('userListContainer');
-    if (!container) return;
-    
-    container.innerHTML = '';
-    
-    if (users.length === 0) {
-        container.innerHTML = '<div class="no-results">No users found.</div>';
-        return;
+async function loadUsers() {
+    try {
+        // Load users from Airtable
+        users = await fetchFromAirtable('users');
+        
+        const container = document.getElementById('userListContainer');
+        if (!container) return;
+        
+        container.innerHTML = '';
+        
+        if (users.length === 0) {
+            container.innerHTML = '<div class="no-results">No users found.</div>';
+            return;
+        }
+        
+        users.forEach(user => {
+            const userElement = document.createElement('div');
+            userElement.className = 'user-item';
+            const roleClass = user.Role === 'Admin' ? 'role-admin' : 'role-crew';
+            
+            userElement.innerHTML = `
+                <div class="user-header">
+                    <div class="user-id">${user.ID} - ${user.Name}</div>
+                    <div class="user-role-badge ${roleClass}">${user.Role}</div>
+                </div>
+                <div class="user-details">
+                    <div class="detail-item">
+                        <span class="detail-label">User ID:</span>
+                        <span>${user.ID}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Name:</span>
+                        <span>${user.Name}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Role:</span>
+                        <span>${user.Role}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Password:</span>
+                        <span>${currentUser.role === 'Admin' ? user.Password : '••••••••'}</span>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    ${currentUser.role === 'Admin' ?
+                        `<button class="btn-edit" onclick="editUser('${user.ID}')">Edit</button>
+                         <button class="btn-reset" onclick="resetPassword('${user.ID}')">Reset Password</button>
+                         <button class="btn-delete" onclick="deleteUser('${user.ID}')">Delete User</button>` :
+                        ''}
+                </div>
+            `;
+            
+            container.appendChild(userElement);
+        });
+    } catch (error) {
+        console.error('Error loading users:', error);
+        showNotification('Error loading users. Please try again.', 'error');
     }
-    
-    users.forEach(user => {
-        const userElement = document.createElement('div');
-        userElement.className = 'user-item';
-        const roleClass = user.role === 'Admin' ? 'role-admin' : 'role-crew';
-        
-        userElement.innerHTML = `
-            <div class="user-header">
-                <div class="user-id">${user.id} - ${user.name}</div>
-                <div class="user-role-badge ${roleClass}">${user.role}</div>
-            </div>
-            <div class="user-details">
-                <div class="detail-item">
-                    <span class="detail-label">User ID:</span>
-                    <span>${user.id}</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Name:</span>
-                    <span>${user.name}</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Role:</span>
-                    <span>${user.role}</span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Password:</span>
-                    <span>${currentUser.role === 'Admin' ? user.password : '••••••••'}</span>
-                </div>
-            </div>
-            <div class="action-buttons">
-                ${currentUser.role === 'Admin' ?
-                    `<button class="btn-edit" onclick="editUser('${user.id}')">Edit</button>
-                     <button class="btn-reset" onclick="resetPassword('${user.id}')">Reset Password</button>
-                     <button class="btn-delete" onclick="deleteUser('${user.id}')">Delete User</button>` :
-                    ''}
-            </div>
-        `;
-        
-        container.appendChild(userElement);
-    });
 }
 
 // Edit user
@@ -3655,12 +4044,12 @@ function editUser(userId) {
         return;
     }
     
-    const user = users.find(u => u.id === userId);
+    const user = users.find(u => u.ID === userId);
     if (user) {
         // Populate edit form
-        document.getElementById('editUserId').value = user.id;
-        document.getElementById('editUserName').value = user.name;
-        document.getElementById('editUserRole').value = user.role;
+        document.getElementById('editUserId').value = user.ID;
+        document.getElementById('editUserName').value = user.Name;
+        document.getElementById('editUserRole').value = user.Role;
         document.getElementById('editUserPassword').value = '';
         
         showPage('edituserform');
@@ -3668,7 +4057,7 @@ function editUser(userId) {
 }
 
 // Update user
-function updateUser() {
+async function updateUser() {
     const userId = document.getElementById('editUserId').value;
     const userName = document.getElementById('editUserName').value;
     const userRole = document.getElementById('editUserRole').value;
@@ -3679,24 +4068,41 @@ function updateUser() {
         return;
     }
     
-    const user = users.find(u => u.id === userId);
-    if (user) {
-        user.name = userName;
-        user.role = userRole;
+    try {
+        // Update user in Airtable
+        const updateFields = {
+            Name: userName,
+            Role: userRole
+        };
         
-        // Update password if provided
         if (userPassword) {
-            user.password = userPassword;
+            updateFields.Password = userPassword;
+        }
+        
+        await updateInAirtable('users', userId, updateFields);
+        
+        const user = users.find(u => u.ID === userId);
+        if (user) {
+            user.Name = userName;
+            user.Role = userRole;
+            
+            // Update password if provided
+            if (userPassword) {
+                user.Password = userPassword;
+            }
         }
         
         showPage('usermanagement');
         loadUsers();
         showNotification('User updated successfully!', 'success');
+    } catch (error) {
+        console.error('Error updating user:', error);
+        showNotification('Error updating user. Please try again.', 'error');
     }
 }
 
 // Reset password
-function resetPassword(userId) {
+async function resetPassword(userId) {
     if (currentUser.role !== 'Admin') {
         showNotification('Only admin can reset passwords', 'error');
         return;
@@ -3704,27 +4110,46 @@ function resetPassword(userId) {
     
     const newPassword = prompt('Enter new password:');
     if (newPassword) {
-        const user = users.find(u => u.id === userId);
-        if (user) {
-            user.password = newPassword;
+        try {
+            // Update user password in Airtable
+            await updateInAirtable('users', userId, {
+                Password: newPassword
+            });
+            
+            const user = users.find(u => u.ID === userId);
+            if (user) {
+                user.Password = newPassword;
+            }
+            
             loadUsers();
             showNotification('Password reset successfully!', 'success');
+        } catch (error) {
+            console.error('Error resetting password:', error);
+            showNotification('Error resetting password. Please try again.', 'error');
         }
     }
 }
 
 // Delete user
-function deleteUser(userId) {
+async function deleteUser(userId) {
     if (currentUser.role !== 'Admin') {
         showNotification('Only admin can delete users', 'error');
         return;
     }
     
     if (confirm('Are you sure you want to delete this user?')) {
-        users = users.filter(u => u.id !== userId);
-        loadUsers();
-        updateDashboardStats();
-        showNotification('User deleted successfully!', 'success');
+        try {
+            // Delete user from Airtable
+            await deleteFromAirtable('users', userId);
+            
+            users = users.filter(u => u.ID !== userId);
+            loadUsers();
+            updateDashboardStats();
+            showNotification('User deleted successfully!', 'success');
+        } catch (error) {
+            console.error('Error deleting user:', error);
+            showNotification('Error deleting user. Please try again.', 'error');
+        }
     }
 }
 
@@ -3737,106 +4162,111 @@ function clearUserForm() {
 }
 
 // Export data
-function exportData(type) {
+async function exportData(type) {
     if (currentUser.role !== 'Admin') {
         showNotification('Only admin can export data', 'error');
         return;
     }
     
-    let data = [];
-    let filename = '';
-    let headers = [];
-    
-    if (type === 'cashbill') {
-        data = cashbills;
-        filename = 'cashbills_export.csv';
-        headers = ['Cashbill Number', 'Created By', 'Salesperson ID', 'Salesperson Name', 'Customer Name', 'Item', 'Quantity', 'Price', 'Total Amount', 'Payment Type', 'Status', 'Date'];
-    } else if (type === 'logbook') {
-        data = logbookEntries;
-        filename = 'logbook_export.csv';
-        headers = ['Crew ID', 'Crew Name', 'Type', 'Content', 'Date', 'Courier Company', 'Tracking Number', 'Status'];
-    } else if (type === 'bank') {
-        data = bankRecords;
-        filename = 'bank_records_export.csv';
-        headers = ['Cashbill Number', 'Created By', 'Salesperson ID', 'Salesperson Name', 'Amount', 'Payment Type', 'Date', 'Description', 'Day Closed', 'Status'];
-    } else if (type === 'dailylog') {
-        data = dailyLogs;
-        filename = 'daily_logs_export.csv';
-        headers = ['Crew ID', 'Crew Name', 'Date', 'Opening Balance', 'Closing Balance', 'Notes', 'Status'];
-    }
-    
-    // Create CSV content
-    let csvContent = headers.join(',') + '\n';
-    
-    data.forEach(item => {
-        let row = [];
+    try {
+        let data = [];
+        let filename = '';
+        let headers = [];
         
         if (type === 'cashbill') {
-            row = [
-                item.cashbillNumber,
-                `"${item.crewName}"`,
-                item.salespersonId,
-                `"${item.salespersonName}"`,
-                `"${item.customerName}"`,
-                `"${item.item}"`,
-                item.quantity,
-                item.price,
-                item.totalAmount,
-                formatPaymentType(item.paymentType),
-                item.status,
-                `"${item.date}"`
-            ];
+            data = await fetchFromAirtable('cashbills');
+            filename = 'cashbills_export.csv';
+            headers = ['Cashbill Number', 'Created By', 'Salesperson ID', 'Salesperson Name', 'Customer Name', 'Item', 'Quantity', 'Price', 'Total Amount', 'Payment Type', 'Status', 'Date'];
         } else if (type === 'logbook') {
-            row = [
-                item.crewId,
-                `"${item.crewName}"`,
-                item.type,
-                `"${item.content}"`,
-                `"${item.date}"`,
-                `"${item.courierCompany || ''}"`,
-                `"${item.trackingNumber || ''}"`,
-                item.status
-            ];
+            data = await fetchFromAirtable('logbook');
+            filename = 'logbook_export.csv';
+            headers = ['Crew ID', 'Crew Name', 'Type', 'Content', 'Date', 'Courier Company', 'Tracking Number', 'Status'];
         } else if (type === 'bank') {
-            row = [
-                item.cashbillNumber,
-                `"${item.crewName}"`,
-                item.salespersonId,
-                `"${item.salespersonName}"`,
-                item.amount,
-                formatPaymentType(item.paymentType),
-                item.date,
-                `"${item.description}"`,
-                item.dayClosed ? 'Yes' : 'No',
-                item.status
-            ];
+            data = await fetchFromAirtable('bankRecords');
+            filename = 'bank_records_export.csv';
+            headers = ['Cashbill Number', 'Created By', 'Salesperson ID', 'Salesperson Name', 'Amount', 'Payment Type', 'Date', 'Description', 'Day Closed', 'Status'];
         } else if (type === 'dailylog') {
-            row = [
-                item.crewId,
-                `"${item.crewName}"`,
-                `"${item.date}"`,
-                item.openingBalance,
-                item.closingBalance,
-                `"${item.notes}"`,
-                item.status
-            ];
+            data = await fetchFromAirtable('dailyLogs');
+            filename = 'daily_logs_export.csv';
+            headers = ['Crew ID', 'Crew Name', 'Date', 'Opening Balance', 'Closing Balance', 'Notes', 'Status'];
         }
         
-        csvContent += row.join(',') + '\n';
-    });
-    
-    // Create download link
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.setAttribute('hidden', '');
-    a.setAttribute('href', url);
-    a.setAttribute('download', filename);
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    
-    showNotification(`${type.charAt(0).toUpperCase() + type.slice(1)} data exported successfully!`, 'success');
+        // Create CSV content
+        let csvContent = headers.join(',') + '\n';
+        
+        data.forEach(item => {
+            let row = [];
+            
+            if (type === 'cashbill') {
+                row = [
+                    item.CashbillNumber,
+                    `"${item.CrewName}"`,
+                    item.SalespersonID,
+                    `"${item.SalespersonName}"`,
+                    `"${item.CustomerName}"`,
+                    `"${item.Item}"`,
+                    item.Quantity,
+                    item.Price,
+                    item.TotalAmount,
+                    formatPaymentType(item.PaymentType),
+                    item.Status,
+                    `"${item.Date}"`
+                ];
+            } else if (type === 'logbook') {
+                row = [
+                    item.CrewID,
+                    `"${item.CrewName}"`,
+                    item.Type,
+                    `"${item.Content}"`,
+                    `"${item.Date}"`,
+                    `"${item.CourierCompany || ''}"`,
+                    `"${item.TrackingNumber || ''}"`,
+                    item.Status
+                ];
+            } else if (type === 'bank') {
+                row = [
+                    item.CashbillNumber,
+                    `"${item.CrewName}"`,
+                    item.SalespersonID,
+                    `"${item.SalespersonName}"`,
+                    item.Amount,
+                    formatPaymentType(item.PaymentType),
+                    item.Date,
+                    `"${item.Description}"`,
+                    item.DayClosed ? 'Yes' : 'No',
+                    item.Status
+                ];
+            } else if (type === 'dailylog') {
+                row = [
+                    item.CrewID,
+                    `"${item.CrewName}"`,
+                    `"${item.Date}"`,
+                    item.OpeningBalance,
+                    item.ClosingBalance,
+                    `"${item.Notes}"`,
+                    item.Status
+                ];
+            }
+            
+            csvContent += row.join(',') + '\n';
+        });
+        
+        // Create download link
+        const blob = new Blob([csvContent], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.setAttribute('hidden', '');
+        a.setAttribute('href', url);
+        a.setAttribute('download', filename);
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        
+        showNotification(`${type.charAt(0).toUpperCase() + type.slice(1)} data exported successfully!`, 'success');
+    } catch (error) {
+        console.error('Error exporting data:', error);
+        showNotification('Error exporting data. Please try again.', 'error');
+    }
 }
 
 // Show notification
@@ -3854,94 +4284,6 @@ function showNotification(message, type) {
 // Generate random ID
 function generateId() {
     return Math.random().toString(36).substr(2, 9);
-}
-
-// Initialize sample data
-function initializeSampleData() {
-    // Sample users (kept local)
-    users = [
-        {
-            id: '1001',
-            name: 'Administrator',
-            role: 'Admin',
-            password: 'admin123'
-        },
-        {
-            id: '1002',
-            name: 'Crew 1002',
-            role: 'Crew',
-            password: 'crew123'
-        },
-        {
-            id: '1003',
-            name: 'Crew 1003',
-            role: 'Crew',
-            password: 'crew123'
-        },
-        {
-            id: '1004',
-            name: 'Crew 1004',
-            role: 'Crew',
-            password: 'crew123'
-        },
-        {
-            id: '1005',
-            name: 'Crew 1005',
-            role: 'Crew',
-            password: 'crew123'
-        }
-    ];
-    
-    // Initialize cashbill counter
-    cashbillCounter = 4;
-    
-    // Sample daily logs (kept local)
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
-    const twoDaysAgo = new Date(today);
-    twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
-    
-    const todayString = today.toLocaleDateString();
-    const yesterdayString = yesterday.toLocaleDateString();
-    const twoDaysAgoString = twoDaysAgo.toLocaleDateString();
-    
-    dailyLogs = [
-        {
-            id: generateId(),
-            crewId: '1002',
-            crewName: 'Crew 1002',
-            date: twoDaysAgoString,
-            openingBalance: 100.00,
-            closingBalance: 250.00,
-            notes: 'Busy day with many customers.',
-            status: 'closed'
-        },
-        {
-            id: generateId(),
-            crewId: '1003',
-            crewName: 'Crew 1003',
-            date: yesterdayString,
-            openingBalance: 150.00,
-            closingBalance: 300.00,
-            notes: 'Good sales today.',
-            status: 'closed'
-        },
-        {
-            id: generateId(),
-            crewId: '1004',
-            crewName: 'Crew 1004',
-            date: todayString,
-            openingBalance: 200.00,
-            closingBalance: 0,
-            notes: 'Day in progress.',
-            status: 'open'
-        }
-    ];
-    
-    // Load cashbills and logbook from Google Sheets
-    loadCashbillsFromGoogleSheets();
-    loadLogbookFromGoogleSheets();
 }
 </script>
 </body>
