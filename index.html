@@ -1044,7 +1044,7 @@
         
         // Google Sheets configuration
         const GOOGLE_SHEETS_CONFIG = {
-            webAppUrl: 'https://script.google.com/macros/s/AKfycbxsreR_gLqiKs9snQRpk-icP8rsGST5slXzevES_9zJhNJll5RTzZGXpjKUUZnuVUaL/exec'
+            webAppUrl: 'https://script.google.com/macros/s/AKfycbw578G9bZEtsAsLQaAx5ngL8q9y0HraxsSpZNE9gR694Jczy-bpASjYRjpFKHJmQLAr/exec'
         };
         
         // Login function
@@ -1827,278 +1827,283 @@
             }
         }
         
-        // Load cashbills from Google Sheets
-        function loadCashbillsFromGoogleSheets() {
-            showSyncStatus('Loading cashbills from Google Sheets...');
-            
-            fetch(`${GOOGLE_SHEETS_CONFIG.webAppUrl}?action=get&sheet=cashbill`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.error) {
-                        throw new Error(data.error);
-                    }
-                    
-                    cashbills = data;
-                    
-                    // Set cashbill counter
-                    if (cashbills.length > 0) {
-                        const lastCashbill = cashbills.reduce((prev, current) => {
-                            const prevNum = parseInt(prev.cashbill_number ? prev.cashbill_number.replace('#INV-', '') : '0');
-                            const currentNum = parseInt(current.cashbill_number ? current.cashbill_number.replace('#INV-', '') : '0');
-                            return prevNum > currentNum ? prev : current;
-                        });
-                        cashbillCounter = parseInt(lastCashbill.cashbill_number.replace('#INV-', '')) + 1;
-                    }
-                    
-                    showSyncStatus('Cashbills loaded successfully', 'success');
-                    updateDashboardStats();
-                    loadCashbills();
-                })
-                .catch(error => {
-                    console.error('Error loading cashbills:', error);
-                    showSyncStatus('Error loading cashbills: ' + error.message, 'error');
-                    
-                    // Fallback to localStorage
-                    const storedCashbills = localStorage.getItem('pne_cashbills');
-                    if (storedCashbills) {
-                        cashbills = JSON.parse(storedCashbills);
-                        updateDashboardStats();
-                        loadCashbills();
-                    }
-                });
+// Load cashbills from Google Sheets
+function loadCashbillsFromGoogleSheets() {
+    showSyncStatus('Loading cashbills from Google Sheets...');
+    
+    const url = `${GOOGLE_SHEETS_CONFIG.webAppUrl}?action=get&sheet=cashbill&t=${Date.now()}`;
+    
+    fetch(url, {
+        method: 'GET',
+        mode: 'cors'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.error) {
+            throw new Error(data.error);
         }
         
-        // Save cashbill to Google Sheets
-        function saveCashbillToGoogleSheets(cashbill) {
-            showSyncStatus('Saving cashbill to Google Sheets...');
-            
-            fetch(GOOGLE_SHEETS_CONFIG.webAppUrl, {
-                method: 'POST',
-                body: JSON.stringify({
-                    action: 'add',
-                    sheet: 'cashbill',
-                    record: cashbill
-                }),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.error || !data.success) {
-                    throw new Error(data.error || 'Unknown error');
-                }
-                
-                showSyncStatus('Cashbill saved successfully', 'success');
-                // Also save to localStorage as backup
-                localStorage.setItem('pne_cashbills', JSON.stringify(cashbills));
-            })
-            .catch(error => {
-                console.error('Error saving cashbill:', error);
-                showSyncStatus('Error saving cashbill: ' + error.message, 'error');
-                // Fallback to localStorage
-                localStorage.setItem('pne_cashbills', JSON.stringify(cashbills));
+        cashbills = data;
+        
+        // Set cashbill counter
+        if (cashbills.length > 0) {
+            const lastCashbill = cashbills.reduce((prev, current) => {
+                const prevNum = parseInt(prev.cashbill_number ? prev.cashbill_number.replace('#INV-', '') : '0');
+                const currentNum = parseInt(current.cashbill_number ? current.cashbill_number.replace('#INV-', '') : '0');
+                return prevNum > currentNum ? prev : current;
             });
+            cashbillCounter = parseInt(lastCashbill.cashbill_number.replace('#INV-', '')) + 1;
         }
         
-        // Update cashbill in Google Sheets
-        function updateCashbillInGoogleSheets(cashbill) {
-            showSyncStatus('Updating cashbill in Google Sheets...');
-            
-            fetch(GOOGLE_SHEETS_CONFIG.webAppUrl, {
-                method: 'POST',
-                body: JSON.stringify({
-                    action: 'update',
-                    sheet: 'cashbill',
-                    id: cashbill.id,
-                    record: cashbill
-                }),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.error || !data.success) {
-                    throw new Error(data.error || 'Unknown error');
-                }
-                
-                showSyncStatus('Cashbill updated successfully', 'success');
-                // Also save to localStorage as backup
-                localStorage.setItem('pne_cashbills', JSON.stringify(cashbills));
-            })
-            .catch(error => {
-                console.error('Error updating cashbill:', error);
-                showSyncStatus('Error updating cashbill: ' + error.message, 'error');
-                // Fallback to localStorage
-                localStorage.setItem('pne_cashbills', JSON.stringify(cashbills));
-            });
+        showSyncStatus('Cashbills loaded successfully', 'success');
+        updateDashboardStats();
+        loadCashbills();
+    })
+    .catch(error => {
+        console.error('Error loading cashbills:', error);
+        showSyncStatus('Error loading cashbills: ' + error.message, 'error');
+        
+        // Fallback to localStorage
+        const storedCashbills = localStorage.getItem('pne_cashbills');
+        if (storedCashbills) {
+            cashbills = JSON.parse(storedCashbills);
+            updateDashboardStats();
+            loadCashbills();
+        }
+    });
+}
+
+// Save cashbill to Google Sheets
+function saveCashbillToGoogleSheets(cashbill) {
+    showSyncStatus('Saving cashbill to Google Sheets...');
+    
+    const formData = new FormData();
+    formData.append('action', 'add');
+    formData.append('sheet', 'cashbill');
+    formData.append('record', JSON.stringify(cashbill));
+    
+    fetch(GOOGLE_SHEETS_CONFIG.webAppUrl, {
+        method: 'POST',
+        body: formData,
+        mode: 'cors'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.error || !data.success) {
+            throw new Error(data.error || 'Unknown error');
         }
         
-        // Load logbook from Google Sheets
-        function loadLogbookFromGoogleSheets() {
-            showSyncStatus('Loading logbook from Google Sheets...');
-            
-            fetch(`${GOOGLE_SHEETS_CONFIG.webAppUrl}?action=get&sheet=logbook`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.error) {
-                        throw new Error(data.error);
-                    }
-                    
-                    logbookEntries = data;
-                    showSyncStatus('Logbook loaded successfully', 'success');
-                    updateDashboardStats();
-                    loadLogbookEntries();
-                })
-                .catch(error => {
-                    console.error('Error loading logbook:', error);
-                    showSyncStatus('Error loading logbook: ' + error.message, 'error');
-                    
-                    // Fallback to localStorage
-                    const storedLogbook = localStorage.getItem('pne_logbook');
-                    if (storedLogbook) {
-                        logbookEntries = JSON.parse(storedLogbook);
-                        updateDashboardStats();
-                        loadLogbookEntries();
-                    }
-                });
+        showSyncStatus('Cashbill saved successfully', 'success');
+        // Also save to localStorage as backup
+        localStorage.setItem('pne_cashbills', JSON.stringify(cashbills));
+    })
+    .catch(error => {
+        console.error('Error saving cashbill:', error);
+        showSyncStatus('Error saving cashbill: ' + error.message, 'error');
+        // Fallback to localStorage
+        localStorage.setItem('pne_cashbills', JSON.stringify(cashbills));
+    });
+}
+
+// Update cashbill in Google Sheets
+function updateCashbillInGoogleSheets(cashbill) {
+    showSyncStatus('Updating cashbill in Google Sheets...');
+    
+    const formData = new FormData();
+    formData.append('action', 'update');
+    formData.append('sheet', 'cashbill');
+    formData.append('id', cashbill.id);
+    formData.append('record', JSON.stringify(cashbill));
+    
+    fetch(GOOGLE_SHEETS_CONFIG.webAppUrl, {
+        method: 'POST',
+        body: formData,
+        mode: 'cors'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.error || !data.success) {
+            throw new Error(data.error || 'Unknown error');
         }
         
-        // Save logbook to Google Sheets
-        function saveLogbookToGoogleSheets(logEntry) {
-            showSyncStatus('Saving log entry to Google Sheets...');
-            
-            fetch(GOOGLE_SHEETS_CONFIG.webAppUrl, {
-                method: 'POST',
-                body: JSON.stringify({
-                    action: 'add',
-                    sheet: 'logbook',
-                    record: logEntry
-                }),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.error || !data.success) {
-                    throw new Error(data.error || 'Unknown error');
-                }
-                
-                showSyncStatus('Log entry saved successfully', 'success');
-                // Also save to localStorage as backup
-                localStorage.setItem('pne_logbook', JSON.stringify(logbookEntries));
-            })
-            .catch(error => {
-                console.error('Error saving log entry:', error);
-                showSyncStatus('Error saving log entry: ' + error.message, 'error');
-                // Fallback to localStorage
-                localStorage.setItem('pne_logbook', JSON.stringify(logbookEntries));
-            });
+        showSyncStatus('Cashbill updated successfully', 'success');
+        // Also save to localStorage as backup
+        localStorage.setItem('pne_cashbills', JSON.stringify(cashbills));
+    })
+    .catch(error => {
+        console.error('Error updating cashbill:', error);
+        showSyncStatus('Error updating cashbill: ' + error.message, 'error');
+        // Fallback to localStorage
+        localStorage.setItem('pne_cashbills', JSON.stringify(cashbills));
+    });
+}
+
+// Load logbook from Google Sheets
+function loadLogbookFromGoogleSheets() {
+    showSyncStatus('Loading logbook from Google Sheets...');
+    
+    const url = `${GOOGLE_SHEETS_CONFIG.webAppUrl}?action=get&sheet=logbook&t=${Date.now()}`;
+    
+    fetch(url, {
+        method: 'GET',
+        mode: 'cors'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.error) {
+            throw new Error(data.error);
         }
         
-        // Update logbook in Google Sheets
-        function updateLogbookInGoogleSheets(logEntry) {
-            showSyncStatus('Updating log entry in Google Sheets...');
-            
-            fetch(GOOGLE_SHEETS_CONFIG.webAppUrl, {
-                method: 'POST',
-                body: JSON.stringify({
-                    action: 'update',
-                    sheet: 'logbook',
-                    id: logEntry.id,
-                    record: logEntry
-                }),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.error || !data.success) {
-                    throw new Error(data.error || 'Unknown error');
-                }
-                
-                showSyncStatus('Log entry updated successfully', 'success');
-                // Also save to localStorage as backup
-                localStorage.setItem('pne_logbook', JSON.stringify(logbookEntries));
-            })
-            .catch(error => {
-                console.error('Error updating log entry:', error);
-                showSyncStatus('Error updating log entry: ' + error.message, 'error');
-                // Fallback to localStorage
-                localStorage.setItem('pne_logbook', JSON.stringify(logbookEntries));
-            });
+        logbookEntries = data;
+        showSyncStatus('Logbook loaded successfully', 'success');
+        updateDashboardStats();
+        loadLogbookEntries();
+    })
+    .catch(error => {
+        console.error('Error loading logbook:', error);
+        showSyncStatus('Error loading logbook: ' + error.message, 'error');
+        
+        // Fallback to localStorage
+        const storedLogbook = localStorage.getItem('pne_logbook');
+        if (storedLogbook) {
+            logbookEntries = JSON.parse(storedLogbook);
+            updateDashboardStats();
+            loadLogbookEntries();
+        }
+    });
+}
+
+// Save logbook to Google Sheets
+function saveLogbookToGoogleSheets(logEntry) {
+    showSyncStatus('Saving log entry to Google Sheets...');
+    
+    const formData = new FormData();
+    formData.append('action', 'add');
+    formData.append('sheet', 'logbook');
+    formData.append('record', JSON.stringify(logEntry));
+    
+    fetch(GOOGLE_SHEETS_CONFIG.webAppUrl, {
+        method: 'POST',
+        body: formData,
+        mode: 'cors'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.error || !data.success) {
+            throw new Error(data.error || 'Unknown error');
         }
         
-        // Delete logbook from Google Sheets
-        function deleteLogbookFromGoogleSheets(id) {
-            showSyncStatus('Deleting log entry from Google Sheets...');
-            
-            fetch(GOOGLE_SHEETS_CONFIG.webAppUrl, {
-                method: 'POST',
-                body: JSON.stringify({
-                    action: 'delete',
-                    sheet: 'logbook',
-                    id: id
-                }),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.error || !data.success) {
-                    throw new Error(data.error || 'Unknown error');
-                }
-                
-                showSyncStatus('Log entry deleted successfully', 'success');
-                // Also save to localStorage as backup
-                localStorage.setItem('pne_logbook', JSON.stringify(logbookEntries));
-            })
-            .catch(error => {
-                console.error('Error deleting log entry:', error);
-                showSyncStatus('Error deleting log entry: ' + error.message, 'error');
-                // Fallback to localStorage
-                localStorage.setItem('pne_logbook', JSON.stringify(logbookEntries));
-            });
+        showSyncStatus('Log entry saved successfully', 'success');
+        // Also save to localStorage as backup
+        localStorage.setItem('pne_logbook', JSON.stringify(logbookEntries));
+    })
+    .catch(error => {
+        console.error('Error saving log entry:', error);
+        showSyncStatus('Error saving log entry: ' + error.message, 'error');
+        // Fallback to localStorage
+        localStorage.setItem('pne_logbook', JSON.stringify(logbookEntries));
+    });
+}
+
+// Update logbook in Google Sheets
+function updateLogbookInGoogleSheets(logEntry) {
+    showSyncStatus('Updating log entry in Google Sheets...');
+    
+    const formData = new FormData();
+    formData.append('action', 'update');
+    formData.append('sheet', 'logbook');
+    formData.append('id', logEntry.id);
+    formData.append('record', JSON.stringify(logEntry));
+    
+    fetch(GOOGLE_SHEETS_CONFIG.webAppUrl, {
+        method: 'POST',
+        body: formData,
+        mode: 'cors'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
+        return response.json();
+    })
+    .then(data => {
+        if (data.error || !data.success) {
+            throw new Error(data.error || 'Unknown error');
+        }
+        
+        showSyncStatus('Log entry updated successfully', 'success');
+        // Also save to localStorage as backup
+        localStorage.setItem('pne_logbook', JSON.stringify(logbookEntries));
+    })
+    .catch(error => {
+        console.error('Error updating log entry:', error);
+        showSyncStatus('Error updating log entry: ' + error.message, 'error');
+        // Fallback to localStorage
+        localStorage.setItem('pne_logbook', JSON.stringify(logbookEntries));
+    });
+}
+
+// Delete logbook from Google Sheets
+function deleteLogbookFromGoogleSheets(id) {
+    showSyncStatus('Deleting log entry from Google Sheets...');
+    
+    const formData = new FormData();
+    formData.append('action', 'delete');
+    formData.append('sheet', 'logbook');
+    formData.append('id', id);
+    
+    fetch(GOOGLE_SHEETS_CONFIG.webAppUrl, {
+        method: 'POST',
+        body: formData,
+        mode: 'cors'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.error || !data.success) {
+            throw new Error(data.error || 'Unknown error');
+        }
+        
+        showSyncStatus('Log entry deleted successfully', 'success');
+        // Also save to localStorage as backup
+        localStorage.setItem('pne_logbook', JSON.stringify(logbookEntries));
+    })
+    .catch(error => {
+        console.error('Error deleting log entry:', error);
+        showSyncStatus('Error deleting log entry: ' + error.message, 'error');
+        // Fallback to localStorage
+        localStorage.setItem('pne_logbook', JSON.stringify(logbookEntries));
+    });
+}
     </script>
 </body>
 </html>
