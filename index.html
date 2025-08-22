@@ -1716,35 +1716,52 @@ async function loadDataFromGoogleSheets() {
   try {
     // Load cashbills
     const cashbillsResponse = await fetch(`${SCRIPT_URL}?sheet=Cashbills&action=read`);
-    cashbills = await cashbillsResponse.json();
+    if (!cashbillsResponse.ok) throw new Error('Failed to load cashbills');
+    const cashbillsData = await cashbillsResponse.json();
+    if (cashbillsData.error) throw new Error(cashbillsData.error);
+    cashbills = cashbillsData;
     
     // Load logbook entries
     const logbookResponse = await fetch(`${SCRIPT_URL}?sheet=Logbook&action=read`);
-    logbookEntries = await logbookResponse.json();
+    if (!logbookResponse.ok) throw new Error('Failed to load logbook entries');
+    const logbookData = await logbookResponse.json();
+    if (logbookData.error) throw new Error(logbookData.error);
+    logbookEntries = logbookData;
     
     // Load bank records
     const bankResponse = await fetch(`${SCRIPT_URL}?sheet=BankRecords&action=read`);
-    bankRecords = await bankResponse.json();
+    if (!bankResponse.ok) throw new Error('Failed to load bank records');
+    const bankData = await bankResponse.json();
+    if (bankData.error) throw new Error(bankData.error);
+    bankRecords = bankData;
     
     // Load users
     const usersResponse = await fetch(`${SCRIPT_URL}?sheet=Users&action=read`);
-    users = await usersResponse.json();
+    if (!usersResponse.ok) throw new Error('Failed to load users');
+    const usersData = await usersResponse.json();
+    if (usersData.error) throw new Error(usersData.error);
+    users = usersData;
     
     // Load daily logs
     const dailyResponse = await fetch(`${SCRIPT_URL}?sheet=DailyLogs&action=read`);
-    dailyLogs = await dailyResponse.json();
+    if (!dailyResponse.ok) throw new Error('Failed to load daily logs');
+    const dailyData = await dailyResponse.json();
+    if (dailyData.error) throw new Error(dailyData.error);
+    dailyLogs = dailyData;
     
     // Load settings
     const settingsResponse = await fetch(`${SCRIPT_URL}?sheet=Settings&action=read`);
-    const settings = await settingsResponse.json();
-    cashbillCounter = settings.length > 0 ? settings[0].cashbillCounter : 1;
+    if (!settingsResponse.ok) throw new Error('Failed to load settings');
+    const settingsData = await settingsResponse.json();
+    if (settingsData.error) throw new Error(settingsData.error);
+    cashbillCounter = settingsData.length > 0 ? settingsData[0].cashbillCounter : 1;
     
     hideLoading();
     return true;
   } catch (error) {
     console.error('Error loading data from Google Sheets:', error);
     hideLoading();
-    showNotification('Error loading data', 'error');
+    showNotification('Error loading data: ' + error.message, 'error');
     return false;
   }
 }
@@ -1754,7 +1771,7 @@ async function saveDataToGoogleSheets() {
   showLoading();
   try {
     // Save cashbills
-    await fetch(SCRIPT_URL, {
+    const cashbillsResponse = await fetch(SCRIPT_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1767,7 +1784,7 @@ async function saveDataToGoogleSheets() {
     });
     
     // Save logbook entries
-    await fetch(SCRIPT_URL, {
+    const logbookResponse = await fetch(SCRIPT_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1780,7 +1797,7 @@ async function saveDataToGoogleSheets() {
     });
     
     // Save bank records
-    await fetch(SCRIPT_URL, {
+    const bankResponse = await fetch(SCRIPT_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1793,7 +1810,7 @@ async function saveDataToGoogleSheets() {
     });
     
     // Save users
-    await fetch(SCRIPT_URL, {
+    const usersResponse = await fetch(SCRIPT_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1806,7 +1823,7 @@ async function saveDataToGoogleSheets() {
     });
     
     // Save daily logs
-    await fetch(SCRIPT_URL, {
+    const dailyResponse = await fetch(SCRIPT_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1819,7 +1836,7 @@ async function saveDataToGoogleSheets() {
     });
     
     // Save settings
-    await fetch(SCRIPT_URL, {
+    const settingsResponse = await fetch(SCRIPT_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1836,7 +1853,7 @@ async function saveDataToGoogleSheets() {
   } catch (error) {
     console.error('Error saving data to Google Sheets:', error);
     hideLoading();
-    showNotification('Error saving data', 'error');
+    showNotification('Error saving data: ' + error.message, 'error');
   }
 }
 
