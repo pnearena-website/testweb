@@ -1012,9 +1012,6 @@ background-color: #c0392b;
 </div>
 <div class="page-header">
 <h1 class="page-title">Dashboard</h1>
-<button class="btn-primary" onclick="refreshData()">
-<i class="fas fa-sync-alt"></i> Refresh Data
-</button>
 </div>
 <div class="stats-container">
 <div class="stat-card">
@@ -1661,14 +1658,9 @@ Close Day
 </div>
 <!-- Notification -->
 <div id="notification" class="notification"></div>
-
-<!-- jQuery and Loading Overlay -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
-
 <script>
-// Google Sheets Web App URL
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzL1bM84gZFiFreLUjjJaVDKQnpX1xs3xMeyhzX2Hi5JxgdwDrmfO6BYDDEumE78eGjgQ/exec';
+// Google Apps Script URL - Replace with your actual URL
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzgAI30nmtNS_nxpGFaRTGuwHmiToZ20m22-AaqzWmHdYLe3X4jlnpC637WE4v55LiGDA/exec";
 
 // Global variables
 let currentUser = null;
@@ -1680,12 +1672,12 @@ let dailyLogs = [];
 let sidebarCollapsed = false;
 let cashbillCounter = 1;
 let itemPrices = {
-"Event Ticket": 50.00,
-"VIP Pass": 150.00,
-"Merchandise T-Shirt": 45.00,
-"Merchandise Cap": 35.00,
-"Food & Beverage": 15.00,
-"Parking Pass": 20.00
+    "Event Ticket": 50.00,
+    "VIP Pass": 150.00,
+    "Merchandise T-Shirt": 45.00,
+    "Merchandise Cap": 35.00,
+    "Food & Beverage": 15.00,
+    "Parking Pass": 20.00
 };
 let dayToClose = null;
 let editingLogEntryId = null;
@@ -1693,169 +1685,6 @@ let currentBankDate = null;
 let editingDailyLogId = null;
 let uncommitEntryType = null;
 let uncommitEntryId = null;
-let refreshInterval;
-let lastRefreshTime = Date.now();
-
-// Show loading overlay
-function showLoading() {
-  $.LoadingOverlay("show", {
-    background: "rgba(0, 0, 0, 0.5)",
-    image: "",
-    fontawesome: "fa fa-spinner fa-spin"
-  });
-}
-
-// Hide loading overlay
-function hideLoading() {
-  $.LoadingOverlay("hide");
-}
-
-// Load data from Google Sheets
-async function loadDataFromGoogleSheets() {
-  showLoading();
-  try {
-    // Load cashbills
-    const cashbillsResponse = await fetch(`${SCRIPT_URL}?sheet=Cashbills&action=read`);
-    if (!cashbillsResponse.ok) throw new Error('Failed to load cashbills');
-    const cashbillsData = await cashbillsResponse.json();
-    if (cashbillsData.error) throw new Error(cashbillsData.error);
-    cashbills = cashbillsData;
-    
-    // Load logbook entries
-    const logbookResponse = await fetch(`${SCRIPT_URL}?sheet=Logbook&action=read`);
-    if (!logbookResponse.ok) throw new Error('Failed to load logbook entries');
-    const logbookData = await logbookResponse.json();
-    if (logbookData.error) throw new Error(logbookData.error);
-    logbookEntries = logbookData;
-    
-    // Load bank records
-    const bankResponse = await fetch(`${SCRIPT_URL}?sheet=BankRecords&action=read`);
-    if (!bankResponse.ok) throw new Error('Failed to load bank records');
-    const bankData = await bankResponse.json();
-    if (bankData.error) throw new Error(bankData.error);
-    bankRecords = bankData;
-    
-    // Load users
-    const usersResponse = await fetch(`${SCRIPT_URL}?sheet=Users&action=read`);
-    if (!usersResponse.ok) throw new Error('Failed to load users');
-    const usersData = await usersResponse.json();
-    if (usersData.error) throw new Error(usersData.error);
-    users = usersData;
-    
-    // Load daily logs
-    const dailyResponse = await fetch(`${SCRIPT_URL}?sheet=DailyLogs&action=read`);
-    if (!dailyResponse.ok) throw new Error('Failed to load daily logs');
-    const dailyData = await dailyResponse.json();
-    if (dailyData.error) throw new Error(dailyData.error);
-    dailyLogs = dailyData;
-    
-    // Load settings
-    const settingsResponse = await fetch(`${SCRIPT_URL}?sheet=Settings&action=read`);
-    if (!settingsResponse.ok) throw new Error('Failed to load settings');
-    const settingsData = await settingsResponse.json();
-    if (settingsData.error) throw new Error(settingsData.error);
-    cashbillCounter = settingsData.length > 0 ? settingsData[0].cashbillCounter : 1;
-    
-    hideLoading();
-    return true;
-  } catch (error) {
-    console.error('Error loading data from Google Sheets:', error);
-    hideLoading();
-    showNotification('Error loading data: ' + error.message, 'error');
-    return false;
-  }
-}
-
-// Save data to Google Sheets
-async function saveDataToGoogleSheets() {
-  showLoading();
-  try {
-    // Save cashbills
-    const cashbillsResponse = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        sheet: 'Cashbills',
-        action: 'write',
-        data: cashbills
-      })
-    });
-    
-    // Save logbook entries
-    const logbookResponse = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        sheet: 'Logbook',
-        action: 'write',
-        data: logbookEntries
-      })
-    });
-    
-    // Save bank records
-    const bankResponse = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        sheet: 'BankRecords',
-        action: 'write',
-        data: bankRecords
-      })
-    });
-    
-    // Save users
-    const usersResponse = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        sheet: 'Users',
-        action: 'write',
-        data: users
-      })
-    });
-    
-    // Save daily logs
-    const dailyResponse = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        sheet: 'DailyLogs',
-        action: 'write',
-        data: dailyLogs
-      })
-    });
-    
-    // Save settings
-    const settingsResponse = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        sheet: 'Settings',
-        action: 'write',
-        data: [{id: 1, cashbillCounter: cashbillCounter}]
-      })
-    });
-    
-    hideLoading();
-    console.log('Data saved to Google Sheets');
-  } catch (error) {
-    console.error('Error saving data to Google Sheets:', error);
-    hideLoading();
-    showNotification('Error saving data: ' + error.message, 'error');
-  }
-}
 
 // Check for saved login state when page loads
 window.onload = function() {
@@ -1863,7 +1692,7 @@ window.onload = function() {
 };
 
 // Check if there's a saved login state
-async function checkSavedLogin() {
+function checkSavedLogin() {
     const savedUser = localStorage.getItem('pneArenaUser');
     if (savedUser) {
         try {
@@ -1871,8 +1700,6 @@ async function checkSavedLogin() {
             // Validate the saved user data
             if (userData.id && userData.role && userData.name) {
                 currentUser = userData;
-                // Load data from Google Sheets
-                await loadDataFromGoogleSheets();
                 showDashboard();
                 return;
             }
@@ -1882,26 +1709,31 @@ async function checkSavedLogin() {
             localStorage.removeItem('pneArenaUser');
         }
     }
-    
-    // No valid saved login found, load data and show login page
-    await loadDataFromGoogleSheets();
+    // No valid saved login found, show login page
     document.getElementById('loginPage').style.display = 'flex';
 }
 
 // Login function
-async function login() {
+function login() {
     const crewId = document.getElementById('crewId').value;
     const password = document.getElementById('password').value;
     const errorMessage = document.getElementById('errorMessage');
     
-    // Find user in users array
-    const user = users.find(u => u.id === crewId && u.password === password);
-    
-    if (user) {
+    // Validate credentials
+    if (crewId === '1001' && password === 'admin123') {
         currentUser = {
-            id: user.id,
-            role: user.role,
-            name: user.name
+            id: '1001',
+            role: 'Admin',
+            name: 'Administrator'
+        };
+        // Save login state to localStorage
+        localStorage.setItem('pneArenaUser', JSON.stringify(currentUser));
+        showDashboard();
+    } else if (crewId >= '1002' && crewId <= '1005' && password === 'crew123') {
+        currentUser = {
+            id: crewId,
+            role: 'Crew',
+            name: `Crew ${crewId}`
         };
         // Save login state to localStorage
         localStorage.setItem('pneArenaUser', JSON.stringify(currentUser));
@@ -1924,7 +1756,16 @@ async function showDashboard() {
         document.getElementById('adminPanel').style.display = 'block';
     }
     
-    // Update dashboard stats
+    // Initialize with sample data if empty
+    if (users.length === 0) {
+        initializeSampleData();
+    } else {
+        // Load data from Google Sheets
+        await loadCashbillsFromGoogleSheets();
+        await loadLogbookFromGoogleSheets();
+    }
+    
+    // Load data based on user role
     updateDashboardStats();
     loadCashbills();
     loadLogbookEntries();
@@ -2020,13 +1861,6 @@ function showPage(pageName) {
         updateLoggedInUserInfoDaily();
     } else if (pageName === 'editdailylogform') {
         // Form is populated by editDailyLog function
-    }
-    
-    // Start auto-refresh on dashboard, stop on other pages
-    if (pageName === 'dashboard') {
-        startAutoRefresh();
-    } else {
-        stopAutoRefresh();
     }
 }
 
@@ -2129,6 +1963,200 @@ function calculateTotal() {
     document.getElementById('totalAmount').value = total.toFixed(2);
 }
 
+// Load cashbills from Google Sheets via Apps Script
+async function loadCashbillsFromGoogleSheets() {
+    try {
+        const response = await fetch(`${APPS_SCRIPT_URL}?action=getCashbills`);
+        const data = await response.json();
+        
+        if (response.ok && data.status === 200) {
+            cashbills = JSON.parse(data.message);
+            
+            // Update cashbill counter
+            if (cashbills.length > 0) {
+                const maxId = Math.max(...cashbills.map(cb => parseInt(cb.cashbillNumber.replace('#INV-', ''))));
+                cashbillCounter = maxId + 1;
+            }
+            
+            // Create bank records from committed cashbills
+            bankRecords = [];
+            cashbills.filter(cb => cb.status === 'committed').forEach(cb => {
+                bankRecords.push({
+                    id: generateId(),
+                    cashbillId: cb.id,
+                    cashbillNumber: cb.cashbillNumber,
+                    crewId: cb.crewId,
+                    crewName: cb.crewName,
+                    salespersonId: cb.salespersonId,
+                    salespersonName: cb.salespersonName,
+                    amount: cb.totalAmount,
+                    paymentType: cb.paymentType,
+                    date: cb.dateOnly,
+                    description: `Payment for ${cb.item} - ${cb.customerName}`,
+                    dayClosed: false,
+                    status: 'committed'
+                });
+            });
+        } else {
+            console.error('Error loading cashbills:', data.message);
+            showNotification('Error loading cashbills: ' + data.message, 'error');
+        }
+    } catch (error) {
+        console.error('Error loading cashbills from Google Sheets:', error);
+        showNotification('Error loading cashbills from Google Sheets', 'error');
+    }
+}
+
+// Load logbook from Google Sheets via Apps Script
+async function loadLogbookFromGoogleSheets() {
+    try {
+        const response = await fetch(`${APPS_SCRIPT_URL}?action=getLogbook`);
+        const data = await response.json();
+        
+        if (response.ok && data.status === 200) {
+            logbookEntries = JSON.parse(data.message);
+        } else {
+            console.error('Error loading logbook:', data.message);
+            showNotification('Error loading logbook: ' + data.message, 'error');
+        }
+    } catch (error) {
+        console.error('Error loading logbook from Google Sheets:', error);
+        showNotification('Error loading logbook from Google Sheets', 'error');
+    }
+}
+
+// Save cashbill to Google Sheets via Apps Script
+async function saveCashbillToGoogleSheets(cashbill) {
+    try {
+        const response = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                action: 'addCashbill',
+                data: cashbill
+            })
+        });
+        
+        const data = await response.json();
+        return response.ok && data.status === 200;
+    } catch (error) {
+        console.error('Error saving cashbill to Google Sheets:', error);
+        return false;
+    }
+}
+
+// Save logbook entry to Google Sheets via Apps Script
+async function saveLogbookToGoogleSheets(entry) {
+    try {
+        const response = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                action: 'addLogbook',
+                data: entry
+            })
+        });
+        
+        const data = await response.json();
+        return response.ok && data.status === 200;
+    } catch (error) {
+        console.error('Error saving logbook entry to Google Sheets:', error);
+        return false;
+    }
+}
+
+// Update cashbill in Google Sheets via Apps Script
+async function updateCashbillInGoogleSheets(cashbill) {
+    try {
+        const response = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                action: 'updateCashbill',
+                data: cashbill
+            })
+        });
+        
+        const data = await response.json();
+        return response.ok && data.status === 200;
+    } catch (error) {
+        console.error('Error updating cashbill in Google Sheets:', error);
+        return false;
+    }
+}
+
+// Update logbook entry in Google Sheets via Apps Script
+async function updateLogbookInGoogleSheets(entry) {
+    try {
+        const response = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                action: 'updateLogbook',
+                data: entry
+            })
+        });
+        
+        const data = await response.json();
+        return response.ok && data.status === 200;
+    } catch (error) {
+        console.error('Error updating logbook entry in Google Sheets:', error);
+        return false;
+    }
+}
+
+// Delete cashbill from Google Sheets via Apps Script
+async function deleteCashbillFromGoogleSheets(id) {
+    try {
+        const response = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                action: 'deleteCashbill',
+                data: { id: id }
+            })
+        });
+        
+        const data = await response.json();
+        return response.ok && data.status === 200;
+    } catch (error) {
+        console.error('Error deleting cashbill from Google Sheets:', error);
+        return false;
+    }
+}
+
+// Delete logbook entry from Google Sheets via Apps Script
+async function deleteLogbookFromGoogleSheets(id) {
+    try {
+        const response = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                action: 'deleteLogbook',
+                data: { id: id }
+            })
+        });
+        
+        const data = await response.json();
+        return response.ok && data.status === 200;
+    } catch (error) {
+        console.error('Error deleting logbook entry from Google Sheets:', error);
+        return false;
+    }
+}
+
 // Save cashbill
 async function saveCashbill(status) {
     const customerName = document.getElementById('customerName').value;
@@ -2171,34 +2199,39 @@ async function saveCashbill(status) {
         dateOnly: new Date().toLocaleDateString()
     };
     
-    cashbills.push(cashbill);
+    // Save to Google Sheets
+    const success = await saveCashbillToGoogleSheets(cashbill);
     
-    // Add to bank records if committed
-    if (status === 'committed') {
-        const bankRecord = {
-            id: generateId(),
-            cashbillId: cashbill.id,
-            cashbillNumber: cashbillNumber,
-            crewId: currentUser.id,
-            crewName: currentUser.name,
-            salespersonId: salespersonId,
-            salespersonName: salespersonName,
-            amount: parseFloat(totalAmount),
-            paymentType: paymentType,
-            date: new Date().toLocaleDateString(),
-            description: `Payment for ${item} - ${customerName}`,
-            dayClosed: false,
-            status: 'committed'
-        };
-        bankRecords.push(bankRecord);
+    if (success) {
+        // Add to local array
+        cashbills.push(cashbill);
+        
+        // Add to bank records if committed
+        if (status === 'committed') {
+            const bankRecord = {
+                id: generateId(),
+                cashbillId: cashbill.id,
+                cashbillNumber: cashbillNumber,
+                crewId: currentUser.id,
+                crewName: currentUser.name,
+                salespersonId: salespersonId,
+                salespersonName: salespersonName,
+                amount: parseFloat(totalAmount),
+                paymentType: paymentType,
+                date: new Date().toLocaleDateString(),
+                description: `Payment for ${item} - ${customerName}`,
+                dayClosed: false,
+                status: 'committed'
+            };
+            bankRecords.push(bankRecord);
+        }
+        
+        showPage('cashbill');
+        updateDashboardStats();
+        showNotification(`Cashbill ${status === 'committed' ? 'committed' : 'saved as draft'} successfully!`, 'success');
+    } else {
+        showNotification('Failed to save cashbill to Google Sheets', 'error');
     }
-    
-    // Save data to Google Sheets
-    await saveDataToGoogleSheets();
-    
-    showPage('cashbill');
-    updateDashboardStats();
-    showNotification(`Cashbill ${status === 'committed' ? 'committed' : 'saved as draft'} successfully!`, 'success');
 }
 
 // Commit cashbill
@@ -2207,30 +2240,34 @@ async function commitCashbill(id) {
     if (cashbill) {
         cashbill.status = 'committed';
         
-        // Add to bank records
-        const bankRecord = {
-            id: generateId(),
-            cashbillId: cashbill.id,
-            cashbillNumber: cashbill.cashbillNumber,
-            crewId: cashbill.crewId,
-            crewName: cashbill.crewName,
-            salespersonId: cashbill.salespersonId,
-            salespersonName: cashbill.salespersonName,
-            amount: cashbill.totalAmount,
-            paymentType: cashbill.paymentType,
-            date: new Date().toLocaleDateString(),
-            description: `Payment for ${cashbill.item} - ${cashbill.customerName}`,
-            dayClosed: false,
-            status: 'committed'
-        };
-        bankRecords.push(bankRecord);
+        // Update in Google Sheets
+        const success = await updateCashbillInGoogleSheets(cashbill);
         
-        // Save data to Google Sheets
-        await saveDataToGoogleSheets();
-        
-        loadCashbills();
-        updateDashboardStats();
-        showNotification('Cashbill committed successfully!', 'success');
+        if (success) {
+            // Add to bank records
+            const bankRecord = {
+                id: generateId(),
+                cashbillId: cashbill.id,
+                cashbillNumber: cashbill.cashbillNumber,
+                crewId: cashbill.crewId,
+                crewName: cashbill.crewName,
+                salespersonId: cashbill.salespersonId,
+                salespersonName: cashbill.salespersonName,
+                amount: cashbill.totalAmount,
+                paymentType: cashbill.paymentType,
+                date: new Date().toLocaleDateString(),
+                description: `Payment for ${cashbill.item} - ${cashbill.customerName}`,
+                dayClosed: false,
+                status: 'committed'
+            };
+            bankRecords.push(bankRecord);
+            
+            loadCashbills();
+            updateDashboardStats();
+            showNotification('Cashbill committed successfully!', 'success');
+        } else {
+            showNotification('Failed to update cashbill in Google Sheets', 'error');
+        }
     }
 }
 
@@ -2257,21 +2294,6 @@ function uncommitLogEntry(id) {
     }
     
     uncommitEntryType = 'logbook';
-    uncommitEntryId = id;
-    document.getElementById('uncommitModal').style.display = 'block';
-    document.getElementById('uncommitReason').value = '';
-    document.getElementById('confirmAdminId').value = '';
-    document.getElementById('confirmAdminPassword').value = '';
-}
-
-// Uncommit bank record (admin only)
-function uncommitBankRecord(id) {
-    if (currentUser.role !== 'Admin') {
-        showNotification('Only admin can uncommit bank records', 'error');
-        return;
-    }
-    
-    uncommitEntryType = 'bank';
     uncommitEntryId = id;
     document.getElementById('uncommitModal').style.display = 'block';
     document.getElementById('uncommitReason').value = '';
@@ -2306,38 +2328,43 @@ async function confirmUncommit() {
         const cashbill = cashbills.find(cb => cb.id === uncommitEntryId);
         if (cashbill) {
             cashbill.status = 'draft';
-            // Remove from bank records
-            bankRecords = bankRecords.filter(br => br.cashbillId !== uncommitEntryId);
-            loadCashbills();
-            updateDashboardStats();
-            showNotification('Cashbill uncommitted successfully!', 'success');
+            
+            // Update in Google Sheets
+            const success = await updateCashbillInGoogleSheets(cashbill);
+            
+            if (success) {
+                // Remove from bank records
+                bankRecords = bankRecords.filter(br => br.cashbillId !== uncommitEntryId);
+                loadCashbills();
+                updateDashboardStats();
+                showNotification('Cashbill uncommitted successfully!', 'success');
+            } else {
+                showNotification('Failed to update cashbill in Google Sheets', 'error');
+            }
         }
     } else if (uncommitEntryType === 'logbook') {
         const logEntry = logbookEntries.find(le => le.id === uncommitEntryId);
         if (logEntry) {
             logEntry.status = 'draft';
-            loadLogbookEntries();
-            updateDashboardStats();
-            showNotification('Logbook entry uncommitted successfully!', 'success');
-        }
-    } else if (uncommitEntryType === 'bank') {
-        const bankRecord = bankRecords.find(br => br.id === uncommitEntryId);
-        if (bankRecord) {
-            bankRecord.status = 'draft';
-            loadBankRecordsForDate();
-            updateBankSummary();
-            showNotification('Bank record uncommitted successfully!', 'success');
+            
+            // Update in Google Sheets
+            const success = await updateLogbookInGoogleSheets(logEntry);
+            
+            if (success) {
+                loadLogbookEntries();
+                updateDashboardStats();
+                showNotification('Logbook entry uncommitted successfully!', 'success');
+            } else {
+                showNotification('Failed to update logbook entry in Google Sheets', 'error');
+            }
         }
     }
-    
-    // Save data to Google Sheets
-    await saveDataToGoogleSheets();
     
     closeModal('uncommitModal');
 }
 
 // Edit cashbill (admin only)
-async function editCashbill(id) {
+function editCashbill(id) {
     if (currentUser.role !== 'Admin') {
         showNotification('Only admin can edit cashbills', 'error');
         return;
@@ -2364,10 +2391,6 @@ async function editCashbill(id) {
         
         // Remove the cashbill from the list
         cashbills = cashbills.filter(cb => cb.id !== id);
-        
-        // Save data to Google Sheets
-        await saveDataToGoogleSheets();
-        
         loadCashbills();
         showNotification('Cashbill loaded for editing', 'info');
     }
@@ -2477,9 +2500,12 @@ function clearCashbillSearch() {
 }
 
 // Load cashbills
-function loadCashbills() {
+async function loadCashbills() {
     const container = document.getElementById('cashbillListContainer');
-    container.innerHTML = '';
+    container.innerHTML = '<div class="no-results">Loading cashbills...</div>';
+    
+    // Reload from Google Sheets
+    await loadCashbillsFromGoogleSheets();
     
     let filteredCashbills = cashbills;
     
@@ -2492,6 +2518,8 @@ function loadCashbills() {
         container.innerHTML = '<div class="no-results">No cashbills found.</div>';
         return;
     }
+    
+    container.innerHTML = '';
     
     filteredCashbills.forEach(cashbill => {
         const cashbillElement = document.createElement('div');
@@ -2617,14 +2645,19 @@ async function createLogEntry() {
         status: 'committed'
     };
     
-    logbookEntries.push(logEntry);
+    // Save to Google Sheets
+    const success = await saveLogbookToGoogleSheets(logEntry);
     
-    // Save data to Google Sheets
-    await saveDataToGoogleSheets();
-    
-    showPage('logbook');
-    updateDashboardStats();
-    showNotification('Log entry created successfully!', 'success');
+    if (success) {
+        // Add to local array
+        logbookEntries.push(logEntry);
+        
+        showPage('logbook');
+        updateDashboardStats();
+        showNotification('Log entry created successfully!', 'success');
+    } else {
+        showNotification('Failed to save log entry to Google Sheets', 'error');
+    }
 }
 
 // Edit log entry
@@ -2681,28 +2714,35 @@ async function updateLogEntry() {
         logEntry.courierCompany = courierCompany;
         logEntry.trackingNumber = trackingNumber;
         
-        editingLogEntryId = null;
+        // Update in Google Sheets
+        const success = await updateLogbookInGoogleSheets(logEntry);
         
-        // Save data to Google Sheets
-        await saveDataToGoogleSheets();
-        
-        showPage('logbook');
-        loadLogbookEntries();
-        showNotification('Log entry updated successfully!', 'success');
+        if (success) {
+            editingLogEntryId = null;
+            showPage('logbook');
+            loadLogbookEntries();
+            showNotification('Log entry updated successfully!', 'success');
+        } else {
+            showNotification('Failed to update log entry in Google Sheets', 'error');
+        }
     }
 }
 
 // Delete log entry
 async function deleteLogEntry(id) {
     if (confirm('Are you sure you want to delete this log entry?')) {
-        logbookEntries = logbookEntries.filter(le => le.id !== id);
+        // Delete from Google Sheets
+        const success = await deleteLogbookFromGoogleSheets(id);
         
-        // Save data to Google Sheets
-        await saveDataToGoogleSheets();
-        
-        loadLogbookEntries();
-        updateDashboardStats();
-        showNotification('Log entry deleted successfully!', 'success');
+        if (success) {
+            // Remove from local array
+            logbookEntries = logbookEntries.filter(le => le.id !== id);
+            loadLogbookEntries();
+            updateDashboardStats();
+            showNotification('Log entry deleted successfully!', 'success');
+        } else {
+            showNotification('Failed to delete log entry from Google Sheets', 'error');
+        }
     }
 }
 
@@ -2789,9 +2829,12 @@ function clearLogbookSearch() {
 }
 
 // Load logbook entries
-function loadLogbookEntries() {
+async function loadLogbookEntries() {
     const container = document.getElementById('logbookListContainer');
-    container.innerHTML = '';
+    container.innerHTML = '<div class="no-results">Loading logbook entries...</div>';
+    
+    // Reload from Google Sheets
+    await loadLogbookFromGoogleSheets();
     
     let filteredEntries = logbookEntries;
     
@@ -2804,6 +2847,8 @@ function loadLogbookEntries() {
         container.innerHTML = '<div class="no-results">No logbook entries found.</div>';
         return;
     }
+    
+    container.innerHTML = '';
     
     filteredEntries.forEach(entry => {
         const entryElement = document.createElement('div');
@@ -2860,7 +2905,7 @@ function clearLogbookForm() {
 }
 
 // Create daily log
-async function createDailyLog() {
+function createDailyLog() {
     const date = document.getElementById('dailyLogDate').value;
     const openingBalance = parseFloat(document.getElementById('openingBalance').value) || 0;
     const closingBalance = parseFloat(document.getElementById('closingBalance').value) || 0;
@@ -2897,9 +2942,6 @@ async function createDailyLog() {
     };
     
     dailyLogs.push(dailyLog);
-    
-    // Save data to Google Sheets
-    await saveDataToGoogleSheets();
     
     showPage('dailylog');
     updateDashboardStats();
@@ -2986,7 +3028,7 @@ function editDailyLog(id) {
 }
 
 // Update daily log
-async function updateDailyLog() {
+function updateDailyLog() {
     if (!editingDailyLogId) {
         showNotification('No daily log selected for editing', 'error');
         return;
@@ -3019,10 +3061,6 @@ async function updateDailyLog() {
         }
         
         editingDailyLogId = null;
-        
-        // Save data to Google Sheets
-        await saveDataToGoogleSheets();
-        
         showPage('dailylog');
         loadDailyLogs();
         updateDashboardStats();
@@ -3031,7 +3069,7 @@ async function updateDailyLog() {
 }
 
 // Close daily log
-async function closeDailyLog(id) {
+function closeDailyLog(id) {
     const dailyLog = dailyLogs.find(log => log.id === id);
     if (dailyLog) {
         // Prompt for closing balance if not provided
@@ -3041,10 +3079,6 @@ async function closeDailyLog(id) {
             if (!isNaN(balance)) {
                 dailyLog.closingBalance = balance;
                 dailyLog.status = 'closed';
-                
-                // Save data to Google Sheets
-                await saveDataToGoogleSheets();
-                
                 loadDailyLogs();
                 updateDashboardStats();
                 showNotification('Day closed successfully!', 'success');
@@ -3341,7 +3375,7 @@ function closeModal(modalId) {
 }
 
 // Confirm close day
-async function confirmCloseDay() {
+function confirmCloseDay() {
     const crewId = document.getElementById('confirmCrewId').value;
     const password = document.getElementById('confirmPassword').value;
     
@@ -3369,9 +3403,6 @@ async function confirmCloseDay() {
             record.dayClosed = true;
         }
     });
-    
-    // Save data to Google Sheets
-    await saveDataToGoogleSheets();
     
     closeModal('closeDayModal');
     loadBankRecordsForDate();
@@ -3532,7 +3563,7 @@ function updatePerformanceTable() {
 }
 
 // Create user
-async function createUser() {
+function createUser() {
     const userId = document.getElementById('newUserId').value;
     const userName = document.getElementById('newUserName').value;
     const userRole = document.getElementById('newUserRole').value;
@@ -3557,9 +3588,6 @@ async function createUser() {
     };
     
     users.push(newUser);
-    
-    // Save data to Google Sheets
-    await saveDataToGoogleSheets();
     
     showPage('usermanagement');
     updateDashboardStats();
@@ -3639,7 +3667,7 @@ function editUser(userId) {
 }
 
 // Update user
-async function updateUser() {
+function updateUser() {
     const userId = document.getElementById('editUserId').value;
     const userName = document.getElementById('editUserName').value;
     const userRole = document.getElementById('editUserRole').value;
@@ -3660,9 +3688,6 @@ async function updateUser() {
             user.password = userPassword;
         }
         
-        // Save data to Google Sheets
-        await saveDataToGoogleSheets();
-        
         showPage('usermanagement');
         loadUsers();
         showNotification('User updated successfully!', 'success');
@@ -3670,7 +3695,7 @@ async function updateUser() {
 }
 
 // Reset password
-async function resetPassword(userId) {
+function resetPassword(userId) {
     if (currentUser.role !== 'Admin') {
         showNotification('Only admin can reset passwords', 'error');
         return;
@@ -3681,10 +3706,6 @@ async function resetPassword(userId) {
         const user = users.find(u => u.id === userId);
         if (user) {
             user.password = newPassword;
-            
-            // Save data to Google Sheets
-            await saveDataToGoogleSheets();
-            
             loadUsers();
             showNotification('Password reset successfully!', 'success');
         }
@@ -3692,7 +3713,7 @@ async function resetPassword(userId) {
 }
 
 // Delete user
-async function deleteUser(userId) {
+function deleteUser(userId) {
     if (currentUser.role !== 'Admin') {
         showNotification('Only admin can delete users', 'error');
         return;
@@ -3700,10 +3721,6 @@ async function deleteUser(userId) {
     
     if (confirm('Are you sure you want to delete this user?')) {
         users = users.filter(u => u.id !== userId);
-        
-        // Save data to Google Sheets
-        await saveDataToGoogleSheets();
-        
         loadUsers();
         updateDashboardStats();
         showNotification('User deleted successfully!', 'success');
@@ -3838,33 +3855,92 @@ function generateId() {
     return Math.random().toString(36).substr(2, 9);
 }
 
-// Auto-refresh functions
-function startAutoRefresh() {
-    refreshInterval = setInterval(async () => {
-        // Only refresh if dashboard is active and it's been at least 30 seconds
-        if (document.getElementById('dashboardPage').classList.contains('active') && 
-            Date.now() - lastRefreshTime > 30000) {
-            await loadDataFromGoogleSheets();
-            updateDashboardStats();
-            lastRefreshTime = Date.now();
+// Initialize sample data
+function initializeSampleData() {
+    // Sample users (kept local)
+    users = [
+        {
+            id: '1001',
+            name: 'Administrator',
+            role: 'Admin',
+            password: 'admin123'
+        },
+        {
+            id: '1002',
+            name: 'Crew 1002',
+            role: 'Crew',
+            password: 'crew123'
+        },
+        {
+            id: '1003',
+            name: 'Crew 1003',
+            role: 'Crew',
+            password: 'crew123'
+        },
+        {
+            id: '1004',
+            name: 'Crew 1004',
+            role: 'Crew',
+            password: 'crew123'
+        },
+        {
+            id: '1005',
+            name: 'Crew 1005',
+            role: 'Crew',
+            password: 'crew123'
         }
-    }, 30000);
-}
-
-function stopAutoRefresh() {
-    if (refreshInterval) {
-        clearInterval(refreshInterval);
-    }
-}
-
-// Refresh data manually
-async function refreshData() {
-    showLoading();
-    await loadDataFromGoogleSheets();
-    updateDashboardStats();
-    hideLoading();
-    showNotification('Data refreshed successfully!', 'success');
-    lastRefreshTime = Date.now();
+    ];
+    
+    // Initialize cashbill counter
+    cashbillCounter = 4;
+    
+    // Sample daily logs (kept local)
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const twoDaysAgo = new Date(today);
+    twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+    
+    const todayString = today.toLocaleDateString();
+    const yesterdayString = yesterday.toLocaleDateString();
+    const twoDaysAgoString = twoDaysAgo.toLocaleDateString();
+    
+    dailyLogs = [
+        {
+            id: generateId(),
+            crewId: '1002',
+            crewName: 'Crew 1002',
+            date: twoDaysAgoString,
+            openingBalance: 100.00,
+            closingBalance: 250.00,
+            notes: 'Busy day with many customers.',
+            status: 'closed'
+        },
+        {
+            id: generateId(),
+            crewId: '1003',
+            crewName: 'Crew 1003',
+            date: yesterdayString,
+            openingBalance: 150.00,
+            closingBalance: 300.00,
+            notes: 'Good sales today.',
+            status: 'closed'
+        },
+        {
+            id: generateId(),
+            crewId: '1004',
+            crewName: 'Crew 1004',
+            date: todayString,
+            openingBalance: 200.00,
+            closingBalance: 0,
+            notes: 'Day in progress.',
+            status: 'open'
+        }
+    ];
+    
+    // Load cashbills and logbook from Google Sheets
+    loadCashbillsFromGoogleSheets();
+    loadLogbookFromGoogleSheets();
 }
 </script>
 </body>
