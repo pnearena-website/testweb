@@ -939,19 +939,6 @@ font-weight: bold;
 .btn-close-day-log:hover {
 background-color: #c0392b;
 }
-/* Loading indicator */
-.loading {
-display: inline-block;
-width: 20px;
-height: 20px;
-border: 3px solid rgba(255,255,255,.3);
-border-radius: 50%;
-border-top-color: #fff;
-animation: spin 1s ease-in-out infinite;
-}
-@keyframes spin {
-to { transform: rotate(360deg); }
-}
 </style>
 </head>
 <body>
@@ -971,7 +958,6 @@ to { transform: rotate(360deg); }
 <div id="errorMessage" class="error-message">Invalid Crew ID or Password</div>
 </div>
 </div>
-
 <!-- Dashboard -->
 <div id="dashboardContainer" class="dashboard-container">
 <!-- Top Bar -->
@@ -982,7 +968,6 @@ to { transform: rotate(360deg); }
 <button class="btn-logout" onclick="logout()">Logout</button>
 </div>
 </div>
-
 <!-- Main Container -->
 <div class="main-container">
 <!-- Sidebar -->
@@ -1017,7 +1002,6 @@ to { transform: rotate(360deg); }
 </div>
 </div>
 </div>
-
 <!-- Content Area -->
 <div class="content">
 <!-- Dashboard Page -->
@@ -1026,11 +1010,12 @@ to { transform: rotate(360deg); }
 <div class="announcement-bar">
 <i class="fas fa-info-circle"></i> Any bugs or any adjustment contact Danial (Admin/IT)
 </div>
-
 <div class="page-header">
 <h1 class="page-title">Dashboard</h1>
+<button class="btn-primary" onclick="refreshData()">
+<i class="fas fa-sync-alt"></i> Refresh Data
+</button>
 </div>
-
 <div class="stats-container">
 <div class="stat-card">
 <div class="stat-title">Total Cashbills</div>
@@ -1057,7 +1042,6 @@ to { transform: rotate(360deg); }
 <div class="stat-value" id="totalDailyLogsClosed">0</div>
 </div>
 </div>
-
 <div class="dashboard-content">
 <p>Welcome to PNE Arena Plan Flow Portal. Select an option from the sidebar to get started.</p>
 <!-- Daily Log Status Section -->
@@ -1068,7 +1052,6 @@ to { transform: rotate(360deg); }
 </div>
 </div>
 </div>
-
 <!-- Admin Panel -->
 <div class="admin-panel" id="adminPanel" style="display: none;">
 <h2 class="admin-title">Admin Panel</h2>
@@ -1105,7 +1088,6 @@ to { transform: rotate(360deg); }
 </div>
 </div>
 </div>
-
 <!-- Cashbill List Page -->
 <div id="cashbillPage" class="page">
 <div class="page-header">
@@ -1114,7 +1096,6 @@ to { transform: rotate(360deg); }
 <i class="fas fa-plus"></i> Create Cashbill
 </button>
 </div>
-
 <!-- Search Bar -->
 <div class="search-bar">
 <input type="text" id="cashbillSearch" class="search-input" placeholder="Search by cashbill number, customer name, or salesperson...">
@@ -1125,7 +1106,6 @@ to { transform: rotate(360deg); }
 <i class="fas fa-times"></i>
 </button>
 </div>
-
 <!-- Cashbill List -->
 <div class="cashbill-list">
 <h2>Cashbill Records</h2>
@@ -1134,7 +1114,6 @@ to { transform: rotate(360deg); }
 </div>
 </div>
 </div>
-
 <!-- Cashbill Form Page -->
 <div id="cashbillformPage" class="page">
 <button class="btn-back" onclick="showPage('cashbill')">
@@ -1143,7 +1122,6 @@ to { transform: rotate(360deg); }
 <div class="page-header">
 <h1 class="page-title">Create New Cashbill</h1>
 </div>
-
 <!-- User Info Display -->
 <div class="user-info-display">
 <div class="user-info-title">Logged in as:</div>
@@ -1151,7 +1129,6 @@ to { transform: rotate(360deg); }
 <span id="loggedInUserInfo">Loading...</span>
 </div>
 </div>
-
 <!-- Cashbill Form -->
 <div class="cashbill-form">
 <div class="form-row">
@@ -1233,7 +1210,6 @@ to { transform: rotate(360deg); }
 </div>
 </div>
 </div>
-
 <!-- Logbook List Page -->
 <div id="logbookPage" class="page">
 <div class="page-header">
@@ -1242,7 +1218,6 @@ to { transform: rotate(360deg); }
 <i class="fas fa-plus"></i> Create Log Entry
 </button>
 </div>
-
 <!-- Search Bar -->
 <div class="search-bar">
 <input type="text" id="logbookSearch" class="search-input" placeholder="Search by content, type, or tracking number...">
@@ -1253,7 +1228,6 @@ to { transform: rotate(360deg); }
 <i class="fas fa-times"></i>
 </button>
 </div>
-
 <!-- Logbook List -->
 <div class="logbook-list">
 <h2>Logbook Entries</h2>
@@ -1262,7 +1236,6 @@ to { transform: rotate(360deg); }
 </div>
 </div>
 </div>
-
 <!-- Logbook Form Page -->
 <div id="logbookformPage" class="page">
 <button class="btn-back" onclick="showPage('logbook')">
@@ -1271,7 +1244,6 @@ to { transform: rotate(360deg); }
 <div class="page-header">
 <h1 class="page-title">Create New Log Entry</h1>
 </div>
-
 <!-- Logbook Form -->
 <div class="logbook-form">
 <div class="form-group">
@@ -1308,7 +1280,6 @@ to { transform: rotate(360deg); }
 </div>
 </div>
 </div>
-
 <!-- Edit Logbook Form Page -->
 <div id="editlogbookformPage" class="page">
 <button class="btn-back" onclick="showPage('logbook')">
@@ -1317,7 +1288,6 @@ to { transform: rotate(360deg); }
 <div class="page-header">
 <h1 class="page-title">Edit Log Entry</h1>
 </div>
-
 <!-- Edit Logbook Form -->
 <div class="edit-logbook-form">
 <div class="form-group">
@@ -1354,7 +1324,6 @@ to { transform: rotate(360deg); }
 </div>
 </div>
 </div>
-
 <!-- Daily Log List Page -->
 <div id="dailylogPage" class="page">
 <div class="page-header">
@@ -1363,7 +1332,6 @@ to { transform: rotate(360deg); }
 <i class="fas fa-plus"></i> Create Daily Log
 </button>
 </div>
-
 <!-- Search Bar -->
 <div class="search-bar">
 <input type="text" id="dailylogSearch" class="search-input" placeholder="Search by date or notes...">
@@ -1374,7 +1342,6 @@ to { transform: rotate(360deg); }
 <i class="fas fa-times"></i>
 </button>
 </div>
-
 <!-- Daily Log List -->
 <div class="dailylog-list">
 <h2>Daily Log Entries</h2>
@@ -1383,7 +1350,6 @@ to { transform: rotate(360deg); }
 </div>
 </div>
 </div>
-
 <!-- Daily Log Form Page -->
 <div id="dailylogformPage" class="page">
 <button class="btn-back" onclick="showPage('dailylog')">
@@ -1392,7 +1358,6 @@ to { transform: rotate(360deg); }
 <div class="page-header">
 <h1 class="page-title">Create Daily Log</h1>
 </div>
-
 <!-- User Info Display -->
 <div class="user-info-display">
 <div class="user-info-title">Logged in as:</div>
@@ -1400,7 +1365,6 @@ to { transform: rotate(360deg); }
 <span id="loggedInUserInfoDaily">Loading...</span>
 </div>
 </div>
-
 <!-- Daily Log Form -->
 <div class="dailylog-form">
 <div class="form-group">
@@ -1431,7 +1395,6 @@ to { transform: rotate(360deg); }
 </div>
 </div>
 </div>
-
 <!-- Edit Daily Log Form Page -->
 <div id="editdailylogformPage" class="page">
 <button class="btn-back" onclick="showPage('dailylog')">
@@ -1440,7 +1403,6 @@ to { transform: rotate(360deg); }
 <div class="page-header">
 <h1 class="page-title">Edit Daily Log</h1>
 </div>
-
 <!-- Edit Daily Log Form -->
 <div class="dailylog-form">
 <div class="form-group">
@@ -1471,13 +1433,11 @@ to { transform: rotate(360deg); }
 </div>
 </div>
 </div>
-
 <!-- Bank Records Page -->
 <div id="bankrecordsPage" class="page">
 <div class="page-header">
 <h1 class="page-title">Bank Records</h1>
 </div>
-
 <div class="bank-summary">
 <div class="summary-card">
 <div class="summary-title">Total Deposits (RM)</div>
@@ -1508,7 +1468,6 @@ to { transform: rotate(360deg); }
 <div class="summary-value" id="qrOthersTransactions">0.00</div>
 </div>
 </div>
-
 <!-- Date Selector -->
 <div class="bank-date-selector">
 <div class="date-picker-container">
@@ -1517,12 +1476,10 @@ to { transform: rotate(360deg); }
 <button class="view-today-btn" onclick="viewTodayBankRecords()">View Today</button>
 </div>
 </div>
-
 <!-- Payment Method Boxes -->
 <div class="payment-method-boxes" id="paymentMethodBoxes">
 <!-- Payment method boxes will be dynamically added here -->
 </div>
-
 <!-- Bank Records List -->
 <div class="bank-records-list">
 <h2 class="bank-records-title">Transaction Details</h2>
@@ -1530,7 +1487,6 @@ to { transform: rotate(360deg); }
 <!-- Bank records will be dynamically added here -->
 </div>
 </div>
-
 <!-- Close Day Section -->
 <div class="close-day-section">
 <button id="closeDayBtn" class="btn-close-day" onclick="openCloseDayModal()" style="display: none;">
@@ -1538,7 +1494,6 @@ Close Day
 </button>
 </div>
 </div>
-
 <!-- User Management Page -->
 <div id="usermanagementPage" class="page">
 <div class="page-header">
@@ -1547,7 +1502,6 @@ Close Day
 <i class="fas fa-plus"></i> Add User
 </button>
 </div>
-
 <!-- User List -->
 <div class="user-list">
 <h2>User Accounts</h2>
@@ -1556,7 +1510,6 @@ Close Day
 </div>
 </div>
 </div>
-
 <!-- User Form Page -->
 <div id="userformPage" class="page">
 <button class="btn-back" onclick="showPage('usermanagement')">
@@ -1565,7 +1518,6 @@ Close Day
 <div class="page-header">
 <h1 class="page-title">Add New User</h1>
 </div>
-
 <!-- User Form -->
 <div class="user-form">
 <div class="form-row">
@@ -1605,7 +1557,6 @@ Close Day
 </div>
 </div>
 </div>
-
 <!-- Edit User Form Page -->
 <div id="edituserformPage" class="page">
 <button class="btn-back" onclick="showPage('usermanagement')">
@@ -1614,7 +1565,6 @@ Close Day
 <div class="page-header">
 <h1 class="page-title">Edit User</h1>
 </div>
-
 <!-- Edit User Form -->
 <div class="user-form">
 <div class="form-row">
@@ -1657,7 +1607,6 @@ Close Day
 </div>
 </div>
 </div>
-
 <!-- Close Day Confirmation Modal -->
 <div id="closeDayModal" class="modal">
 <div class="modal-content">
@@ -1682,7 +1631,6 @@ Close Day
 </div>
 </div>
 </div>
-
 <!-- Uncommit Confirmation Modal -->
 <div id="uncommitModal" class="modal">
 <div class="modal-content">
@@ -1711,13 +1659,16 @@ Close Day
 </div>
 </div>
 </div>
-
 <!-- Notification -->
 <div id="notification" class="notification"></div>
 
+<!-- jQuery and Loading Overlay -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
+
 <script>
-// Google Sheets API URL
-const GOOGLE_SHEETS_API_URL = "https://script.google.com/macros/s/AKfycbxSU8yXh8Y_yQf2fzz7SsNzcb80vOOsGKbstWBIgUSFV_oXy0oFqvTRAIuGP3qxHRABEA/exec";
+// Google Sheets Web App URL
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzL1bM84gZFiFreLUjjJaVDKQnpX1xs3xMeyhzX2Hi5JxgdwDrmfO6BYDDEumE78eGjgQ/exec';
 
 // Global variables
 let currentUser = null;
@@ -1729,12 +1680,12 @@ let dailyLogs = [];
 let sidebarCollapsed = false;
 let cashbillCounter = 1;
 let itemPrices = {
-    "Event Ticket": 50.00,
-    "VIP Pass": 150.00,
-    "Merchandise T-Shirt": 45.00,
-    "Merchandise Cap": 35.00,
-    "Food & Beverage": 15.00,
-    "Parking Pass": 20.00
+"Event Ticket": 50.00,
+"VIP Pass": 150.00,
+"Merchandise T-Shirt": 45.00,
+"Merchandise Cap": 35.00,
+"Food & Beverage": 15.00,
+"Parking Pass": 20.00
 };
 let dayToClose = null;
 let editingLogEntryId = null;
@@ -1742,84 +1693,151 @@ let currentBankDate = null;
 let editingDailyLogId = null;
 let uncommitEntryType = null;
 let uncommitEntryId = null;
-let isLoading = false;
+let refreshInterval;
+let lastRefreshTime = Date.now();
 
-// API Helper Function
-async function callGoogleSheetsAPI(sheet, action, data = null) {
-    if (isLoading) {
-        showNotification('Another operation is in progress. Please wait.', 'error');
-        return { result: 'error', message: 'Operation in progress' };
-    }
-    
-    isLoading = true;
-    showLoadingIndicator();
-    
-    const url = `${GOOGLE_SHEETS_API_URL}?sheet=${sheet}&action=${action}`;
-    
-    const options = {
-        method: data ? 'POST' : 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: data ? JSON.stringify(data) : null,
-    };
-    
-    try {
-        const response = await fetch(url, options);
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const result = await response.json();
-        hideLoadingIndicator();
-        isLoading = false;
-        return result;
-    } catch (error) {
-        console.error('Error calling Google Sheets API:', error);
-        hideLoadingIndicator();
-        isLoading = false;
-        return { result: 'error', message: error.message };
-    }
+// Show loading overlay
+function showLoading() {
+  $.LoadingOverlay("show", {
+    background: "rgba(0, 0, 0, 0.5)",
+    image: "",
+    fontawesome: "fa fa-spinner fa-spin"
+  });
 }
 
-// Show loading indicator
-function showLoadingIndicator() {
-    // Add a loading indicator to the page
-    const existingIndicator = document.getElementById('loadingIndicator');
-    if (!existingIndicator) {
-        const indicator = document.createElement('div');
-        indicator.id = 'loadingIndicator';
-        indicator.style.position = 'fixed';
-        indicator.style.top = '0';
-        indicator.style.left = '0';
-        indicator.style.width = '100%';
-        indicator.style.height = '100%';
-        indicator.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-        indicator.style.display = 'flex';
-        indicator.style.justifyContent = 'center';
-        indicator.style.alignItems = 'center';
-        indicator.style.zIndex = '9999';
-        
-        const spinner = document.createElement('div');
-        spinner.className = 'loading';
-        spinner.style.width = '50px';
-        spinner.style.height = '50px';
-        spinner.style.border = '5px solid rgba(255,255,255,.3)';
-        spinner.style.borderRadius = '50%';
-        spinner.style.borderTopColor = '#3498db';
-        
-        indicator.appendChild(spinner);
-        document.body.appendChild(indicator);
-    }
+// Hide loading overlay
+function hideLoading() {
+  $.LoadingOverlay("hide");
 }
 
-// Hide loading indicator
-function hideLoadingIndicator() {
-    const indicator = document.getElementById('loadingIndicator');
-    if (indicator) {
-        document.body.removeChild(indicator);
-    }
+// Load data from Google Sheets
+async function loadDataFromGoogleSheets() {
+  showLoading();
+  try {
+    // Load cashbills
+    const cashbillsResponse = await fetch(`${SCRIPT_URL}?sheet=Cashbills&action=read`);
+    cashbills = await cashbillsResponse.json();
+    
+    // Load logbook entries
+    const logbookResponse = await fetch(`${SCRIPT_URL}?sheet=Logbook&action=read`);
+    logbookEntries = await logbookResponse.json();
+    
+    // Load bank records
+    const bankResponse = await fetch(`${SCRIPT_URL}?sheet=BankRecords&action=read`);
+    bankRecords = await bankResponse.json();
+    
+    // Load users
+    const usersResponse = await fetch(`${SCRIPT_URL}?sheet=Users&action=read`);
+    users = await usersResponse.json();
+    
+    // Load daily logs
+    const dailyResponse = await fetch(`${SCRIPT_URL}?sheet=DailyLogs&action=read`);
+    dailyLogs = await dailyResponse.json();
+    
+    // Load settings
+    const settingsResponse = await fetch(`${SCRIPT_URL}?sheet=Settings&action=read`);
+    const settings = await settingsResponse.json();
+    cashbillCounter = settings.length > 0 ? settings[0].cashbillCounter : 1;
+    
+    hideLoading();
+    return true;
+  } catch (error) {
+    console.error('Error loading data from Google Sheets:', error);
+    hideLoading();
+    showNotification('Error loading data', 'error');
+    return false;
+  }
+}
+
+// Save data to Google Sheets
+async function saveDataToGoogleSheets() {
+  showLoading();
+  try {
+    // Save cashbills
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        sheet: 'Cashbills',
+        action: 'write',
+        data: cashbills
+      })
+    });
+    
+    // Save logbook entries
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        sheet: 'Logbook',
+        action: 'write',
+        data: logbookEntries
+      })
+    });
+    
+    // Save bank records
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        sheet: 'BankRecords',
+        action: 'write',
+        data: bankRecords
+      })
+    });
+    
+    // Save users
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        sheet: 'Users',
+        action: 'write',
+        data: users
+      })
+    });
+    
+    // Save daily logs
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        sheet: 'DailyLogs',
+        action: 'write',
+        data: dailyLogs
+      })
+    });
+    
+    // Save settings
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        sheet: 'Settings',
+        action: 'write',
+        data: [{id: 1, cashbillCounter: cashbillCounter}]
+      })
+    });
+    
+    hideLoading();
+    console.log('Data saved to Google Sheets');
+  } catch (error) {
+    console.error('Error saving data to Google Sheets:', error);
+    hideLoading();
+    showNotification('Error saving data', 'error');
+  }
 }
 
 // Check for saved login state when page loads
@@ -1836,8 +1854,8 @@ async function checkSavedLogin() {
             // Validate the saved user data
             if (userData.id && userData.role && userData.name) {
                 currentUser = userData;
-                // Load data from Google Sheets before showing dashboard
-                await initializeSampleData();
+                // Load data from Google Sheets
+                await loadDataFromGoogleSheets();
                 showDashboard();
                 return;
             }
@@ -1847,26 +1865,19 @@ async function checkSavedLogin() {
             localStorage.removeItem('pneArenaUser');
         }
     }
-    // No valid saved login found, show login page
+    
+    // No valid saved login found, load data and show login page
+    await loadDataFromGoogleSheets();
     document.getElementById('loginPage').style.display = 'flex';
 }
 
 // Login function
 async function login() {
-    const crewId = document.getElementById('crewId').value.trim();
-    const password = document.getElementById('password').value.trim();
+    const crewId = document.getElementById('crewId').value;
+    const password = document.getElementById('password').value;
     const errorMessage = document.getElementById('errorMessage');
     
-    if (!crewId || !password) {
-        errorMessage.textContent = 'Please enter both Crew ID and Password';
-        errorMessage.style.display = 'block';
-        return;
-    }
-    
-    // Load users from Google Sheets
-    await loadUsers();
-    
-    // Find user with matching credentials
+    // Find user in users array
     const user = users.find(u => u.id === crewId && u.password === password);
     
     if (user) {
@@ -1877,13 +1888,8 @@ async function login() {
         };
         // Save login state to localStorage
         localStorage.setItem('pneArenaUser', JSON.stringify(currentUser));
-        
-        // Load all data from Google Sheets
-        await initializeSampleData();
-        
         showDashboard();
     } else {
-        errorMessage.textContent = 'Invalid Crew ID or Password';
         errorMessage.style.display = 'block';
     }
 }
@@ -1901,7 +1907,7 @@ async function showDashboard() {
         document.getElementById('adminPanel').style.display = 'block';
     }
     
-    // Load data based on user role
+    // Update dashboard stats
     updateDashboardStats();
     loadCashbills();
     loadLogbookEntries();
@@ -1998,6 +2004,13 @@ function showPage(pageName) {
     } else if (pageName === 'editdailylogform') {
         // Form is populated by editDailyLog function
     }
+    
+    // Start auto-refresh on dashboard, stop on other pages
+    if (pageName === 'dashboard') {
+        startAutoRefresh();
+    } else {
+        stopAutoRefresh();
+    }
 }
 
 // Initialize bank records page
@@ -2033,17 +2046,13 @@ function formatDateForInput(date) {
 // Update logged in user info
 function updateLoggedInUserInfo() {
     const userInfoElement = document.getElementById('loggedInUserInfo');
-    if (userInfoElement) {
-        userInfoElement.textContent = `${currentUser.name} (${currentUser.id}) - ${currentUser.role}`;
-    }
+    userInfoElement.textContent = `${currentUser.name} (${currentUser.id}) - ${currentUser.role}`;
 }
 
 // Update logged in user info for daily log
 function updateLoggedInUserInfoDaily() {
     const userInfoElement = document.getElementById('loggedInUserInfoDaily');
-    if (userInfoElement) {
-        userInfoElement.textContent = `${currentUser.name} (${currentUser.id}) - ${currentUser.role}`;
-    }
+    userInfoElement.textContent = `${currentUser.name} (${currentUser.id}) - ${currentUser.role}`;
 }
 
 // Toggle log type fields
@@ -2069,17 +2078,9 @@ function toggleEditLogTypeFields() {
 }
 
 // Populate salesperson filter
-async function populateSalespersonFilter() {
+function populateSalespersonFilter() {
     const salespersonSelect = document.getElementById('salespersonId');
-    if (!salespersonSelect) return;
-    
     salespersonSelect.innerHTML = '<option value="">Select Salesperson</option>';
-    
-    // Ensure users are loaded
-    if (users.length === 0) {
-        await loadUsers();
-    }
-    
     users.forEach(user => {
         const option = document.createElement('option');
         option.value = user.id;
@@ -2113,7 +2114,7 @@ function calculateTotal() {
 
 // Save cashbill
 async function saveCashbill(status) {
-    const customerName = document.getElementById('customerName').value.trim();
+    const customerName = document.getElementById('customerName').value;
     const salespersonId = document.getElementById('salespersonId').value;
     const itemSelect = document.getElementById('itemSelect');
     const item = itemSelect.options[itemSelect.selectedIndex].text.split(' - ')[0];
@@ -2153,47 +2154,34 @@ async function saveCashbill(status) {
         dateOnly: new Date().toLocaleDateString()
     };
     
-    // Save to Google Sheets
-    const result = await callGoogleSheetsAPI('Cashbills', 'add', cashbill);
+    cashbills.push(cashbill);
     
-    if (result.result === 'success') {
-        // Add to bank records if committed
-        if (status === 'committed') {
-            const bankRecord = {
-                id: generateId(),
-                cashbillId: cashbill.id,
-                cashbillNumber: cashbillNumber,
-                crewId: currentUser.id,
-                crewName: currentUser.name,
-                salespersonId: salespersonId,
-                salespersonName: salespersonName,
-                amount: parseFloat(totalAmount),
-                paymentType: paymentType,
-                date: new Date().toLocaleDateString(),
-                description: `Payment for ${item} - ${customerName}`,
-                dayClosed: false,
-                status: 'committed'
-            };
-            
-            // Save bank record to Google Sheets
-            const bankResult = await callGoogleSheetsAPI('Bank Records', 'add', bankRecord);
-            
-            if (bankResult.result === 'success') {
-                await loadBankRecords();
-            } else {
-                showNotification('Error creating bank record: ' + bankResult.message, 'error');
-            }
-        }
-        
-        // Reload cashbills from Google Sheets
-        await loadCashbills();
-        
-        showPage('cashbill');
-        updateDashboardStats();
-        showNotification(`Cashbill ${status === 'committed' ? 'committed' : 'saved as draft'} successfully!`, 'success');
-    } else {
-        showNotification('Error creating cashbill: ' + result.message, 'error');
+    // Add to bank records if committed
+    if (status === 'committed') {
+        const bankRecord = {
+            id: generateId(),
+            cashbillId: cashbill.id,
+            cashbillNumber: cashbillNumber,
+            crewId: currentUser.id,
+            crewName: currentUser.name,
+            salespersonId: salespersonId,
+            salespersonName: salespersonName,
+            amount: parseFloat(totalAmount),
+            paymentType: paymentType,
+            date: new Date().toLocaleDateString(),
+            description: `Payment for ${item} - ${customerName}`,
+            dayClosed: false,
+            status: 'committed'
+        };
+        bankRecords.push(bankRecord);
     }
+    
+    // Save data to Google Sheets
+    await saveDataToGoogleSheets();
+    
+    showPage('cashbill');
+    updateDashboardStats();
+    showNotification(`Cashbill ${status === 'committed' ? 'committed' : 'saved as draft'} successfully!`, 'success');
 }
 
 // Commit cashbill
@@ -2202,42 +2190,30 @@ async function commitCashbill(id) {
     if (cashbill) {
         cashbill.status = 'committed';
         
-        // Update in Google Sheets
-        const result = await callGoogleSheetsAPI('Cashbills', 'update', cashbill);
+        // Add to bank records
+        const bankRecord = {
+            id: generateId(),
+            cashbillId: cashbill.id,
+            cashbillNumber: cashbill.cashbillNumber,
+            crewId: cashbill.crewId,
+            crewName: cashbill.crewName,
+            salespersonId: cashbill.salespersonId,
+            salespersonName: cashbill.salespersonName,
+            amount: cashbill.totalAmount,
+            paymentType: cashbill.paymentType,
+            date: new Date().toLocaleDateString(),
+            description: `Payment for ${cashbill.item} - ${cashbill.customerName}`,
+            dayClosed: false,
+            status: 'committed'
+        };
+        bankRecords.push(bankRecord);
         
-        if (result.result === 'success') {
-            // Add to bank records
-            const bankRecord = {
-                id: generateId(),
-                cashbillId: cashbill.id,
-                cashbillNumber: cashbill.cashbillNumber,
-                crewId: cashbill.crewId,
-                crewName: cashbill.crewName,
-                salespersonId: cashbill.salespersonId,
-                salespersonName: cashbill.salespersonName,
-                amount: cashbill.totalAmount,
-                paymentType: cashbill.paymentType,
-                date: new Date().toLocaleDateString(),
-                description: `Payment for ${cashbill.item} - ${cashbill.customerName}`,
-                dayClosed: false,
-                status: 'committed'
-            };
-            
-            // Save bank record to Google Sheets
-            const bankResult = await callGoogleSheetsAPI('Bank Records', 'add', bankRecord);
-            
-            if (bankResult.result === 'success') {
-                await loadBankRecords();
-            } else {
-                showNotification('Error creating bank record: ' + bankResult.message, 'error');
-            }
-            
-            await loadCashbills();
-            updateDashboardStats();
-            showNotification('Cashbill committed successfully!', 'success');
-        } else {
-            showNotification('Error committing cashbill: ' + result.message, 'error');
-        }
+        // Save data to Google Sheets
+        await saveDataToGoogleSheets();
+        
+        loadCashbills();
+        updateDashboardStats();
+        showNotification('Cashbill committed successfully!', 'success');
     }
 }
 
@@ -2288,9 +2264,9 @@ function uncommitBankRecord(id) {
 
 // Confirm uncommit action
 async function confirmUncommit() {
-    const reason = document.getElementById('uncommitReason').value.trim();
-    const adminId = document.getElementById('confirmAdminId').value.trim();
-    const password = document.getElementById('confirmAdminPassword').value.trim();
+    const reason = document.getElementById('uncommitReason').value;
+    const adminId = document.getElementById('confirmAdminId').value;
+    const password = document.getElementById('confirmAdminPassword').value;
     
     if (!reason) {
         showNotification('Please provide a reason for uncommitting', 'error');
@@ -2313,62 +2289,32 @@ async function confirmUncommit() {
         const cashbill = cashbills.find(cb => cb.id === uncommitEntryId);
         if (cashbill) {
             cashbill.status = 'draft';
-            
-            // Update in Google Sheets
-            const result = await callGoogleSheetsAPI('Cashbills', 'update', cashbill);
-            
-            if (result.result === 'success') {
-                // Remove from bank records
-                const bankRecord = bankRecords.find(br => br.cashbillId === uncommitEntryId);
-                if (bankRecord) {
-                    const deleteResult = await callGoogleSheetsAPI('Bank Records', 'delete', { id: bankRecord.id });
-                    if (deleteResult.result === 'success') {
-                        await loadBankRecords();
-                    } else {
-                        showNotification('Error deleting bank record: ' + deleteResult.message, 'error');
-                    }
-                }
-                
-                await loadCashbills();
-                updateDashboardStats();
-                showNotification('Cashbill uncommitted successfully!', 'success');
-            } else {
-                showNotification('Error uncommitting cashbill: ' + result.message, 'error');
-            }
+            // Remove from bank records
+            bankRecords = bankRecords.filter(br => br.cashbillId !== uncommitEntryId);
+            loadCashbills();
+            updateDashboardStats();
+            showNotification('Cashbill uncommitted successfully!', 'success');
         }
     } else if (uncommitEntryType === 'logbook') {
         const logEntry = logbookEntries.find(le => le.id === uncommitEntryId);
         if (logEntry) {
             logEntry.status = 'draft';
-            
-            // Update in Google Sheets
-            const result = await callGoogleSheetsAPI('Logbook', 'update', logEntry);
-            
-            if (result.result === 'success') {
-                await loadLogbookEntries();
-                updateDashboardStats();
-                showNotification('Logbook entry uncommitted successfully!', 'success');
-            } else {
-                showNotification('Error uncommitting logbook entry: ' + result.message, 'error');
-            }
+            loadLogbookEntries();
+            updateDashboardStats();
+            showNotification('Logbook entry uncommitted successfully!', 'success');
         }
     } else if (uncommitEntryType === 'bank') {
         const bankRecord = bankRecords.find(br => br.id === uncommitEntryId);
         if (bankRecord) {
             bankRecord.status = 'draft';
-            
-            // Update in Google Sheets
-            const result = await callGoogleSheetsAPI('Bank Records', 'update', bankRecord);
-            
-            if (result.result === 'success') {
-                await loadBankRecordsForDate();
-                updateBankSummary();
-                showNotification('Bank record uncommitted successfully!', 'success');
-            } else {
-                showNotification('Error uncommitting bank record: ' + result.message, 'error');
-            }
+            loadBankRecordsForDate();
+            updateBankSummary();
+            showNotification('Bank record uncommitted successfully!', 'success');
         }
     }
+    
+    // Save data to Google Sheets
+    await saveDataToGoogleSheets();
     
     closeModal('uncommitModal');
 }
@@ -2400,13 +2346,13 @@ async function editCashbill(id) {
         }
         
         // Remove the cashbill from the list
-        const deleteResult = await callGoogleSheetsAPI('Cashbills', 'delete', { id: id });
-        if (deleteResult.result === 'success') {
-            await loadCashbills();
-            showNotification('Cashbill loaded for editing', 'info');
-        } else {
-            showNotification('Error loading cashbill for editing: ' + deleteResult.message, 'error');
-        }
+        cashbills = cashbills.filter(cb => cb.id !== id);
+        
+        // Save data to Google Sheets
+        await saveDataToGoogleSheets();
+        
+        loadCashbills();
+        showNotification('Cashbill loaded for editing', 'info');
     }
 }
 
@@ -2514,102 +2460,86 @@ function clearCashbillSearch() {
 }
 
 // Load cashbills
-async function loadCashbills() {
-    try {
-        const result = await callGoogleSheetsAPI('Cashbills', 'get');
-        if (result.result === 'success') {
-            cashbills = result.data || [];
-            console.log(`Loaded ${cashbills.length} cashbills from Google Sheets`);
-            
-            const container = document.getElementById('cashbillListContainer');
-            if (!container) return;
-            
-            container.innerHTML = '';
-            
-            let filteredCashbills = cashbills;
-            
-            // If crew user, only show their own cashbills
-            if (currentUser.role === 'Crew') {
-                filteredCashbills = cashbills.filter(cb => cb.crewId === currentUser.id);
-            }
-            
-            if (filteredCashbills.length === 0) {
-                container.innerHTML = '<div class="no-results">No cashbills found.</div>';
-                return;
-            }
-            
-            filteredCashbills.forEach(cashbill => {
-                const cashbillElement = document.createElement('div');
-                cashbillElement.className = 'cashbill-item';
-                const statusClass = cashbill.status === 'committed' ? 'status-committed' : 'status-draft';
-                const statusText = cashbill.status === 'committed' ? 'Committed' : 'Draft';
-                
-                cashbillElement.innerHTML = `
-                    <div class="cashbill-header">
-                        <div class="cashbill-id">${cashbill.cashbillNumber}</div>
-                        <div class="cashbill-status ${statusClass}">${statusText}</div>
-                    </div>
-                    <div class="cashbill-details">
-                        <div class="detail-item">
-                            <span class="detail-label">Created By:</span>
-                            <span>${cashbill.crewName}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Salesperson:</span>
-                            <span>${cashbill.salespersonName} (${cashbill.salespersonId})</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Customer:</span>
-                            <span>${cashbill.customerName}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Item:</span>
-                            <span>${cashbill.item}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Quantity:</span>
-                            <span>${cashbill.quantity}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Price:</span>
-                            <span>RM ${cashbill.price.toFixed(2)}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Payment:</span>
-                            <span>${formatPaymentType(cashbill.paymentType)}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Date:</span>
-                            <span>${cashbill.date}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Total:</span>
-                            <span>RM ${cashbill.totalAmount.toFixed(2)}</span>
-                        </div>
-                    </div>
-                    <div class="action-buttons">
-                        ${cashbill.status === 'draft' ?
-                            `<button class="btn-commit" onclick="commitCashbill('${cashbill.id}')">Commit</button>` :
-                            ''}
-                        ${currentUser.role === 'Admin' && cashbill.status === 'committed' ?
-                            `<button class="btn-uncommit" onclick="uncommitCashbill('${cashbill.id}')">Uncommit</button>` :
-                            ''}
-                        ${currentUser.role === 'Admin' && cashbill.status === 'draft' ?
-                            `<button class="btn-edit" onclick="editCashbill('${cashbill.id}')">Edit</button>` :
-                            ''}
-                    </div>
-                `;
-                
-                container.appendChild(cashbillElement);
-            });
-        } else {
-            console.error('Error loading cashbills:', result.message);
-            showNotification('Error loading cashbills from Google Sheets', 'error');
-        }
-    } catch (error) {
-        console.error('Error in loadCashbills:', error);
-        showNotification('Network error when loading cashbills', 'error');
+function loadCashbills() {
+    const container = document.getElementById('cashbillListContainer');
+    container.innerHTML = '';
+    
+    let filteredCashbills = cashbills;
+    
+    // If crew user, only show their own cashbills
+    if (currentUser.role === 'Crew') {
+        filteredCashbills = cashbills.filter(cb => cb.crewId === currentUser.id);
     }
+    
+    if (filteredCashbills.length === 0) {
+        container.innerHTML = '<div class="no-results">No cashbills found.</div>';
+        return;
+    }
+    
+    filteredCashbills.forEach(cashbill => {
+        const cashbillElement = document.createElement('div');
+        cashbillElement.className = 'cashbill-item';
+        const statusClass = cashbill.status === 'committed' ? 'status-committed' : 'status-draft';
+        const statusText = cashbill.status === 'committed' ? 'Committed' : 'Draft';
+        
+        cashbillElement.innerHTML = `
+            <div class="cashbill-header">
+                <div class="cashbill-id">${cashbill.cashbillNumber}</div>
+                <div class="cashbill-status ${statusClass}">${statusText}</div>
+            </div>
+            <div class="cashbill-details">
+                <div class="detail-item">
+                    <span class="detail-label">Created By:</span>
+                    <span>${cashbill.crewName}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Salesperson:</span>
+                    <span>${cashbill.salespersonName} (${cashbill.salespersonId})</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Customer:</span>
+                    <span>${cashbill.customerName}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Item:</span>
+                    <span>${cashbill.item}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Quantity:</span>
+                    <span>${cashbill.quantity}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Price:</span>
+                    <span>RM ${cashbill.price.toFixed(2)}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Payment:</span>
+                    <span>${formatPaymentType(cashbill.paymentType)}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Date:</span>
+                    <span>${cashbill.date}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Total:</span>
+                    <span>RM ${cashbill.totalAmount.toFixed(2)}</span>
+                </div>
+            </div>
+            <div class="action-buttons">
+                ${cashbill.status === 'draft' ?
+                    `<button class="btn-commit" onclick="commitCashbill('${cashbill.id}')">Commit</button>` :
+                    ''}
+                ${currentUser.role === 'Admin' && cashbill.status === 'committed' ?
+                    `<button class="btn-uncommit" onclick="uncommitCashbill('${cashbill.id}')">Uncommit</button>` :
+                    ''}
+                ${currentUser.role === 'Admin' && cashbill.status === 'draft' ?
+                    `<button class="btn-edit" onclick="editCashbill('${cashbill.id}')">Edit</button>` :
+                    ''}
+            </div>
+        `;
+        
+        container.appendChild(cashbillElement);
+    });
 }
 
 // Clear cashbill form
@@ -2639,14 +2569,14 @@ function formatPaymentType(paymentType) {
 // Create log entry
 async function createLogEntry() {
     const logType = document.getElementById('logType').value;
-    const logContent = document.getElementById('logContent').value.trim();
+    const logContent = document.getElementById('logContent').value;
     let courierCompany = '';
     let trackingNumber = '';
     
     // Get courier info if applicable
     if (logType === 'courier') {
         courierCompany = document.getElementById('courierCompany').value;
-        trackingNumber = document.getElementById('trackingNumber').value.trim();
+        trackingNumber = document.getElementById('trackingNumber').value;
         if (!trackingNumber) {
             showNotification('Tracking number is required for courier logs', 'error');
             return;
@@ -2670,17 +2600,14 @@ async function createLogEntry() {
         status: 'committed'
     };
     
-    // Save to Google Sheets
-    const result = await callGoogleSheetsAPI('Logbook', 'add', logEntry);
+    logbookEntries.push(logEntry);
     
-    if (result.result === 'success') {
-        showPage('logbook');
-        await loadLogbookEntries();
-        updateDashboardStats();
-        showNotification('Log entry created successfully!', 'success');
-    } else {
-        showNotification('Error creating log entry: ' + result.message, 'error');
-    }
+    // Save data to Google Sheets
+    await saveDataToGoogleSheets();
+    
+    showPage('logbook');
+    updateDashboardStats();
+    showNotification('Log entry created successfully!', 'success');
 }
 
 // Edit log entry
@@ -2711,14 +2638,14 @@ async function updateLogEntry() {
     }
     
     const logType = document.getElementById('editLogType').value;
-    const logContent = document.getElementById('editLogContent').value.trim();
+    const logContent = document.getElementById('editLogContent').value;
     let courierCompany = '';
     let trackingNumber = '';
     
     // Get courier info if applicable
     if (logType === 'courier') {
         courierCompany = document.getElementById('editCourierCompany').value;
-        trackingNumber = document.getElementById('editTrackingNumber').value.trim();
+        trackingNumber = document.getElementById('editTrackingNumber').value;
         if (!trackingNumber) {
             showNotification('Tracking number is required for courier logs', 'error');
             return;
@@ -2737,33 +2664,28 @@ async function updateLogEntry() {
         logEntry.courierCompany = courierCompany;
         logEntry.trackingNumber = trackingNumber;
         
-        // Update in Google Sheets
-        const result = await callGoogleSheetsAPI('Logbook', 'update', logEntry);
+        editingLogEntryId = null;
         
-        if (result.result === 'success') {
-            editingLogEntryId = null;
-            showPage('logbook');
-            await loadLogbookEntries();
-            showNotification('Log entry updated successfully!', 'success');
-        } else {
-            showNotification('Error updating log entry: ' + result.message, 'error');
-        }
+        // Save data to Google Sheets
+        await saveDataToGoogleSheets();
+        
+        showPage('logbook');
+        loadLogbookEntries();
+        showNotification('Log entry updated successfully!', 'success');
     }
 }
 
 // Delete log entry
 async function deleteLogEntry(id) {
     if (confirm('Are you sure you want to delete this log entry?')) {
-        // Delete from Google Sheets
-        const result = await callGoogleSheetsAPI('Logbook', 'delete', { id: id });
+        logbookEntries = logbookEntries.filter(le => le.id !== id);
         
-        if (result.result === 'success') {
-            await loadLogbookEntries();
-            updateDashboardStats();
-            showNotification('Log entry deleted successfully!', 'success');
-        } else {
-            showNotification('Error deleting log entry: ' + result.message, 'error');
-        }
+        // Save data to Google Sheets
+        await saveDataToGoogleSheets();
+        
+        loadLogbookEntries();
+        updateDashboardStats();
+        showNotification('Log entry deleted successfully!', 'success');
     }
 }
 
@@ -2850,81 +2772,65 @@ function clearLogbookSearch() {
 }
 
 // Load logbook entries
-async function loadLogbookEntries() {
-    try {
-        const result = await callGoogleSheetsAPI('Logbook', 'get');
-        if (result.result === 'success') {
-            logbookEntries = result.data || [];
-            console.log(`Loaded ${logbookEntries.length} logbook entries from Google Sheets`);
-            
-            const container = document.getElementById('logbookListContainer');
-            if (!container) return;
-            
-            container.innerHTML = '';
-            
-            let filteredEntries = logbookEntries;
-            
-            // If crew user, only show their own entries
-            if (currentUser.role === 'Crew') {
-                filteredEntries = logbookEntries.filter(le => le.crewId === currentUser.id);
-            }
-            
-            if (filteredEntries.length === 0) {
-                container.innerHTML = '<div class="no-results">No logbook entries found.</div>';
-                return;
-            }
-            
-            filteredEntries.forEach(entry => {
-                const entryElement = document.createElement('div');
-                entryElement.className = 'logbook-item';
-                
-                let courierInfo = '';
-                if (entry.type === 'courier') {
-                    courierInfo = `<div class="detail-item">
-                        <span class="detail-label">Courier:</span>
-                        <span>${entry.courierCompany}</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">Tracking #:</span>
-                        <span>${entry.trackingNumber}</span>
-                    </div>`;
-                }
-                
-                const statusClass = entry.status === 'committed' ? 'status-committed' : 'status-draft';
-                const statusText = entry.status === 'committed' ? 'Committed' : 'Draft';
-                
-                entryElement.innerHTML = `
-                    <div class="logbook-header">
-                        <div class="logbook-date">${entry.date}</div>
-                        <div class="logbook-type">${entry.type}</div>
-                        <div class="logbook-status ${statusClass}">${statusText}</div>
-                    </div>
-                    <div class="logbook-content">
-                        <p>${entry.content}</p>
-                    </div>
-                    <div class="logbook-details">
-                        ${courierInfo}
-                    </div>
-                    <div class="action-buttons">
-                        <div style="font-size: 14px; margin-bottom: 5px;">By: ${entry.crewName}</div>
-                        <button class="btn-edit" onclick="editLogEntry('${entry.id}')">Edit</button>
-                        <button class="btn-delete" onclick="deleteLogEntry('${entry.id}')">Delete</button>
-                        ${currentUser.role === 'Admin' && entry.status === 'committed' ?
-                            `<button class="btn-uncommit" onclick="uncommitLogEntry('${entry.id}')">Uncommit</button>` :
-                            ''}
-                    </div>
-                `;
-                
-                container.appendChild(entryElement);
-            });
-        } else {
-            console.error('Error loading logbook entries:', result.message);
-            showNotification('Error loading logbook entries from Google Sheets', 'error');
-        }
-    } catch (error) {
-        console.error('Error in loadLogbookEntries:', error);
-        showNotification('Network error when loading logbook entries', 'error');
+function loadLogbookEntries() {
+    const container = document.getElementById('logbookListContainer');
+    container.innerHTML = '';
+    
+    let filteredEntries = logbookEntries;
+    
+    // If crew user, only show their own entries
+    if (currentUser.role === 'Crew') {
+        filteredEntries = logbookEntries.filter(le => le.crewId === currentUser.id);
     }
+    
+    if (filteredEntries.length === 0) {
+        container.innerHTML = '<div class="no-results">No logbook entries found.</div>';
+        return;
+    }
+    
+    filteredEntries.forEach(entry => {
+        const entryElement = document.createElement('div');
+        entryElement.className = 'logbook-item';
+        
+        let courierInfo = '';
+        if (entry.type === 'courier') {
+            courierInfo = `<div class="detail-item">
+                <span class="detail-label">Courier:</span>
+                <span>${entry.courierCompany}</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Tracking #:</span>
+                <span>${entry.trackingNumber}</span>
+            </div>`;
+        }
+        
+        const statusClass = entry.status === 'committed' ? 'status-committed' : 'status-draft';
+        const statusText = entry.status === 'committed' ? 'Committed' : 'Draft';
+        
+        entryElement.innerHTML = `
+            <div class="logbook-header">
+                <div class="logbook-date">${entry.date}</div>
+                <div class="logbook-type">${entry.type}</div>
+                <div class="logbook-status ${statusClass}">${statusText}</div>
+            </div>
+            <div class="logbook-content">
+                <p>${entry.content}</p>
+            </div>
+            <div class="logbook-details">
+                ${courierInfo}
+            </div>
+            <div class="action-buttons">
+                <div style="font-size: 14px; margin-bottom: 5px;">By: ${entry.crewName}</div>
+                <button class="btn-edit" onclick="editLogEntry('${entry.id}')">Edit</button>
+                <button class="btn-delete" onclick="deleteLogEntry('${entry.id}')">Delete</button>
+                ${currentUser.role === 'Admin' && entry.status === 'committed' ?
+                    `<button class="btn-uncommit" onclick="uncommitLogEntry('${entry.id}')">Uncommit</button>` :
+                    ''}
+            </div>
+        `;
+        
+        container.appendChild(entryElement);
+    });
 }
 
 // Clear logbook form
@@ -2941,7 +2847,7 @@ async function createDailyLog() {
     const date = document.getElementById('dailyLogDate').value;
     const openingBalance = parseFloat(document.getElementById('openingBalance').value) || 0;
     const closingBalance = parseFloat(document.getElementById('closingBalance').value) || 0;
-    const notes = document.getElementById('dailyLogNotes').value.trim();
+    const notes = document.getElementById('dailyLogNotes').value;
     
     if (!date) {
         showNotification('Please select a date', 'error');
@@ -2973,90 +2879,71 @@ async function createDailyLog() {
         status: closingBalance > 0 ? 'closed' : 'open' // If closing balance is provided, mark as closed
     };
     
-    // Save to Google Sheets
-    const result = await callGoogleSheetsAPI('Daily Logs', 'add', dailyLog);
+    dailyLogs.push(dailyLog);
     
-    if (result.result === 'success') {
-        showPage('dailylog');
-        await loadDailyLogs();
-        updateDashboardStats();
-        showNotification('Daily log created successfully!', 'success');
-    } else {
-        showNotification('Error creating daily log: ' + result.message, 'error');
-    }
+    // Save data to Google Sheets
+    await saveDataToGoogleSheets();
+    
+    showPage('dailylog');
+    updateDashboardStats();
+    showNotification('Daily log created successfully!', 'success');
 }
 
 // Load daily logs
-async function loadDailyLogs() {
-    try {
-        const result = await callGoogleSheetsAPI('Daily Logs', 'get');
-        if (result.result === 'success') {
-            dailyLogs = result.data || [];
-            console.log(`Loaded ${dailyLogs.length} daily logs from Google Sheets`);
-            
-            const container = document.getElementById('dailylogListContainer');
-            if (!container) return;
-            
-            container.innerHTML = '';
-            
-            let filteredLogs = dailyLogs;
-            
-            // If crew user, only show their own logs
-            if (currentUser.role === 'Crew') {
-                filteredLogs = dailyLogs.filter(log => log.crewId === currentUser.id);
-            }
-            
-            if (filteredLogs.length === 0) {
-                container.innerHTML = '<div class="no-results">No daily logs found.</div>';
-                return;
-            }
-            
-            filteredLogs.forEach(log => {
-                const logElement = document.createElement('div');
-                logElement.className = 'dailylog-item';
-                const statusClass = log.status === 'closed' ? 'status-closed' : 'status-open';
-                const statusText = log.status === 'closed' ? 'Closed' : 'Open';
-                
-                logElement.innerHTML = `
-                    <div class="dailylog-header">
-                        <div class="dailylog-date">${log.date}</div>
-                        <div class="dailylog-status ${statusClass}">${statusText}</div>
-                    </div>
-                    <div class="dailylog-details">
-                        <div class="detail-item">
-                            <span class="detail-label">Opening Balance:</span>
-                            <span>RM ${log.openingBalance.toFixed(2)}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Closing Balance:</span>
-                            <span>RM ${log.closingBalance.toFixed(2)}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Notes:</span>
-                            <span>${log.notes}</span>
-                        </div>
-                    </div>
-                    <div class="action-buttons">
-                        ${log.status === 'open' ?
-                            `<button class="btn-edit" onclick="editDailyLog('${log.id}')">Edit</button>
-                             <button class="btn-close-day-log" onclick="closeDailyLog('${log.id}')">Close Day</button>` :
-                            ''}
-                        ${currentUser.role === 'Admin' ?
-                            `<button class="btn-edit" onclick="editDailyLog('${log.id}')">Edit</button>` :
-                            ''}
-                    </div>
-                `;
-                
-                container.appendChild(logElement);
-            });
-        } else {
-            console.error('Error loading daily logs:', result.message);
-            showNotification('Error loading daily logs from Google Sheets', 'error');
-        }
-    } catch (error) {
-        console.error('Error in loadDailyLogs:', error);
-        showNotification('Network error when loading daily logs', 'error');
+function loadDailyLogs() {
+    const container = document.getElementById('dailylogListContainer');
+    container.innerHTML = '';
+    
+    let filteredLogs = dailyLogs;
+    
+    // If crew user, only show their own logs
+    if (currentUser.role === 'Crew') {
+        filteredLogs = dailyLogs.filter(log => log.crewId === currentUser.id);
     }
+    
+    if (filteredLogs.length === 0) {
+        container.innerHTML = '<div class="no-results">No daily logs found.</div>';
+        return;
+    }
+    
+    filteredLogs.forEach(log => {
+        const logElement = document.createElement('div');
+        logElement.className = 'dailylog-item';
+        const statusClass = log.status === 'closed' ? 'status-closed' : 'status-open';
+        const statusText = log.status === 'closed' ? 'Closed' : 'Open';
+        
+        logElement.innerHTML = `
+            <div class="dailylog-header">
+                <div class="dailylog-date">${log.date}</div>
+                <div class="dailylog-status ${statusClass}">${statusText}</div>
+            </div>
+            <div class="dailylog-details">
+                <div class="detail-item">
+                    <span class="detail-label">Opening Balance:</span>
+                    <span>RM ${log.openingBalance.toFixed(2)}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Closing Balance:</span>
+                    <span>RM ${log.closingBalance.toFixed(2)}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Notes:</span>
+                    <span>${log.notes}</span>
+                </div>
+            </div>
+            <div class="action-buttons">
+                ${log.status === 'open' ?
+                    `<button class="btn-edit" onclick="editDailyLog('${log.id}')">Edit</button>
+                     <button class="btn-close-day-log" onclick="closeDailyLog('${log.id}')">Close Day</button>` :
+                    ''}
+                ${currentUser.role === 'Admin' ?
+                    `<button class="btn-edit" onclick="editDailyLog('${log.id}')">Edit</button>` :
+                    ''}
+            </div>
+        `;
+        
+        container.appendChild(logElement);
+    });
 }
 
 // Edit daily log
@@ -3091,7 +2978,7 @@ async function updateDailyLog() {
     const date = document.getElementById('editDailyLogDate').value;
     const openingBalance = parseFloat(document.getElementById('editOpeningBalance').value) || 0;
     const closingBalance = parseFloat(document.getElementById('editClosingBalance').value) || 0;
-    const notes = document.getElementById('editDailyLogNotes').value.trim();
+    const notes = document.getElementById('editDailyLogNotes').value;
     
     if (!date) {
         showNotification('Please select a date', 'error');
@@ -3114,18 +3001,15 @@ async function updateDailyLog() {
             dailyLog.status = 'closed';
         }
         
-        // Update in Google Sheets
-        const result = await callGoogleSheetsAPI('Daily Logs', 'update', dailyLog);
+        editingDailyLogId = null;
         
-        if (result.result === 'success') {
-            editingDailyLogId = null;
-            showPage('dailylog');
-            await loadDailyLogs();
-            updateDashboardStats();
-            showNotification('Daily log updated successfully!', 'success');
-        } else {
-            showNotification('Error updating daily log: ' + result.message, 'error');
-        }
+        // Save data to Google Sheets
+        await saveDataToGoogleSheets();
+        
+        showPage('dailylog');
+        loadDailyLogs();
+        updateDashboardStats();
+        showNotification('Daily log updated successfully!', 'success');
     }
 }
 
@@ -3141,16 +3025,12 @@ async function closeDailyLog(id) {
                 dailyLog.closingBalance = balance;
                 dailyLog.status = 'closed';
                 
-                // Update in Google Sheets
-                const result = await callGoogleSheetsAPI('Daily Logs', 'update', dailyLog);
+                // Save data to Google Sheets
+                await saveDataToGoogleSheets();
                 
-                if (result.result === 'success') {
-                    await loadDailyLogs();
-                    updateDashboardStats();
-                    showNotification('Day closed successfully!', 'success');
-                } else {
-                    showNotification('Error closing day: ' + result.message, 'error');
-                }
+                loadDailyLogs();
+                updateDashboardStats();
+                showNotification('Day closed successfully!', 'success');
             } else {
                 showNotification('Invalid closing balance', 'error');
             }
@@ -3274,7 +3154,7 @@ function updateDailyLogStatusSection() {
 }
 
 // Load bank records for a specific date
-async function loadBankRecordsForDate() {
+function loadBankRecordsForDate() {
     const dateInput = document.getElementById('bankDateSelect').value;
     if (!dateInput) return;
     
@@ -3321,8 +3201,6 @@ async function loadBankRecordsForDate() {
 // Display payment method boxes
 function displayPaymentMethodBoxes(recordsByPaymentType, dayClosed) {
     const container = document.getElementById('paymentMethodBoxes');
-    if (!container) return;
-    
     container.innerHTML = '';
     
     // Payment types to display
@@ -3360,8 +3238,6 @@ function displayPaymentMethodBoxes(recordsByPaymentType, dayClosed) {
 // Display bank records list
 function displayBankRecordsList(records) {
     const container = document.getElementById('bankListContainer');
-    if (!container) return;
-    
     container.innerHTML = '';
     
     if (records.length === 0) {
@@ -3411,20 +3287,9 @@ function displayBankRecordsList(records) {
 }
 
 // Load bank records (legacy function for dashboard)
-async function loadBankRecords() {
-    try {
-        const result = await callGoogleSheetsAPI('Bank Records', 'get');
-        if (result.result === 'success') {
-            bankRecords = result.data || [];
-            console.log(`Loaded ${bankRecords.length} bank records from Google Sheets`);
-        } else {
-            console.error('Error loading bank records:', result.message);
-            showNotification('Error loading bank records from Google Sheets', 'error');
-        }
-    } catch (error) {
-        console.error('Error in loadBankRecords:', error);
-        showNotification('Network error when loading bank records', 'error');
-    }
+function loadBankRecords() {
+    // This function is kept for compatibility with dashboard
+    // The main bank records page now uses loadBankRecordsForDate
 }
 
 // Format date for comparison
@@ -3452,10 +3317,7 @@ function openCloseDayModal() {
 
 // Close modal
 function closeModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.style.display = 'none';
-    }
+    document.getElementById(modalId).style.display = 'none';
     dayToClose = null;
     uncommitEntryType = null;
     uncommitEntryId = null;
@@ -3463,8 +3325,8 @@ function closeModal(modalId) {
 
 // Confirm close day
 async function confirmCloseDay() {
-    const crewId = document.getElementById('confirmCrewId').value.trim();
-    const password = document.getElementById('confirmPassword').value.trim();
+    const crewId = document.getElementById('confirmCrewId').value;
+    const password = document.getElementById('confirmPassword').value;
     
     // Validate credentials
     let isValid = false;
@@ -3485,19 +3347,17 @@ async function confirmCloseDay() {
     }
     
     // Mark all records for this day as closed
-    const recordsToUpdate = bankRecords.filter(record => record.date === dayToClose);
-    
-    for (const record of recordsToUpdate) {
-        record.dayClosed = true;
-        const result = await callGoogleSheetsAPI('Bank Records', 'update', record);
-        if (result.result !== 'success') {
-            showNotification('Error closing day: ' + result.message, 'error');
-            return;
+    bankRecords.forEach(record => {
+        if (record.date === dayToClose) {
+            record.dayClosed = true;
         }
-    }
+    });
+    
+    // Save data to Google Sheets
+    await saveDataToGoogleSheets();
     
     closeModal('closeDayModal');
-    await loadBankRecordsForDate();
+    loadBankRecordsForDate();
     showNotification(`Day ${dayToClose} closed successfully!`, 'success');
 }
 
@@ -3531,26 +3391,13 @@ function updateBankSummary() {
         }
     });
     
-    const totalDepositsElement = document.getElementById('totalDeposits');
-    if (totalDepositsElement) totalDepositsElement.textContent = totalDeposits.toFixed(2);
-    
-    const cashTransactionsElement = document.getElementById('cashTransactions');
-    if (cashTransactionsElement) cashTransactionsElement.textContent = cashTransactions.toFixed(2);
-    
-    const cardTransactionsElement = document.getElementById('cardTransactions');
-    if (cardTransactionsElement) cardTransactionsElement.textContent = cardTransactions.toFixed(2);
-    
-    const bankTransfersElement = document.getElementById('bankTransfers');
-    if (bankTransfersElement) bankTransfersElement.textContent = bankTransfers.toFixed(2);
-    
-    const qrMaybankTransactionsElement = document.getElementById('qrMaybankTransactions');
-    if (qrMaybankTransactionsElement) qrMaybankTransactionsElement.textContent = qrMaybankTransactions.toFixed(2);
-    
-    const qrCimbTransactionsElement = document.getElementById('qrCimbTransactions');
-    if (qrCimbTransactionsElement) qrCimbTransactionsElement.textContent = qrCimbTransactions.toFixed(2);
-    
-    const qrOthersTransactionsElement = document.getElementById('qrOthersTransactions');
-    if (qrOthersTransactionsElement) qrOthersTransactionsElement.textContent = qrOthersTransactions.toFixed(2);
+    document.getElementById('totalDeposits').textContent = totalDeposits.toFixed(2);
+    document.getElementById('cashTransactions').textContent = cashTransactions.toFixed(2);
+    document.getElementById('cardTransactions').textContent = cardTransactions.toFixed(2);
+    document.getElementById('bankTransfers').textContent = bankTransfers.toFixed(2);
+    document.getElementById('qrMaybankTransactions').textContent = qrMaybankTransactions.toFixed(2);
+    document.getElementById('qrCimbTransactions').textContent = qrCimbTransactions.toFixed(2);
+    document.getElementById('qrOthersTransactions').textContent = qrOthersTransactions.toFixed(2);
 }
 
 // Filter bank records (legacy function)
@@ -3560,16 +3407,11 @@ function filterBankRecords() {
 }
 
 // Populate crew filter
-async function populateCrewFilter() {
+function populateCrewFilter() {
     const crewFilter = document.getElementById('filterCrew');
     if (!crewFilter) return;
     
     crewFilter.innerHTML = '<option value="all">All Crew</option>';
-    
-    // Ensure users are loaded
-    if (users.length === 0) {
-        await loadUsers();
-    }
     
     // Get unique crew IDs
     const crewIds = [...new Set(users.map(user => user.id))];
@@ -3590,8 +3432,7 @@ function updateDashboardStats() {
     if (currentUser.role === 'Crew') {
         totalCashbills = cashbills.filter(cb => cb.crewId === currentUser.id).length;
     }
-    const totalCashbillsElement = document.getElementById('totalCashbills');
-    if (totalCashbillsElement) totalCashbillsElement.textContent = totalCashbills;
+    document.getElementById('totalCashbills').textContent = totalCashbills;
     
     // Total sales
     let totalSales = 0;
@@ -3604,22 +3445,19 @@ function updateDashboardStats() {
             .filter(cb => cb.crewId === currentUser.id && cb.status === 'committed')
             .reduce((sum, cb) => sum + cb.totalAmount, 0);
     }
-    const totalSalesElement = document.getElementById('totalSales');
-    if (totalSalesElement) totalSalesElement.textContent = totalSales.toFixed(2);
+    document.getElementById('totalSales').textContent = totalSales.toFixed(2);
     
     // Total log entries
     let totalLogEntries = logbookEntries.length;
     if (currentUser.role === 'Crew') {
         totalLogEntries = logbookEntries.filter(le => le.crewId === currentUser.id).length;
     }
-    const totalLogEntriesElement = document.getElementById('totalLogEntries');
-    if (totalLogEntriesElement) totalLogEntriesElement.textContent = totalLogEntries;
+    document.getElementById('totalLogEntries').textContent = totalLogEntries;
     
     // Active crew
     const activeCrew = currentUser.role === 'Admin' ?
         users.filter(user => user.role === 'Crew').length : 1;
-    const activeCrewElement = document.getElementById('activeCrew');
-    if (activeCrewElement) activeCrewElement.textContent = activeCrew;
+    document.getElementById('activeCrew').textContent = activeCrew;
     
     // Daily logs stats
     let totalDailyLogsCreated = 0;
@@ -3632,17 +3470,14 @@ function updateDashboardStats() {
         totalDailyLogsCreated = crewLogs.length;
         totalDailyLogsClosed = crewLogs.filter(log => log.status === 'closed').length;
     }
-    const totalDailyLogsCreatedElement = document.getElementById('totalDailyLogsCreated');
-    if (totalDailyLogsCreatedElement) totalDailyLogsCreatedElement.textContent = totalDailyLogsCreated;
-    
-    const totalDailyLogsClosedElement = document.getElementById('totalDailyLogsClosed');
-    if (totalDailyLogsClosedElement) totalDailyLogsClosedElement.textContent = totalDailyLogsClosed;
+    document.getElementById('totalDailyLogsCreated').textContent = totalDailyLogsCreated;
+    document.getElementById('totalDailyLogsClosed').textContent = totalDailyLogsClosed;
     
     // Update daily log status section
     updateDailyLogStatusSection();
     
     // Update bank summary if on bank records page
-    if (document.getElementById('bankrecordsPage') && document.getElementById('bankrecordsPage').classList.contains('active')) {
+    if (document.getElementById('bankrecordsPage').classList.contains('active')) {
         updateBankSummary();
     }
 }
@@ -3681,10 +3516,10 @@ function updatePerformanceTable() {
 
 // Create user
 async function createUser() {
-    const userId = document.getElementById('newUserId').value.trim();
-    const userName = document.getElementById('newUserName').value.trim();
+    const userId = document.getElementById('newUserId').value;
+    const userName = document.getElementById('newUserName').value;
     const userRole = document.getElementById('newUserRole').value;
-    const userPassword = document.getElementById('newUserPassword').value.trim();
+    const userPassword = document.getElementById('newUserPassword').value;
     
     if (!userId || !userName || !userPassword) {
         showNotification('Please fill in all fields', 'error');
@@ -3704,86 +3539,67 @@ async function createUser() {
         password: userPassword
     };
     
-    // Save to Google Sheets
-    const result = await callGoogleSheetsAPI('Users', 'add', newUser);
+    users.push(newUser);
     
-    if (result.result === 'success') {
-        // Reload users from Google Sheets
-        await loadUsers();
-        
-        showPage('usermanagement');
-        updateDashboardStats();
-        showNotification('User created successfully!', 'success');
-    } else {
-        showNotification('Error creating user: ' + result.message, 'error');
-    }
+    // Save data to Google Sheets
+    await saveDataToGoogleSheets();
+    
+    showPage('usermanagement');
+    updateDashboardStats();
+    showNotification('User created successfully!', 'success');
 }
 
 // Load users
-async function loadUsers() {
-    try {
-        const result = await callGoogleSheetsAPI('Users', 'get');
-        if (result.result === 'success') {
-            users = result.data || [];
-            console.log(`Loaded ${users.length} users from Google Sheets`);
-            
-            const container = document.getElementById('userListContainer');
-            if (!container) return;
-            
-            container.innerHTML = '';
-            
-            if (users.length === 0) {
-                container.innerHTML = '<div class="no-results">No users found.</div>';
-                return;
-            }
-            
-            users.forEach(user => {
-                const userElement = document.createElement('div');
-                userElement.className = 'user-item';
-                const roleClass = user.role === 'Admin' ? 'role-admin' : 'role-crew';
-                
-                userElement.innerHTML = `
-                    <div class="user-header">
-                        <div class="user-id">${user.id} - ${user.name}</div>
-                        <div class="user-role-badge ${roleClass}">${user.role}</div>
-                    </div>
-                    <div class="user-details">
-                        <div class="detail-item">
-                            <span class="detail-label">User ID:</span>
-                            <span>${user.id}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Name:</span>
-                            <span>${user.name}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Role:</span>
-                            <span>${user.role}</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Password:</span>
-                            <span>${currentUser.role === 'Admin' ? user.password : '••••••••'}</span>
-                        </div>
-                    </div>
-                    <div class="action-buttons">
-                        ${currentUser.role === 'Admin' ?
-                            `<button class="btn-edit" onclick="editUser('${user.id}')">Edit</button>
-                             <button class="btn-reset" onclick="resetPassword('${user.id}')">Reset Password</button>
-                             <button class="btn-delete" onclick="deleteUser('${user.id}')">Delete User</button>` :
-                            ''}
-                    </div>
-                `;
-                
-                container.appendChild(userElement);
-            });
-        } else {
-            console.error('Error loading users:', result.message);
-            showNotification('Error loading users from Google Sheets', 'error');
-        }
-    } catch (error) {
-        console.error('Error in loadUsers:', error);
-        showNotification('Network error when loading users', 'error');
+function loadUsers() {
+    const container = document.getElementById('userListContainer');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    if (users.length === 0) {
+        container.innerHTML = '<div class="no-results">No users found.</div>';
+        return;
     }
+    
+    users.forEach(user => {
+        const userElement = document.createElement('div');
+        userElement.className = 'user-item';
+        const roleClass = user.role === 'Admin' ? 'role-admin' : 'role-crew';
+        
+        userElement.innerHTML = `
+            <div class="user-header">
+                <div class="user-id">${user.id} - ${user.name}</div>
+                <div class="user-role-badge ${roleClass}">${user.role}</div>
+            </div>
+            <div class="user-details">
+                <div class="detail-item">
+                    <span class="detail-label">User ID:</span>
+                    <span>${user.id}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Name:</span>
+                    <span>${user.name}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Role:</span>
+                    <span>${user.role}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Password:</span>
+                    <span>${currentUser.role === 'Admin' ? user.password : '••••••••'}</span>
+                </div>
+            </div>
+            <div class="action-buttons">
+                ${currentUser.role === 'Admin' ?
+                    `<button class="btn-edit" onclick="editUser('${user.id}')">Edit</button>
+                     <button class="btn-reset" onclick="resetPassword('${user.id}')">Reset Password</button>
+                     <button class="btn-delete" onclick="deleteUser('${user.id}')">Delete User</button>` :
+                    ''}
+            </div>
+        `;
+        
+        container.appendChild(userElement);
+    });
 }
 
 // Edit user
@@ -3808,9 +3624,9 @@ function editUser(userId) {
 // Update user
 async function updateUser() {
     const userId = document.getElementById('editUserId').value;
-    const userName = document.getElementById('editUserName').value.trim();
+    const userName = document.getElementById('editUserName').value;
     const userRole = document.getElementById('editUserRole').value;
-    const userPassword = document.getElementById('editUserPassword').value.trim();
+    const userPassword = document.getElementById('editUserPassword').value;
     
     if (!userId || !userName) {
         showNotification('User ID and Name are required', 'error');
@@ -3827,16 +3643,12 @@ async function updateUser() {
             user.password = userPassword;
         }
         
-        // Update in Google Sheets
-        const result = await callGoogleSheetsAPI('Users', 'update', user);
+        // Save data to Google Sheets
+        await saveDataToGoogleSheets();
         
-        if (result.result === 'success') {
-            showPage('usermanagement');
-            await loadUsers();
-            showNotification('User updated successfully!', 'success');
-        } else {
-            showNotification('Error updating user: ' + result.message, 'error');
-        }
+        showPage('usermanagement');
+        loadUsers();
+        showNotification('User updated successfully!', 'success');
     }
 }
 
@@ -3848,25 +3660,16 @@ async function resetPassword(userId) {
     }
     
     const newPassword = prompt('Enter new password:');
-    if (newPassword !== null) {
-        const trimmedPassword = newPassword.trim();
-        if (trimmedPassword) {
-            const user = users.find(u => u.id === userId);
-            if (user) {
-                user.password = trimmedPassword;
-                
-                // Update in Google Sheets
-                const result = await callGoogleSheetsAPI('Users', 'update', user);
-                
-                if (result.result === 'success') {
-                    await loadUsers();
-                    showNotification('Password reset successfully!', 'success');
-                } else {
-                    showNotification('Error resetting password: ' + result.message, 'error');
-                }
-            }
-        } else {
-            showNotification('Password cannot be empty', 'error');
+    if (newPassword) {
+        const user = users.find(u => u.id === userId);
+        if (user) {
+            user.password = newPassword;
+            
+            // Save data to Google Sheets
+            await saveDataToGoogleSheets();
+            
+            loadUsers();
+            showNotification('Password reset successfully!', 'success');
         }
     }
 }
@@ -3879,16 +3682,14 @@ async function deleteUser(userId) {
     }
     
     if (confirm('Are you sure you want to delete this user?')) {
-        // Delete from Google Sheets
-        const result = await callGoogleSheetsAPI('Users', 'delete', { id: userId });
+        users = users.filter(u => u.id !== userId);
         
-        if (result.result === 'success') {
-            await loadUsers();
-            updateDashboardStats();
-            showNotification('User deleted successfully!', 'success');
-        } else {
-            showNotification('Error deleting user: ' + result.message, 'error');
-        }
+        // Save data to Google Sheets
+        await saveDataToGoogleSheets();
+        
+        loadUsers();
+        updateDashboardStats();
+        showNotification('User deleted successfully!', 'success');
     }
 }
 
@@ -3901,7 +3702,7 @@ function clearUserForm() {
 }
 
 // Export data
-async function exportData(type) {
+function exportData(type) {
     if (currentUser.role !== 'Admin') {
         showNotification('Only admin can export data', 'error');
         return;
@@ -4006,8 +3807,6 @@ async function exportData(type) {
 // Show notification
 function showNotification(message, type) {
     const notification = document.getElementById('notification');
-    if (!notification) return;
-    
     notification.textContent = message;
     notification.className = `notification ${type}`;
     notification.style.display = 'block';
@@ -4022,25 +3821,33 @@ function generateId() {
     return Math.random().toString(36).substr(2, 9);
 }
 
-// Initialize sample data
-async function initializeSampleData() {
-    // Load all data from Google Sheets
-    await loadUsers();
-    await loadCashbills();
-    await loadLogbookEntries();
-    await loadBankRecords();
-    await loadDailyLogs();
-    
-    // Set cashbill counter based on existing cashbills
-    if (cashbills.length > 0) {
-        const maxCashbillNumber = Math.max(...cashbills.map(cb => {
-            const match = cb.cashbillNumber.match(/#INV-(\d+)/);
-            return match ? parseInt(match[1]) : 0;
-        }));
-        cashbillCounter = maxCashbillNumber + 1;
-    } else {
-        cashbillCounter = 1;
+// Auto-refresh functions
+function startAutoRefresh() {
+    refreshInterval = setInterval(async () => {
+        // Only refresh if dashboard is active and it's been at least 30 seconds
+        if (document.getElementById('dashboardPage').classList.contains('active') && 
+            Date.now() - lastRefreshTime > 30000) {
+            await loadDataFromGoogleSheets();
+            updateDashboardStats();
+            lastRefreshTime = Date.now();
+        }
+    }, 30000);
+}
+
+function stopAutoRefresh() {
+    if (refreshInterval) {
+        clearInterval(refreshInterval);
     }
+}
+
+// Refresh data manually
+async function refreshData() {
+    showLoading();
+    await loadDataFromGoogleSheets();
+    updateDashboardStats();
+    hideLoading();
+    showNotification('Data refreshed successfully!', 'success');
+    lastRefreshTime = Date.now();
 }
 </script>
 </body>
