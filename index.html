@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PNE Arena Test</title>
+    <title>PNE Arena - Cashbill & Logbook Portal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
@@ -1039,7 +1039,7 @@
         const itemsPerPage = 10;
         
         // Google Sheets API configuration
-        const API_ENDPOINT = 'https://script.google.com/macros/s/AKfycbznyyUJB0QIOGqXd4Th6YJyaCxJa2KhAyCoqc15SxQLJpPxOJDkil0WYcpYt-YWs_4/exec';
+        const API_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyu9ebHrK138Y9xl34rDp3e5raLDB5SRpo_YRbKTPSsjoSRVdSz3YWnHVg7_HQWoCcz/exec';
         const CASHBILL_SHEET_NAME = 'Cashbills';
         const LOGBOOK_SHEET_NAME = 'LogEntries';
         
@@ -2821,19 +2821,16 @@
         // Helper function to clear a sheet
         async function clearSheet(sheetName) {
             const url = `${API_ENDPOINT}`;
-            const body = new URLSearchParams();
-            body.append('action', 'clear');
-            body.append('sheet', sheetName);
+            const formData = new FormData();
+            formData.append('action', 'clear');
+            formData.append('sheet', sheetName);
             
-            console.log('Clearing sheet:', url, body.toString());
+            console.log('Clearing sheet:', url, 'action=clear&sheet=' + sheetName);
             
             try {
                 const response = await fetch(url, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: body.toString()
+                    body: formData
                 });
                 
                 const result = await response.json();
@@ -2853,20 +2850,17 @@
         // Helper function to append a row to a sheet
         async function appendToSheet(sheetName, values) {
             const url = `${API_ENDPOINT}`;
-            const body = new URLSearchParams();
-            body.append('action', 'append');
-            body.append('sheet', sheetName);
-            body.append('values', JSON.stringify(values));
+            const formData = new FormData();
+            formData.append('action', 'append');
+            formData.append('sheet', sheetName);
+            formData.append('values', JSON.stringify(values));
             
-            console.log('Appending to sheet:', url, body.toString());
+            console.log('Appending to sheet:', url, 'action=append&sheet=' + sheetName + '&values=' + JSON.stringify(values));
             
             try {
                 const response = await fetch(url, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: body.toString()
+                    body: formData
                 });
                 
                 const result = await response.json();
@@ -2886,19 +2880,16 @@
         // Helper function to fetch data from a sheet
         async function fetchFromSheet(sheetName) {
             const url = `${API_ENDPOINT}`;
-            const body = new URLSearchParams();
-            body.append('action', 'get');
-            body.append('sheet', sheetName);
+            const formData = new FormData();
+            formData.append('action', 'get');
+            formData.append('sheet', sheetName);
             
-            console.log('Fetching from sheet:', url, body.toString());
+            console.log('Fetching from sheet:', url, 'action=get&sheet=' + sheetName);
             
             try {
                 const response = await fetch(url, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: body.toString()
+                    body: formData
                 });
                 
                 const result = await response.json();
