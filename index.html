@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PNE Arena Test</title>
+    <title>PNE Arena - Cashbill & Logbook Portal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
@@ -2722,9 +2722,33 @@
                     log.crewName
                 ]);
                 
-                // Update sheets with new data (instead of clearing and appending)
-                await updateSheet(CASHBILL_SHEET_NAME, cashbillValues);
-                await updateSheet(LOGBOOK_SHEET_NAME, logEntryValues);
+                // Clear existing data first
+                await clearSheet(CASHBILL_SHEET_NAME);
+                await clearSheet(LOGBOOK_SHEET_NAME);
+                
+                // Append header row
+                await appendToSheet(CASHBILL_SHEET_NAME, [
+                    'ID', 'Customer Name', 'Payment Type', 'Items', 'Total', 
+                    'Date', 'Committed', 'Crew ID', 'Crew Name'
+                ]);
+                
+                await appendToSheet(LOGBOOK_SHEET_NAME, [
+                    'ID', 'Type', 'Title', 'Description', 'Courier Service', 
+                    'Date', 'Crew ID', 'Crew Name'
+                ]);
+                
+                // Append new data
+                if (cashbillValues.length > 0) {
+                    for (const row of cashbillValues) {
+                        await appendToSheet(CASHBILL_SHEET_NAME, row);
+                    }
+                }
+                
+                if (logEntryValues.length > 0) {
+                    for (const row of logEntryValues) {
+                        await appendToSheet(LOGBOOK_SHEET_NAME, row);
+                    }
+                }
                 
                 showNotification('Data saved to Google Sheets successfully', 'success');
                 return true;
@@ -2735,50 +2759,24 @@
             }
         }
         
-        // Helper function to update a sheet (replaces all data but keeps headers)
-        async function updateSheet(sheetName, values) {
-            const url = `${API_ENDPOINT}`;
-            const formData = new FormData();
-            formData.append('action', 'update');
-            formData.append('sheet', sheetName);
-            formData.append('values', JSON.stringify(values));
-            
-            console.log('Updating sheet:', url, 'action=update&sheet=' + sheetName);
-            
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const result = await response.json();
-                console.log('Update sheet response:', result);
-                
-                if (!result.success) {
-                    throw new Error(`Failed to update sheet ${sheetName}: ${result.error}`);
-                }
-                
-                return result;
-            } catch (error) {
-                console.error('Error in updateSheet:', error);
-                throw error;
-            }
-        }
-        
-        // Helper function to clear a sheet
+        // Helper function to clear a sheet with better error handling
         async function clearSheet(sheetName) {
             const url = `${API_ENDPOINT}`;
             const formData = new FormData();
             formData.append('action', 'clear');
             formData.append('sheet', sheetName);
             
-            console.log('Clearing sheet:', url, 'action=clear&sheet=' + sheetName);
+            console.log('Clearing sheet:', sheetName);
             
             try {
                 const response = await fetch(url, {
                     method: 'POST',
                     body: formData
                 });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
                 
                 const result = await response.json();
                 console.log('Clear sheet response:', result);
@@ -2790,11 +2788,12 @@
                 return result;
             } catch (error) {
                 console.error('Error in clearSheet:', error);
+                showNotification(`Error clearing sheet: ${error.message}`, 'error');
                 throw error;
             }
         }
         
-        // Helper function to append a row to a sheet
+        // Helper function to append a row to a sheet with better error handling
         async function appendToSheet(sheetName, values) {
             const url = `${API_ENDPOINT}`;
             const formData = new FormData();
@@ -2802,13 +2801,17 @@
             formData.append('sheet', sheetName);
             formData.append('values', JSON.stringify(values));
             
-            console.log('Appending to sheet:', url, 'action=append&sheet=' + sheetName + '&values=' + JSON.stringify(values));
+            console.log('Appending to sheet:', sheetName, 'values:', values);
             
             try {
                 const response = await fetch(url, {
                     method: 'POST',
                     body: formData
                 });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
                 
                 const result = await response.json();
                 console.log('Append to sheet response:', result);
@@ -2820,6 +2823,7 @@
                 return result;
             } catch (error) {
                 console.error('Error in appendToSheet:', error);
+                showNotification(`Error appending to sheet: ${error.message}`, 'error');
                 throw error;
             }
         }
@@ -2839,6 +2843,10 @@
                     body: formData
                 });
                 
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
                 const result = await response.json();
                 console.log('Fetch from sheet response:', result);
                 
@@ -2849,6 +2857,7 @@
                 return result;
             } catch (error) {
                 console.error('Error in fetchFromSheet:', error);
+                showNotification(`Error fetching from sheet: ${error.message}`, 'error');
                 throw error;
             }
         }
