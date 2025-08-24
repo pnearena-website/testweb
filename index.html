@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PNE Arena - Cashbill & Logbook Portal</title>
+    <title>PNE Arena Test</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
@@ -311,6 +311,11 @@
         
         .notification.info {
             background-color: var(--info);
+        }
+        
+        .notification.warning {
+            background-color: var(--warning);
+            color: var(--text-dark);
         }
         
         /* Currency display */
@@ -632,9 +637,14 @@
                 <span id="userRole" class="badge bg-secondary">Admin</span>
                 <span id="userName" class="ms-2"></span>
             </div>
-            <button id="logoutBtn" class="btn btn-outline-secondary btn-sm">
-                <i class="bi bi-box-arrow-right"></i> Logout
-            </button>
+            <div>
+                <button id="syncBtn" class="btn btn-outline-primary btn-sm me-2" onclick="syncWithGoogleSheets()" title="Sync with Google Sheets">
+                    <i class="bi bi-arrow-clockwise"></i> Sync
+                </button>
+                <button id="logoutBtn" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </button>
+            </div>
         </div>
         
         <!-- Sidebar -->
@@ -1029,7 +1039,7 @@
         const itemsPerPage = 10;
         
         // Google Sheets API configuration
-        const API_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzrxYNIZ-mO1UkpLWoPbRngrbpgGSAUho3X6YRqVKYUW4rQQVABUV7vT7Rcxj-Yvfcinw/exec';
+        const API_ENDPOINT = 'https://script.google.com/macros/s/AKfycbznyyUJB0QIOGqXd4Th6YJyaCxJa2KhAyCoqc15SxQLJpPxOJDkil0WYcpYt-YWs_4/exec';
         const CASHBILL_SHEET_NAME = 'Cashbills';
         const LOGBOOK_SHEET_NAME = 'LogEntries';
         
@@ -1290,7 +1300,7 @@
         }
         
         // Show dashboard
-        function showDashboard() {
+        async function showDashboard() {
             loginPage.style.display = 'none';
             dashboardContainer.style.display = 'block';
             userRoleBadge.textContent = currentUser.role;
@@ -1302,6 +1312,9 @@
             } else {
                 adminPanel.style.display = 'none';
             }
+            
+            // Sync with Google Sheets on login
+            await syncWithGoogleSheets();
             
             // Show dashboard page by default
             showPage('dashboard');
@@ -2727,9 +2740,11 @@
                 }
                 
                 showNotification('Data saved to Google Sheets successfully', 'success');
+                return true;
             } catch (error) {
                 console.error('Error saving to Google Sheets:', error);
                 showNotification('Error saving to Google Sheets: ' + error.message, 'error');
+                return false;
             }
         }
         
@@ -2745,15 +2760,15 @@
                     for (let i = 1; i < cashbillResponse.data.length; i++) {
                         const row = cashbillResponse.data[i];
                         cashbills.push({
-                            id: parseInt(row[0]),
-                            customerName: row[1],
-                            paymentType: row[2],
-                            items: JSON.parse(row[3]), // Parse JSON string
-                            total: parseFloat(row[4]),
-                            date: row[5],
+                            id: parseInt(row[0]) || 1,
+                            customerName: row[1] || '',
+                            paymentType: row[2] || '',
+                            items: row[3] ? JSON.parse(row[3]) : [], // Parse JSON string
+                            total: parseFloat(row[4]) || 0,
+                            date: row[5] || new Date().toISOString(),
                             committed: row[6] === true || row[6] === 'TRUE',
-                            crewId: row[7],
-                            crewName: row[8]
+                            crewId: row[7] || '',
+                            crewName: row[8] || ''
                         });
                     }
                 }
@@ -2765,14 +2780,14 @@
                     for (let i = 1; i < logbookResponse.data.length; i++) {
                         const row = logbookResponse.data[i];
                         logEntries.push({
-                            id: parseInt(row[0]),
-                            type: row[1],
-                            title: row[2],
-                            description: row[3],
+                            id: parseInt(row[0]) || 1,
+                            type: row[1] || '',
+                            title: row[2] || '',
+                            description: row[3] || '',
                             courierService: row[4] || null,
-                            date: row[5],
-                            crewId: row[6],
-                            crewName: row[7]
+                            date: row[5] || new Date().toISOString(),
+                            crewId: row[6] || '',
+                            crewName: row[7] || ''
                         });
                     }
                 }
@@ -2795,12 +2810,11 @@
                 renderLogbookTable();
                 
                 showNotification('Data loaded from Google Sheets successfully', 'success');
+                return true;
             } catch (error) {
                 console.error('Error loading from Google Sheets:', error);
                 showNotification('Error loading from Google Sheets: ' + error.message, 'error');
-                
-                // Fallback to localStorage
-                loadSavedDataFromLocalStorage();
+                return false;
             }
         }
         
@@ -2936,21 +2950,46 @@
         }
         
         // Update the saveData function to save to both localStorage and Google Sheets
-        function saveData() {
+        async function saveData() {
             // Save to localStorage as backup
             saveDataToLocalStorage();
             
             // Save to Google Sheets
-            saveDataToGoogleSheets();
+            const googleSheetsSuccess = await saveDataToGoogleSheets();
+            
+            if (!googleSheetsSuccess) {
+                showNotification('Data saved locally but not to Google Sheets', 'warning');
+            }
         }
         
-        // Update the loadSavedData function to try Google Sheets first, then fallback to localStorage
-        function loadSavedData() {
-            // Try to load from Google Sheets first
-            loadDataFromGoogleSheets().catch(error => {
-                console.error('Failed to load from Google Sheets, falling back to localStorage:', error);
+        // Update the loadSavedData function to always try Google Sheets first
+        async function loadSavedData() {
+            // Always try to load from Google Sheets first
+            const googleSheetsSuccess = await loadDataFromGoogleSheets();
+            
+            if (!googleSheetsSuccess) {
+                // Fallback to localStorage
+                showNotification('Failed to load from Google Sheets, using local data', 'warning');
                 loadSavedDataFromLocalStorage();
-            });
+            }
+        }
+        
+        // Add a function to manually sync with Google Sheets
+        async function syncWithGoogleSheets() {
+            try {
+                showNotification('Syncing with Google Sheets...', 'info');
+                
+                // First, save local data to Google Sheets
+                await saveDataToGoogleSheets();
+                
+                // Then, load the latest data from Google Sheets
+                await loadDataFromGoogleSheets();
+                
+                showNotification('Sync completed successfully', 'success');
+            } catch (error) {
+                console.error('Error syncing with Google Sheets:', error);
+                showNotification('Error syncing with Google Sheets: ' + error.message, 'error');
+            }
         }
         
         // Initialize the app when DOM is loaded
