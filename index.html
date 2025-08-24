@@ -706,6 +706,9 @@
                             <button class="btn btn-primary" onclick="loadDataFromGoogleSheets()">
                                 <i class="bi bi-cloud-download me-1"></i> Load from Google Sheets
                             </button>
+                            <button class="btn btn-info" onclick="testGoogleSheetsConnection()">
+                                <i class="bi bi-activity me-1"></i> Test Connection
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -1039,9 +1042,9 @@
         const itemsPerPage = 10;
         
         // Google Sheets API configuration
-        const API_ENDPOINT = 'https://script.google.com/macros/s/AKfycbx9IEznn-bVze9GsWcvXMvfrkHNnuvSDvLrQWyxoFk/dev';
+        const API_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyqvyFM-CAO7eqcriuCNWWELaaBtkmGVDivvEwaj6e0TNjeBa30g2Ix3L5w64W46zoc/exec';
         const CASHBILL_SHEET_NAME = 'Cashbills';
-        const LOGBOOK_SHEET_NAME = 'LogEntries';
+        const LOGBOOK_SHEET_NAME = 'Logentries';
         
         // DOM elements
         const loginPage = document.getElementById('loginPage');
@@ -2692,6 +2695,38 @@
                 cashbills.filter(c => c.committed).length;
         }
         
+        // Function to test the Google Sheets connection
+        async function testGoogleSheetsConnection() {
+            try {
+                showNotification('Testing Google Sheets connection...', 'info');
+                
+                const url = `${API_ENDPOINT}`;
+                const formData = new FormData();
+                formData.append('action', 'test');
+                
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                console.log('Test result:', result);
+                
+                if (result.success) {
+                    showNotification('Google Sheets connection successful', 'success');
+                } else {
+                    showNotification('Google Sheets connection failed: ' + result.error, 'error');
+                }
+            } catch (error) {
+                console.error('Error testing Google Sheets connection:', error);
+                showNotification('Error testing Google Sheets connection: ' + error.message, 'error');
+            }
+        }
+        
         // Function to save data to Google Sheets
         async function saveDataToGoogleSheets() {
             try {
@@ -2722,11 +2757,16 @@
                     log.crewName
                 ]);
                 
+                console.log('Saving cashbills:', cashbillValues.length, 'records');
+                console.log('Saving log entries:', logEntryValues.length, 'records');
+                
                 // Clear existing data first
+                console.log('Clearing sheets...');
                 await clearSheet(CASHBILL_SHEET_NAME);
                 await clearSheet(LOGBOOK_SHEET_NAME);
                 
                 // Append header row
+                console.log('Adding headers...');
                 await appendToSheet(CASHBILL_SHEET_NAME, [
                     'ID', 'Customer Name', 'Payment Type', 'Items', 'Total', 
                     'Date', 'Committed', 'Crew ID', 'Crew Name'
@@ -2739,12 +2779,14 @@
                 
                 // Append new data
                 if (cashbillValues.length > 0) {
+                    console.log('Appending cashbill data...');
                     for (const row of cashbillValues) {
                         await appendToSheet(CASHBILL_SHEET_NAME, row);
                     }
                 }
                 
                 if (logEntryValues.length > 0) {
+                    console.log('Appending log entry data...');
                     for (const row of logEntryValues) {
                         await appendToSheet(LOGBOOK_SHEET_NAME, row);
                     }
