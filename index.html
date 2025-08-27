@@ -209,6 +209,12 @@
       transform: translateY(0);
     }
     
+    button:disabled {
+      background: var(--text-secondary);
+      cursor: not-allowed;
+      transform: none;
+    }
+    
     .btn-secondary {
       background: var(--success);
     }
@@ -367,6 +373,18 @@
       align-items: center;
       justify-content: center;
       gap: 0.75rem;
+    }
+    
+    .permission-denied {
+      background: var(--warning);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
     }
     
     .cashbill-details {
@@ -691,11 +709,13 @@
       background: var(--card-bg);
       padding: 2rem;
       border-radius: var(--radius);
-      max-width: 500px;
+      max-width: 700px;
       width: 90%;
       transition: var(--transition);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
       border: 1px solid var(--border-color);
+      max-height: 90vh;
+      overflow-y: auto;
     }
     
     .modal-header {
@@ -755,6 +775,16 @@
     
     .draft-indicator {
       background: var(--warning);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      margin-left: 0.75rem;
+      font-weight: 500;
+    }
+    
+    .committed-indicator {
+      background: var(--success);
       color: white;
       padding: 0.25rem 0.75rem;
       border-radius: 20px;
@@ -883,6 +913,25 @@
       color: var(--danger);
     }
     
+    .edit-items-container {
+      margin-top: 1.5rem;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .edit-item-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto;
+      gap: 1rem;
+      align-items: end;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      background: var(--bg-tertiary);
+      border-radius: var(--radius);
+      transition: var(--transition);
+      border: 1px solid var(--border-color);
+    }
+    
     @media (max-width: 768px) {
       .nav-links {
         flex-direction: column;
@@ -899,7 +948,7 @@
         grid-template-columns: 1fr;
       }
       
-      .item-row {
+      .item-row, .edit-item-row {
         grid-template-columns: 1fr;
       }
       
@@ -921,6 +970,11 @@
       
       .permission-grid {
         grid-template-columns: 1fr;
+      }
+      
+      .modal-content {
+        max-width: 95%;
+        padding: 1.5rem;
       }
     }
   </style>
@@ -1097,6 +1151,8 @@
               <option value="">Select payment method</option>
               <option value="cash">Cash</option>
               <option value="card">Card</option>
+              <option value="qr">QR</option>
+              <option value="online_banking">Online Banking</option>
             </select>
           </div>
           
@@ -1142,7 +1198,7 @@
       
       <div style="text-align: center; margin-top: 2rem;">
         <button onclick="showPage('newCashbillPage')"><i class="fas fa-file-invoice"></i> Create Another Cashbill</button>
-        <button class="btn-secondary" onclick="exportCashbill()"><i class="fas fa-file-pdf"></i> Export as PDF</button>
+        <button class="btn-secondary" id="exportPdfButton" onclick="exportCashbill()"><i class="fas fa-file-pdf"></i> Export as PDF</button>
       </div>
     </div>
     
@@ -1175,7 +1231,7 @@
             <label for="filterStatus">Status:</label>
             <select id="filterStatus">
               <option value="">All</option>
-              <option value="finalized">Finalized</option>
+              <option value="committed">Committed</option>
               <option value="draft">Draft</option>
             </select>
           </div>
@@ -1185,6 +1241,8 @@
               <option value="">All</option>
               <option value="cash">Cash</option>
               <option value="card">Card</option>
+              <option value="qr">QR</option>
+              <option value="online_banking">Online Banking</option>
             </select>
           </div>
           <div class="filter-group">
@@ -1198,7 +1256,7 @@
           <div class="filter-actions">
             <button onclick="applyFilters()"><i class="fas fa-filter"></i> Apply Filters</button>
             <button type="button" class="btn-secondary" onclick="resetFilters()"><i class="fas fa-redo"></i> Reset</button>
-            <button type="button" class="btn-secondary" onclick="exportToCSV()"><i class="fas fa-file-csv"></i> Export CSV</button>
+            <button type="button" class="btn-secondary" id="exportCsvButton" onclick="exportToCSV()"><i class="fas fa-file-csv"></i> Export CSV</button>
           </div>
         </div>
         
@@ -1353,15 +1411,50 @@
             <select id="editPaymentMethod" required>
               <option value="cash">Cash</option>
               <option value="card">Card</option>
+              <option value="qr">QR</option>
+              <option value="online_banking">Online Banking</option>
             </select>
           </div>
           <div class="form-group">
             <label for="editStatus">Status:</label>
             <select id="editStatus" required>
               <option value="draft">Draft</option>
-              <option value="finalized">Finalized</option>
+              <option value="committed">Committed</option>
             </select>
           </div>
+          
+          <div class="edit-items-container">
+            <h3>Items</h3>
+            <div id="editItemsContainer">
+              <!-- Items will be populated here -->
+            </div>
+            <button type="button" class="add-item-btn" onclick="addEditItem()"><i class="fas fa-plus"></i> Add Item</button>
+          </div>
+          
+          <div class="total-section">
+            <div class="total-row">
+              <span>Subtotal:</span>
+              <span id="editSubtotal">RM0.00</span>
+            </div>
+            <div class="total-row">
+              <span>Tax:</span>
+              <span id="editTotalTax">RM0.00</span>
+            </div>
+            <div class="total-row">
+              <span>Discount:</span>
+              <span id="editTotalDiscount">RM0.00</span>
+            </div>
+            <div class="total-row final">
+              <span>Total:</span>
+              <span id="editGrandTotal">RM0.00</span>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="editNotes">Notes (Optional):</label>
+            <textarea id="editNotes" rows="3"></textarea>
+          </div>
+          
           <div class="modal-actions">
             <button type="submit"><i class="fas fa-save"></i> Save Changes</button>
             <button type="button" class="btn-secondary" onclick="closeEditModal()"><i class="fas fa-times"></i> Cancel</button>
@@ -1461,9 +1554,10 @@
     // Initialize data storage
     let cashbills = JSON.parse(localStorage.getItem('cashbills')) || [];
     let users = JSON.parse(localStorage.getItem('users')) || [
-      { id: 1, username: 'danial', password: 'Dd1234', role: 'admin', temporaryAccess: null },
+      { id: 1, username: 'danial', password: 'dd', role: 'admin', temporaryAccess: null },
       { id: 2, username: 'aida', password: 'Aida', role: 'manager', temporaryAccess: null },
-      { id: 3, username: 'putri', password: 'Putri', role: 'marketing', temporaryAccess: null }
+      { id: 3, username: 'putri', password: 'Putri', role: 'marketing', temporaryAccess: null },
+      { id: 4, username: 'crew1', password: 'Crew1', role: 'crew', temporaryAccess: null }
     ];
     let activityLog = JSON.parse(localStorage.getItem('activityLog')) || [];
     let currentUser = null;
@@ -1542,6 +1636,16 @@
       // Update admin panel when admin panel page is shown
       if (pageId === 'adminPanelPage') {
         updateAdminPanel();
+      }
+      
+      // Update export button on success page for crew members
+      if (pageId === 'successPage') {
+        const exportButton = document.getElementById('exportPdfButton');
+        if (exportButton && currentUser && currentUser.role === 'crew') {
+          exportButton.disabled = true;
+          exportButton.innerHTML = '<i class="fas fa-file-pdf"></i> No permission';
+          exportButton.setAttribute('title', 'Crew members cannot export committed cashbills');
+        }
       }
     }
     
@@ -1624,7 +1728,19 @@
         case 'admin': return 'Admin';
         case 'manager': return 'Manager';
         case 'marketing': return 'Marketing Team';
+        case 'crew': return 'Crew';
         default: return 'Crew';
+      }
+    }
+    
+    // Get payment method display name
+    function getPaymentMethodDisplayName(method) {
+      switch(method) {
+        case 'cash': return 'Cash';
+        case 'card': return 'Card';
+        case 'qr': return 'QR';
+        case 'online_banking': return 'Online Banking';
+        default: return method;
       }
     }
     
@@ -1731,7 +1847,7 @@
         const discount = parseFloat(row.querySelector('.item-discount').value) || 0;
         
         items.push({
-          description,
+          description: description.toUpperCase(), // Convert to uppercase
           quantity,
           unitPrice,
           taxRate,
@@ -1768,7 +1884,7 @@
         totalTax,
         totalDiscount,
         grandTotal,
-        status: 'finalized',
+        status: 'committed', // Changed from 'finalized' to 'committed'
         date: new Date().toISOString()
       };
       
@@ -1814,7 +1930,7 @@
         
         if (description && quantity && unitPrice) {
           items.push({
-            description,
+            description: description.toUpperCase(), // Convert to uppercase
             quantity,
             unitPrice,
             taxRate,
@@ -1942,7 +2058,7 @@
       });
       
       detailsContainer.innerHTML = `
-        <h3>${cashbill.invoiceNumber} ${cashbill.status === 'draft' ? '<span class="draft-indicator">Draft</span>' : ''}</h3>
+        <h3>${cashbill.invoiceNumber} ${cashbill.status === 'draft' ? '<span class="draft-indicator">Draft</span>' : '<span class="committed-indicator">Committed</span>'}</h3>
         <div class="detail-row">
           <span>Customer Name:</span>
           <span>${cashbill.customerName}</span>
@@ -1953,11 +2069,11 @@
         </div>
         <div class="detail-row">
           <span>Payment Method:</span>
-          <span>${cashbill.paymentMethod.charAt(0).toUpperCase() + cashbill.paymentMethod.slice(1)}</span>
+          <span>${getPaymentMethodDisplayName(cashbill.paymentMethod)}</span>
         </div>
         <div class="detail-row">
           <span>Status:</span>
-          <span>${cashbill.status.charAt(0).toUpperCase() + cashbill.status.slice(1)}</span>
+          <span>${cashbill.status === 'draft' ? 'Draft' : 'Committed'}</span>
         </div>
         <div style="margin-top: 1.5rem;">
           <h4>Items:</h4>
@@ -1985,13 +2101,13 @@
     
     // Update dashboard statistics
     function updateDashboardStats() {
-      const finalizedCashbills = cashbills.filter(bill => bill.status === 'finalized');
+      const committedCashbills = cashbills.filter(bill => bill.status === 'committed');
       const draftCashbills = cashbills.filter(bill => bill.status === 'draft');
       
-      const totalCashbills = finalizedCashbills.length;
-      const totalRevenue = finalizedCashbills.reduce((sum, bill) => sum + (bill.grandTotal || 0), 0);
-      const cashPayments = finalizedCashbills.filter(bill => bill.paymentMethod === 'cash').length;
-      const cardPayments = finalizedCashbills.filter(bill => bill.paymentMethod === 'card').length;
+      const totalCashbills = committedCashbills.length;
+      const totalRevenue = committedCashbills.reduce((sum, bill) => sum + (bill.grandTotal || 0), 0);
+      const cashPayments = committedCashbills.filter(bill => bill.paymentMethod === 'cash').length;
+      const cardPayments = committedCashbills.filter(bill => bill.paymentMethod === 'card').length;
       
       document.getElementById('totalCashbills').textContent = totalCashbills;
       document.getElementById('totalRevenue').textContent = `RM${totalRevenue.toFixed(2)}`;
@@ -2093,18 +2209,27 @@
         const canEdit = currentUser.role === 'admin' || bill.userId === currentUser.id;
         const totalAmount = bill.grandTotal || 0;
         
+        let actionsHTML = '';
+        
+        // For committed cashbills, crew members see "No permission"
+        if (bill.status === 'committed' && currentUser.role === 'crew') {
+          actionsHTML = '<span class="permission-denied"><i class="fas fa-lock"></i> No permission</span>';
+        } else if (canEdit) {
+          actionsHTML = `
+            <button class="btn-edit" onclick="editCashbill(${bill.id})"><i class="fas fa-edit"></i> Edit</button>
+            <button class="btn-delete" onclick="confirmDeleteCashbill(${bill.id})"><i class="fas fa-trash"></i> Delete</button>
+          `;
+        }
+        
         tableHTML += `
           <tr>
             <td>${bill.invoiceNumber}</td>
             <td>${bill.customerName}</td>
             <td>${new Date(bill.date).toLocaleDateString()}</td>
             <td>RM${totalAmount.toFixed(2)}</td>
-            <td>${bill.paymentMethod.charAt(0).toUpperCase() + bill.paymentMethod.slice(1)}</td>
-            <td>${bill.status.charAt(0).toUpperCase() + bill.status.slice(1)}</td>
-            <td>
-              ${canEdit ? `<button class="btn-edit" onclick="editCashbill(${bill.id})"><i class="fas fa-edit"></i> Edit</button>` : ''}
-              ${canEdit ? `<button class="btn-delete" onclick="confirmDeleteCashbill(${bill.id})"><i class="fas fa-trash"></i> Delete</button>` : ''}
-            </td>
+            <td>${getPaymentMethodDisplayName(bill.paymentMethod)}</td>
+            <td>${bill.status === 'draft' ? 'Draft' : 'Committed'}</td>
+            <td>${actionsHTML}</td>
           </tr>
         `;
       });
@@ -2119,6 +2244,21 @@
       
       // Update pagination
       updatePagination(filteredCashbills.length);
+      
+      // Update export button for crew members
+      const exportButton = document.getElementById('exportCsvButton');
+      if (exportButton && currentUser.role === 'crew') {
+        const hasCommitted = filteredCashbills.some(bill => bill.status === 'committed');
+        if (hasCommitted) {
+          exportButton.disabled = true;
+          exportButton.setAttribute('title', 'Crew members cannot export committed cashbills');
+          exportButton.innerHTML = '<i class="fas fa-file-csv"></i> No permission';
+        } else {
+          exportButton.disabled = false;
+          exportButton.removeAttribute('title');
+          exportButton.innerHTML = '<i class="fas fa-file-csv"></i> Export CSV';
+        }
+      }
     }
     
     // Update pagination
@@ -2218,12 +2358,21 @@
     
     // Export to CSV
     function exportToCSV() {
+      // Check if crew member is trying to export
+      if (currentUser.role === 'crew') {
+        const hasCommitted = filteredCashbills.some(bill => bill.status === 'committed');
+        if (hasCommitted) {
+          alert('Crew members cannot export committed cashbills.');
+          return;
+        }
+      }
+      
       showLoading();
       
       let csv = 'Invoice Number,Customer,Date,Subtotal,Tax,Discount,Total,Payment Method,Status\n';
       
       filteredCashbills.forEach(bill => {
-        csv += `${bill.invoiceNumber},"${bill.customerName}",${new Date(bill.date).toLocaleDateString()},${(bill.subtotal || 0).toFixed(2)},${(bill.totalTax || 0).toFixed(2)},${(bill.totalDiscount || 0).toFixed(2)},${(bill.grandTotal || 0).toFixed(2)},${bill.paymentMethod},${bill.status}\n`;
+        csv += `${bill.invoiceNumber},"${bill.customerName}",${new Date(bill.date).toLocaleDateString()},${(bill.subtotal || 0).toFixed(2)},${(bill.totalTax || 0).toFixed(2)},${(bill.totalDiscount || 0).toFixed(2)},${(bill.grandTotal || 0).toFixed(2)},${getPaymentMethodDisplayName(bill.paymentMethod)},${bill.status === 'draft' ? 'Draft' : 'Committed'}\n`;
       });
       
       const blob = new Blob([csv], { type: 'text/csv' });
@@ -2242,6 +2391,12 @@
     
     // Export cashbill as PDF (simulated)
     function exportCashbill() {
+      // Check if crew member is trying to export
+      if (currentUser.role === 'crew') {
+        alert('Crew members cannot export committed cashbills.');
+        return;
+      }
+      
       alert('PDF export would be implemented here. In a real application, this would generate a PDF file.');
     }
     
@@ -2250,12 +2405,140 @@
       const cashbill = cashbills.find(bill => bill.id === id);
       if (!cashbill) return;
       
+      // Check if crew member is trying to edit a committed cashbill
+      if (currentUser.role === 'crew' && cashbill.status === 'committed') {
+        alert('Crew members cannot edit committed cashbills.');
+        return;
+      }
+      
+      // Populate edit form
       document.getElementById('editCashbillId').value = cashbill.id;
       document.getElementById('editCustomerName').value = cashbill.customerName;
       document.getElementById('editPaymentMethod').value = cashbill.paymentMethod;
       document.getElementById('editStatus').value = cashbill.status;
+      document.getElementById('editNotes').value = cashbill.notes || '';
+      
+      // Populate items
+      const itemsContainer = document.getElementById('editItemsContainer');
+      itemsContainer.innerHTML = '';
+      
+      cashbill.items.forEach((item, index) => {
+        const itemRow = document.createElement('div');
+        itemRow.className = 'edit-item-row';
+        itemRow.innerHTML = `
+          <div class="form-group">
+            <label>Description</label>
+            <input type="text" class="edit-item-description" value="${item.description}" required placeholder="Item description">
+          </div>
+          <div class="form-group">
+            <label>Quantity</label>
+            <input type="number" class="edit-item-quantity" min="1" value="${item.quantity}" required>
+          </div>
+          <div class="form-group">
+            <label>Unit Price (RM)</label>
+            <input type="number" class="edit-item-price" step="0.01" min="0" value="${item.unitPrice}" required placeholder="0.00">
+          </div>
+          <div class="form-group">
+            <label>Tax (%)</label>
+            <input type="number" class="edit-item-tax" step="0.01" min="0" value="${item.taxRate}" placeholder="0">
+          </div>
+          <div class="form-group">
+            <label>Discount (RM)</label>
+            <input type="number" class="edit-item-discount" step="0.01" min="0" value="${item.discount}" placeholder="0">
+          </div>
+          <div>
+            <button type="button" class="remove-item-btn" onclick="removeEditItem(this)"><i class="fas fa-trash"></i> Remove</button>
+          </div>
+        `;
+        itemsContainer.appendChild(itemRow);
+      });
+      
+      // Add event listeners to calculate totals
+      document.querySelectorAll('.edit-item-row input').forEach(input => {
+        input.addEventListener('input', calculateEditTotals);
+      });
+      
+      // Calculate initial totals
+      calculateEditTotals();
       
       document.getElementById('editModal').style.display = 'flex';
+    }
+    
+    // Add item to edit form
+    function addEditItem() {
+      const itemsContainer = document.getElementById('editItemsContainer');
+      const newItem = document.createElement('div');
+      newItem.className = 'edit-item-row';
+      newItem.innerHTML = `
+        <div class="form-group">
+          <label>Description</label>
+          <input type="text" class="edit-item-description" required placeholder="Item description">
+        </div>
+        <div class="form-group">
+          <label>Quantity</label>
+          <input type="number" class="edit-item-quantity" min="1" value="1" required>
+        </div>
+        <div class="form-group">
+          <label>Unit Price (RM)</label>
+          <input type="number" class="edit-item-price" step="0.01" min="0" required placeholder="0.00">
+        </div>
+        <div class="form-group">
+          <label>Tax (%)</label>
+          <input type="number" class="edit-item-tax" step="0.01" min="0" value="0" placeholder="0">
+        </div>
+        <div class="form-group">
+          <label>Discount (RM)</label>
+          <input type="number" class="edit-item-discount" step="0.01" min="0" value="0" placeholder="0">
+        </div>
+        <div>
+          <button type="button" class="remove-item-btn" onclick="removeEditItem(this)"><i class="fas fa-trash"></i> Remove</button>
+        </div>
+      `;
+      itemsContainer.appendChild(newItem);
+      
+      // Add event listeners to calculate totals
+      newItem.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', calculateEditTotals);
+      });
+    }
+    
+    // Remove item from edit form
+    function removeEditItem(button) {
+      const itemRow = button.closest('.edit-item-row');
+      itemRow.remove();
+      calculateEditTotals();
+    }
+    
+    // Calculate edit totals
+    function calculateEditTotals() {
+      let subtotal = 0;
+      let totalTax = 0;
+      let totalDiscount = 0;
+      
+      document.querySelectorAll('.edit-item-row').forEach(row => {
+        const quantity = parseFloat(row.querySelector('.edit-item-quantity').value) || 0;
+        const price = parseFloat(row.querySelector('.edit-item-price').value) || 0;
+        const taxRate = parseFloat(row.querySelector('.edit-item-tax').value) || 0;
+        const discount = parseFloat(row.querySelector('.edit-item-discount').value) || 0;
+        
+        // Ensure all values are valid numbers
+        if (!isNaN(quantity) && !isNaN(price) && !isNaN(taxRate) && !isNaN(discount)) {
+          const itemTotal = quantity * price;
+          const itemTax = itemTotal * (taxRate / 100);
+          
+          subtotal += itemTotal;
+          totalTax += itemTax;
+          totalDiscount += discount;
+        }
+      });
+      
+      const grandTotal = subtotal + totalTax - totalDiscount;
+      
+      // Update display with proper formatting
+      document.getElementById('editSubtotal').textContent = `RM${subtotal.toFixed(2)}`;
+      document.getElementById('editTotalTax').textContent = `RM${totalTax.toFixed(2)}`;
+      document.getElementById('editTotalDiscount').textContent = `RM${totalDiscount.toFixed(2)}`;
+      document.getElementById('editGrandTotal').textContent = `RM${grandTotal.toFixed(2)}`;
     }
     
     // Close edit modal
@@ -2271,18 +2554,67 @@
       const customerName = document.getElementById('editCustomerName').value;
       const paymentMethod = document.getElementById('editPaymentMethod').value;
       const status = document.getElementById('editStatus').value;
+      const notes = document.getElementById('editNotes').value;
       
       const cashbillIndex = cashbills.findIndex(bill => bill.id === id);
       if (cashbillIndex === -1) return;
       
+      // Check if crew member is trying to commit a cashbill
+      if (currentUser.role === 'crew' && status === 'committed' && cashbills[cashbillIndex].status === 'draft') {
+        alert('Crew members cannot commit cashbills.');
+        return;
+      }
+      
+      // Get items
+      const items = [];
+      document.querySelectorAll('.edit-item-row').forEach(row => {
+        const description = row.querySelector('.edit-item-description').value;
+        const quantity = parseInt(row.querySelector('.edit-item-quantity').value) || 0;
+        const unitPrice = parseFloat(row.querySelector('.edit-item-price').value) || 0;
+        const taxRate = parseFloat(row.querySelector('.edit-item-tax').value) || 0;
+        const discount = parseFloat(row.querySelector('.edit-item-discount').value) || 0;
+        
+        items.push({
+          description: description.toUpperCase(), // Convert to uppercase
+          quantity,
+          unitPrice,
+          taxRate,
+          discount
+        });
+      });
+      
+      // Calculate totals
+      let subtotal = 0;
+      let totalTax = 0;
+      let totalDiscount = 0;
+      
+      items.forEach(item => {
+        const itemTotal = item.quantity * item.unitPrice;
+        const itemTax = itemTotal * (item.taxRate / 100);
+        
+        subtotal += itemTotal;
+        totalTax += itemTax;
+        totalDiscount += item.discount;
+      });
+      
+      const grandTotal = subtotal + totalTax - totalDiscount;
+      
+      // Update cashbill
       cashbills[cashbillIndex].customerName = customerName;
       cashbills[cashbillIndex].paymentMethod = paymentMethod;
       cashbills[cashbillIndex].status = status;
+      cashbills[cashbillIndex].notes = notes;
+      cashbills[cashbillIndex].items = items;
+      cashbills[cashbillIndex].subtotal = subtotal;
+      cashbills[cashbillIndex].totalTax = totalTax;
+      cashbills[cashbillIndex].totalDiscount = totalDiscount;
+      cashbills[cashbillIndex].grandTotal = grandTotal;
       
       localStorage.setItem('cashbills', JSON.stringify(cashbills));
       
       // Log activity
-      logActivity(currentUser.id, currentUser.username, 'Edit Cashbill', `Edited cashbill ${cashbills[cashbillIndex].invoiceNumber}`);
+      const actionText = status === 'committed' ? 'committed' : 'uncommitted';
+      logActivity(currentUser.id, currentUser.username, 'Edit Cashbill', `${actionText} cashbill ${cashbills[cashbillIndex].invoiceNumber}`);
       
       closeEditModal();
       updateReportsPage();
@@ -2291,6 +2623,15 @@
     
     // Confirm delete cashbill
     function confirmDeleteCashbill(id) {
+      const cashbill = cashbills.find(bill => bill.id === id);
+      if (!cashbill) return;
+      
+      // Check if crew member is trying to delete a committed cashbill
+      if (currentUser.role === 'crew' && cashbill.status === 'committed') {
+        alert('Crew members cannot delete committed cashbills.');
+        return;
+      }
+      
       confirmedAction = () => deleteCashbill(id);
       document.getElementById('confirmTitle').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Confirm Delete';
       document.getElementById('confirmMessage').textContent = 'Are you sure you want to delete this cashbill? This action cannot be undone.';
@@ -2301,6 +2642,12 @@
     function deleteCashbill(id) {
       const cashbill = cashbills.find(bill => bill.id === id);
       if (!cashbill) return;
+      
+      // Check if crew member is trying to delete a committed cashbill
+      if (currentUser.role === 'crew' && cashbill.status === 'committed') {
+        alert('Crew members cannot delete committed cashbills.');
+        return;
+      }
       
       cashbills = cashbills.filter(bill => bill.id !== id);
       localStorage.setItem('cashbills', JSON.stringify(cashbills));
