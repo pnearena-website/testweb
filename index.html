@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* All the CSS styles remain the same as in the previous version */
+    /* All existing CSS styles remain the same */
     :root {
       /* Color Variables */
       --primary: #1e3a8a;
@@ -1534,6 +1534,29 @@
     .detail-row:last-child {
       border-bottom: none;
     }
+    
+    /* New styles for item dropdown */
+    .item-select {
+      font-size: 0.95rem;
+    }
+    
+    .min-order-note {
+      font-size: 0.8rem;
+      color: var(--warning);
+      margin-top: 0.25rem;
+    }
+    
+    .member-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .member-checkbox input[type="checkbox"] {
+      width: auto;
+      margin: 0;
+    }
   </style>
 </head>
 <body>
@@ -1799,17 +1822,25 @@
             <input type="text" id="customerName" required placeholder="Enter customer name">
           </div>
           
+          <div class="member-checkbox">
+            <input type="checkbox" id="isMember">
+            <label for="isMember">Is Member?</label>
+          </div>
+          
           <div class="items-container">
             <h3>Items</h3>
             <div id="itemsContainer">
               <div class="item-row">
                 <div class="form-group">
-                  <label>Description</label>
-                  <input type="text" class="item-description" required placeholder="Item description">
+                  <label>Item</label>
+                  <select class="item-select" required>
+                    <option value="">Select an item</option>
+                  </select>
                 </div>
                 <div class="form-group">
                   <label>Quantity</label>
                   <input type="number" class="item-quantity" min="1" value="1" required>
+                  <div class="min-order-note" style="display: none; font-size: 0.8rem; color: var(--warning);">Minimum order: <span class="min-order-value"></span> sets</div>
                 </div>
                 <div class="form-group">
                   <label>Unit Price (RM)</label>
@@ -2127,6 +2158,98 @@
   </div>
   
   <script>
+    // Define items list with categories and pricing
+    const itemsList = [
+      {
+        category: "Jubah",
+        items: [
+          { 
+            description: "Adult Jubah", 
+            price: 250, 
+            memberPrice: 220, 
+            minOrder: null, 
+            freeCap: true 
+          },
+          { 
+            description: "Year 6 Jubah", 
+            price: 170, 
+            memberPrice: 150, 
+            minOrder: 10, 
+            freeCap: true 
+          },
+          { 
+            description: "Kindergarten Jubah", 
+            price: 110, 
+            memberPrice: 99, 
+            minOrder: 10, 
+            freeCap: true 
+          }
+        ]
+      },
+      {
+        category: "Accessories & Souvenirs",
+        items: [
+          { 
+            description: "Pluque Arkalic (with name print)", 
+            price: 19.90, 
+            memberPrice: 17.50, 
+            minOrder: null 
+          },
+          { 
+            description: "Cute Medal (Arkalic material)", 
+            price: 12.90, 
+            memberPrice: 10.90, 
+            minOrder: 10 
+          },
+          { 
+            description: "Cute Keychain (Arkalic Sublimation)", 
+            price: 5.90, 
+            memberPrice: 3.90, 
+            minOrder: 10 
+          },
+          { 
+            description: "Attendance Keychain (Acrylic)", 
+            price: 4.90, 
+            memberPrice: 3.50, 
+            minOrder: 10 
+          }
+        ]
+      },
+      {
+        category: "T-Shirts (Kindergarten)",
+        items: [
+          { 
+            description: "Kindergarten T-Shirt (Microfiber)", 
+            price: 29.90, 
+            memberPrice: 25.00, 
+            minOrder: 20 
+          },
+          { 
+            description: "Kindergarten T-Shirt + Pants Set (Microfiber + Tracksuit)", 
+            price: 45.00, 
+            memberPrice: 39.90, 
+            minOrder: 20 
+          }
+        ]
+      }
+    ];
+
+    // Function to populate item dropdown
+    function populateItemDropdown(selectElement) {
+      selectElement.innerHTML = '<option value="">Select an item</option>';
+      itemsList.forEach(category => {
+        const optgroup = document.createElement('optgroup');
+        optgroup.label = category.category;
+        category.items.forEach(item => {
+          const option = document.createElement('option');
+          option.value = JSON.stringify(item);
+          option.textContent = item.description;
+          optgroup.appendChild(option);
+        });
+        selectElement.appendChild(optgroup);
+      });
+    }
+
     // API URL for Google Apps Script
     const API_URL = "https://script.google.com/macros/s/AKfycbyekmbibuQZeerhAHQ8Eva_0nzuO397O0-3PJUtXs5Dfq-tHC3z1vap1hfXu-BvJKb-/exec";
     
@@ -2402,12 +2525,15 @@
       newItem.className = 'item-row';
       newItem.innerHTML = `
         <div class="form-group">
-          <label>Description</label>
-          <input type="text" class="item-description" required placeholder="Item description">
+          <label>Item</label>
+          <select class="item-select" required>
+            <option value="">Select an item</option>
+          </select>
         </div>
         <div class="form-group">
           <label>Quantity</label>
           <input type="number" class="item-quantity" min="1" value="1" required>
+          <div class="min-order-note" style="display: none; font-size: 0.8rem; color: var(--warning);">Minimum order: <span class="min-order-value"></span> sets</div>
         </div>
         <div class="form-group">
           <label>Unit Price (RM)</label>
@@ -2426,6 +2552,36 @@
         </div>
       `;
       itemsContainer.appendChild(newItem);
+      
+      // Populate the dropdown
+      const selectElement = newItem.querySelector('.item-select');
+      populateItemDropdown(selectElement);
+      
+      // Add event listener for item selection
+      selectElement.addEventListener('change', function() {
+        if (this.value) {
+          const item = JSON.parse(this.value);
+          const row = this.closest('.item-row');
+          const isMember = document.getElementById('isMember').checked;
+          const price = isMember ? item.memberPrice : item.price;
+          row.querySelector('.item-price').value = price;
+          
+          // Handle minimum order
+          if (item.minOrder) {
+            const quantityInput = row.querySelector('.item-quantity');
+            quantityInput.min = item.minOrder;
+            quantityInput.value = item.minOrder;
+            const minOrderNote = row.querySelector('.min-order-note');
+            minOrderNote.querySelector('.min-order-value').textContent = item.minOrder;
+            minOrderNote.style.display = 'block';
+          } else {
+            row.querySelector('.min-order-note').style.display = 'none';
+          }
+          
+          // Recalculate totals
+          calculateTotals();
+        }
+      });
       
       // Add event listeners to calculate totals
       newItem.querySelectorAll('input').forEach(input => {
@@ -2472,6 +2628,75 @@
       document.getElementById('grandTotal').textContent = `${systemSettings.currency}${grandTotal.toFixed(2)}`;
     }
     
+    // Initialize the first item row
+    document.addEventListener('DOMContentLoaded', function() {
+      // Update the initial item row
+      const initialItemRow = document.querySelector('#itemsContainer .item-row');
+      if (initialItemRow) {
+        // Replace description input with dropdown
+        const descriptionGroup = initialItemRow.querySelector('.form-group');
+        descriptionGroup.innerHTML = `
+          <label>Item</label>
+          <select class="item-select" required>
+            <option value="">Select an item</option>
+          </select>
+        `;
+        
+        // Add minimum order note
+        const quantityGroup = initialItemRow.querySelectorAll('.form-group')[1];
+        quantityGroup.innerHTML += `
+          <div class="min-order-note" style="display: none; font-size: 0.8rem; color: var(--warning);">Minimum order: <span class="min-order-value"></span> sets</div>
+        `;
+        
+        // Populate the dropdown
+        const selectElement = initialItemRow.querySelector('.item-select');
+        populateItemDropdown(selectElement);
+        
+        // Add event listener for item selection
+        selectElement.addEventListener('change', function() {
+          if (this.value) {
+            const item = JSON.parse(this.value);
+            const row = this.closest('.item-row');
+            const isMember = document.getElementById('isMember').checked;
+            const price = isMember ? item.memberPrice : item.price;
+            row.querySelector('.item-price').value = price;
+            
+            // Handle minimum order
+            if (item.minOrder) {
+              const quantityInput = row.querySelector('.item-quantity');
+              quantityInput.min = item.minOrder;
+              quantityInput.value = item.minOrder;
+              const minOrderNote = row.querySelector('.min-order-note');
+              minOrderNote.querySelector('.min-order-value').textContent = item.minOrder;
+              minOrderNote.style.display = 'block';
+            } else {
+              row.querySelector('.min-order-note').style.display = 'none';
+            }
+            
+            // Recalculate totals
+            calculateTotals();
+          }
+        });
+      }
+      
+      // Add event listener for member checkbox
+      const memberCheckbox = document.getElementById('isMember');
+      if (memberCheckbox) {
+        memberCheckbox.addEventListener('change', function() {
+          // Update all item rows that have a selected item
+          document.querySelectorAll('.item-row').forEach(row => {
+            const select = row.querySelector('.item-select');
+            if (select.value) {
+              const item = JSON.parse(select.value);
+              const price = this.checked ? item.memberPrice : item.price;
+              row.querySelector('.item-price').value = price;
+              calculateTotals();
+            }
+          });
+        });
+      }
+    });
+    
     // Add event listeners to initial inputs
     document.querySelectorAll('.item-row input').forEach(input => {
       input.addEventListener('input', calculateTotals);
@@ -2509,26 +2734,39 @@
       
       // Get form values
       const customerName = document.getElementById('customerName').value;
+      const isMember = document.getElementById('isMember').checked;
       const paymentMethod = document.getElementById('paymentMethod').value;
       const notes = document.getElementById('notes').value;
       
       // Get items
       const items = [];
       document.querySelectorAll('.item-row').forEach(row => {
-        const description = row.querySelector('.item-description').value;
-        const quantity = parseInt(row.querySelector('.item-quantity').value) || 0;
-        const unitPrice = parseFloat(row.querySelector('.item-price').value) || 0;
-        const taxRate = parseFloat(row.querySelector('.item-tax').value) || 0;
-        const discount = parseFloat(row.querySelector('.item-discount').value) || 0;
-        
-        items.push({
-          description: description, // Keep as user entered
-          quantity,
-          unitPrice,
-          taxRate,
-          discount
-        });
+        const select = row.querySelector('.item-select');
+        if (select.value) {
+          const itemData = JSON.parse(select.value);
+          const quantity = parseInt(row.querySelector('.item-quantity').value) || 0;
+          const unitPrice = parseFloat(row.querySelector('.item-price').value) || 0;
+          const taxRate = parseFloat(row.querySelector('.item-tax').value) || 0;
+          const discount = parseFloat(row.querySelector('.item-discount').value) || 0;
+          
+          items.push({
+            description: itemData.description,
+            quantity,
+            unitPrice,
+            taxRate,
+            discount,
+            isMember: isMember,
+            memberPrice: itemData.memberPrice,
+            regularPrice: itemData.price
+          });
+        }
       });
+      
+      if (items.length === 0) {
+        alert('Please add at least one item');
+        hideLoading();
+        return;
+      }
       
       // Calculate totals
       let subtotal = 0;
@@ -2553,6 +2791,7 @@
         userId: currentUser.id,
         userName: currentUser.name, // Add userName
         customerName,
+        isMember,
         items, // Keep as array for now
         paymentMethod,
         notes,
@@ -2598,25 +2837,30 @@
       
       // Get form values
       const customerName = document.getElementById('customerName').value;
+      const isMember = document.getElementById('isMember').checked;
       const paymentMethod = document.getElementById('paymentMethod').value;
       const notes = document.getElementById('notes').value;
       
       // Get items
       const items = [];
       document.querySelectorAll('.item-row').forEach(row => {
-        const description = row.querySelector('.item-description').value;
-        const quantity = parseInt(row.querySelector('.item-quantity').value) || 0;
-        const unitPrice = parseFloat(row.querySelector('.item-price').value) || 0;
-        const taxRate = parseFloat(row.querySelector('.item-tax').value) || 0;
-        const discount = parseFloat(row.querySelector('.item-discount').value) || 0;
-        
-        if (description && quantity && unitPrice) {
+        const select = row.querySelector('.item-select');
+        if (select.value) {
+          const itemData = JSON.parse(select.value);
+          const quantity = parseInt(row.querySelector('.item-quantity').value) || 0;
+          const unitPrice = parseFloat(row.querySelector('.item-price').value) || 0;
+          const taxRate = parseFloat(row.querySelector('.item-tax').value) || 0;
+          const discount = parseFloat(row.querySelector('.item-discount').value) || 0;
+          
           items.push({
-            description: description, // Keep as user entered
+            description: itemData.description,
             quantity,
             unitPrice,
             taxRate,
-            discount
+            discount,
+            isMember: isMember,
+            memberPrice: itemData.memberPrice,
+            regularPrice: itemData.price
           });
         }
       });
@@ -2650,6 +2894,7 @@
         userId: currentUser.id,
         userName: currentUser.name, // Add userName
         customerName,
+        isMember,
         items, // Keep as array for now
         paymentMethod,
         notes,
@@ -2695,12 +2940,15 @@
       itemsContainer.innerHTML = `
         <div class="item-row">
           <div class="form-group">
-            <label>Description</label>
-            <input type="text" class="item-description" required placeholder="Item description">
+            <label>Item</label>
+            <select class="item-select" required>
+              <option value="">Select an item</option>
+            </select>
           </div>
           <div class="form-group">
             <label>Quantity</label>
             <input type="number" class="item-quantity" min="1" value="1" required>
+            <div class="min-order-note" style="display: none; font-size: 0.8rem; color: var(--warning);">Minimum order: <span class="min-order-value"></span> sets</div>
           </div>
           <div class="form-group">
             <label>Unit Price (RM)</label>
@@ -2721,7 +2969,35 @@
       `;
       
       // Add event listeners
-      document.querySelectorAll('.item-row input').forEach(input => {
+      const selectElement = itemsContainer.querySelector('.item-select');
+      populateItemDropdown(selectElement);
+      
+      selectElement.addEventListener('change', function() {
+        if (this.value) {
+          const item = JSON.parse(this.value);
+          const row = this.closest('.item-row');
+          const isMember = document.getElementById('isMember').checked;
+          const price = isMember ? item.memberPrice : item.price;
+          row.querySelector('.item-price').value = price;
+          
+          // Handle minimum order
+          if (item.minOrder) {
+            const quantityInput = row.querySelector('.item-quantity');
+            quantityInput.min = item.minOrder;
+            quantityInput.value = item.minOrder;
+            const minOrderNote = row.querySelector('.min-order-note');
+            minOrderNote.querySelector('.min-order-value').textContent = item.minOrder;
+            minOrderNote.style.display = 'block';
+          } else {
+            row.querySelector('.min-order-note').style.display = 'none';
+          }
+          
+          // Recalculate totals
+          calculateTotals();
+        }
+      });
+      
+      itemsContainer.querySelectorAll('input').forEach(input => {
         input.addEventListener('input', calculateTotals);
       });
       
