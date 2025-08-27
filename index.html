@@ -3,67 +3,71 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PNE ARENA Test</title>
+  <title>PNE ARENA System - Professional Billing Management</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #2c3e50;
-      --primary-dark: #1a252f;
-      --secondary: #3498db;
-      --success: #27ae60;
-      --danger: #e74c3c;
-      --warning: #f39c12;
-      --info: #2980b9;
-      --light: #ecf0f1;
-      --dark: #2c3e50;
-      --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.2);
-      --radius: 8px;
-      --transition: all 0.3s ease;
+      /* Color Variables */
+      --primary: #1e3a8a;
+      --primary-dark: #1e293b;
+      --secondary: #3b82f6;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --info: #06b6d4;
+      --light: #f8fafc;
+      --dark: #0f172a;
+      --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --radius: 0.5rem;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       
-      /* Light mode colors */
+      /* Light mode */
       --bg-primary: #ffffff;
-      --bg-secondary: #f8f9fa;
-      --bg-tertiary: #e9ecef;
-      --text-primary: #2c3e50;
-      --text-secondary: #6c757d;
-      --text-tertiary: #495057;
-      --border-color: #dee2e6;
+      --bg-secondary: #f1f5f9;
+      --bg-tertiary: #e2e8f0;
+      --text-primary: #1e293b;
+      --text-secondary: #64748b;
+      --text-tertiary: #94a3b8;
+      --border-color: #e2e8f0;
       --input-bg: #ffffff;
-      --input-border: #ced4da;
+      --input-border: #cbd5e1;
       --card-bg: #ffffff;
       --table-bg: #ffffff;
-      --table-header-bg: #f8f9fa;
-      --hover-bg: #f8f9fa;
+      --table-header-bg: #f8fafc;
+      --hover-bg: #f1f5f9;
     }
     
-    /* Dark mode variables with improved contrast */
+    /* Dark mode */
     [data-theme="dark"] {
-      --bg-primary: #0d1117;
-      --bg-secondary: #161b22;
-      --bg-tertiary: #21262d;
-      --text-primary: #f0f6fc;
-      --text-secondary: #8b949e;
-      --text-tertiary: #c9d1d9;
-      --border-color: #30363d;
-      --input-bg: #0d1117;
-      --input-border: #30363d;
-      --card-bg: #161b22;
-      --table-bg: #161b22;
-      --table-header-bg: #21262d;
-      --hover-bg: #21262d;
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --bg-tertiary: #334155;
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-tertiary: #94a3b8;
+      --border-color: #334155;
+      --input-bg: #1e293b;
+      --input-border: #475569;
+      --card-bg: #1e293b;
+      --table-bg: #1e293b;
+      --table-header-bg: #334155;
+      --hover-bg: #334155;
       
-      --primary: #58a6ff;
-      --primary-dark: #1f6feb;
-      --secondary: #58a6ff;
-      --success: #3fb950;
-      --danger: #f85149;
-      --warning: #d29922;
-      --info: #58a6ff;
-      --light: #21262d;
-      --dark: #f0f6fc;
-      --shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+      --primary: #60a5fa;
+      --primary-dark: #3b82f6;
+      --secondary: #60a5fa;
+      --success: #34d399;
+      --danger: #f87171;
+      --warning: #fbbf24;
+      --info: #22d3ee;
+      --light: #334155;
+      --dark: #f8fafc;
+      --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
     }
     
     * {
@@ -79,23 +83,26 @@
       min-height: 100vh;
       line-height: 1.6;
       transition: var(--transition);
+      font-size: 14px;
     }
     
+    /* Container */
     .container {
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
       background: var(--bg-primary);
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
+      box-shadow: var(--shadow-lg);
       overflow: hidden;
       transition: var(--transition);
       border: 1px solid var(--border-color);
     }
     
+    /* Header */
     header {
-      background: var(--primary);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
       color: white;
-      padding: 2.5rem;
+      padding: 2rem;
       text-align: center;
       position: relative;
       border-bottom: 4px solid var(--secondary);
@@ -110,9 +117,10 @@
     
     header p {
       opacity: 0.9;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
     }
     
+    /* Theme Toggle */
     .theme-toggle {
       position: absolute;
       top: 1.5rem;
@@ -135,15 +143,59 @@
       background: rgba(255, 255, 255, 0.3);
     }
     
+    /* Notification Toggle */
+    .notification-toggle {
+      position: absolute;
+      top: 1.5rem;
+      right: 5.5rem;
+    }
+    
+    .notification-toggle button {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      transition: background 0.3s ease;
+      position: relative;
+    }
+    
+    .notification-toggle button:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+    
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: var(--danger);
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+    
+    /* Pages */
     .page {
       display: none;
-      padding: 2.5rem;
+      padding: 2rem;
       animation: fadeIn 0.4s ease-in-out;
       background: var(--bg-primary);
       color: var(--text-primary);
     }
     
-    .active {
+    .page.active {
       display: block;
     }
     
@@ -152,29 +204,464 @@
       to { opacity: 1; transform: translateY(0); }
     }
     
+    /* Navigation */
+    nav {
+      background: var(--bg-secondary);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    
+    nav a {
+      color: var(--secondary);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+    }
+    
+    nav a:hover {
+      background: rgba(59, 130, 246, 0.1);
+    }
+    
+    .user-info {
+      font-weight: 500;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .user-role {
+      background: var(--success);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 24px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+    
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      transition: var(--transition);
+      border: 1px solid var(--border-color);
+    }
+    
+    .card h2 {
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    
+    /* Dashboard Stats */
+    .dashboard-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .stat-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      border: 1px solid var(--border-color);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--secondary), var(--primary));
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .stat-card h3 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+    
+    .stat-card p {
+      color: var(--text-secondary);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+    }
+    
+    /* Quick Actions */
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .quick-action-btn {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      position: relative;
+    }
+    
+    .quick-action-btn:hover {
+      background: var(--hover-bg);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .quick-action-btn i {
+      font-size: 2rem;
+      color: var(--secondary);
+    }
+    
+    .quick-action-btn h3 {
+      margin: 0;
+      font-size: 1rem;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+    
+    /* Performance Metrics */
+    .performance-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .metric-card {
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+    }
+    
+    .metric-card:hover {
+      box-shadow: var(--shadow);
+    }
+    
+    .metric-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .progress-bar {
+      height: 8px;
+      background: var(--bg-tertiary);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 0.5rem;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--secondary), var(--primary));
+      border-radius: 4px;
+      transition: width 1s ease;
+    }
+    
+    .metric-value {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    
+    /* System Health */
+    .system-health {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .health-indicator {
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      border: 1px solid var(--border-color);
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .health-indicator:hover {
+      box-shadow: var(--shadow);
+    }
+    
+    .health-indicator i {
+      font-size: 2rem;
+      margin-bottom: 0.75rem;
+    }
+    
+    .health-good {
+      color: var(--success);
+    }
+    
+    .health-warning {
+      color: var(--warning);
+    }
+    
+    .health-danger {
+      color: var(--danger);
+    }
+    
+    .health-indicator h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.25rem;
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+    
+    .health-indicator p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+    
+    /* User Activity Chart */
+    .user-activity-chart {
+      height: 250px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+      border: 1px solid var(--border-color);
+      position: relative;
+    }
+    
+    .chart-container {
+      height: 200px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-around;
+      padding-top: 1rem;
+    }
+    
+    .chart-bar {
+      width: 40px;
+      background: linear-gradient(to top, var(--secondary), var(--primary));
+      border-radius: 4px 4px 0 0;
+      transition: height 1s ease;
+      position: relative;
+    }
+    
+    .chart-bar:hover {
+      opacity: 0.8;
+    }
+    
+    .chart-label {
+      position: absolute;
+      bottom: -25px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+    
+    .chart-value {
+      position: absolute;
+      top: -25px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    
+    /* System Tools */
+    .system-tools {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    
+    .tool-btn {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .tool-btn:hover {
+      background: var(--hover-bg);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .tool-btn i {
+      font-size: 1.8rem;
+      color: var(--secondary);
+    }
+    
+    .tool-btn h3 {
+      margin: 0;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+    
+    /* Activity Feeds */
+    .recent-activity {
+      max-height: 300px;
+      overflow-y: auto;
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+      border: 1px solid var(--border-color);
+    }
+    
+    .activity-item {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+    
+    .activity-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    
+    .activity-icon.create {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+    }
+    
+    .activity-icon.edit {
+      background: rgba(59, 130, 246, 0.1);
+      color: var(--secondary);
+    }
+    
+    .activity-icon.delete {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
+    }
+    
+    .activity-icon.login {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--warning);
+    }
+    
+    .activity-content {
+      flex: 1;
+    }
+    
+    .activity-title {
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 0.2rem;
+    }
+    
+    .activity-time {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+    
+    /* Forms */
     form {
       background: var(--bg-secondary);
-      padding: 2.5rem;
+      padding: 2rem;
       border-radius: var(--radius);
       border: 1px solid var(--border-color);
       margin-bottom: 2rem;
       transition: var(--transition);
     }
     
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
     label {
       display: block;
       margin-bottom: 0.5rem;
-      font-weight: 600;
+      font-weight: 500;
       color: var(--text-primary);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
     
     input, select, textarea {
       width: 100%;
-      padding: 0.85rem 1.2rem;
+      padding: 0.75rem 1rem;
       border: 1px solid var(--input-border);
       border-radius: 6px;
-      font-size: 1rem;
+      font-size: 0.95rem;
       transition: var(--transition);
       background: var(--input-bg);
       color: var(--text-primary);
@@ -183,28 +670,29 @@
     input:focus, select:focus, textarea:focus {
       outline: none;
       border-color: var(--secondary);
-      box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
     }
     
+    /* Buttons */
     button {
       background: var(--secondary);
       color: white;
       border: none;
-      padding: 0.85rem 1.8rem;
+      padding: 0.75rem 1.5rem;
       border-radius: 6px;
       cursor: pointer;
-      font-size: 1rem;
-      font-weight: 600;
+      font-size: 0.95rem;
+      font-weight: 500;
       transition: var(--transition);
       display: inline-flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.5rem;
     }
     
     button:hover {
       background: var(--primary-dark);
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      box-shadow: var(--shadow-md);
     }
     
     button:active {
@@ -222,7 +710,7 @@
     }
     
     .btn-secondary:hover {
-      background: #229954;
+      background: #059669;
     }
     
     .btn-danger {
@@ -230,7 +718,7 @@
     }
     
     .btn-danger:hover {
-      background: #c0392b;
+      background: #dc2626;
     }
     
     .btn-warning {
@@ -238,7 +726,7 @@
     }
     
     .btn-warning:hover {
-      background: #d68910;
+      background: #d97706;
     }
     
     .btn-info {
@@ -246,214 +734,136 @@
     }
     
     .btn-info:hover {
-      background: #21618c;
+      background: #0891b2;
     }
     
-    nav {
-      background: var(--bg-secondary);
-      padding: 1.2rem 2.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid var(--border-color);
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-    
-    nav a {
-      color: var(--secondary);
-      text-decoration: none;
-      font-weight: 600;
-      padding: 0.6rem 1.2rem;
-      border-radius: 6px;
-      transition: var(--transition);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-    
-    nav a:hover {
-      background: rgba(88, 166, 255, 0.1);
-    }
-    
-    .nav-links {
-      display: flex;
-      gap: 0.6rem;
-      flex-wrap: wrap;
-    }
-    
-    .user-info {
-      font-weight: 600;
-      color: var(--text-primary);
-      display: flex;
-      align-items: center;
-      gap: 1.2rem;
-    }
-    
-    .user-role {
-      background: var(--success);
-      color: white;
-      padding: 0.3rem 0.9rem;
-      border-radius: 24px;
-      font-size: 0.85rem;
-      font-weight: 500;
-    }
-    
-    .card {
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 2.5rem;
-      margin-bottom: 2.5rem;
-      transition: var(--transition);
-      border: 1px solid var(--border-color);
-    }
-    
-    .card h2 {
-      color: var(--text-primary);
-      margin-bottom: 1.8rem;
-      padding-bottom: 1.2rem;
-      border-bottom: 2px solid var(--border-color);
-      display: flex;
-      align-items: center;
-      gap: 0.9rem;
-      font-size: 1.7rem;
-      font-weight: 700;
-    }
-    
+    /* Messages */
     .success-message {
       background: var(--success);
       color: white;
-      padding: 1.2rem;
+      padding: 1rem;
       border-radius: var(--radius);
-      margin-bottom: 1.8rem;
+      margin-bottom: 1.5rem;
       text-align: center;
-      font-weight: 600;
+      font-weight: 500;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.9rem;
-      font-size: 1.1rem;
+      gap: 0.75rem;
+      font-size: 1rem;
     }
     
     .error-message {
       background: var(--danger);
       color: white;
-      padding: 1.2rem;
+      padding: 1rem;
       border-radius: var(--radius);
-      margin-bottom: 1.8rem;
+      margin-bottom: 1.5rem;
       text-align: center;
-      font-weight: 600;
+      font-weight: 500;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.9rem;
-      font-size: 1.1rem;
+      gap: 0.75rem;
+      font-size: 1rem;
     }
     
     .warning-message {
       background: var(--warning);
       color: white;
-      padding: 1.2rem;
+      padding: 1rem;
       border-radius: var(--radius);
-      margin-bottom: 1.8rem;
+      margin-bottom: 1.5rem;
       text-align: center;
-      font-weight: 600;
+      font-weight: 500;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.9rem;
-      font-size: 1.1rem;
+      gap: 0.75rem;
+      font-size: 1rem;
     }
     
     .info-message {
       background: var(--info);
       color: white;
-      padding: 1.2rem;
+      padding: 1rem;
       border-radius: var(--radius);
-      margin-bottom: 1.8rem;
+      margin-bottom: 1.5rem;
       text-align: center;
-      font-weight: 600;
+      font-weight: 500;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.9rem;
-      font-size: 1.1rem;
+      gap: 0.75rem;
+      font-size: 1rem;
     }
     
+    /* Indicators */
     .permission-denied {
       background: var(--warning);
       color: white;
-      padding: 0.6rem 1.2rem;
+      padding: 0.5rem 1rem;
       border-radius: 6px;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 500;
       display: inline-flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.5rem;
     }
     
-    .cashbill-details {
-      background: var(--bg-secondary);
-      border-radius: var(--radius);
-      padding: 3rem;
-      margin-top: 2.5rem;
-      transition: var(--transition);
-      border: 1px solid var(--border-color);
-      box-shadow: var(--shadow-lg);
-      font-size: 1.1rem;
+    .draft-indicator {
+      background: var(--warning);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 24px;
+      font-size: 0.85rem;
+      margin-left: 0.75rem;
+      font-weight: 500;
     }
     
-    .cashbill-details h3 {
-      color: var(--text-primary);
-      margin-bottom: 2rem;
-      text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.9rem;
-      font-size: 1.8rem;
-      font-weight: 700;
+    .committed-indicator {
+      background: var(--success);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 24px;
+      font-size: 0.85rem;
+      margin-left: 0.75rem;
+      font-weight: 500;
     }
     
-    .detail-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 1rem 0;
-      border-bottom: 1px solid var(--border-color);
-      font-size: 1.1rem;
+    .temp-access-indicator {
+      background: var(--info);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 24px;
+      font-size: 0.85rem;
+      margin-left: 0.75rem;
+      font-weight: 500;
     }
     
-    .detail-row:last-child {
-      border-bottom: none;
-      font-weight: 700;
-      font-size: 1.3rem;
-      margin-top: 1rem;
-      padding-top: 1.5rem;
-    }
-    
+    /* Tables */
     .table-container {
       overflow-x: auto;
-      margin-top: 1.8rem;
+      margin-top: 1.5rem;
     }
     
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 1.8rem;
+      margin-top: 1.5rem;
       background: var(--table-bg);
       border-radius: var(--radius);
       overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      box-shadow: var(--shadow);
       border: 1px solid var(--border-color);
     }
     
     th, td {
-      padding: 1.2rem 1.8rem;
+      padding: 1rem 1.5rem;
       text-align: left;
       border-bottom: 1px solid var(--border-color);
       color: var(--text-primary);
-      font-size: 1rem;
+      font-size: 0.95rem;
     }
     
     th {
@@ -461,105 +871,73 @@
       font-weight: 600;
       color: var(--text-primary);
       text-transform: uppercase;
-      font-size: 0.9rem;
-      letter-spacing: 0.6px;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
     }
     
     tr:hover {
       background: var(--hover-bg);
     }
     
+    /* Action Buttons */
     .btn-delete {
       background: var(--danger);
       color: white;
       border: none;
-      padding: 0.6rem 1.2rem;
+      padding: 0.5rem 1rem;
       border-radius: 6px;
       cursor: pointer;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       display: inline-flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.5rem;
     }
     
     .btn-delete:hover {
-      background: #c0392b;
+      background: #dc2626;
     }
     
     .btn-edit {
       background: var(--secondary);
       color: white;
       border: none;
-      padding: 0.6rem 1.2rem;
+      padding: 0.5rem 1rem;
       border-radius: 6px;
       cursor: pointer;
-      font-size: 0.95rem;
-      margin-right: 0.6rem;
+      font-size: 0.9rem;
+      margin-right: 0.5rem;
       display: inline-flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.5rem;
     }
     
     .btn-edit:hover {
       background: var(--primary-dark);
     }
     
+    /* Empty State */
     .empty-state {
       text-align: center;
-      padding: 4rem;
+      padding: 3rem;
       color: var(--text-secondary);
     }
     
     .empty-state svg {
-      width: 100px;
-      height: 100px;
-      margin-bottom: 2rem;
+      width: 80px;
+      height: 80px;
+      margin-bottom: 1.5rem;
       opacity: 0.5;
     }
     
-    .dashboard-stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-      margin-bottom: 2.5rem;
-    }
-    
-    .stat-card {
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 2.5rem;
-      text-align: center;
-      transition: var(--transition);
-      border-top: 5px solid var(--secondary);
-      border: 1px solid var(--border-color);
-    }
-    
-    .stat-card h3 {
-      font-size: 2.8rem;
-      margin-bottom: 0.6rem;
-      color: var(--text-primary);
-      font-weight: 700;
-    }
-    
-    .stat-card p {
-      color: var(--text-secondary);
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.6rem;
-      font-size: 1.1rem;
-    }
-    
+    /* Filters */
     .filter-container {
       background: var(--bg-secondary);
-      padding: 2rem;
+      padding: 1.5rem;
       border-radius: var(--radius);
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       display: flex;
       flex-wrap: wrap;
-      gap: 1.2rem;
+      gap: 1rem;
       align-items: flex-end;
       transition: var(--transition);
       border: 1px solid var(--border-color);
@@ -567,36 +945,37 @@
     
     .filter-group {
       flex: 1;
-      min-width: 220px;
+      min-width: 200px;
     }
     
     .filter-group label {
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.25rem;
       display: flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.5rem;
       color: var(--text-primary);
     }
     
     .filter-actions {
       display: flex;
-      gap: 0.9rem;
+      gap: 0.75rem;
     }
     
+    /* Pagination */
     .pagination {
       display: flex;
       justify-content: center;
-      margin-top: 2.5rem;
-      gap: 0.3rem;
+      margin-top: 2rem;
+      gap: 0.25rem;
     }
     
     .pagination button {
-      padding: 0.9rem 1.2rem;
+      padding: 0.75rem 1rem;
       background: var(--bg-secondary);
       color: var(--text-primary);
       border: 1px solid var(--border-color);
       border-radius: 6px;
-      font-size: 1rem;
+      font-size: 0.95rem;
     }
     
     .pagination button.active {
@@ -609,13 +988,14 @@
       background: var(--hover-bg);
     }
     
+    /* Items */
     .item-row {
       display: grid;
       grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto;
-      gap: 1.2rem;
+      gap: 1rem;
       align-items: end;
-      margin-bottom: 1.2rem;
-      padding: 2rem;
+      margin-bottom: 1rem;
+      padding: 1.5rem;
       background: var(--bg-secondary);
       border-radius: var(--radius);
       transition: var(--transition);
@@ -623,33 +1003,34 @@
     }
     
     .items-container {
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
     
     .add-item-btn {
       background: var(--success);
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
     
     .add-item-btn:hover {
-      background: #229954;
+      background: #059669;
     }
     
     .remove-item-btn {
       background: var(--danger);
-      padding: 0.6rem 1.2rem;
-      font-size: 0.95rem;
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
     }
     
     .remove-item-btn:hover {
-      background: #c0392b;
+      background: #dc2626;
     }
     
+    /* Totals */
     .total-section {
       background: var(--bg-secondary);
-      padding: 2rem;
+      padding: 1.5rem;
       border-radius: var(--radius);
-      margin-top: 2rem;
+      margin-top: 1.5rem;
       transition: var(--transition);
       border: 1px solid var(--border-color);
     }
@@ -657,36 +1038,103 @@
     .total-row {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 0.9rem;
+      margin-bottom: 0.75rem;
       color: var(--text-primary);
-      font-size: 1.1rem;
+      font-size: 1rem;
     }
     
     .total-row.final {
-      font-weight: 700;
-      font-size: 1.4rem;
+      font-weight: 600;
+      font-size: 1.2rem;
       border-top: 1px solid var(--border-color);
-      padding-top: 1.5rem;
+      padding-top: 1.25rem;
+      margin-top: 1.25rem;
+    }
+    
+    /* User Management */
+    .user-management {
       margin-top: 1.5rem;
     }
     
-    .user-management {
-      margin-top: 2rem;
-    }
-    
-    .user-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr auto auto auto;
-      gap: 1.2rem;
+    .user-card {
+      display: flex;
       align-items: center;
-      padding: 2rem;
+      padding: 1.5rem;
       background: var(--bg-secondary);
       border-radius: var(--radius);
-      margin-bottom: 1.2rem;
-      transition: var(--transition);
+      margin-bottom: 1rem;
       border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
     }
     
+    .user-card:hover {
+      box-shadow: var(--shadow);
+    }
+    
+    .user-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--secondary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-right: 1.5rem;
+    }
+    
+    .user-info {
+      flex: 1;
+    }
+    
+    .user-name {
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.25rem;
+      font-size: 1.1rem;
+    }
+    
+    .user-details {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .user-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    
+    /* Password Field */
+    .password-field {
+      position: relative;
+    }
+    
+    .password-toggle {
+      position: absolute;
+      right: 1rem;
+      top: 2.5rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      padding: 0.25rem;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+    
+    .password-toggle:hover {
+      background: var(--hover-bg);
+      color: var(--text-primary);
+    }
+    
+    /* Loading */
     .loading {
       display: flex;
       justify-content: center;
@@ -695,11 +1143,11 @@
     }
     
     .spinner {
-      border: 5px solid rgba(0, 0, 0, 0.1);
+      border: 4px solid rgba(0, 0, 0, 0.1);
       border-radius: 50%;
-      border-top: 5px solid var(--secondary);
-      width: 50px;
-      height: 50px;
+      border-top: 4px solid var(--secondary);
+      width: 40px;
+      height: 40px;
       animation: spin 1s linear infinite;
     }
     
@@ -708,6 +1156,7 @@
       100% { transform: rotate(360deg); }
     }
     
+    /* Modals */
     .modal {
       display: none;
       position: fixed;
@@ -715,18 +1164,18 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.7);
       z-index: 1000;
       justify-content: center;
       align-items: center;
-      padding: 2rem;
+      padding: 1rem;
     }
     
     .modal-content {
       background: var(--card-bg);
-      padding: 3rem;
+      padding: 2rem;
       border-radius: var(--radius);
-      max-width: 900px;
+      max-width: 800px;
       width: 100%;
       transition: var(--transition);
       box-shadow: var(--shadow-lg);
@@ -739,7 +1188,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       padding-bottom: 1rem;
       border-bottom: 2px solid var(--border-color);
     }
@@ -748,19 +1197,19 @@
       color: var(--text-primary);
       display: flex;
       align-items: center;
-      gap: 0.9rem;
-      font-size: 1.8rem;
-      font-weight: 700;
+      gap: 0.75rem;
+      font-size: 1.5rem;
+      font-weight: 600;
     }
     
     .close-modal {
       background: none;
       border: none;
-      font-size: 1.8rem;
+      font-size: 1.5rem;
       cursor: pointer;
       color: var(--text-primary);
-      width: 40px;
-      height: 40px;
+      width: 36px;
+      height: 36px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -776,123 +1225,134 @@
       display: flex;
       justify-content: flex-end;
       gap: 1rem;
-      margin-top: 2rem;
-      padding-top: 1.5rem;
+      margin-top: 1.5rem;
+      padding-top: 1rem;
       border-top: 1px solid var(--border-color);
     }
     
-    .shortcuts {
+    /* Cashbill Details */
+    .cashbill-details {
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-top: 2rem;
+      transition: var(--transition);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-lg);
+      font-size: 1rem;
+    }
+    
+    .cashbill-details h3 {
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 1rem;
+    }
+    
+    .detail-row:last-child {
+      border-bottom: none;
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-top: 1rem;
+      padding-top: 1.25rem;
+    }
+    
+    /* Notification Panel */
+    .notification-panel {
       position: fixed;
-      bottom: 1.2rem;
-      right: 1.2rem;
+      top: 80px;
+      right: 20px;
+      width: 350px;
+      max-height: 400px;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-color);
+      z-index: 100;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      transform: translateX(400px);
+    }
+    
+    .notification-panel.active {
+      transform: translateX(0);
+    }
+    
+    .notification-header {
       background: var(--primary);
       color: white;
-      padding: 0.9rem 1.2rem;
-      border-radius: var(--radius);
-      font-size: 0.9rem;
-      opacity: 0.8;
-      box-shadow: var(--shadow);
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
     
-    .draft-indicator {
-      background: var(--warning);
-      color: white;
-      padding: 0.3rem 0.9rem;
-      border-radius: 24px;
-      font-size: 0.85rem;
-      margin-left: 0.9rem;
+    .notification-header h3 {
+      margin: 0;
+      font-size: 1.1rem;
       font-weight: 500;
     }
     
-    .committed-indicator {
-      background: var(--success);
-      color: white;
-      padding: 0.3rem 0.9rem;
-      border-radius: 24px;
-      font-size: 0.85rem;
-      margin-left: 0.9rem;
-      font-weight: 500;
+    .notification-list {
+      max-height: 320px;
+      overflow-y: auto;
     }
     
-    .temp-access-indicator {
-      background: var(--info);
-      color: white;
-      padding: 0.3rem 0.9rem;
-      border-radius: 24px;
-      font-size: 0.85rem;
-      margin-left: 0.9rem;
-      font-weight: 500;
-    }
-    
-    .password-field {
-      position: relative;
-    }
-    
-    .password-toggle {
-      position: absolute;
-      right: 1.2rem;
-      top: 2.8rem;
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--text-secondary);
-      font-size: 1.2rem;
-      padding: 0.3rem;
-      border-radius: 6px;
+    .notification-item {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
       transition: all 0.3s ease;
     }
     
-    .password-toggle:hover {
+    .notification-item:hover {
       background: var(--hover-bg);
-      color: var(--text-primary);
     }
     
-    .activity-log {
-      max-height: 350px;
-      overflow-y: auto;
-      background: var(--bg-secondary);
-      padding: 2rem;
-      border-radius: var(--radius);
-      margin-top: 2rem;
-      border: 1px solid var(--border-color);
-    }
-    
-    .log-entry {
-      padding: 0.9rem 0;
-      border-bottom: 1px solid var(--border-color);
-      font-size: 1rem;
-      color: var(--text-primary);
-    }
-    
-    .log-entry:last-child {
+    .notification-item:last-child {
       border-bottom: none;
     }
     
-    .log-time {
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-    }
-    
-    .admin-badge {
-      background: var(--danger);
-      color: white;
-      padding: 0.2rem 0.6rem;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      margin-left: 0.6rem;
+    .notification-title {
       font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 0.25rem;
     }
     
+    .notification-message {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    
+    .notification-time {
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+      margin-top: 0.25rem;
+    }
+    
+    /* Permission Grid */
     .permission-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-      margin-top: 2rem;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
     }
     
     .permission-card {
       background: var(--bg-secondary);
-      padding: 2rem;
+      padding: 1.5rem;
       border-radius: var(--radius);
       transition: var(--transition);
       border-left: 5px solid var(--secondary);
@@ -900,13 +1360,13 @@
     }
     
     .permission-card h4 {
-      margin-bottom: 1.2rem;
+      margin-bottom: 1rem;
       color: var(--text-primary);
       display: flex;
       align-items: center;
-      gap: 0.6rem;
-      font-size: 1.2rem;
-      font-weight: 600;
+      gap: 0.5rem;
+      font-size: 1.1rem;
+      font-weight: 500;
     }
     
     .permission-card ul {
@@ -916,17 +1376,17 @@
     }
     
     .permission-card li {
-      padding: 0.6rem 0;
+      padding: 0.5rem 0;
       display: flex;
       align-items: flex-start;
-      font-size: 1rem;
+      font-size: 0.95rem;
     }
     
     .permission-card li:before {
       content: "✓";
       color: var(--success);
       font-weight: bold;
-      margin-right: 0.9rem;
+      margin-right: 0.75rem;
       flex-shrink: 0;
     }
     
@@ -935,9 +1395,62 @@
       color: var(--danger);
     }
     
+    /* Activity Log */
+    .activity-log {
+      max-height: 350px;
+      overflow-y: auto;
+      background: var(--bg-secondary);
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      margin-top: 1.5rem;
+      border: 1px solid var(--border-color);
+    }
+    
+    .log-entry {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.95rem;
+      color: var(--text-primary);
+    }
+    
+    .log-entry:last-child {
+      border-bottom: none;
+    }
+    
+    .log-time {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+    
+    /* Admin Badge */
+    .admin-badge {
+      background: var(--danger);
+      color: white;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      margin-left: 0.5rem;
+      font-weight: 500;
+    }
+    
+    /* Shortcuts */
+    .shortcuts {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      background: var(--primary);
+      color: white;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius);
+      font-size: 0.85rem;
+      opacity: 0.8;
+      box-shadow: var(--shadow);
+    }
+    
+    /* Edit Items */
     .edit-items-container {
-      margin-top: 2rem;
-      max-height: 450px;
+      margin-top: 1.5rem;
+      max-height: 400px;
       overflow-y: auto;
       padding: 1rem;
       background: var(--bg-tertiary);
@@ -950,26 +1463,38 @@
       gap: 1rem;
       align-items: end;
       margin-bottom: 1rem;
-      padding: 1.5rem;
+      padding: 1.25rem;
       background: var(--bg-secondary);
       border-radius: var(--radius);
       transition: var(--transition);
       border: 1px solid var(--border-color);
     }
     
+    /* Responsive */
     @media (max-width: 768px) {
-      .nav-links {
-        flex-direction: column;
-        gap: 0.3rem;
-        width: 100%;
-      }
-      
-      nav {
-        flex-direction: column;
-        gap: 1.2rem;
+      .container {
+        margin: 0;
+        border-radius: 0;
       }
       
       .dashboard-stats {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+      }
+      
+      .quick-actions {
+        grid-template-columns: 1fr;
+      }
+      
+      .performance-metrics {
+        grid-template-columns: 1fr;
+      }
+      
+      .system-health {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .system-tools {
         grid-template-columns: 1fr;
       }
       
@@ -985,8 +1510,21 @@
         width: 100%;
       }
       
-      .user-row {
-        grid-template-columns: 1fr;
+      .nav-links {
+        flex-direction: column;
+        gap: 0.25rem;
+        width: 100%;
+      }
+      
+      nav {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .user-info {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
       }
       
       .shortcuts {
@@ -999,31 +1537,50 @@
       
       .modal-content {
         max-width: 98%;
-        padding: 2rem;
-        margin: 1rem;
+        padding: 1.5rem;
+        margin: 0.5rem;
       }
       
       .cashbill-details {
-        padding: 2rem;
-        font-size: 1rem;
+        padding: 1.5rem;
+        font-size: 0.95rem;
       }
       
       .cashbill-details h3 {
-        font-size: 1.5rem;
+        font-size: 1.25rem;
       }
       
       .detail-row {
-        font-size: 1rem;
+        font-size: 0.95rem;
       }
       
       .detail-row.final {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
+      }
+      
+      .notification-panel {
+        width: calc(100% - 40px);
+        right: 20px;
+        left: 20px;
+      }
+      
+      .user-card {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .user-avatar {
+        margin: 0 0 1rem 0;
+      }
+      
+      .user-actions {
+        justify-content: center;
       }
     }
     
     @media (min-width: 1200px) {
       .modal-content {
-        max-width: 1000px;
+        max-width: 900px;
       }
     }
   </style>
@@ -1032,10 +1589,16 @@
   <div class="container">
     <header>
       <h1>PNE ARENA System</h1>
-      <p> Billing Management Solution</p>
+      <p>Professional Billing Management Solution</p>
       <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">
         <i class="fas fa-moon"></i>
       </button>
+      <div class="notification-toggle">
+        <button onclick="toggleNotifications()">
+          <i class="fas fa-bell"></i>
+          <span id="notificationCount" class="notification-badge" style="display: none;">0</span>
+        </button>
+      </div>
     </header>
     
     <!-- LOGIN PAGE -->
@@ -1079,6 +1642,151 @@
         </div>
       </nav>
       
+      <!-- Crew Features -->
+      <div id="crewFeatures" style="display: none;">
+        <div class="card">
+          <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
+          <div class="quick-actions">
+            <div class="quick-action-btn" onclick="showPage('newCashbillPage')">
+              <i class="fas fa-plus-circle"></i>
+              <h3>New Cashbill</h3>
+            </div>
+            <div class="quick-action-btn" onclick="showDrafts()">
+              <i class="fas fa-file-alt"></i>
+              <h3>My Drafts</h3>
+              <span id="draftCountBadge" class="notification-badge" style="display: none;">0</span>
+            </div>
+            <div class="quick-action-btn" onclick="showMyCashbills()">
+              <i class="fas fa-receipt"></i>
+              <h3>My Cashbills</h3>
+            </div>
+            <div class="quick-action-btn" onclick="showPerformanceReport()">
+              <i class="fas fa-chart-line"></i>
+              <h3>Performance</h3>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <h2><i class="fas fa-chart-line"></i> My Performance</h2>
+          <div class="performance-metrics">
+            <div class="metric-card">
+              <h3><i class="fas fa-file-invoice"></i> Cashbills Created</h3>
+              <div class="progress-bar">
+                <div id="myCashbillsProgress" class="progress-fill" style="width: 0%;"></div>
+              </div>
+              <div class="metric-value">
+                <span id="myCashbillsCount">0</span>
+                <span id="myCashbillsTarget">Target: 10</span>
+              </div>
+            </div>
+            <div class="metric-card">
+              <h3><i class="fas fa-money-bill-wave"></i> Revenue Generated</h3>
+              <div class="progress-bar">
+                <div id="myRevenueProgress" class="progress-fill" style="width: 0%;"></div>
+              </div>
+              <div class="metric-value">
+                <span id="myRevenueAmount">RM0.00</span>
+                <span id="myRevenueTarget">Target: RM5000</span>
+              </div>
+            </div>
+            <div class="metric-card">
+              <h3><i class="fas fa-percentage"></i> Completion Rate</h3>
+              <div class="progress-bar">
+                <div id="myCompletionProgress" class="progress-fill" style="width: 0%;"></div>
+              </div>
+              <div class="metric-value">
+                <span id="myCompletionRate">0%</span>
+                <span>Committed vs Draft</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <h2><i class="fas fa-history"></i> Recent Activity</h2>
+          <div class="recent-activity" id="myRecentActivity">
+            <!-- Will be populated by JavaScript -->
+          </div>
+        </div>
+      </div>
+      
+      <!-- Admin Features -->
+      <div id="adminFeatures" style="display: none;">
+        <div class="card">
+          <h2><i class="fas fa-heartbeat"></i> System Health</h2>
+          <div class="system-health">
+            <div class="health-indicator">
+              <i class="fas fa-users health-good"></i>
+              <h3 id="totalUsersCount">0</h3>
+              <p>Active Users</p>
+            </div>
+            <div class="health-indicator">
+              <i class="fas fa-file-invoice health-good"></i>
+              <h3 id="totalCashbillsCount">0</h3>
+              <p>Total Cashbills</p>
+            </div>
+            <div class="health-indicator">
+              <i class="fas fa-server health-good"></i>
+              <h3>99.9%</h3>
+              <p>System Uptime</p>
+            </div>
+            <div class="health-indicator">
+              <i class="fas fa-database health-warning"></i>
+              <h3>78%</h3>
+              <p>Storage Used</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <h2><i class="fas fa-chart-bar"></i> User Activity</h2>
+          <div class="user-activity-chart">
+            <div class="chart-container" id="userActivityChart">
+              <!-- Will be populated by JavaScript -->
+            </div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <h2><i class="fas fa-tools"></i> System Tools</h2>
+          <div class="system-tools">
+            <div class="tool-btn" onclick="backupSystem()">
+              <i class="fas fa-download"></i>
+              <h3>Backup Data</h3>
+            </div>
+            <div class="tool-btn" onclick="showRestoreModal()">
+              <i class="fas fa-upload"></i>
+              <h3>Restore Data</h3>
+            </div>
+            <div class="tool-btn" onclick="showSystemSettings()">
+              <i class="fas fa-cog"></i>
+              <h3>System Settings</h3>
+            </div>
+            <div class="tool-btn" onclick="generateReport()">
+              <i class="fas fa-file-alt"></i>
+              <h3>Generate Report</h3>
+            </div>
+            <div class="tool-btn" onclick="showAuditLog()">
+              <i class="fas fa-history"></i>
+              <h3>Audit Log</h3>
+            </div>
+            <div class="tool-btn" onclick="showDataAnalytics()">
+              <i class="fas fa-chart-pie"></i>
+              <h3>Analytics</h3>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card">
+          <h2><i class="fas fa-history"></i> System Activity</h2>
+          <div class="recent-activity" id="systemRecentActivity">
+            <!-- Will be populated by JavaScript -->
+          </div>
+        </div>
+      </div>
+      
+      <!-- Common Dashboard Features -->
       <div class="dashboard-stats">
         <div class="stat-card">
           <h3 id="totalCashbills">0</h3>
@@ -1096,11 +1804,19 @@
           <h3 id="cardPayments">0</h3>
           <p><i class="fas fa-credit-card"></i> Card Payments</p>
         </div>
+        <div class="stat-card">
+          <h3 id="qrPayments">0</h3>
+          <p><i class="fas fa-qrcode"></i> QR Payments</p>
+        </div>
+        <div class="stat-card">
+          <h3 id="onlineBankingPayments">0</h3>
+          <p><i class="fas fa-university"></i> Online Banking</p>
+        </div>
       </div>
       
       <div class="card">
         <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
-        <p>Any bugs contact Danial Danish (Admin).</p>
+        <p>Welcome to PNE ARENA System. Any bugs contact Danial Danish (Admin).</p>
         <div id="dashboardMessage" class="warning-message" style="display: none;">
           <i class="fas fa-exclamation-triangle"></i> You have <span id="draftCount">0</span> draft cashbills. <a onclick="showPage('reportsPage')" style="color: white; text-decoration: underline;">View them now</a>.
         </div>
@@ -1210,7 +1926,7 @@
             <textarea id="notes" rows="3" placeholder="Additional notes..."></textarea>
           </div>
           
-          <div style="display: flex; gap: 1.2rem; flex-wrap: wrap;">
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
             <button type="submit"><i class="fas fa-file-invoice"></i> Generate Cashbill</button>
             <button type="button" class="btn-secondary" onclick="saveDraft()"><i class="fas fa-save"></i> Save Draft</button>
             <button type="button" onclick="resetForm()"><i class="fas fa-redo"></i> Reset</button>
@@ -1245,7 +1961,7 @@
         <!-- Cashbill details will be populated here -->
       </div>
       
-      <div style="text-align: center; margin-top: 2.5rem;">
+      <div style="text-align: center; margin-top: 2rem;">
         <button onclick="showPage('newCashbillPage')"><i class="fas fa-file-invoice"></i> Create Another Cashbill</button>
         <button class="btn-secondary" id="exportPdfButton" onclick="exportCashbill()"><i class="fas fa-file-pdf"></i> Export as PDF</button>
       </div>
@@ -1363,7 +2079,7 @@
             <button type="submit"><i class="fas fa-user-plus"></i> Add User</button>
           </form>
           
-          <h3 style="margin-top: 2.5rem;">Existing Users</h3>
+          <h3 style="margin-top: 2rem;">Existing Users</h3>
           <div id="usersList">
             <!-- Users list will be populated here -->
           </div>
@@ -1426,16 +2142,16 @@
           </div>
         </div>
         
-        <h3 style="margin-top: 2.5rem;"><i class="fas fa-clock"></i> Temporary Access Management</h3>
+        <h3 style="margin-top: 2rem;"><i class="fas fa-clock"></i> Temporary Access Management</h3>
         <div id="tempAccessUsers">
           <!-- Temporary access users will be populated here -->
         </div>
         
-        <div style="margin-top: 2rem;">
+        <div style="margin-top: 1.5rem;">
           <button class="btn-info" onclick="showGrantAccessModal()"><i class="fas fa-user-clock"></i> Grant Temporary Access</button>
         </div>
         
-        <h3 style="margin-top: 2.5rem;"><i class="fas fa-history"></i> System Activity Log</h3>
+        <h3 style="margin-top: 2rem;"><i class="fas fa-history"></i> System Activity Log</h3>
         <div class="activity-log" id="systemActivityLog">
           <!-- System activity log will be populated here -->
         </div>
@@ -1588,6 +2304,17 @@
       </div>
     </div>
     
+    <!-- NOTIFICATION PANEL -->
+    <div id="notificationPanel" class="notification-panel">
+      <div class="notification-header">
+        <h3>Notifications</h3>
+        <button onclick="toggleNotifications()"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="notification-list" id="notificationList">
+        <!-- Notifications will be populated here -->
+      </div>
+    </div>
+    
     <!-- LOADING SPINNER -->
     <div id="loadingSpinner" class="loading" style="display: none;">
       <div class="spinner"></div>
@@ -1609,6 +2336,24 @@
       { id: 4, username: 'crew1', password: 'Crew1', role: 'crew', temporaryAccess: null }
     ];
     let activityLog = JSON.parse(localStorage.getItem('activityLog')) || [];
+    let notifications = JSON.parse(localStorage.getItem('notifications')) || [];
+    let systemSettings = JSON.parse(localStorage.getItem('systemSettings')) || {
+      companyName: 'PNE ARENA',
+      currency: 'RM',
+      taxRate: 0,
+      cashbillTargets: {
+        crew: 10,
+        manager: 20,
+        marketing: 15,
+        admin: 0
+      },
+      revenueTargets: {
+        crew: 5000,
+        manager: 15000,
+        marketing: 10000,
+        admin: 0
+      }
+    };
     let currentUser = null;
     let currentPage = 1;
     const itemsPerPage = 10;
@@ -1634,7 +2379,7 @@
         timestamp: new Date().toISOString()
       };
       
-      activityLog.unshift(logEntry); // Add to beginning of array
+      activityLog.unshift(logEntry);
       
       // Keep only last 100 entries
       if (activityLog.length > 100) {
@@ -1642,6 +2387,88 @@
       }
       
       localStorage.setItem('activityLog', JSON.stringify(activityLog));
+      
+      // Add notification for certain activities
+      if (action === 'Create Cashbill' || action === 'Delete Cashbill' || action === 'Grant Temporary Access' || action === 'Revoke Temporary Access') {
+        addNotification(username, action, details);
+      }
+    }
+    
+    // Add notification
+    function addNotification(username, action, details) {
+      const notification = {
+        id: Date.now(),
+        username,
+        action,
+        details,
+        timestamp: new Date().toISOString(),
+        read: false
+      };
+      
+      notifications.unshift(notification);
+      
+      // Keep only last 20 notifications
+      if (notifications.length > 20) {
+        notifications = notifications.slice(0, 20);
+      }
+      
+      localStorage.setItem('notifications', JSON.stringify(notifications));
+      updateNotificationBadge();
+    }
+    
+    // Update notification badge
+    function updateNotificationBadge() {
+      const unreadCount = notifications.filter(n => !n.read).length;
+      const badge = document.getElementById('notificationCount');
+      
+      if (unreadCount > 0) {
+        badge.textContent = unreadCount;
+        badge.style.display = 'flex';
+      } else {
+        badge.style.display = 'none';
+      }
+    }
+    
+    // Toggle notifications panel
+    function toggleNotifications() {
+      const panel = document.getElementById('notificationPanel');
+      panel.classList.toggle('active');
+      
+      if (panel.classList.contains('active')) {
+        updateNotificationList();
+        
+        // Mark all notifications as read
+        notifications.forEach(n => n.read = true);
+        localStorage.setItem('notifications', JSON.stringify(notifications));
+        updateNotificationBadge();
+      }
+    }
+    
+    // Update notification list
+    function updateNotificationList() {
+      const list = document.getElementById('notificationList');
+      
+      if (notifications.length === 0) {
+        list.innerHTML = '<div class="notification-item"><div class="notification-title">No notifications</div></div>';
+        return;
+      }
+      
+      let html = '';
+      notifications.forEach(notification => {
+        const date = new Date(notification.timestamp);
+        const formattedDate = date.toLocaleDateString();
+        const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        html += `
+          <div class="notification-item">
+            <div class="notification-title">${notification.username} ${notification.action.toLowerCase()}</div>
+            <div class="notification-message">${notification.details}</div>
+            <div class="notification-time">${formattedDate} at ${formattedTime}</div>
+          </div>
+        `;
+      });
+      
+      list.innerHTML = html;
     }
     
     // Theme toggle
@@ -1769,6 +2596,18 @@
       
       // Show/hide activity log card based on role
       document.getElementById('activityLogCard').style.display = currentUser.role === 'admin' ? 'block' : 'none';
+      
+      // Show/hide role-specific features
+      if (currentUser.role === 'crew') {
+        document.getElementById('crewFeatures').style.display = 'block';
+        document.getElementById('adminFeatures').style.display = 'none';
+      } else if (currentUser.role === 'admin') {
+        document.getElementById('crewFeatures').style.display = 'none';
+        document.getElementById('adminFeatures').style.display = 'block';
+      } else {
+        document.getElementById('crewFeatures').style.display = 'none';
+        document.getElementById('adminFeatures').style.display = 'none';
+      }
     }
     
     // Get role display name
@@ -1864,10 +2703,10 @@
       const grandTotal = subtotal + totalTax - totalDiscount;
       
       // Update display with proper formatting
-      document.getElementById('subtotal').textContent = `RM${subtotal.toFixed(2)}`;
-      document.getElementById('totalTax').textContent = `RM${totalTax.toFixed(2)}`;
-      document.getElementById('totalDiscount').textContent = `RM${totalDiscount.toFixed(2)}`;
-      document.getElementById('grandTotal').textContent = `RM${grandTotal.toFixed(2)}`;
+      document.getElementById('subtotal').textContent = `${systemSettings.currency}${subtotal.toFixed(2)}`;
+      document.getElementById('totalTax').textContent = `${systemSettings.currency}${totalTax.toFixed(2)}`;
+      document.getElementById('totalDiscount').textContent = `${systemSettings.currency}${totalDiscount.toFixed(2)}`;
+      document.getElementById('grandTotal').textContent = `${systemSettings.currency}${grandTotal.toFixed(2)}`;
     }
     
     // Add event listeners to initial inputs
@@ -1933,7 +2772,7 @@
         totalTax,
         totalDiscount,
         grandTotal,
-        status: 'committed', // Changed from 'finalized' to 'committed'
+        status: 'committed',
         date: new Date().toISOString()
       };
       
@@ -2101,7 +2940,7 @@
         itemsHTML += `
           <div class="detail-row">
             <span>${item.description} (x${item.quantity})</span>
-            <span>RM${itemTotal.toFixed(2)}</span>
+            <span>${systemSettings.currency}${itemTotal.toFixed(2)}</span>
           </div>
         `;
       });
@@ -2124,25 +2963,25 @@
           <span>Status:</span>
           <span>${cashbill.status === 'draft' ? 'Draft' : 'Committed'}</span>
         </div>
-        <div style="margin-top: 2rem;">
+        <div style="margin-top: 1.5rem;">
           <h4>Items:</h4>
           ${itemsHTML}
         </div>
         <div class="detail-row">
           <span>Subtotal:</span>
-          <span>RM${cashbill.subtotal.toFixed(2)}</span>
+          <span>${systemSettings.currency}${cashbill.subtotal.toFixed(2)}</span>
         </div>
         <div class="detail-row">
           <span>Tax:</span>
-          <span>RM${cashbill.totalTax.toFixed(2)}</span>
+          <span>${systemSettings.currency}${cashbill.totalTax.toFixed(2)}</span>
         </div>
         <div class="detail-row">
           <span>Discount:</span>
-          <span>RM${cashbill.totalDiscount.toFixed(2)}</span>
+          <span>${systemSettings.currency}${cashbill.totalDiscount.toFixed(2)}</span>
         </div>
         <div class="detail-row final">
           <span>Total Amount:</span>
-          <span>RM${cashbill.grandTotal.toFixed(2)}</span>
+          <span>${systemSettings.currency}${cashbill.grandTotal.toFixed(2)}</span>
         </div>
         ${cashbill.notes ? `<div class="detail-row"><span>Notes:</span><span>${cashbill.notes}</span></div>` : ''}
       `;
@@ -2157,11 +2996,15 @@
       const totalRevenue = committedCashbills.reduce((sum, bill) => sum + (bill.grandTotal || 0), 0);
       const cashPayments = committedCashbills.filter(bill => bill.paymentMethod === 'cash').length;
       const cardPayments = committedCashbills.filter(bill => bill.paymentMethod === 'card').length;
+      const qrPayments = committedCashbills.filter(bill => bill.paymentMethod === 'qr').length;
+      const onlineBankingPayments = committedCashbills.filter(bill => bill.paymentMethod === 'online_banking').length;
       
       document.getElementById('totalCashbills').textContent = totalCashbills;
-      document.getElementById('totalRevenue').textContent = `RM${totalRevenue.toFixed(2)}`;
+      document.getElementById('totalRevenue').textContent = `${systemSettings.currency}${totalRevenue.toFixed(2)}`;
       document.getElementById('cashPayments').textContent = cashPayments;
       document.getElementById('cardPayments').textContent = cardPayments;
+      document.getElementById('qrPayments').textContent = qrPayments;
+      document.getElementById('onlineBankingPayments').textContent = onlineBankingPayments;
       
       // Show draft count if any
       if (draftCashbills.length > 0) {
@@ -2183,6 +3026,216 @@
       } else {
         document.getElementById('adminDashboardMessage').style.display = 'none';
       }
+      
+      // Update crew features
+      if (currentUser && currentUser.role === 'crew') {
+        updateCrewFeatures();
+      }
+      
+      // Update admin features
+      if (currentUser && currentUser.role === 'admin') {
+        updateAdminFeatures();
+      }
+    }
+    
+    // Update crew features
+    function updateCrewFeatures() {
+      // Get crew's cashbills
+      const myCashbills = cashbills.filter(bill => bill.userId === currentUser.id);
+      const myCommittedCashbills = myCashbills.filter(bill => bill.status === 'committed');
+      const myDraftCashbills = myCashbills.filter(bill => bill.status === 'draft');
+      const myTotalRevenue = myCommittedCashbills.reduce((sum, bill) => sum + (bill.grandTotal || 0), 0);
+      
+      // Update performance metrics
+      document.getElementById('myCashbillsCount').textContent = myCashbills.length;
+      document.getElementById('myRevenueAmount').textContent = `${systemSettings.currency}${myTotalRevenue.toFixed(2)}`;
+      
+      // Update progress bars
+      const cashbillsTarget = systemSettings.cashbillTargets.crew;
+      const revenueTarget = systemSettings.revenueTargets.crew;
+      const cashbillsProgress = Math.min(100, (myCashbills.length / cashbillsTarget) * 100);
+      const revenueProgress = Math.min(100, (myTotalRevenue / revenueTarget) * 100);
+      const completionRate = myCashbills.length > 0 ? (myCommittedCashbills.length / myCashbills.length) * 100 : 0;
+      
+      document.getElementById('myCashbillsProgress').style.width = `${cashbillsProgress}%`;
+      document.getElementById('myRevenueProgress').style.width = `${revenueProgress}%`;
+      document.getElementById('myCompletionProgress').style.width = `${completionRate}%`;
+      document.getElementById('myCompletionRate').textContent = `${completionRate.toFixed(1)}%`;
+      
+      // Update draft count badge
+      const draftBadge = document.getElementById('draftCountBadge');
+      if (myDraftCashbills.length > 0) {
+        draftBadge.textContent = myDraftCashbills.length;
+        draftBadge.style.display = 'flex';
+      } else {
+        draftBadge.style.display = 'none';
+      }
+      
+      // Update recent activity
+      updateMyRecentActivity();
+    }
+    
+    // Update admin features
+    function updateAdminFeatures() {
+      // Update system health
+      document.getElementById('totalUsersCount').textContent = users.length;
+      document.getElementById('totalCashbillsCount').textContent = cashbills.length;
+      
+      // Update user activity chart
+      updateUserActivityChart();
+      
+      // Update system activity
+      updateSystemRecentActivity();
+    }
+    
+    // Update my recent activity
+    function updateMyRecentActivity() {
+      const container = document.getElementById('myRecentActivity');
+      const myActivities = activityLog
+        .filter(log => log.userId === currentUser.id)
+        .slice(0, 10);
+      
+      if (myActivities.length === 0) {
+        container.innerHTML = '<p>No recent activity.</p>';
+        return;
+      }
+      
+      let html = '';
+      myActivities.forEach(activity => {
+        const date = new Date(activity.timestamp);
+        const formattedDate = date.toLocaleDateString();
+        const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        let iconClass = '';
+        if (activity.action === 'Login') iconClass = 'login';
+        else if (activity.action === 'Create Cashbill') iconClass = 'create';
+        else if (activity.action === 'Edit Cashbill') iconClass = 'edit';
+        else if (activity.action === 'Delete Cashbill') iconClass = 'delete';
+        
+        html += `
+          <div class="activity-item">
+            <div class="activity-icon ${iconClass}">
+              <i class="fas fa-${getActivityIcon(activity.action)}"></i>
+            </div>
+            <div class="activity-content">
+              <div class="activity-title">${activity.action}</div>
+              <div class="activity-time">${formattedDate} at ${formattedTime}</div>
+            </div>
+          </div>
+        `;
+      });
+      
+      container.innerHTML = html;
+    }
+    
+    // Update system recent activity
+    function updateSystemRecentActivity() {
+      const container = document.getElementById('systemRecentActivity');
+      const recentActivities = activityLog.slice(0, 10);
+      
+      if (recentActivities.length === 0) {
+        container.innerHTML = '<p>No recent activity.</p>';
+        return;
+      }
+      
+      let html = '';
+      recentActivities.forEach(activity => {
+        const date = new Date(activity.timestamp);
+        const formattedDate = date.toLocaleDateString();
+        const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        let iconClass = '';
+        if (activity.action === 'Login') iconClass = 'login';
+        else if (activity.action === 'Create Cashbill') iconClass = 'create';
+        else if (activity.action === 'Edit Cashbill') iconClass = 'edit';
+        else if (activity.action === 'Delete Cashbill') iconClass = 'delete';
+        
+        html += `
+          <div class="activity-item">
+            <div class="activity-icon ${iconClass}">
+              <i class="fas fa-${getActivityIcon(activity.action)}"></i>
+            </div>
+            <div class="activity-content">
+              <div class="activity-title">${activity.username} ${activity.action.toLowerCase()}</div>
+              <div class="activity-time">${formattedDate} at ${formattedTime}</div>
+            </div>
+          </div>
+        `;
+      });
+      
+      container.innerHTML = html;
+    }
+    
+    // Get activity icon
+    function getActivityIcon(action) {
+      switch(action) {
+        case 'Login': return 'sign-in-alt';
+        case 'Create Cashbill': return 'plus-circle';
+        case 'Edit Cashbill': return 'edit';
+        case 'Delete Cashbill': return 'trash';
+        case 'Save Draft': return 'save';
+        case 'Export Data': return 'file-export';
+        case 'Add User': return 'user-plus';
+        case 'Reset Password': return 'key';
+        case 'Grant Temporary Access': return 'user-clock';
+        case 'Revoke Temporary Access': return 'user-times';
+        case 'Backup System': return 'download';
+        case 'Restore System': return 'upload';
+        case 'Update System Settings': return 'cog';
+        case 'Generate Report': return 'file-alt';
+        default: return 'info-circle';
+      }
+    }
+    
+    // Update user activity chart
+    function updateUserActivityChart() {
+      const container = document.getElementById('userActivityChart');
+      container.innerHTML = '';
+      
+      // Get the last 30 days
+      const today = new Date();
+      const thirtyDaysAgo = new Date(today);
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+      
+      // Filter cashbills in the last 30 days
+      const recentCashbills = cashbills.filter(bill => {
+        const billDate = new Date(bill.date);
+        return billDate >= thirtyDaysAgo && billDate <= today;
+      });
+      
+      // Group by user
+      const userActivity = {};
+      users.forEach(user => {
+        userActivity[user.username] = 0;
+      });
+      
+      recentCashbills.forEach(bill => {
+        const user = users.find(u => u.id === bill.userId);
+        if (user) {
+          userActivity[user.username]++;
+        }
+      });
+      
+      // Find max value for scaling
+      const maxCount = Math.max(...Object.values(userActivity), 1);
+      
+      // Create bars
+      Object.entries(userActivity).forEach(([username, count]) => {
+        const barHeight = (count / maxCount) * 100; // percentage of max
+        const bar = document.createElement('div');
+        bar.style.flex = '1';
+        bar.style.display = 'flex';
+        bar.style.flexDirection = 'column';
+        bar.style.alignItems = 'center';
+        bar.style.position = 'relative';
+        bar.innerHTML = `
+          <div class="chart-bar" style="height: ${barHeight}%; min-height: 5px;">
+            <div class="chart-value">${count}</div>
+          </div>
+          <div class="chart-label">${username}</div>
+        `;
+        container.appendChild(bar);
+      });
     }
     
     // Update activity log
@@ -2212,6 +3265,283 @@
       });
       
       activityLogContainer.innerHTML = logHTML;
+    }
+    
+    // Show drafts for current user
+    function showDrafts() {
+      document.getElementById('filterStatus').value = 'draft';
+      applyFilters();
+      showPage('reportsPage');
+    }
+    
+    // Show cashbills for current user
+    function showMyCashbills() {
+      resetFilters();
+      showPage('reportsPage');
+    }
+    
+    // Show performance report
+    function showPerformanceReport() {
+      alert('Performance report feature would be implemented here with detailed analytics and charts.');
+    }
+    
+    // Backup system data
+    function backupSystem() {
+      showLoading();
+      
+      const backup = {
+        cashbills,
+        users,
+        activityLog,
+        notifications,
+        systemSettings,
+        lastInvoiceNumber: localStorage.getItem('lastInvoiceNumber'),
+        timestamp: new Date().toISOString()
+      };
+      
+      const dataStr = JSON.stringify(backup, null, 2);
+      const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+      
+      const exportFileDefaultName = `pne_arena_backup_${new Date().toISOString().split('T')[0]}.json`;
+      
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUri);
+      linkElement.setAttribute('download', exportFileDefaultName);
+      linkElement.click();
+      
+      hideLoading();
+      
+      logActivity(currentUser.id, currentUser.username, 'Backup System', 'Created system data backup');
+      alert('Backup created successfully!');
+    }
+    
+    // Show restore modal
+    function showRestoreModal() {
+      const modal = document.createElement('div');
+      modal.className = 'modal';
+      modal.style.display = 'flex';
+      modal.innerHTML = `
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3><i class="fas fa-upload"></i> Restore System</h3>
+            <button class="close-modal" onclick="this.closest('.modal').remove()"><i class="fas fa-times"></i></button>
+          </div>
+          <p>Warning: This will overwrite all current data. Please make sure you have a backup before proceeding.</p>
+          <div class="form-group">
+            <label for="restoreFile">Select Backup File:</label>
+            <input type="file" id="restoreFile" accept=".json">
+          </div>
+          <div class="modal-actions">
+            <button onclick="restoreSystem()"><i class="fas fa-upload"></i> Restore</button>
+            <button type="button" class="btn-secondary" onclick="this.closest('.modal').remove()"><i class="fas fa-times"></i> Cancel</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+    
+    // Restore system data
+    function restoreSystem() {
+      const fileInput = document.getElementById('restoreFile');
+      if (!fileInput.files.length) {
+        alert('Please select a backup file');
+        return;
+      }
+      
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+      
+      reader.onload = function(e) {
+        try {
+          const backup = JSON.parse(e.target.result);
+          
+          if (backup.cashbills && backup.users && backup.activityLog) {
+            cashbills = backup.cashbills;
+            users = backup.users;
+            activityLog = backup.activityLog;
+            notifications = backup.notifications || [];
+            systemSettings = backup.systemSettings || systemSettings;
+            
+            localStorage.setItem('cashbills', JSON.stringify(cashbills));
+            localStorage.setItem('users', JSON.stringify(users));
+            localStorage.setItem('activityLog', JSON.stringify(activityLog));
+            localStorage.setItem('notifications', JSON.stringify(notifications));
+            localStorage.setItem('systemSettings', JSON.stringify(systemSettings));
+            
+            if (backup.lastInvoiceNumber) {
+              localStorage.setItem('lastInvoiceNumber', backup.lastInvoiceNumber);
+            }
+            
+            logActivity(currentUser.id, currentUser.username, 'Restore System', 'Restored system from backup');
+            
+            document.querySelector('.modal').remove();
+            
+            alert('System restored successfully! The page will now reload.');
+            setTimeout(() => location.reload(), 1500);
+          } else {
+            alert('Invalid backup file');
+          }
+        } catch (error) {
+          alert('Error reading backup file: ' + error.message);
+        }
+      };
+      
+      reader.readAsText(file);
+    }
+    
+    // Show system settings
+    function showSystemSettings() {
+      const modal = document.createElement('div');
+      modal.className = 'modal';
+      modal.style.display = 'flex';
+      modal.innerHTML = `
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3><i class="fas fa-cog"></i> System Settings</h3>
+            <button class="close-modal" onclick="this.closest('.modal').remove()"><i class="fas fa-times"></i></button>
+          </div>
+          <form id="systemSettingsForm">
+            <div class="form-group">
+              <label for="companyName">Company Name:</label>
+              <input type="text" id="companyName" value="${systemSettings.companyName}" required>
+            </div>
+            <div class="form-group">
+              <label for="currency">Currency:</label>
+              <select id="currency" required>
+                <option value="RM" ${systemSettings.currency === 'RM' ? 'selected' : ''}>Malaysian Ringgit (RM)</option>
+                <option value="USD" ${systemSettings.currency === 'USD' ? 'selected' : ''}>US Dollar ($)</option>
+                <option value="EUR" ${systemSettings.currency === 'EUR' ? 'selected' : ''}>Euro (€)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="taxRate">Default Tax Rate (%):</label>
+              <input type="number" id="taxRate" step="0.01" min="0" value="${systemSettings.taxRate}" required>
+            </div>
+            <div class="form-group">
+              <label for="crewCashbillTarget">Crew Cashbill Target:</label>
+              <input type="number" id="crewCashbillTarget" min="1" value="${systemSettings.cashbillTargets.crew}" required>
+            </div>
+            <div class="form-group">
+              <label for="crewRevenueTarget">Crew Revenue Target:</label>
+              <input type="number" id="crewRevenueTarget" step="100" min="0" value="${systemSettings.revenueTargets.crew}" required>
+            </div>
+            <div class="modal-actions">
+              <button type="submit"><i class="fas fa-save"></i> Save Settings</button>
+              <button type="button" class="btn-secondary" onclick="this.closest('.modal').remove()"><i class="fas fa-times"></i> Cancel</button>
+            </div>
+          </form>
+        </div>
+      `;
+      document.body.appendChild(modal);
+      
+      document.getElementById('systemSettingsForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        systemSettings.companyName = document.getElementById('companyName').value;
+        systemSettings.currency = document.getElementById('currency').value;
+        systemSettings.taxRate = parseFloat(document.getElementById('taxRate').value);
+        systemSettings.cashbillTargets.crew = parseInt(document.getElementById('crewCashbillTarget').value);
+        systemSettings.revenueTargets.crew = parseFloat(document.getElementById('crewRevenueTarget').value);
+        
+        localStorage.setItem('systemSettings', JSON.stringify(systemSettings));
+        
+        // Update company name in header
+        document.querySelector('header h1').textContent = systemSettings.companyName + ' System';
+        
+        logActivity(currentUser.id, currentUser.username, 'Update System Settings', 'Updated system configuration');
+        
+        alert('Settings saved successfully!');
+        modal.remove();
+      });
+    }
+    
+    // Generate system report
+    function generateReport() {
+      showLoading();
+      
+      const committedCashbills = cashbills.filter(bill => bill.status === 'committed');
+      const totalRevenue = committedCashbills.reduce((sum, bill) => sum + (bill.grandTotal || 0), 0);
+      
+      const paymentMethods = {
+        cash: committedCashbills.filter(bill => bill.paymentMethod === 'cash').length,
+        card: committedCashbills.filter(bill => bill.paymentMethod === 'card').length,
+        qr: committedCashbills.filter(bill => bill.paymentMethod === 'qr').length,
+        online_banking: committedCashbills.filter(bill => bill.paymentMethod === 'online_banking').length
+      };
+      
+      const userStats = {};
+      users.forEach(user => {
+        const userCashbills = cashbills.filter(bill => bill.userId === user.id);
+        const userCommitted = userCashbills.filter(bill => bill.status === 'committed');
+        const userRevenue = userCommitted.reduce((sum, bill) => sum + (bill.grandTotal || 0), 0);
+        
+        userStats[user.username] = {
+          total: userCashbills.length,
+          committed: userCommitted.length,
+          revenue: userRevenue
+        };
+      });
+      
+      const report = {
+        generatedAt: new Date().toISOString(),
+        summary: {
+          totalCashbills: cashbills.length,
+          committedCashbills: committedCashbills.length,
+          draftCashbills: cashbills.length - committedCashbills.length,
+          totalRevenue: totalRevenue,
+          paymentMethods: paymentMethods
+        },
+        userStats: userStats,
+        systemSettings: systemSettings
+      };
+      
+      const dataStr = JSON.stringify(report, null, 2);
+      const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+      
+      const exportFileDefaultName = `pne_arena_report_${new Date().toISOString().split('T')[0]}.json`;
+      
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUri);
+      linkElement.setAttribute('download', exportFileDefaultName);
+      linkElement.click();
+      
+      hideLoading();
+      
+      logActivity(currentUser.id, currentUser.username, 'Generate Report', 'Generated system report');
+      alert('Report generated successfully!');
+    }
+    
+    // Show audit log
+    function showAuditLog() {
+      const modal = document.createElement('div');
+      modal.className = 'modal';
+      modal.style.display = 'flex';
+      modal.innerHTML = `
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3><i class="fas fa-history"></i> Audit Log</h3>
+            <button class="close-modal" onclick="this.closest('.modal').remove()"><i class="fas fa-times"></i></button>
+          </div>
+          <div class="activity-log" style="max-height: 500px;">
+            ${activityLog.map(log => `
+              <div class="log-entry">
+                <strong>${log.username}</strong> ${log.action}
+                ${log.details ? ` - ${log.details}` : ''}
+                <div class="log-time">${new Date(log.timestamp).toLocaleString()}</div>
+              </div>
+            `).join('')}
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary" onclick="this.closest('.modal').remove()"><i class="fas fa-times"></i> Close</button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+    
+    // Show data analytics
+    function showDataAnalytics() {
+      alert('Data analytics feature would be implemented here with advanced charts and insights.');
     }
     
     // Update reports page
@@ -2244,6 +3574,7 @@
               <tr>
                 <th>Invoice #</th>
                 <th>Customer</th>
+                <th>User</th>
                 <th>Date</th>
                 <th>Total</th>
                 <th>Payment</th>
@@ -2255,6 +3586,7 @@
       `;
       
       paginatedCashbills.forEach(bill => {
+        const user = users.find(u => u.id === bill.userId);
         const canEdit = currentUser.role === 'admin' || bill.userId === currentUser.id;
         const totalAmount = bill.grandTotal || 0;
         
@@ -2274,8 +3606,9 @@
           <tr>
             <td>${bill.invoiceNumber}</td>
             <td>${bill.customerName}</td>
+            <td>${user ? user.username : 'Unknown'}</td>
             <td>${new Date(bill.date).toLocaleDateString()}</td>
-            <td>RM${totalAmount.toFixed(2)}</td>
+            <td>${systemSettings.currency}${totalAmount.toFixed(2)}</td>
             <td>${getPaymentMethodDisplayName(bill.paymentMethod)}</td>
             <td>${bill.status === 'draft' ? 'Draft' : 'Committed'}</td>
             <td>${actionsHTML}</td>
@@ -2373,11 +3706,6 @@
           return false;
         }
         
-        // Role-based access
-        if (currentUser.role !== 'admin' && bill.userId !== currentUser.id) {
-          return false;
-        }
-        
         return true;
       });
       
@@ -2394,13 +3722,7 @@
       document.getElementById('dateFrom').value = '';
       document.getElementById('dateTo').value = '';
       
-      // Apply role-based filtering
-      if (currentUser.role === 'admin') {
-        filteredCashbills = [...cashbills];
-      } else {
-        filteredCashbills = cashbills.filter(bill => bill.userId === currentUser.id);
-      }
-      
+      filteredCashbills = [...cashbills];
       currentPage = 1;
       updateReportsPage();
     }
@@ -2418,10 +3740,11 @@
       
       showLoading();
       
-      let csv = 'Invoice Number,Customer,Date,Subtotal,Tax,Discount,Total,Payment Method,Status\n';
+      let csv = 'Invoice Number,Customer,User,Date,Subtotal,Tax,Discount,Total,Payment Method,Status\n';
       
       filteredCashbills.forEach(bill => {
-        csv += `${bill.invoiceNumber},"${bill.customerName}",${new Date(bill.date).toLocaleDateString()},${(bill.subtotal || 0).toFixed(2)},${(bill.totalTax || 0).toFixed(2)},${(bill.totalDiscount || 0).toFixed(2)},${(bill.grandTotal || 0).toFixed(2)},${getPaymentMethodDisplayName(bill.paymentMethod)},${bill.status === 'draft' ? 'Draft' : 'Committed'}\n`;
+        const user = users.find(u => u.id === bill.userId);
+        csv += `${bill.invoiceNumber},"${bill.customerName}",${user ? user.username : 'Unknown'},${new Date(bill.date).toLocaleDateString()},${(bill.subtotal || 0).toFixed(2)},${(bill.totalTax || 0).toFixed(2)},${(bill.totalDiscount || 0).toFixed(2)},${(bill.grandTotal || 0).toFixed(2)},${getPaymentMethodDisplayName(bill.paymentMethod)},${bill.status === 'draft' ? 'Draft' : 'Committed'}\n`;
       });
       
       const blob = new Blob([csv], { type: 'text/csv' });
@@ -2584,10 +3907,10 @@
       const grandTotal = subtotal + totalTax - totalDiscount;
       
       // Update display with proper formatting
-      document.getElementById('editSubtotal').textContent = `RM${subtotal.toFixed(2)}`;
-      document.getElementById('editTotalTax').textContent = `RM${totalTax.toFixed(2)}`;
-      document.getElementById('editTotalDiscount').textContent = `RM${totalDiscount.toFixed(2)}`;
-      document.getElementById('editGrandTotal').textContent = `RM${grandTotal.toFixed(2)}`;
+      document.getElementById('editSubtotal').textContent = `${systemSettings.currency}${subtotal.toFixed(2)}`;
+      document.getElementById('editTotalTax').textContent = `${systemSettings.currency}${totalTax.toFixed(2)}`;
+      document.getElementById('editTotalDiscount').textContent = `${systemSettings.currency}${totalDiscount.toFixed(2)}`;
+      document.getElementById('editGrandTotal').textContent = `${systemSettings.currency}${grandTotal.toFixed(2)}`;
     }
     
     // Close edit modal
@@ -2808,26 +4131,31 @@
         const canManage = currentUser.role === 'admin' && !isCurrentUser && !isMainAdmin;
         
         usersHTML += `
-          <div class="user-row">
-            <div>${user.username}</div>
-            <div><span class="user-role">${getRoleDisplayName(user.role)}</span></div>
-            <div>
+          <div class="user-card">
+            <div class="user-avatar">${user.username.charAt(0).toUpperCase()}</div>
+            <div class="user-info">
+              <div class="user-name">${user.username}</div>
+              <div class="user-details">
+                <span class="user-role">${getRoleDisplayName(user.role)}</span>
+                ${user.temporaryAccess && user.temporaryAccess.expires ? 
+                  `<span class="temp-access-indicator">Temporary Access</span>` : ''}
+              </div>
+            </div>
+            <div class="user-actions">
               ${currentUser.role === 'admin' ? 
                 `<div class="password-field">
                   <input type="password" value="${user.password}" readonly id="password-${user.id}">
                   <button type="button" class="password-toggle" onclick="togglePassword(${user.id})"><i class="fas fa-eye"></i></button>
                 </div>` : 
-                '••••••••'}
-            </div>
-            <div>
-              ${canManage ? 
-                `<button class="btn-warning" onclick="showResetPasswordModal(${user.id})"><i class="fas fa-key"></i> Reset Password</button>` : 
                 ''}
               ${canManage ? 
-                `<button class="btn-info" onclick="showGrantAccessModal(${user.id})"><i class="fas fa-user-clock"></i> Grant Access</button>` : 
+                `<button class="btn-warning" onclick="showResetPasswordModal(${user.id})"><i class="fas fa-key"></i> Reset</button>` : 
                 ''}
               ${canManage ? 
-                `<button class="btn-delete" onclick="deleteUser(${user.id})"><i class="fas fa-trash"></i> Delete</button>` : 
+                `<button class="btn-info" onclick="showGrantAccessModal(${user.id})"><i class="fas fa-user-clock"></i> Grant</button>` : 
+                ''}
+              ${canManage ? 
+                `<button class="btn-danger" onclick="deleteUser(${user.id})"><i class="fas fa-trash"></i> Delete</button>` : 
                 ''}
             </div>
           </div>
@@ -3097,13 +4425,15 @@
     
     // Initialize the app
     function initApp() {
+      // Load system settings
+      document.querySelector('header h1').textContent = systemSettings.companyName + ' System';
+      
+      // Update notification badge
+      updateNotificationBadge();
+      
       // Apply role-based filtering
       if (currentUser) {
-        if (currentUser.role === 'admin') {
-          filteredCashbills = [...cashbills];
-        } else {
-          filteredCashbills = cashbills.filter(bill => bill.userId === currentUser.id);
-        }
+        filteredCashbills = [...cashbills];
       }
     }
     
