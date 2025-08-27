@@ -1271,7 +1271,7 @@
       width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, 0.7);
-      display: flex;
+      display: none;
       justify-content: center;
       align-items: center;
       z-index: 10000;
@@ -2116,7 +2116,7 @@
     </div>
     
     <!-- LOADING SPINNER -->
-    <div id="loadingSpinner" class="loading" style="display: none;">
+    <div id="loadingSpinner" class="loading">
       <div class="spinner"></div>
     </div>
     
@@ -2477,6 +2477,30 @@
       input.addEventListener('input', calculateTotals);
     });
     
+    // Helper function to save cashbill to server with proper serialization
+    async function saveCashbillToServer(cashbill) {
+      // Create a copy of the cashbill with properly serialized items
+      const serializedCashbill = {
+        ...cashbill,
+        items: JSON.stringify(cashbill.items) // Serialize items array to JSON string
+      };
+      
+      try {
+        const response = await fetch(`${API_URL}?action=add&sheet=cashbills&data=${encodeURIComponent(JSON.stringify(serializedCashbill))}`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const result = await response.json();
+        
+        if (result.success) {
+          return true;
+        } else {
+          throw new Error(result.error || "Unknown error");
+        }
+      } catch (error) {
+        console.error("Error saving cashbill:", error);
+        throw error;
+      }
+    }
+    
     // Cashbill form submission
     document.getElementById('cashbillForm').addEventListener('submit', async function(e) {
       e.preventDefault();
@@ -2498,7 +2522,7 @@
         const discount = parseFloat(row.querySelector('.item-discount').value) || 0;
         
         items.push({
-          description: description.toUpperCase(), // Convert to uppercase
+          description: description, // Keep as user entered
           quantity,
           unitPrice,
           taxRate,
@@ -2529,7 +2553,7 @@
         userId: currentUser.id,
         userName: currentUser.name, // Add userName
         customerName,
-        items,
+        items, // Keep as array for now
         paymentMethod,
         notes,
         subtotal,
@@ -2541,32 +2565,26 @@
       };
       
       try {
-        // Add to server
-        const response = await fetch(`${API_URL}?action=add&sheet=cashbills&data=${encodeURIComponent(JSON.stringify(cashbill))}`);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const result = await response.json();
+        // Save to server with proper serialization
+        await saveCashbillToServer(cashbill);
         
-        if (result.success) {
-          // Update local cache
-          cashbills.push(cashbill);
-          
-          // Log activity
-          logActivity(currentUser.id, currentUser.name, 'Create Cashbill', `Created cashbill ${cashbill.invoiceNumber} for ${customerName}`);
-          
-          // Display cashbill details
-          displayCashbillDetails(cashbill);
-          
-          // Hide loading
-          hideLoading();
-          
-          // Show success page
-          showPage('successPage');
-          
-          // Reset form
-          resetForm();
-        } else {
-          throw new Error(result.error || "Unknown error");
-        }
+        // Update local cache
+        cashbills.push(cashbill);
+        
+        // Log activity
+        logActivity(currentUser.id, currentUser.name, 'Create Cashbill', `Created cashbill ${cashbill.invoiceNumber} for ${customerName}`);
+        
+        // Display cashbill details
+        displayCashbillDetails(cashbill);
+        
+        // Hide loading
+        hideLoading();
+        
+        // Show success page
+        showPage('successPage');
+        
+        // Reset form
+        resetForm();
       } catch (error) {
         console.error("Error saving cashbill:", error);
         alert("Error saving cashbill. Please try again.");
@@ -2594,7 +2612,7 @@
         
         if (description && quantity && unitPrice) {
           items.push({
-            description: description.toUpperCase(), // Convert to uppercase
+            description: description, // Keep as user entered
             quantity,
             unitPrice,
             taxRate,
@@ -2632,7 +2650,7 @@
         userId: currentUser.id,
         userName: currentUser.name, // Add userName
         customerName,
-        items,
+        items, // Keep as array for now
         paymentMethod,
         notes,
         subtotal,
@@ -2644,29 +2662,23 @@
       };
       
       try {
-        // Add to server
-        const response = await fetch(`${API_URL}?action=add&sheet=cashbills&data=${encodeURIComponent(JSON.stringify(cashbill))}`);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const result = await response.json();
+        // Save to server with proper serialization
+        await saveCashbillToServer(cashbill);
         
-        if (result.success) {
-          // Update local cache
-          cashbills.push(cashbill);
-          
-          // Log activity
-          logActivity(currentUser.id, currentUser.name, 'Save Draft', `Saved draft cashbill ${cashbill.invoiceNumber} for ${customerName}`);
-          
-          // Hide loading
-          hideLoading();
-          
-          // Show success message
-          alert('Draft saved successfully!');
-          
-          // Reset form
-          resetForm();
-        } else {
-          throw new Error(result.error || "Unknown error");
-        }
+        // Update local cache
+        cashbills.push(cashbill);
+        
+        // Log activity
+        logActivity(currentUser.id, currentUser.name, 'Save Draft', `Saved draft cashbill ${cashbill.invoiceNumber} for ${customerName}`);
+        
+        // Hide loading
+        hideLoading();
+        
+        // Show success message
+        alert('Draft saved successfully!');
+        
+        // Reset form
+        resetForm();
       } catch (error) {
         console.error("Error saving draft:", error);
         alert("Error saving draft. Please try again.");
@@ -3523,8 +3535,8 @@
       let csv = 'Invoice Number,Customer,User,Date,Subtotal,Tax,Discount,Total,Payment Method,Status\n';
       
       filteredCashbills.forEach(bill => {
-        const userName = bill.userName || (users.find(u => u.id === bill.userId)?.name || 'Unknown');
-        csv += `${bill.invoiceNumber},"${bill.customerName}",${userName},${new Date(bill.date).toLocaleDateString()},${(bill.subtotal || 0).toFixed(2)},${(bill.totalTax || 0).toFixed(2)},${(bill.totalDiscount || 0).toFixed(2)},${(bill.grandTotal || 0).toFixed(2)},${getPaymentMethodDisplayName(bill.paymentMethod)},${bill.status === 'draft' ? 'Draft' : 'Committed'}\n`;
+        const user = users.find(u => u.id === bill.userId);
+        csv += `${bill.invoiceNumber},"${bill.customerName}",${user ? user.name : 'Unknown'},${new Date(bill.date).toLocaleDateString()},${(bill.subtotal || 0).toFixed(2)},${(bill.totalTax || 0).toFixed(2)},${(bill.totalDiscount || 0).toFixed(2)},${(bill.grandTotal || 0).toFixed(2)},${getPaymentMethodDisplayName(bill.paymentMethod)},${bill.status === 'draft' ? 'Draft' : 'Committed'}\n`;
       });
       
       const blob = new Blob([csv], { type: 'text/csv' });
@@ -3721,7 +3733,7 @@
         const discount = parseFloat(row.querySelector('.edit-item-discount').value) || 0;
         
         items.push({
-          description: description.toUpperCase(), // Convert to uppercase
+          description: description, // Keep as user entered
           quantity,
           unitPrice,
           taxRate,
@@ -3751,7 +3763,7 @@
         paymentMethod,
         status,
         notes,
-        items,
+        items, // Keep as array for now
         subtotal,
         totalTax,
         totalDiscount,
@@ -3759,8 +3771,14 @@
       };
       
       try {
+        // Create a copy with serialized items for the server
+        const serializedCashbill = {
+          ...updatedCashbill,
+          items: JSON.stringify(updatedCashbill.items) // Serialize items array to JSON string
+        };
+        
         // Update cashbill in server
-        const response = await fetch(`${API_URL}?action=update&sheet=cashbills&id=${id}&data=${encodeURIComponent(JSON.stringify(updatedCashbill))}`);
+        const response = await fetch(`${API_URL}?action=update&sheet=cashbills&id=${id}&data=${encodeURIComponent(JSON.stringify(serializedCashbill))}`);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const result = await response.json();
         
@@ -3945,12 +3963,25 @@
         try {
           const cashbillsResponse = await fetch(`${API_URL}?action=get&sheet=cashbills`);
           if (cashbillsResponse.ok) {
-            cashbills = await cashbillsResponse.json();
-            // Ensure userId is a string for proper comparison
-            cashbills = cashbills.map(bill => {
+            const serverCashbills = await cashbillsResponse.json();
+            
+            // Process cashbills to parse items
+            cashbills = serverCashbills.map(bill => {
+              // Ensure userId is a string for proper comparison
               if (bill.userId && typeof bill.userId !== 'string') {
                 bill.userId = String(bill.userId);
               }
+              
+              // Parse items if it's a string
+              if (typeof bill.items === 'string') {
+                try {
+                  bill.items = JSON.parse(bill.items);
+                } catch (e) {
+                  console.error("Error parsing items for cashbill", bill.invoiceNumber, ":", e);
+                  bill.items = [];
+                }
+              }
+              
               return bill;
             });
           } else {
