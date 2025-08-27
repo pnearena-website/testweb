@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PNE ARENA System - Professional Billing Management</title>
+  <title>PNE ARENA Systemt</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -1381,6 +1381,153 @@
         max-width: 900px;
       }
     }
+    
+    /* Login Form Enhancements */
+    .login-form-container {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    
+    .login-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .login-header h2 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .login-header p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+    
+    .login-form {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--border-color);
+    }
+    
+    .login-form .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .login-form label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    
+    .login-form input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--input-border);
+      border-radius: 6px;
+      font-size: 0.95rem;
+      transition: var(--transition);
+      background: var(--input-bg);
+      color: var(--text-primary);
+    }
+    
+    .login-form input:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+    
+    .login-form button {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .user-id-display {
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+      padding: 0.5rem 1rem;
+      margin-bottom: 1rem;
+      text-align: center;
+      font-weight: 500;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+    
+    .permission-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    
+    .permission-card {
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      border: 1px solid var(--border-color);
+    }
+    
+    .permission-card h4 {
+      margin-bottom: 1rem;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .permission-card ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    
+    .permission-card li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-secondary);
+    }
+    
+    .permission-card li:last-child {
+      border-bottom: none;
+    }
+    
+    .permission-card li::before {
+      content: "✓";
+      color: var(--success);
+      font-weight: bold;
+      margin-right: 0.5rem;
+    }
+    
+    .cashbill-details {
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-top: 1.5rem;
+      border: 1px solid var(--border-color);
+    }
+    
+    .cashbill-details h3 {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .detail-row:last-child {
+      border-bottom: none;
+    }
   </style>
 </head>
 <body>
@@ -1401,17 +1548,26 @@
     
     <!-- LOGIN PAGE -->
     <div id="loginPage" class="page active">
-      <div class="card">
-        <h2><i class="fas fa-lock"></i> Login to Your Account</h2>
-        <form id="loginForm">
-          <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" id="username" required placeholder="Enter your username">
+      <div class="login-form-container">
+        <div class="login-header">
+          <h2>PNE ARENA System</h2>
+          <p>Professional Billing Management Solution</p>
+        </div>
+        <div class="login-form">
+          <form id="loginForm">
+            <div class="form-group">
+              <label for="userId">User ID:</label>
+              <input type="text" id="userId" required placeholder="Enter your User ID">
+            </div>
+            <div class="form-group">
+              <label for="password">Password:</label>
+              <input type="password" id="password" required placeholder="Enter your password">
+            </div>
+            <button type="submit"><i class="fas fa-sign-in-alt"></i> Login</button>
+          </form>
+          <div id="loginError" class="error-message" style="display: none;">
+            <i class="fas fa-exclamation-circle"></i> Invalid credentials. Please try again.
           </div>
-          <button type="submit"><i class="fas fa-sign-in-alt"></i> Login</button>
-        </form>
-        <div id="loginError" class="error-message" style="display: none;">
-          <i class="fas fa-exclamation-circle"></i> Invalid username. Please try again.
         </div>
       </div>
     </div>
@@ -1971,10 +2127,10 @@
     // Initialize data storage
     let cashbills = [];
     let users = [
-      { id: 1, username: 'danial', role: 'admin' },
-      { id: 2, username: 'aida', role: 'manager' },
-      { id: 3, username: 'putri', role: 'marketing' },
-      { id: 4, username: 'crew1', role: 'crew' }
+      { id: '0001', name: 'Danial Danish', role: 'admin', password: 'dd' },
+      { id: '0002', name: 'Aidawati', role: 'director', password: 'aida' },
+      { id: '0003', name: 'Putri Erinna', role: 'marketing', password: 'putri' },
+      { id: '0004', name: 'Farah', role: 'marketing', password: 'farah' }
     ];
     let activityLog = [];
     let notifications = [];
@@ -2155,14 +2311,15 @@
     // Login functionality
     document.getElementById('loginForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      const username = document.getElementById('username').value;
+      const userId = document.getElementById('userId').value;
+      const password = document.getElementById('password').value;
       
-      const user = users.find(u => u.username === username);
+      const user = users.find(u => u.id === userId && u.password === password);
       
       if (user) {
         currentUser = user;
         updateCurrentUserUI();
-        logActivity(user.id, user.username, 'Login', 'User logged in');
+        logActivity(user.id, user.name, 'Login', 'User logged in');
         showPage('dashboardPage');
         document.getElementById('loginError').style.display = 'none';
       } else {
@@ -2175,11 +2332,11 @@
       if (!currentUser) return;
       
       // Update username in all pages
-      document.getElementById('currentUser').textContent = currentUser.username;
-      document.getElementById('currentUser2').textContent = currentUser.username;
-      document.getElementById('currentUser3').textContent = currentUser.username;
-      document.getElementById('currentUser4').textContent = currentUser.username;
-      document.getElementById('currentUser6').textContent = currentUser.username;
+      document.getElementById('currentUser').textContent = currentUser.name;
+      document.getElementById('currentUser2').textContent = currentUser.name;
+      document.getElementById('currentUser3').textContent = currentUser.name;
+      document.getElementById('currentUser4').textContent = currentUser.name;
+      document.getElementById('currentUser6').textContent = currentUser.name;
       
       // Update role in all pages
       document.getElementById('currentUserRole').textContent = getRoleDisplayName(currentUser.role);
@@ -2214,7 +2371,7 @@
     function getRoleDisplayName(role) {
       switch(role) {
         case 'admin': return 'Admin';
-        case 'manager': return 'Manager';
+        case 'director': return 'Director Head of Business';
         case 'marketing': return 'Marketing Team';
         case 'crew': return 'Crew';
         default: return 'Crew';
@@ -2387,7 +2544,7 @@
           cashbills.push(cashbill);
           
           // Log activity
-          logActivity(currentUser.id, currentUser.username, 'Create Cashbill', `Created cashbill ${cashbill.invoiceNumber} for ${customerName}`);
+          logActivity(currentUser.id, currentUser.name, 'Create Cashbill', `Created cashbill ${cashbill.invoiceNumber} for ${customerName}`);
           
           // Display cashbill details
           displayCashbillDetails(cashbill);
@@ -2489,7 +2646,7 @@
           cashbills.push(cashbill);
           
           // Log activity
-          logActivity(currentUser.id, currentUser.username, 'Save Draft', `Saved draft cashbill ${cashbill.invoiceNumber} for ${customerName}`);
+          logActivity(currentUser.id, currentUser.name, 'Save Draft', `Saved draft cashbill ${cashbill.invoiceNumber} for ${customerName}`);
           
           // Hide loading
           hideLoading();
@@ -2816,13 +2973,13 @@
       // Group by user
       const userActivity = {};
       users.forEach(user => {
-        userActivity[user.username] = 0;
+        userActivity[user.name] = 0;
       });
       
       recentCashbills.forEach(bill => {
         const user = users.find(u => u.id === bill.userId);
         if (user) {
-          userActivity[user.username]++;
+          userActivity[user.name]++;
         }
       });
       
@@ -2920,7 +3077,7 @@
       
       hideLoading();
       
-      logActivity(currentUser.id, currentUser.username, 'Backup System', 'Created system data backup');
+      logActivity(currentUser.id, currentUser.name, 'Backup System', 'Created system data backup');
       alert('Backup created successfully!');
     }
     
@@ -3079,7 +3236,7 @@
             // Update company name in header
             document.querySelector('header h1').textContent = systemSettings.companyName + ' System';
             
-            logActivity(currentUser.id, currentUser.username, 'Update System Settings', 'Updated system configuration');
+            logActivity(currentUser.id, currentUser.name, 'Update System Settings', 'Updated system configuration');
             
             alert('Settings saved successfully!');
             modal.remove();
@@ -3113,7 +3270,7 @@
         const userCommitted = userCashbills.filter(bill => bill.status === 'committed');
         const userRevenue = userCommitted.reduce((sum, bill) => sum + (bill.grandTotal || 0), 0);
         
-        userStats[user.username] = {
+        userStats[user.name] = {
           total: userCashbills.length,
           committed: userCommitted.length,
           revenue: userRevenue
@@ -3145,7 +3302,7 @@
       
       hideLoading();
       
-      logActivity(currentUser.id, currentUser.username, 'Generate Report', 'Generated system report');
+      logActivity(currentUser.id, currentUser.name, 'Generate Report', 'Generated system report');
       alert('Report generated successfully!');
     }
     
@@ -3244,7 +3401,7 @@
           <tr>
             <td>${bill.invoiceNumber}</td>
             <td>${bill.customerName}</td>
-            <td>${user ? user.username : 'Unknown'}</td>
+            <td>${user ? user.name : 'Unknown'}</td>
             <td>${new Date(bill.date).toLocaleDateString()}</td>
             <td>${systemSettings.currency}${totalAmount.toFixed(2)}</td>
             <td>${getPaymentMethodDisplayName(bill.paymentMethod)}</td>
@@ -3358,7 +3515,7 @@
       
       filteredCashbills.forEach(bill => {
         const user = users.find(u => u.id === bill.userId);
-        csv += `${bill.invoiceNumber},"${bill.customerName}",${user ? user.username : 'Unknown'},${new Date(bill.date).toLocaleDateString()},${(bill.subtotal || 0).toFixed(2)},${(bill.totalTax || 0).toFixed(2)},${(bill.totalDiscount || 0).toFixed(2)},${(bill.grandTotal || 0).toFixed(2)},${getPaymentMethodDisplayName(bill.paymentMethod)},${bill.status === 'draft' ? 'Draft' : 'Committed'}\n`;
+        csv += `${bill.invoiceNumber},"${bill.customerName}",${user ? user.name : 'Unknown'},${new Date(bill.date).toLocaleDateString()},${(bill.subtotal || 0).toFixed(2)},${(bill.totalTax || 0).toFixed(2)},${(bill.totalDiscount || 0).toFixed(2)},${(bill.grandTotal || 0).toFixed(2)},${getPaymentMethodDisplayName(bill.paymentMethod)},${bill.status === 'draft' ? 'Draft' : 'Committed'}\n`;
       });
       
       const blob = new Blob([csv], { type: 'text/csv' });
@@ -3370,7 +3527,7 @@
       URL.revokeObjectURL(url);
       
       // Log activity
-      logActivity(currentUser.id, currentUser.username, 'Export Data', 'Exported cashbills to CSV');
+      logActivity(currentUser.id, currentUser.name, 'Export Data', 'Exported cashbills to CSV');
       
       hideLoading();
     }
@@ -3610,7 +3767,7 @@
           
           // Log activity
           const actionText = status === 'committed' ? 'committed' : 'uncommitted';
-          logActivity(currentUser.id, currentUser.username, 'Edit Cashbill', `${actionText} cashbill ${cashbills[cashbillIndex].invoiceNumber}`);
+          logActivity(currentUser.id, currentUser.name, 'Edit Cashbill', `${actionText} cashbill ${cashbills[cashbillIndex].invoiceNumber}`);
           
           closeEditModal();
           updateReportsPage();
@@ -3663,7 +3820,7 @@
           filteredCashbills = filteredCashbills.filter(bill => bill.id !== id);
           
           // Log activity
-          logActivity(currentUser.id, currentUser.username, 'Delete Cashbill', `Deleted cashbill ${cashbill.invoiceNumber}`);
+          logActivity(currentUser.id, currentUser.name, 'Delete Cashbill', `Deleted cashbill ${cashbill.invoiceNumber}`);
           
           updateReportsPage();
           updateDashboardStats();
@@ -3688,7 +3845,7 @@
     // Logout function
     function logout() {
       if (currentUser) {
-        logActivity(currentUser.id, currentUser.username, 'Logout', 'User logged out');
+        logActivity(currentUser.id, currentUser.name, 'Logout', 'User logged out');
       }
       
       currentUser = null;
@@ -3788,7 +3945,6 @@
           console.error("Error loading cashbills:", error);
           cashbills = [];
         }
-
         // Load activity log
         try {
           const activityResponse = await fetch(`${API_URL}?action=get&sheet=activityLog`);
@@ -3802,7 +3958,6 @@
           console.error("Error loading activity log:", error);
           activityLog = [];
         }
-
         // Load notifications
         try {
           const notificationsResponse = await fetch(`${API_URL}?action=get&sheet=notifications`);
@@ -3816,7 +3971,6 @@
           console.error("Error loading notifications:", error);
           notifications = [];
         }
-
         // Load system settings
         try {
           const settingsResponse = await fetch(`${API_URL}?action=get&sheet=systemSettings`);
@@ -3833,7 +3987,6 @@
           console.error("Error loading system settings:", error);
           // Use default systemSettings
         }
-
         // Update UI
         updateDashboardStats();
         updateNotificationBadge();
