@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    /* All the CSS styles remain the same as in the previous version */
     :root {
       /* Color Variables */
       --primary: #1e3a8a;
@@ -831,16 +832,6 @@
       font-weight: 500;
     }
     
-    .temp-access-indicator {
-      background: var(--info);
-      color: white;
-      padding: 0.25rem 0.75rem;
-      border-radius: 24px;
-      font-size: 0.85rem;
-      margin-left: 0.75rem;
-      font-weight: 500;
-    }
-    
     /* Tables */
     .table-container {
       overflow-x: auto;
@@ -1051,109 +1042,79 @@
       margin-top: 1.25rem;
     }
     
-    /* User Management */
-    .user-management {
-      margin-top: 1.5rem;
-    }
-    
-    .user-card {
-      display: flex;
-      align-items: center;
-      padding: 1.5rem;
+    /* Activity Log */
+    .activity-log {
+      max-height: 350px;
+      overflow-y: auto;
       background: var(--bg-secondary);
+      padding: 1.5rem;
       border-radius: var(--radius);
-      margin-bottom: 1rem;
+      margin-top: 1.5rem;
       border: 1px solid var(--border-color);
-      transition: all 0.3s ease;
     }
     
-    .user-card:hover {
+    .log-entry {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.95rem;
+      color: var(--text-primary);
+    }
+    
+    .log-entry:last-child {
+      border-bottom: none;
+    }
+    
+    .log-time {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+    
+    /* Admin Badge */
+    .admin-badge {
+      background: var(--danger);
+      color: white;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      margin-left: 0.5rem;
+      font-weight: 500;
+    }
+    
+    /* Shortcuts */
+    .shortcuts {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      background: var(--primary);
+      color: white;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius);
+      font-size: 0.85rem;
+      opacity: 0.8;
       box-shadow: var(--shadow);
     }
     
-    .user-avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: var(--secondary);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-      font-size: 1.2rem;
-      margin-right: 1.5rem;
+    /* Edit Items */
+    .edit-items-container {
+      margin-top: 1.5rem;
+      max-height: 400px;
+      overflow-y: auto;
+      padding: 1rem;
+      background: var(--bg-tertiary);
+      border-radius: var(--radius);
     }
     
-    .user-info {
-      flex: 1;
-    }
-    
-    .user-name {
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 0.25rem;
-      font-size: 1.1rem;
-    }
-    
-    .user-details {
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-    
-    .user-actions {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-    
-    /* Password Field */
-    .password-field {
-      position: relative;
-    }
-    
-    .password-toggle {
-      position: absolute;
-      right: 1rem;
-      top: 2.5rem;
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--text-secondary);
-      font-size: 1.1rem;
-      padding: 0.25rem;
-      border-radius: 4px;
-      transition: all 0.3s ease;
-    }
-    
-    .password-toggle:hover {
-      background: var(--hover-bg);
-      color: var(--text-primary);
-    }
-    
-    /* Loading */
-    .loading {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 120px;
-    }
-    
-    .spinner {
-      border: 4px solid rgba(0, 0, 0, 0.1);
-      border-radius: 50%;
-      border-top: 4px solid var(--secondary);
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-    }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    .edit-item-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto;
+      gap: 1rem;
+      align-items: end;
+      margin-bottom: 1rem;
+      padding: 1.25rem;
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+      transition: var(--transition);
+      border: 1px solid var(--border-color);
     }
     
     /* Modals */
@@ -1230,46 +1191,6 @@
       border-top: 1px solid var(--border-color);
     }
     
-    /* Cashbill Details */
-    .cashbill-details {
-      background: var(--bg-secondary);
-      border-radius: var(--radius);
-      padding: 2rem;
-      margin-top: 2rem;
-      transition: var(--transition);
-      border: 1px solid var(--border-color);
-      box-shadow: var(--shadow-lg);
-      font-size: 1rem;
-    }
-    
-    .cashbill-details h3 {
-      color: var(--text-primary);
-      margin-bottom: 1.5rem;
-      text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-      font-size: 1.5rem;
-      font-weight: 600;
-    }
-    
-    .detail-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 0.75rem 0;
-      border-bottom: 1px solid var(--border-color);
-      font-size: 1rem;
-    }
-    
-    .detail-row:last-child {
-      border-bottom: none;
-      font-weight: 600;
-      font-size: 1.2rem;
-      margin-top: 1rem;
-      padding-top: 1.25rem;
-    }
-    
     /* Notification Panel */
     .notification-panel {
       position: fixed;
@@ -1342,132 +1263,26 @@
       margin-top: 0.25rem;
     }
     
-    /* Permission Grid */
-    .permission-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin-top: 1.5rem;
-    }
-    
-    .permission-card {
-      background: var(--bg-secondary);
-      padding: 1.5rem;
-      border-radius: var(--radius);
-      transition: var(--transition);
-      border-left: 5px solid var(--secondary);
-      border: 1px solid var(--border-color);
-    }
-    
-    .permission-card h4 {
-      margin-bottom: 1rem;
-      color: var(--text-primary);
+    /* Loading */
+    .loading {
       display: flex;
+      justify-content: center;
       align-items: center;
-      gap: 0.5rem;
-      font-size: 1.1rem;
-      font-weight: 500;
+      height: 120px;
     }
     
-    .permission-card ul {
-      list-style-type: none;
-      padding-left: 0;
-      color: var(--text-primary);
+    .spinner {
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      border-top: 4px solid var(--secondary);
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
     }
     
-    .permission-card li {
-      padding: 0.5rem 0;
-      display: flex;
-      align-items: flex-start;
-      font-size: 0.95rem;
-    }
-    
-    .permission-card li:before {
-      content: "✓";
-      color: var(--success);
-      font-weight: bold;
-      margin-right: 0.75rem;
-      flex-shrink: 0;
-    }
-    
-    .permission-card li.denied:before {
-      content: "✗";
-      color: var(--danger);
-    }
-    
-    /* Activity Log */
-    .activity-log {
-      max-height: 350px;
-      overflow-y: auto;
-      background: var(--bg-secondary);
-      padding: 1.5rem;
-      border-radius: var(--radius);
-      margin-top: 1.5rem;
-      border: 1px solid var(--border-color);
-    }
-    
-    .log-entry {
-      padding: 0.75rem 0;
-      border-bottom: 1px solid var(--border-color);
-      font-size: 0.95rem;
-      color: var(--text-primary);
-    }
-    
-    .log-entry:last-child {
-      border-bottom: none;
-    }
-    
-    .log-time {
-      color: var(--text-secondary);
-      font-size: 0.85rem;
-    }
-    
-    /* Admin Badge */
-    .admin-badge {
-      background: var(--danger);
-      color: white;
-      padding: 0.15rem 0.5rem;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      margin-left: 0.5rem;
-      font-weight: 500;
-    }
-    
-    /* Shortcuts */
-    .shortcuts {
-      position: fixed;
-      bottom: 1rem;
-      right: 1rem;
-      background: var(--primary);
-      color: white;
-      padding: 0.75rem 1rem;
-      border-radius: var(--radius);
-      font-size: 0.85rem;
-      opacity: 0.8;
-      box-shadow: var(--shadow);
-    }
-    
-    /* Edit Items */
-    .edit-items-container {
-      margin-top: 1.5rem;
-      max-height: 400px;
-      overflow-y: auto;
-      padding: 1rem;
-      background: var(--bg-tertiary);
-      border-radius: var(--radius);
-    }
-    
-    .edit-item-row {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto;
-      gap: 1rem;
-      align-items: end;
-      margin-bottom: 1rem;
-      padding: 1.25rem;
-      background: var(--bg-secondary);
-      border-radius: var(--radius);
-      transition: var(--transition);
-      border: 1px solid var(--border-color);
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
     
     /* Responsive */
@@ -1531,10 +1346,6 @@
         display: none;
       }
       
-      .permission-grid {
-        grid-template-columns: 1fr;
-      }
-      
       .modal-content {
         max-width: 98%;
         padding: 1.5rem;
@@ -1562,19 +1373,6 @@
         width: calc(100% - 40px);
         right: 20px;
         left: 20px;
-      }
-      
-      .user-card {
-        flex-direction: column;
-        text-align: center;
-      }
-      
-      .user-avatar {
-        margin: 0 0 1rem 0;
-      }
-      
-      .user-actions {
-        justify-content: center;
       }
     }
     
@@ -1610,17 +1408,10 @@
             <label for="username">Username:</label>
             <input type="text" id="username" required placeholder="Enter your username">
           </div>
-          <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" id="password" required placeholder="Enter your password">
-          </div>
           <button type="submit"><i class="fas fa-sign-in-alt"></i> Login</button>
         </form>
         <div id="loginError" class="error-message" style="display: none;">
-          <i class="fas fa-exclamation-circle"></i> Invalid credentials. Please try again.
-        </div>
-        <div id="tempAccessExpired" class="warning-message" style="display: none;">
-          <i class="fas fa-clock"></i> Your temporary access has expired. Please contact an administrator.
+          <i class="fas fa-exclamation-circle"></i> Invalid username. Please try again.
         </div>
       </div>
     </div>
@@ -1631,13 +1422,11 @@
         <div class="nav-links">
           <a onclick="showPage('newCashbillPage')"><i class="fas fa-plus"></i> Create New Cashbill</a>
           <a onclick="showPage('reportsPage')"><i class="fas fa-chart-bar"></i> View Reports</a>
-          <a id="userManagementLink" onclick="showPage('userManagementPage')" style="display: none;"><i class="fas fa-users"></i> User Management</a>
           <a id="adminPanelLink" onclick="showPage('adminPanelPage')" style="display: none;"><i class="fas fa-cogs"></i> Admin Panel</a>
         </div>
         <div class="user-info">
           Welcome, <span id="currentUser">Admin</span> 
-          <span id="currentUserRole" class="user-role">Admin</span>
-          <span id="tempAccessIndicator" class="temp-access-indicator" style="display: none;">Temporary Access</span> | 
+          <span id="currentUserRole" class="user-role">Admin</span> | 
           <a onclick="confirmLogout()" style="color: var(--danger);"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
       </nav>
@@ -1716,11 +1505,6 @@
         <div class="card">
           <h2><i class="fas fa-heartbeat"></i> System Health</h2>
           <div class="system-health">
-            <div class="health-indicator">
-              <i class="fas fa-users health-good"></i>
-              <h3 id="totalUsersCount">0</h3>
-              <p>Active Users</p>
-            </div>
             <div class="health-indicator">
               <i class="fas fa-file-invoice health-good"></i>
               <h3 id="totalCashbillsCount">0</h3>
@@ -1820,10 +1604,6 @@
         <div id="dashboardMessage" class="warning-message" style="display: none;">
           <i class="fas fa-exclamation-triangle"></i> You have <span id="draftCount">0</span> draft cashbills. <a onclick="showPage('reportsPage')" style="color: white; text-decoration: underline;">View them now</a>.
         </div>
-        
-        <div id="adminDashboardMessage" class="info-message" style="display: none;">
-          <i class="fas fa-info-circle"></i> <span id="tempAccessCount">0</span> users have temporary access. <a onclick="showPage('adminPanelPage')" style="color: white; text-decoration: underline;">Manage now</a>.
-        </div>
       </div>
       
       <div class="card" id="activityLogCard" style="display: none;">
@@ -1840,13 +1620,11 @@
         <div class="nav-links">
           <a onclick="showPage('dashboardPage')"><i class="fas fa-home"></i> Dashboard</a>
           <a onclick="showPage('reportsPage')"><i class="fas fa-chart-bar"></i> View Reports</a>
-          <a id="userManagementLink2" onclick="showPage('userManagementPage')" style="display: none;"><i class="fas fa-users"></i> User Management</a>
           <a id="adminPanelLink2" onclick="showPage('adminPanelPage')" style="display: none;"><i class="fas fa-cogs"></i> Admin Panel</a>
         </div>
         <div class="user-info">
           Welcome, <span id="currentUser2">Admin</span> 
-          <span id="currentUserRole2" class="user-role">Admin</span>
-          <span id="tempAccessIndicator2" class="temp-access-indicator" style="display: none;">Temporary Access</span> | 
+          <span id="currentUserRole2" class="user-role">Admin</span> | 
           <a onclick="confirmLogout()" style="color: var(--danger);"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
       </nav>
@@ -1942,13 +1720,11 @@
           <a onclick="showPage('newCashbillPage')"><i class="fas fa-plus"></i> Create Another</a>
           <a onclick="showPage('dashboardPage')"><i class="fas fa-home"></i> Dashboard</a>
           <a onclick="showPage('reportsPage')"><i class="fas fa-chart-bar"></i> View Reports</a>
-          <a id="userManagementLink3" onclick="showPage('userManagementPage')" style="display: none;"><i class="fas fa-users"></i> User Management</a>
           <a id="adminPanelLink3" onclick="showPage('adminPanelPage')" style="display: none;"><i class="fas fa-cogs"></i> Admin Panel</a>
         </div>
         <div class="user-info">
           Welcome, <span id="currentUser3">Admin</span> 
-          <span id="currentUserRole3" class="user-role">Admin</span>
-          <span id="tempAccessIndicator3" class="temp-access-indicator" style="display: none;">Temporary Access</span> | 
+          <span id="currentUserRole3" class="user-role">Admin</span> | 
           <a onclick="confirmLogout()" style="color: var(--danger);"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
       </nav>
@@ -1963,7 +1739,7 @@
       
       <div style="text-align: center; margin-top: 2rem;">
         <button onclick="showPage('newCashbillPage')"><i class="fas fa-file-invoice"></i> Create Another Cashbill</button>
-        <button class="btn-secondary" id="exportPdfButton" onclick="exportCashbill()"><i class="fas fa-file-pdf"></i> Export as PDF</button>
+        <button class="btn-secondary" onclick="exportCashbill()"><i class="fas fa-file-pdf"></i> Export as PDF</button>
       </div>
     </div>
     
@@ -1973,13 +1749,11 @@
         <div class="nav-links">
           <a onclick="showPage('dashboardPage')"><i class="fas fa-home"></i> Dashboard</a>
           <a onclick="showPage('newCashbillPage')"><i class="fas fa-plus"></i> Create New Cashbill</a>
-          <a id="userManagementLink4" onclick="showPage('userManagementPage')" style="display: none;"><i class="fas fa-users"></i> User Management</a>
           <a id="adminPanelLink4" onclick="showPage('adminPanelPage')" style="display: none;"><i class="fas fa-cogs"></i> Admin Panel</a>
         </div>
         <div class="user-info">
           Welcome, <span id="currentUser4">Admin</span> 
-          <span id="currentUserRole4" class="user-role">Admin</span>
-          <span id="tempAccessIndicator4" class="temp-access-indicator" style="display: none;">Temporary Access</span> | 
+          <span id="currentUserRole4" class="user-role">Admin</span> | 
           <a onclick="confirmLogout()" style="color: var(--danger);"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
       </nav>
@@ -2021,7 +1795,7 @@
           <div class="filter-actions">
             <button onclick="applyFilters()"><i class="fas fa-filter"></i> Apply Filters</button>
             <button type="button" class="btn-secondary" onclick="resetFilters()"><i class="fas fa-redo"></i> Reset</button>
-            <button type="button" class="btn-secondary" id="exportCsvButton" onclick="exportToCSV()"><i class="fas fa-file-csv"></i> Export CSV</button>
+            <button type="button" class="btn-secondary" onclick="exportToCSV()"><i class="fas fa-file-csv"></i> Export CSV</button>
           </div>
         </div>
         
@@ -2035,58 +1809,6 @@
       </div>
     </div>
     
-    <!-- USER MANAGEMENT PAGE -->
-    <div id="userManagementPage" class="page">
-      <nav>
-        <div class="nav-links">
-          <a onclick="showPage('dashboardPage')"><i class="fas fa-home"></i> Dashboard</a>
-          <a onclick="showPage('newCashbillPage')"><i class="fas fa-plus"></i> Create New Cashbill</a>
-          <a onclick="showPage('reportsPage')"><i class="fas fa-chart-bar"></i> View Reports</a>
-          <a id="adminPanelLink5" onclick="showPage('adminPanelPage')" style="display: none;"><i class="fas fa-cogs"></i> Admin Panel</a>
-        </div>
-        <div class="user-info">
-          Welcome, <span id="currentUser5">Admin</span> 
-          <span id="currentUserRole5" class="user-role">Admin</span>
-          <span id="tempAccessIndicator5" class="temp-access-indicator" style="display: none;">Temporary Access</span> | 
-          <a onclick="confirmLogout()" style="color: var(--danger);"><i class="fas fa-sign-out-alt"></i> Logout</a>
-        </div>
-      </nav>
-      
-      <div class="card">
-        <h2><i class="fas fa-users"></i> User Management</h2>
-        <p>Manage system users and their permissions.</p>
-        
-        <div class="user-management">
-          <h3>Add New User</h3>
-          <form id="addUserForm">
-            <div class="form-group">
-              <label for="newUsername">Username:</label>
-              <input type="text" id="newUsername" required placeholder="Enter username">
-            </div>
-            <div class="form-group">
-              <label for="newPassword">Password:</label>
-              <input type="password" id="newPassword" required placeholder="Enter password">
-            </div>
-            <div class="form-group">
-              <label for="newRole">Role:</label>
-              <select id="newRole" required>
-                <option value="crew">Crew</option>
-                <option value="manager">Manager</option>
-                <option value="marketing">Marketing Team</option>
-                <option value="admin">Admin</option>
-              </select>
-            </div>
-            <button type="submit"><i class="fas fa-user-plus"></i> Add User</button>
-          </form>
-          
-          <h3 style="margin-top: 2rem;">Existing Users</h3>
-          <div id="usersList">
-            <!-- Users list will be populated here -->
-          </div>
-        </div>
-      </div>
-    </div>
-    
     <!-- ADMIN PANEL PAGE -->
     <div id="adminPanelPage" class="page">
       <nav>
@@ -2094,7 +1816,6 @@
           <a onclick="showPage('dashboardPage')"><i class="fas fa-home"></i> Dashboard</a>
           <a onclick="showPage('newCashbillPage')"><i class="fas fa-plus"></i> Create New Cashbill</a>
           <a onclick="showPage('reportsPage')"><i class="fas fa-chart-bar"></i> View Reports</a>
-          <a onclick="showPage('userManagementPage')"><i class="fas fa-users"></i> User Management</a>
         </div>
         <div class="user-info">
           Welcome, <span id="currentUser6">Admin</span> 
@@ -2105,20 +1826,9 @@
       
       <div class="card">
         <h2><i class="fas fa-cogs"></i> Admin Panel</h2>
-        <p>Advanced system administration and security features.</p>
+        <p>System administration and settings.</p>
         
         <div class="permission-grid">
-          <div class="permission-card">
-            <h4><i class="fas fa-key"></i> User Permissions</h4>
-            <ul>
-              <li>View user passwords</li>
-              <li>Reset user passwords</li>
-              <li>Grant temporary access</li>
-              <li>Revoke temporary access</li>
-              <li>View user activity logs</li>
-            </ul>
-          </div>
-          
           <div class="permission-card">
             <h4><i class="fas fa-sliders-h"></i> System Controls</h4>
             <ul>
@@ -2133,22 +1843,11 @@
           <div class="permission-card">
             <h4><i class="fas fa-shield-alt"></i> Security Features</h4>
             <ul>
-              <li>Temporary access management</li>
-              <li>Password strength enforcement</li>
-              <li>Session management</li>
-              <li>Failed login tracking</li>
+              <li>System monitoring</li>
+              <li>Activity tracking</li>
               <li>Security alerts</li>
             </ul>
           </div>
-        </div>
-        
-        <h3 style="margin-top: 2rem;"><i class="fas fa-clock"></i> Temporary Access Management</h3>
-        <div id="tempAccessUsers">
-          <!-- Temporary access users will be populated here -->
-        </div>
-        
-        <div style="margin-top: 1.5rem;">
-          <button class="btn-info" onclick="showGrantAccessModal()"><i class="fas fa-user-clock"></i> Grant Temporary Access</button>
         </div>
         
         <h3 style="margin-top: 2rem;"><i class="fas fa-history"></i> System Activity Log</h3>
@@ -2228,67 +1927,6 @@
       </div>
     </div>
     
-    <!-- RESET PASSWORD MODAL -->
-    <div id="resetPasswordModal" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3><i class="fas fa-key"></i> Reset User Password</h3>
-          <button class="close-modal" onclick="closeResetPasswordModal()"><i class="fas fa-times"></i></button>
-        </div>
-        <form id="resetPasswordForm">
-          <input type="hidden" id="resetUserId">
-          <div class="form-group">
-            <label for="newUserPassword">New Password:</label>
-            <input type="password" id="newUserPassword" required placeholder="Enter new password">
-          </div>
-          <div class="form-group">
-            <label for="confirmUserPassword">Confirm Password:</label>
-            <input type="password" id="confirmUserPassword" required placeholder="Confirm new password">
-          </div>
-          <div class="modal-actions">
-            <button type="submit"><i class="fas fa-key"></i> Reset Password</button>
-            <button type="button" class="btn-secondary" onclick="closeResetPasswordModal()"><i class="fas fa-times"></i> Cancel</button>
-          </div>
-        </form>
-      </div>
-    </div>
-    
-    <!-- GRANT TEMPORARY ACCESS MODAL -->
-    <div id="grantAccessModal" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3><i class="fas fa-user-clock"></i> Grant Temporary Access</h3>
-          <button class="close-modal" onclick="closeGrantAccessModal()"><i class="fas fa-times"></i></button>
-        </div>
-        <form id="grantAccessForm">
-          <div class="form-group">
-            <label for="tempAccessUser">Select User:</label>
-            <select id="tempAccessUser" required>
-              <option value="">Select a user</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="tempAccessDuration">Access Duration:</label>
-            <select id="tempAccessDuration" required>
-              <option value="1">1 Hour</option>
-              <option value="6">6 Hours</option>
-              <option value="24">1 Day</option>
-              <option value="72">3 Days</option>
-              <option value="168">1 Week</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="tempAccessReason">Reason:</label>
-            <textarea id="tempAccessReason" rows="3" placeholder="Reason for temporary access"></textarea>
-          </div>
-          <div class="modal-actions">
-            <button type="submit"><i class="fas fa-user-check"></i> Grant Access</button>
-            <button type="button" class="btn-secondary" onclick="closeGrantAccessModal()"><i class="fas fa-times"></i> Cancel</button>
-          </div>
-        </form>
-      </div>
-    </div>
-    
     <!-- CONFIRMATION MODAL -->
     <div id="confirmModal" class="modal">
       <div class="modal-content">
@@ -2327,37 +1965,30 @@
   </div>
   
   <script>
+    // API URL for Google Apps Script
+    const API_URL = "https://script.google.com/macros/s/AKfycbyekmbibuQZeerhAHQ8Eva_0nzuO397O0-3PJUtXs5Dfq-tHC3z1vap1hfXu-BvJKb-/exec";
+    
     // Initialize data storage
-    let cashbills = JSON.parse(localStorage.getItem('cashbills')) || [];
-    let users = JSON.parse(localStorage.getItem('users')) || [
-      { id: 1, username: 'danial', password: 'dd', role: 'admin', temporaryAccess: null },
-      { id: 2, username: 'aida', password: 'aida', role: 'manager', temporaryAccess: null },
-      { id: 3, username: 'putri', password: 'putri', role: 'marketing', temporaryAccess: null },
-      { id: 4, username: 'crew1', password: 'Crew1', role: 'crew', temporaryAccess: null }
+    let cashbills = [];
+    let users = [
+      { id: 1, username: 'danial', role: 'admin' },
+      { id: 2, username: 'aida', role: 'manager' },
+      { id: 3, username: 'putri', role: 'marketing' },
+      { id: 4, username: 'crew1', role: 'crew' }
     ];
-    let activityLog = JSON.parse(localStorage.getItem('activityLog')) || [];
-    let notifications = JSON.parse(localStorage.getItem('notifications')) || [];
-    let systemSettings = JSON.parse(localStorage.getItem('systemSettings')) || {
+    let activityLog = [];
+    let notifications = [];
+    let systemSettings = {
       companyName: 'PNE ARENA',
       currency: 'RM',
       taxRate: 0,
-      cashbillTargets: {
-        crew: 10,
-        manager: 20,
-        marketing: 15,
-        admin: 0
-      },
-      revenueTargets: {
-        crew: 5000,
-        manager: 15000,
-        marketing: 10000,
-        admin: 0
-      }
+      cashbillTargets: { crew: 10, manager: 20, marketing: 15, admin: 0 },
+      revenueTargets: { crew: 5000, manager: 15000, marketing: 10000, admin: 0 }
     };
     let currentUser = null;
     let currentPage = 1;
     const itemsPerPage = 10;
-    let filteredCashbills = [...cashbills];
+    let filteredCashbills = [];
     let confirmedAction = null;
     
     // Get next invoice number
@@ -2369,7 +2000,7 @@
     }
     
     // Log activity
-    function logActivity(userId, username, action, details) {
+    async function logActivity(userId, username, action, details) {
       const logEntry = {
         id: Date.now(),
         userId,
@@ -2379,23 +2010,29 @@
         timestamp: new Date().toISOString()
       };
       
-      activityLog.unshift(logEntry);
-      
-      // Keep only last 100 entries
-      if (activityLog.length > 100) {
-        activityLog = activityLog.slice(0, 100);
-      }
-      
-      localStorage.setItem('activityLog', JSON.stringify(activityLog));
-      
-      // Add notification for certain activities
-      if (action === 'Create Cashbill' || action === 'Delete Cashbill' || action === 'Grant Temporary Access' || action === 'Revoke Temporary Access') {
-        addNotification(username, action, details);
+      try {
+        // Add to server
+        const response = await fetch(`${API_URL}?action=add&sheet=activityLog&data=${encodeURIComponent(JSON.stringify(logEntry))}`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const result = await response.json();
+        
+        if (result.success) {
+          // Update local cache
+          activityLog.unshift(logEntry);
+          if (activityLog.length > 100) activityLog = activityLog.slice(0, 100);
+          
+          // Add notification for certain activities
+          if (action === 'Create Cashbill' || action === 'Delete Cashbill') {
+            addNotification(username, action, details);
+          }
+        }
+      } catch (error) {
+        console.error("Error logging activity:", error);
       }
     }
     
     // Add notification
-    function addNotification(username, action, details) {
+    async function addNotification(username, action, details) {
       const notification = {
         id: Date.now(),
         username,
@@ -2405,15 +2042,21 @@
         read: false
       };
       
-      notifications.unshift(notification);
-      
-      // Keep only last 20 notifications
-      if (notifications.length > 20) {
-        notifications = notifications.slice(0, 20);
+      try {
+        // Add to server
+        const response = await fetch(`${API_URL}?action=add&sheet=notifications&data=${encodeURIComponent(JSON.stringify(notification))}`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const result = await response.json();
+        
+        if (result.success) {
+          // Update local cache
+          notifications.unshift(notification);
+          if (notifications.length > 20) notifications = notifications.slice(0, 20);
+          updateNotificationBadge();
+        }
+      } catch (error) {
+        console.error("Error adding notification:", error);
       }
-      
-      localStorage.setItem('notifications', JSON.stringify(notifications));
-      updateNotificationBadge();
     }
     
     // Update notification badge
@@ -2439,7 +2082,6 @@
         
         // Mark all notifications as read
         notifications.forEach(n => n.read = true);
-        localStorage.setItem('notifications', JSON.stringify(notifications));
         updateNotificationBadge();
       }
     }
@@ -2504,24 +2146,9 @@
         updateReportsPage();
       }
       
-      // Update users list when user management page is shown
-      if (pageId === 'userManagementPage') {
-        updateUsersList();
-      }
-      
       // Update admin panel when admin panel page is shown
       if (pageId === 'adminPanelPage') {
         updateAdminPanel();
-      }
-      
-      // Update export button on success page for crew members
-      if (pageId === 'successPage') {
-        const exportButton = document.getElementById('exportPdfButton');
-        if (exportButton && currentUser && currentUser.role === 'crew') {
-          exportButton.disabled = true;
-          exportButton.innerHTML = '<i class="fas fa-file-pdf"></i> No permission';
-          exportButton.setAttribute('title', 'Crew members cannot export committed cashbills');
-        }
       }
     }
     
@@ -2529,30 +2156,17 @@
     document.getElementById('loginForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
       
-      const user = users.find(u => u.username === username && u.password === password);
+      const user = users.find(u => u.username === username);
       
       if (user) {
-        // Check if user has temporary access and if it's expired
-        if (user.temporaryAccess && user.temporaryAccess.expires) {
-          const now = new Date().getTime();
-          if (now > user.temporaryAccess.expires) {
-            document.getElementById('tempAccessExpired').style.display = 'block';
-            document.getElementById('loginError').style.display = 'none';
-            return;
-          }
-        }
-        
         currentUser = user;
         updateCurrentUserUI();
         logActivity(user.id, user.username, 'Login', 'User logged in');
         showPage('dashboardPage');
         document.getElementById('loginError').style.display = 'none';
-        document.getElementById('tempAccessExpired').style.display = 'none';
       } else {
         document.getElementById('loginError').style.display = 'block';
-        document.getElementById('tempAccessExpired').style.display = 'none';
       }
     });
     
@@ -2565,7 +2179,6 @@
       document.getElementById('currentUser2').textContent = currentUser.username;
       document.getElementById('currentUser3').textContent = currentUser.username;
       document.getElementById('currentUser4').textContent = currentUser.username;
-      document.getElementById('currentUser5').textContent = currentUser.username;
       document.getElementById('currentUser6').textContent = currentUser.username;
       
       // Update role in all pages
@@ -2573,20 +2186,7 @@
       document.getElementById('currentUserRole2').textContent = getRoleDisplayName(currentUser.role);
       document.getElementById('currentUserRole3').textContent = getRoleDisplayName(currentUser.role);
       document.getElementById('currentUserRole4').textContent = getRoleDisplayName(currentUser.role);
-      document.getElementById('currentUserRole5').textContent = getRoleDisplayName(currentUser.role);
       document.getElementById('currentUserRole6').textContent = getRoleDisplayName(currentUser.role);
-      
-      // Show/hide temporary access indicator
-      const tempAccessIndicators = document.querySelectorAll('[id^="tempAccessIndicator"]');
-      tempAccessIndicators.forEach(indicator => {
-        indicator.style.display = currentUser.temporaryAccess && currentUser.temporaryAccess.expires ? 'inline-block' : 'none';
-      });
-      
-      // Show/hide user management link based on role
-      const userManagementLinks = document.querySelectorAll('[id^="userManagementLink"]');
-      userManagementLinks.forEach(link => {
-        link.style.display = currentUser.role === 'admin' ? 'block' : 'none';
-      });
       
       // Show/hide admin panel link based on role
       const adminPanelLinks = document.querySelectorAll('[id^="adminPanelLink"]');
@@ -2715,7 +2315,7 @@
     });
     
     // Cashbill form submission
-    document.getElementById('cashbillForm').addEventListener('submit', function(e) {
+    document.getElementById('cashbillForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       
       showLoading();
@@ -2776,30 +2376,42 @@
         date: new Date().toISOString()
       };
       
-      // Add to cashbills array
-      cashbills.push(cashbill);
-      
-      // Save to localStorage
-      localStorage.setItem('cashbills', JSON.stringify(cashbills));
-      
-      // Log activity
-      logActivity(currentUser.id, currentUser.username, 'Create Cashbill', `Created cashbill ${cashbill.invoiceNumber} for ${customerName}`);
-      
-      // Display cashbill details
-      displayCashbillDetails(cashbill);
-      
-      // Hide loading
-      hideLoading();
-      
-      // Show success page
-      showPage('successPage');
-      
-      // Reset form
-      resetForm();
+      try {
+        // Add to server
+        const response = await fetch(`${API_URL}?action=add&sheet=cashbills&data=${encodeURIComponent(JSON.stringify(cashbill))}`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const result = await response.json();
+        
+        if (result.success) {
+          // Update local cache
+          cashbills.push(cashbill);
+          
+          // Log activity
+          logActivity(currentUser.id, currentUser.username, 'Create Cashbill', `Created cashbill ${cashbill.invoiceNumber} for ${customerName}`);
+          
+          // Display cashbill details
+          displayCashbillDetails(cashbill);
+          
+          // Hide loading
+          hideLoading();
+          
+          // Show success page
+          showPage('successPage');
+          
+          // Reset form
+          resetForm();
+        } else {
+          throw new Error(result.error || "Unknown error");
+        }
+      } catch (error) {
+        console.error("Error saving cashbill:", error);
+        alert("Error saving cashbill. Please try again.");
+        hideLoading();
+      }
     });
     
     // Save draft
-    function saveDraft() {
+    async function saveDraft() {
       showLoading();
       
       // Get form values
@@ -2866,23 +2478,35 @@
         date: new Date().toISOString()
       };
       
-      // Add to cashbills array
-      cashbills.push(cashbill);
-      
-      // Save to localStorage
-      localStorage.setItem('cashbills', JSON.stringify(cashbills));
-      
-      // Log activity
-      logActivity(currentUser.id, currentUser.username, 'Save Draft', `Saved draft cashbill ${cashbill.invoiceNumber} for ${customerName}`);
-      
-      // Hide loading
-      hideLoading();
-      
-      // Show success message
-      alert('Draft saved successfully!');
-      
-      // Reset form
-      resetForm();
+      try {
+        // Add to server
+        const response = await fetch(`${API_URL}?action=add&sheet=cashbills&data=${encodeURIComponent(JSON.stringify(cashbill))}`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const result = await response.json();
+        
+        if (result.success) {
+          // Update local cache
+          cashbills.push(cashbill);
+          
+          // Log activity
+          logActivity(currentUser.id, currentUser.username, 'Save Draft', `Saved draft cashbill ${cashbill.invoiceNumber} for ${customerName}`);
+          
+          // Hide loading
+          hideLoading();
+          
+          // Show success message
+          alert('Draft saved successfully!');
+          
+          // Reset form
+          resetForm();
+        } else {
+          throw new Error(result.error || "Unknown error");
+        }
+      } catch (error) {
+        console.error("Error saving draft:", error);
+        alert("Error saving draft. Please try again.");
+        hideLoading();
+      }
     }
     
     // Reset form
@@ -3014,19 +2638,6 @@
         document.getElementById('dashboardMessage').style.display = 'none';
       }
       
-      // Show temporary access count if admin
-      if (currentUser && currentUser.role === 'admin') {
-        const tempAccessUsers = users.filter(user => user.temporaryAccess && user.temporaryAccess.expires);
-        if (tempAccessUsers.length > 0) {
-          document.getElementById('tempAccessCount').textContent = tempAccessUsers.length;
-          document.getElementById('adminDashboardMessage').style.display = 'flex';
-        } else {
-          document.getElementById('adminDashboardMessage').style.display = 'none';
-        }
-      } else {
-        document.getElementById('adminDashboardMessage').style.display = 'none';
-      }
-      
       // Update crew features
       if (currentUser && currentUser.role === 'crew') {
         updateCrewFeatures();
@@ -3078,7 +2689,6 @@
     // Update admin features
     function updateAdminFeatures() {
       // Update system health
-      document.getElementById('totalUsersCount').textContent = users.length;
       document.getElementById('totalCashbillsCount').textContent = cashbills.length;
       
       // Update user activity chart
@@ -3291,7 +2901,6 @@
       
       const backup = {
         cashbills,
-        users,
         activityLog,
         notifications,
         systemSettings,
@@ -3351,28 +2960,45 @@
       const file = fileInput.files[0];
       const reader = new FileReader();
       
-      reader.onload = function(e) {
+      reader.onload = async function(e) {
         try {
           const backup = JSON.parse(e.target.result);
           
-          if (backup.cashbills && backup.users && backup.activityLog) {
-            cashbills = backup.cashbills;
-            users = backup.users;
-            activityLog = backup.activityLog;
-            notifications = backup.notifications || [];
-            systemSettings = backup.systemSettings || systemSettings;
+          if (backup.cashbills && backup.activityLog) {
+            // Clear existing data
+            cashbills = [];
+            activityLog = [];
+            notifications = [];
             
-            localStorage.setItem('cashbills', JSON.stringify(cashbills));
-            localStorage.setItem('users', JSON.stringify(users));
-            localStorage.setItem('activityLog', JSON.stringify(activityLog));
-            localStorage.setItem('notifications', JSON.stringify(notifications));
-            localStorage.setItem('systemSettings', JSON.stringify(systemSettings));
+            // Add cashbills to server
+            for (const cashbill of backup.cashbills) {
+              await fetch(`${API_URL}?action=add&sheet=cashbills&data=${encodeURIComponent(JSON.stringify(cashbill))}`);
+            }
+            
+            // Add activity log to server
+            for (const log of backup.activityLog) {
+              await fetch(`${API_URL}?action=add&sheet=activityLog&data=${encodeURIComponent(JSON.stringify(log))}`);
+            }
+            
+            // Add notifications to server
+            if (backup.notifications) {
+              for (const notification of backup.notifications) {
+                await fetch(`${API_URL}?action=add&sheet=notifications&data=${encodeURIComponent(JSON.stringify(notification))}`);
+              }
+            }
+            
+            // Update system settings
+            if (backup.systemSettings) {
+              systemSettings = backup.systemSettings;
+              document.querySelector('header h1').textContent = systemSettings.companyName + ' System';
+            }
             
             if (backup.lastInvoiceNumber) {
               localStorage.setItem('lastInvoiceNumber', backup.lastInvoiceNumber);
             }
             
-            logActivity(currentUser.id, currentUser.username, 'Restore System', 'Restored system from backup');
+            // Reload data
+            await loadData();
             
             document.querySelector('.modal').remove();
             
@@ -3434,7 +3060,7 @@
       `;
       document.body.appendChild(modal);
       
-      document.getElementById('systemSettingsForm').addEventListener('submit', function(e) {
+      document.getElementById('systemSettingsForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         
         systemSettings.companyName = document.getElementById('companyName').value;
@@ -3443,15 +3069,27 @@
         systemSettings.cashbillTargets.crew = parseInt(document.getElementById('crewCashbillTarget').value);
         systemSettings.revenueTargets.crew = parseFloat(document.getElementById('crewRevenueTarget').value);
         
-        localStorage.setItem('systemSettings', JSON.stringify(systemSettings));
-        
-        // Update company name in header
-        document.querySelector('header h1').textContent = systemSettings.companyName + ' System';
-        
-        logActivity(currentUser.id, currentUser.username, 'Update System Settings', 'Updated system configuration');
-        
-        alert('Settings saved successfully!');
-        modal.remove();
+        // Update system settings in Google Sheets
+        try {
+          const response = await fetch(`${API_URL}?action=update&sheet=systemSettings&id=1&data=${encodeURIComponent(JSON.stringify(systemSettings))}`);
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const result = await response.json();
+          
+          if (result.success) {
+            // Update company name in header
+            document.querySelector('header h1').textContent = systemSettings.companyName + ' System';
+            
+            logActivity(currentUser.id, currentUser.username, 'Update System Settings', 'Updated system configuration');
+            
+            alert('Settings saved successfully!');
+            modal.remove();
+          } else {
+            throw new Error(result.error || "Unknown error");
+          }
+        } catch (error) {
+          console.error("Error saving settings:", error);
+          alert("Error saving settings. Please try again.");
+        }
       });
     }
     
@@ -3626,21 +3264,6 @@
       
       // Update pagination
       updatePagination(filteredCashbills.length);
-      
-      // Update export button for crew members
-      const exportButton = document.getElementById('exportCsvButton');
-      if (exportButton && currentUser.role === 'crew') {
-        const hasCommitted = filteredCashbills.some(bill => bill.status === 'committed');
-        if (hasCommitted) {
-          exportButton.disabled = true;
-          exportButton.setAttribute('title', 'Crew members cannot export committed cashbills');
-          exportButton.innerHTML = '<i class="fas fa-file-csv"></i> No permission';
-        } else {
-          exportButton.disabled = false;
-          exportButton.removeAttribute('title');
-          exportButton.innerHTML = '<i class="fas fa-file-csv"></i> Export CSV';
-        }
-      }
     }
     
     // Update pagination
@@ -3729,15 +3352,6 @@
     
     // Export to CSV
     function exportToCSV() {
-      // Check if crew member is trying to export
-      if (currentUser.role === 'crew') {
-        const hasCommitted = filteredCashbills.some(bill => bill.status === 'committed');
-        if (hasCommitted) {
-          alert('Crew members cannot export committed cashbills.');
-          return;
-        }
-      }
-      
       showLoading();
       
       let csv = 'Invoice Number,Customer,User,Date,Subtotal,Tax,Discount,Total,Payment Method,Status\n';
@@ -3763,12 +3377,6 @@
     
     // Export cashbill as PDF (simulated)
     function exportCashbill() {
-      // Check if crew member is trying to export
-      if (currentUser.role === 'crew') {
-        alert('Crew members cannot export committed cashbills.');
-        return;
-      }
-      
       alert('PDF export would be implemented here. In a real application, this would generate a PDF file.');
     }
     
@@ -3919,7 +3527,7 @@
     }
     
     // Edit cashbill form submission
-    document.getElementById('editCashbillForm').addEventListener('submit', function(e) {
+    document.getElementById('editCashbillForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       
       const id = parseInt(document.getElementById('editCashbillId').value);
@@ -3972,25 +3580,48 @@
       const grandTotal = subtotal + totalTax - totalDiscount;
       
       // Update cashbill
-      cashbills[cashbillIndex].customerName = customerName;
-      cashbills[cashbillIndex].paymentMethod = paymentMethod;
-      cashbills[cashbillIndex].status = status;
-      cashbills[cashbillIndex].notes = notes;
-      cashbills[cashbillIndex].items = items;
-      cashbills[cashbillIndex].subtotal = subtotal;
-      cashbills[cashbillIndex].totalTax = totalTax;
-      cashbills[cashbillIndex].totalDiscount = totalDiscount;
-      cashbills[cashbillIndex].grandTotal = grandTotal;
+      const updatedCashbill = {
+        customerName,
+        paymentMethod,
+        status,
+        notes,
+        items,
+        subtotal,
+        totalTax,
+        totalDiscount,
+        grandTotal
+      };
       
-      localStorage.setItem('cashbills', JSON.stringify(cashbills));
-      
-      // Log activity
-      const actionText = status === 'committed' ? 'committed' : 'uncommitted';
-      logActivity(currentUser.id, currentUser.username, 'Edit Cashbill', `${actionText} cashbill ${cashbills[cashbillIndex].invoiceNumber}`);
-      
-      closeEditModal();
-      updateReportsPage();
-      updateDashboardStats();
+      try {
+        // Update cashbill in server
+        const response = await fetch(`${API_URL}?action=update&sheet=cashbills&id=${id}&data=${encodeURIComponent(JSON.stringify(updatedCashbill))}`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const result = await response.json();
+        
+        if (result.success) {
+          // Update local cache
+          cashbills[cashbillIndex] = {...cashbills[cashbillIndex], ...updatedCashbill};
+          
+          // Update filtered cache
+          const filteredIndex = filteredCashbills.findIndex(bill => bill.id === id);
+          if (filteredIndex !== -1) {
+            filteredCashbills[filteredIndex] = {...filteredCashbills[filteredIndex], ...updatedCashbill};
+          }
+          
+          // Log activity
+          const actionText = status === 'committed' ? 'committed' : 'uncommitted';
+          logActivity(currentUser.id, currentUser.username, 'Edit Cashbill', `${actionText} cashbill ${cashbills[cashbillIndex].invoiceNumber}`);
+          
+          closeEditModal();
+          updateReportsPage();
+          updateDashboardStats();
+        } else {
+          throw new Error(result.error || "Unknown error");
+        }
+      } catch (error) {
+        console.error("Error updating cashbill:", error);
+        alert("Error updating cashbill. Please try again.");
+      }
     });
     
     // Confirm delete cashbill
@@ -4011,7 +3642,7 @@
     }
     
     // Delete cashbill
-    function deleteCashbill(id) {
+    async function deleteCashbill(id) {
       const cashbill = cashbills.find(bill => bill.id === id);
       if (!cashbill) return;
       
@@ -4021,18 +3652,29 @@
         return;
       }
       
-      cashbills = cashbills.filter(bill => bill.id !== id);
-      localStorage.setItem('cashbills', JSON.stringify(cashbills));
-      
-      // Update filtered cashbills
-      filteredCashbills = filteredCashbills.filter(bill => bill.id !== id);
-      
-      // Log activity
-      logActivity(currentUser.id, currentUser.username, 'Delete Cashbill', `Deleted cashbill ${cashbill.invoiceNumber}`);
-      
-      updateReportsPage();
-      updateDashboardStats();
-      closeConfirmModal();
+      try {
+        const response = await fetch(`${API_URL}?action=delete&sheet=cashbills&id=${id}`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const result = await response.json();
+        
+        if (result.success) {
+          // Update local cache
+          cashbills = cashbills.filter(bill => bill.id !== id);
+          filteredCashbills = filteredCashbills.filter(bill => bill.id !== id);
+          
+          // Log activity
+          logActivity(currentUser.id, currentUser.username, 'Delete Cashbill', `Deleted cashbill ${cashbill.invoiceNumber}`);
+          
+          updateReportsPage();
+          updateDashboardStats();
+          closeConfirmModal();
+        } else {
+          throw new Error(result.error || "Unknown error");
+        }
+      } catch (error) {
+        console.error("Error deleting cashbill:", error);
+        alert("Error deleting cashbill. Please try again.");
+      }
     }
     
     // Confirm logout
@@ -4078,301 +3720,8 @@
       document.getElementById('loadingSpinner').style.display = 'none';
     }
     
-    // Add user form submission
-    document.getElementById('addUserForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const username = document.getElementById('newUsername').value;
-      const password = document.getElementById('newPassword').value;
-      const role = document.getElementById('newRole').value;
-      
-      // Check if username already exists
-      if (users.some(user => user.username === username)) {
-        alert('Username already exists!');
-        return;
-      }
-      
-      const newUser = {
-        id: Date.now(),
-        username,
-        password,
-        role,
-        temporaryAccess: null
-      };
-      
-      users.push(newUser);
-      localStorage.setItem('users', JSON.stringify(users));
-      
-      // Log activity
-      logActivity(currentUser.id, currentUser.username, 'Add User', `Added new user ${username} with role ${role}`);
-      
-      // Reset form
-      document.getElementById('addUserForm').reset();
-      
-      // Update users list
-      updateUsersList();
-      
-      alert('User added successfully!');
-    });
-    
-    // Update users list
-    function updateUsersList() {
-      const usersList = document.getElementById('usersList');
-      
-      if (users.length === 0) {
-        usersList.innerHTML = '<p>No users found.</p>';
-        return;
-      }
-      
-      let usersHTML = '';
-      users.forEach(user => {
-        const isCurrentUser = user.id === currentUser.id;
-        const isMainAdmin = user.id === 1;
-        const canManage = currentUser.role === 'admin' && !isCurrentUser && !isMainAdmin;
-        
-        usersHTML += `
-          <div class="user-card">
-            <div class="user-avatar">${user.username.charAt(0).toUpperCase()}</div>
-            <div class="user-info">
-              <div class="user-name">${user.username}</div>
-              <div class="user-details">
-                <span class="user-role">${getRoleDisplayName(user.role)}</span>
-                ${user.temporaryAccess && user.temporaryAccess.expires ? 
-                  `<span class="temp-access-indicator">Temporary Access</span>` : ''}
-              </div>
-            </div>
-            <div class="user-actions">
-              ${currentUser.role === 'admin' ? 
-                `<div class="password-field">
-                  <input type="password" value="${user.password}" readonly id="password-${user.id}">
-                  <button type="button" class="password-toggle" onclick="togglePassword(${user.id})"><i class="fas fa-eye"></i></button>
-                </div>` : 
-                ''}
-              ${canManage ? 
-                `<button class="btn-warning" onclick="showResetPasswordModal(${user.id})"><i class="fas fa-key"></i> Reset</button>` : 
-                ''}
-              ${canManage ? 
-                `<button class="btn-info" onclick="showGrantAccessModal(${user.id})"><i class="fas fa-user-clock"></i> Grant</button>` : 
-                ''}
-              ${canManage ? 
-                `<button class="btn-danger" onclick="deleteUser(${user.id})"><i class="fas fa-trash"></i> Delete</button>` : 
-                ''}
-            </div>
-          </div>
-        `;
-      });
-      
-      usersList.innerHTML = usersHTML;
-    }
-    
-    // Toggle password visibility
-    function togglePassword(userId) {
-      const passwordField = document.getElementById(`password-${userId}`);
-      const toggleButton = passwordField.nextElementSibling;
-      const icon = toggleButton.querySelector('i');
-      
-      if (passwordField.type === 'password') {
-        passwordField.type = 'text';
-        icon.className = 'fas fa-eye-slash';
-      } else {
-        passwordField.type = 'password';
-        icon.className = 'fas fa-eye';
-      }
-    }
-    
-    // Show reset password modal
-    function showResetPasswordModal(userId) {
-      const user = users.find(u => u.id === userId);
-      if (!user) return;
-      
-      document.getElementById('resetUserId').value = userId;
-      document.getElementById('newUserPassword').value = '';
-      document.getElementById('confirmUserPassword').value = '';
-      
-      document.getElementById('resetPasswordModal').style.display = 'flex';
-    }
-    
-    // Close reset password modal
-    function closeResetPasswordModal() {
-      document.getElementById('resetPasswordModal').style.display = 'none';
-    }
-    
-    // Reset password form submission
-    document.getElementById('resetPasswordForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const userId = parseInt(document.getElementById('resetUserId').value);
-      const newPassword = document.getElementById('newUserPassword').value;
-      const confirmPassword = document.getElementById('confirmUserPassword').value;
-      
-      if (newPassword !== confirmPassword) {
-        alert('Passwords do not match!');
-        return;
-      }
-      
-      const userIndex = users.findIndex(user => user.id === userId);
-      if (userIndex === -1) return;
-      
-      users[userIndex].password = newPassword;
-      localStorage.setItem('users', JSON.stringify(users));
-      
-      // Log activity
-      logActivity(currentUser.id, currentUser.username, 'Reset Password', `Reset password for user ${users[userIndex].username}`);
-      
-      closeResetPasswordModal();
-      updateUsersList();
-      
-      alert('Password reset successfully!');
-    });
-    
-    // Show grant access modal
-    function showGrantAccessModal(userId = null) {
-      const userSelect = document.getElementById('tempAccessUser');
-      
-      // Populate user select
-      userSelect.innerHTML = '<option value="">Select a user</option>';
-      
-      users.forEach(user => {
-        if (user.role !== 'admin' && user.id !== currentUser.id) {
-          userSelect.innerHTML += `<option value="${user.id}" ${userId === user.id ? 'selected' : ''}>${user.username} (${getRoleDisplayName(user.role)})</option>`;
-        }
-      });
-      
-      document.getElementById('tempAccessDuration').value = '24';
-      document.getElementById('tempAccessReason').value = '';
-      
-      document.getElementById('grantAccessModal').style.display = 'flex';
-    }
-    
-    // Close grant access modal
-    function closeGrantAccessModal() {
-      document.getElementById('grantAccessModal').style.display = 'none';
-    }
-    
-    // Grant access form submission
-    document.getElementById('grantAccessForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const userId = parseInt(document.getElementById('tempAccessUser').value);
-      const duration = parseInt(document.getElementById('tempAccessDuration').value);
-      const reason = document.getElementById('tempAccessReason').value;
-      
-      if (!userId) {
-        alert('Please select a user');
-        return;
-      }
-      
-      const userIndex = users.findIndex(user => user.id === userId);
-      if (userIndex === -1) return;
-      
-      // Calculate expiration time
-      const now = new Date().getTime();
-      const expires = now + (duration * 60 * 60 * 1000); // Convert hours to milliseconds
-      
-      users[userIndex].temporaryAccess = {
-        expires,
-        grantedBy: currentUser.id,
-        reason
-      };
-      
-      localStorage.setItem('users', JSON.stringify(users));
-      
-      // Log activity
-      logActivity(currentUser.id, currentUser.username, 'Grant Temporary Access', `Granted temporary access to ${users[userIndex].username} for ${duration} hours`);
-      
-      closeGrantAccessModal();
-      updateAdminPanel();
-      
-      alert('Temporary access granted successfully!');
-    });
-    
-    // Revoke temporary access
-    function revokeTemporaryAccess(userId) {
-      const userIndex = users.findIndex(user => user.id === userId);
-      if (userIndex === -1) return;
-      
-      users[userIndex].temporaryAccess = null;
-      localStorage.setItem('users', JSON.stringify(users));
-      
-      // Log activity
-      logActivity(currentUser.id, currentUser.username, 'Revoke Temporary Access', `Revoked temporary access for ${users[userIndex].username}`);
-      
-      updateAdminPanel();
-      
-      alert('Temporary access revoked successfully!');
-    }
-    
-    // Delete user
-    function deleteUser(id) {
-      if (confirm('Are you sure you want to delete this user?')) {
-        const user = users.find(user => user.id === id);
-        if (!user) return;
-        
-        users = users.filter(user => user.id !== id);
-        localStorage.setItem('users', JSON.stringify(users));
-        
-        // Log activity
-        logActivity(currentUser.id, currentUser.username, 'Delete User', `Deleted user ${user.username}`);
-        
-        updateUsersList();
-        updateAdminPanel();
-      }
-    }
-    
     // Update admin panel
     function updateAdminPanel() {
-      // Update temporary access users
-      const tempAccessContainer = document.getElementById('tempAccessUsers');
-      const tempAccessUsers = users.filter(user => user.temporaryAccess && user.temporaryAccess.expires);
-      
-      if (tempAccessUsers.length === 0) {
-        tempAccessContainer.innerHTML = '<p>No users have temporary access at the moment.</p>';
-      } else {
-        let usersHTML = `
-          <div class="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Username</th>
-                  <th>Role</th>
-                  <th>Granted By</th>
-                  <th>Expires</th>
-                  <th>Reason</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-        `;
-        
-        tempAccessUsers.forEach(user => {
-          const grantedBy = users.find(u => u.id === user.temporaryAccess.grantedBy);
-          const expiresDate = new Date(user.temporaryAccess.expires);
-          const now = new Date();
-          const isExpired = expiresDate < now;
-          
-          usersHTML += `
-            <tr>
-              <td>${user.username}</td>
-              <td>${getRoleDisplayName(user.role)}</td>
-              <td>${grantedBy ? grantedBy.username : 'Unknown'}</td>
-              <td>${expiresDate.toLocaleString()} ${isExpired ? '(Expired)' : ''}</td>
-              <td>${user.temporaryAccess.reason || 'N/A'}</td>
-              <td>
-                <button class="btn-danger" onclick="revokeTemporaryAccess(${user.id})"><i class="fas fa-user-times"></i> Revoke Access</button>
-              </td>
-            </tr>
-          `;
-        });
-        
-        usersHTML += `
-              </tbody>
-            </table>
-          </div>
-        `;
-        
-        tempAccessContainer.innerHTML = usersHTML;
-      }
-      
       // Update system activity log
       const systemActivityLog = document.getElementById('systemActivityLog');
       
@@ -4423,22 +3772,88 @@
       }
     });
     
-    // Initialize the app
-    function initApp() {
-      // Load system settings
-      document.querySelector('header h1').textContent = systemSettings.companyName + ' System';
-      
-      // Update notification badge
-      updateNotificationBadge();
-      
-      // Apply role-based filtering
-      if (currentUser) {
-        filteredCashbills = [...cashbills];
+    // Load all data from Google Sheets
+    async function loadData() {
+      try {
+        // Load cashbills
+        try {
+          const cashbillsResponse = await fetch(`${API_URL}?action=get&sheet=cashbills`);
+          if (cashbillsResponse.ok) {
+            cashbills = await cashbillsResponse.json();
+          } else {
+            console.error("Failed to load cashbills:", cashbillsResponse.status);
+            cashbills = [];
+          }
+        } catch (error) {
+          console.error("Error loading cashbills:", error);
+          cashbills = [];
+        }
+
+        // Load activity log
+        try {
+          const activityResponse = await fetch(`${API_URL}?action=get&sheet=activityLog`);
+          if (activityResponse.ok) {
+            activityLog = await activityResponse.json();
+          } else {
+            console.error("Failed to load activity log:", activityResponse.status);
+            activityLog = [];
+          }
+        } catch (error) {
+          console.error("Error loading activity log:", error);
+          activityLog = [];
+        }
+
+        // Load notifications
+        try {
+          const notificationsResponse = await fetch(`${API_URL}?action=get&sheet=notifications`);
+          if (notificationsResponse.ok) {
+            notifications = await notificationsResponse.json();
+          } else {
+            console.error("Failed to load notifications:", notificationsResponse.status);
+            notifications = [];
+          }
+        } catch (error) {
+          console.error("Error loading notifications:", error);
+          notifications = [];
+        }
+
+        // Load system settings
+        try {
+          const settingsResponse = await fetch(`${API_URL}?action=get&sheet=systemSettings`);
+          if (settingsResponse.ok) {
+            const settingsData = await settingsResponse.json();
+            if (settingsData.length > 0) {
+              systemSettings = settingsData[0];
+            }
+          } else {
+            console.error("Failed to load system settings:", settingsResponse.status);
+            // Use default systemSettings
+          }
+        } catch (error) {
+          console.error("Error loading system settings:", error);
+          // Use default systemSettings
+        }
+
+        // Update UI
+        updateDashboardStats();
+        updateNotificationBadge();
+      } catch (error) {
+        console.error("Error in loadData:", error);
+        alert("Error loading data from server. Some features may not work properly.");
       }
     }
     
-    // Initialize when page loads
-    window.addEventListener('load', initApp);
+    // Initialize the app
+    window.addEventListener('load', async function() {
+      // Load system settings
+      document.querySelector('header h1').textContent = systemSettings.companyName + ' System';
+      
+      // Load data from server
+      await loadData();
+      
+      // Update notification badge
+      updateNotificationBadge();
+    });
   </script>
 </body>
 </html>
