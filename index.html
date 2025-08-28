@@ -3,11 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PNE ARENA System</title>
+  <title>PNE ARENA System - Advanced Management Solution</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
   <style>
-    /* All existing CSS styles remain the same */
     :root {
       /* Color Variables */
       --primary: #1e3a8a;
@@ -1557,6 +1559,624 @@
       width: auto;
       margin: 0;
     }
+    
+    /* Advanced Admin Features */
+    .admin-feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    
+    .feature-card {
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+    }
+    
+    .feature-card:hover {
+      box-shadow: var(--shadow);
+      transform: translateY(-3px);
+    }
+    
+    .feature-card h4 {
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .feature-card p {
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+    
+    .feature-card .feature-stats {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1rem;
+    }
+    
+    .feature-stat {
+      text-align: center;
+    }
+    
+    .feature-stat-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+    
+    .feature-stat-label {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    
+    .user-management-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .security-settings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .security-setting {
+      background: var(--bg-tertiary);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      border: 1px solid var(--border-color);
+    }
+    
+    .security-setting h5 {
+      color: var(--text-primary);
+      margin-bottom: 0.75rem;
+      font-size: 1rem;
+    }
+    
+    .security-setting input {
+      margin-bottom: 0.5rem;
+    }
+    
+    .system-info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .info-item {
+      background: var(--bg-tertiary);
+      border-radius: var(--radius);
+      padding: 1rem;
+      text-align: center;
+      border: 1px solid var(--border-color);
+    }
+    
+    .info-value {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+    }
+    
+    .info-label {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    
+    .audit-log-controls {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    
+    .audit-log-filters {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+    
+    .audit-log-filters .filter-group {
+      flex: 1;
+      min-width: 150px;
+    }
+    
+    .user-activity-chart-container {
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+      border: 1px solid var(--border-color);
+    }
+    
+    .chart-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .chart-period-selector {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .chart-period-btn {
+      padding: 0.5rem 1rem;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .chart-period-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+    
+    .chart-period-btn:hover:not(.active) {
+      background: var(--hover-bg);
+    }
+    
+    .data-export-options {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+    
+    .export-option {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .export-option:hover {
+      background: var(--hover-bg);
+    }
+    
+    .export-option i {
+      color: var(--secondary);
+    }
+    
+    .system-health-monitor {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    
+    .health-monitor-card {
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      border: 1px solid var(--border-color);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .health-monitor-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+    }
+    
+    .health-monitor-card.good::before {
+      background: var(--success);
+    }
+    
+    .health-monitor-card.warning::before {
+      background: var(--warning);
+    }
+    
+    .health-monitor-card.danger::before {
+      background: var(--danger);
+    }
+    
+    .health-monitor-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .health-monitor-title {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    .health-monitor-status {
+      padding: 0.25rem 0.75rem;
+      border-radius: 24px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    
+    .health-monitor-status.good {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+    }
+    
+    .health-monitor-status.warning {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--warning);
+    }
+    
+    .health-monitor-status.danger {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
+    }
+    
+    .health-monitor-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+    
+    .health-monitor-details {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+    
+    .backup-restore-controls {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .backup-history {
+      margin-top: 1.5rem;
+    }
+    
+    .backup-history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background: var(--bg-tertiary);
+      border-radius: var(--radius);
+      margin-bottom: 0.75rem;
+      border: 1px solid var(--border-color);
+    }
+    
+    .backup-info {
+      flex: 1;
+    }
+    
+    .backup-date {
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 0.25rem;
+    }
+    
+    .backup-size {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    
+    .backup-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .backup-actions button {
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+    }
+    
+    .user-activity-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .activity-summary-card {
+      background: var(--bg-tertiary);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      text-align: center;
+      border: 1px solid var(--border-color);
+    }
+    
+    .activity-summary-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+    
+    .activity-summary-label {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    
+    .user-activity-timeline {
+      max-height: 400px;
+      overflow-y: auto;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      background: var(--bg-secondary);
+    }
+    
+    .timeline-item {
+      position: relative;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .timeline-item:last-child {
+      border-bottom: none;
+    }
+    
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: 1.5rem;
+      top: 1.5rem;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--secondary);
+    }
+    
+    .timeline-content {
+      margin-left: 1.5rem;
+    }
+    
+    .timeline-action {
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 0.25rem;
+    }
+    
+    .timeline-details {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.25rem;
+    }
+    
+    .timeline-time {
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+    }
+    
+    .permission-management-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    
+    .permission-role-selector {
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      border: 1px solid var(--border-color);
+    }
+    
+    .permission-role-item {
+      padding: 0.75rem;
+      margin-bottom: 0.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .permission-role-item:hover {
+      background: var(--hover-bg);
+    }
+    
+    .permission-role-item.active {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .permission-role-item i {
+      font-size: 1.2rem;
+    }
+    
+    .permission-details {
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      border: 1px solid var(--border-color);
+    }
+    
+    .permission-category {
+      margin-bottom: 1.5rem;
+    }
+    
+    .permission-category h5 {
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.5rem;
+    }
+    
+    .permission-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    
+    .permission-item input[type="checkbox"] {
+      width: auto;
+    }
+    
+    .permission-item label {
+      margin-bottom: 0;
+      cursor: pointer;
+    }
+    
+    .system-settings-section {
+      margin-bottom: 2rem;
+    }
+    
+    .settings-group {
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--border-color);
+    }
+    
+    .settings-group h4 {
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+    
+    .settings-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .settings-item:last-child {
+      border-bottom: none;
+    }
+    
+    .settings-label {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    
+    .settings-description {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+    }
+    
+    .settings-control {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .settings-control input[type="checkbox"] {
+      width: auto;
+    }
+    
+    .settings-control input[type="number"] {
+      width: 80px;
+    }
+    
+    .settings-control select {
+      width: 150px;
+    }
+    
+    .advanced-analytics-container {
+      margin-top: 1.5rem;
+    }
+    
+    .analytics-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .analytics-filters {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    
+    .analytics-chart-container {
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--border-color);
+      min-height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .analytics-placeholder {
+      text-align: center;
+      color: var(--text-secondary);
+    }
+    
+    .analytics-placeholder i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+    
+    .analytics-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    
+    .analytics-summary-card {
+      background: var(--bg-tertiary);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      text-align: center;
+      border: 1px solid var(--border-color);
+    }
+    
+    .analytics-summary-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+    
+    .analytics-summary-label {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    
+    .analytics-summary-change {
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+    
+    .analytics-summary-change.positive {
+      color: var(--success);
+    }
+    
+    .analytics-summary-change.negative {
+      color: var(--danger);
+    }
   </style>
 </head>
 <body>
@@ -2021,31 +2641,153 @@
         <h2><i class="fas fa-cogs"></i> Admin Panel</h2>
         <p>System administration and settings.</p>
         
-        <div class="permission-grid">
-          <div class="permission-card">
-            <h4><i class="fas fa-sliders-h"></i> System Controls</h4>
-            <ul>
-              <li>View all cashbills</li>
-              <li>Export system data</li>
-              <li>Manage system settings</li>
-              <li>View audit logs</li>
-              <li>System backup</li>
-            </ul>
+        <div class="admin-feature-grid">
+          <div class="feature-card">
+            <h4><i class="fas fa-users-cog"></i> User Management</h4>
+            <p>Manage system users, roles, and permissions</p>
+            <div class="feature-stats">
+              <div class="feature-stat">
+                <div class="feature-stat-value" id="totalUsersCount">0</div>
+                <div class="feature-stat-label">Total Users</div>
+              </div>
+              <div class="feature-stat">
+                <div class="feature-stat-value" id="activeUsersCount">0</div>
+                <div class="feature-stat-label">Active Today</div>
+              </div>
+            </div>
+            <div class="user-management-actions">
+              <button onclick="showAddUserModal()"><i class="fas fa-user-plus"></i> Add User</button>
+              <button onclick="showUserPermissionsModal()"><i class="fas fa-user-shield"></i> Permissions</button>
+              <button onclick="showUserActivityModal()"><i class="fas fa-chart-line"></i> Activity</button>
+            </div>
           </div>
           
-          <div class="permission-card">
-            <h4><i class="fas fa-shield-alt"></i> Security Features</h4>
-            <ul>
-              <li>System monitoring</li>
-              <li>Activity tracking</li>
-              <li>Security alerts</li>
-            </ul>
+          <div class="feature-card">
+            <h4><i class="fas fa-shield-alt"></i> Security Settings</h4>
+            <p>Configure system security and access controls</p>
+            <div class="security-settings-grid">
+              <div class="security-setting">
+                <h5>Session Control</h5>
+                <label for="sessionTimeout">Session Timeout (min):</label>
+                <input type="number" id="sessionTimeout" min="5" max="120" value="30">
+              </div>
+              <div class="security-setting">
+                <h5>Login Protection</h5>
+                <label for="maxLoginAttempts">Max Login Attempts:</label>
+                <input type="number" id="maxLoginAttempts" min="1" max="10" value="3">
+              </div>
+            </div>
+            <button onclick="saveSecuritySettings()" style="margin-top: 1rem;"><i class="fas fa-save"></i> Save Settings</button>
           </div>
         </div>
         
-        <h3 style="margin-top: 2rem;"><i class="fas fa-history"></i> System Activity Log</h3>
-        <div class="activity-log" id="systemActivityLog">
-          <!-- System activity log will be populated here -->
+        <div class="card" style="margin-top: 2rem;">
+          <h2><i class="fas fa-server"></i> System Information</h2>
+          <div class="system-info-grid">
+            <div class="info-item">
+              <div class="info-value">2.4 GB</div>
+              <div class="info-label">Database Size</div>
+            </div>
+            <div class="info-item">
+              <div class="info-value" id="activeUsersInfo">0</div>
+              <div class="info-label">Active Users</div>
+            </div>
+            <div class="info-item">
+              <div class="info-value">24/7</div>
+              <div class="info-label">System Uptime</div>
+            </div>
+            <div class="info-item">
+              <div class="info-value">78%</div>
+              <div class="info-label">Storage Used</div>
+            </div>
+          </div>
+          
+          <div style="margin-top: 1.5rem;">
+            <h3>System Logs</h3>
+            <div class="audit-log-controls">
+              <div class="audit-log-filters">
+                <div class="filter-group">
+                  <label for="logType">Log Type:</label>
+                  <select id="logType">
+                    <option value="">All</option>
+                    <option value="security">Security</option>
+                    <option value="user">User</option>
+                    <option value="system">System</option>
+                  </select>
+                </div>
+                <div class="filter-group">
+                  <label for="logDateFrom">Date From:</label>
+                  <input type="date" id="logDateFrom">
+                </div>
+                <div class="filter-group">
+                  <label for="logDateTo">Date To:</label>
+                  <input type="date" id="logDateTo">
+                </div>
+              </div>
+              <button onclick="applyLogFilters()"><i class="fas fa-filter"></i> Apply</button>
+            </div>
+            <div class="activity-log" id="systemLogs" style="max-height: 300px;">
+              <!-- Will be populated by JavaScript -->
+            </div>
+          </div>
+        </div>
+        
+        <div class="card" style="margin-top: 2rem;">
+          <h2><i class="fas fa-chart-pie"></i> Advanced Analytics</h2>
+          <div class="advanced-analytics-container">
+            <div class="analytics-controls">
+              <div class="analytics-filters">
+                <div class="filter-group">
+                  <label for="analyticsPeriod">Period:</label>
+                  <select id="analyticsPeriod">
+                    <option value="7">Last 7 Days</option>
+                    <option value="30">Last 30 Days</option>
+                    <option value="90">Last 90 Days</option>
+                    <option value="365">Last Year</option>
+                  </select>
+                </div>
+                <div class="filter-group">
+                  <label for="analyticsMetric">Metric:</label>
+                  <select id="analyticsMetric">
+                    <option value="revenue">Revenue</option>
+                    <option value="cashbills">Cashbills</option>
+                    <option value="users">User Activity</option>
+                  </select>
+                </div>
+              </div>
+              <button onclick="generateAnalyticsReport()"><i class="fas fa-sync"></i> Refresh</button>
+            </div>
+            
+            <div class="analytics-chart-container">
+              <div class="analytics-placeholder">
+                <i class="fas fa-chart-line"></i>
+                <p>Analytics chart will be displayed here</p>
+              </div>
+            </div>
+            
+            <div class="analytics-summary">
+              <div class="analytics-summary-card">
+                <div class="analytics-summary-value">RM12,450</div>
+                <div class="analytics-summary-label">Total Revenue</div>
+                <div class="analytics-summary-change positive">+12.5%</div>
+              </div>
+              <div class="analytics-summary-card">
+                <div class="analytics-summary-value">48</div>
+                <div class="analytics-summary-label">Cashbills</div>
+                <div class="analytics-summary-change positive">+8.2%</div>
+              </div>
+              <div class="analytics-summary-card">
+                <div class="analytics-summary-value">4</div>
+                <div class="analytics-summary-label">Active Users</div>
+                <div class="analytics-summary-change negative">-1</div>
+              </div>
+              <div class="analytics-summary-card">
+                <div class="analytics-summary-value">92%</div>
+                <div class="analytics-summary-label">Completion Rate</div>
+                <div class="analytics-summary-change positive">+3.1%</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -2155,6 +2897,387 @@
     <div class="shortcuts">
       <i class="fas fa-keyboard"></i> Shortcuts: N=New, D=Dashboard, R=Reports, L=Logout
     </div>
+    
+    <!-- ADD USER MODAL -->
+    <div id="addUserModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-user-plus"></i> Add New User</h3>
+          <button class="close-modal" onclick="closeAddUserModal()"><i class="fas fa-times"></i></button>
+        </div>
+        <form id="addUserForm">
+          <div class="form-group">
+            <label for="newUserId">User ID:</label>
+            <input type="text" id="newUserId" required placeholder="Enter User ID">
+          </div>
+          <div class="form-group">
+            <label for="newUserName">Full Name:</label>
+            <input type="text" id="newUserName" required placeholder="Enter full name">
+          </div>
+          <div class="form-group">
+            <label for="newUserRole">Role:</label>
+            <select id="newUserRole" required>
+              <option value="crew">Crew</option>
+              <option value="marketing">Marketing Team</option>
+              <option value="director">Director Head of Business</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="newUserPassword">Password:</label>
+            <input type="password" id="newUserPassword" required placeholder="Enter password">
+          </div>
+          <div class="form-group">
+            <label for="newUserConfirmPassword">Confirm Password:</label>
+            <input type="password" id="newUserConfirmPassword" required placeholder="Confirm password">
+          </div>
+          <div class="modal-actions">
+            <button type="submit"><i class="fas fa-save"></i> Add User</button>
+            <button type="button" class="btn-secondary" onclick="closeAddUserModal()"><i class="fas fa-times"></i> Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+    <!-- USER PERMISSIONS MODAL -->
+    <div id="userPermissionsModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-user-shield"></i> Manage User Permissions</h3>
+          <button class="close-modal" onclick="closeUserPermissionsModal()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="permission-management-grid">
+          <div class="permission-role-selector">
+            <h4>Select User</h4>
+            <select id="permissionUser" onchange="loadUserPermissions()" style="width: 100%; margin-bottom: 1rem;">
+              <option value="">Select a user</option>
+            </select>
+            <div id="roleList">
+              <!-- Role list will be populated here -->
+            </div>
+          </div>
+          <div class="permission-details">
+            <h4>Permissions</h4>
+            <div id="permissionsContainer">
+              <!-- Permissions will be populated here -->
+            </div>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button onclick="saveUserPermissions()"><i class="fas fa-save"></i> Save Permissions</button>
+          <button type="button" class="btn-secondary" onclick="closeUserPermissionsModal()"><i class="fas fa-times"></i> Cancel</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- USER ACTIVITY MODAL -->
+    <div id="userActivityModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-chart-line"></i> User Activity Report</h3>
+          <button class="close-modal" onclick="closeUserActivityModal()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="form-group">
+          <label for="activityUser">Select User:</label>
+          <select id="activityUser" onchange="loadUserActivity()">
+            <option value="">Select a user</option>
+          </select>
+        </div>
+        <div id="userActivityContainer" style="margin-top: 1.5rem;">
+          <!-- Will be populated by JavaScript -->
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" onclick="closeUserActivityModal()"><i class="fas fa-times"></i> Close</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- SYSTEM SETTINGS MODAL -->
+    <div id="systemSettingsModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-cog"></i> System Settings</h3>
+          <button class="close-modal" onclick="closeSystemSettingsModal()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="system-settings-section">
+          <div class="settings-group">
+            <h4>General Settings</h4>
+            <div class="settings-item">
+              <div>
+                <div class="settings-label">Company Name</div>
+                <div class="settings-description">The name of your organization</div>
+              </div>
+              <div class="settings-control">
+                <input type="text" id="settingsCompanyName" value="PNE ARENA">
+              </div>
+            </div>
+            <div class="settings-item">
+              <div>
+                <div class="settings-label">Default Currency</div>
+                <div class="settings-description">Currency used for all transactions</div>
+              </div>
+              <div class="settings-control">
+                <select id="settingsCurrency">
+                  <option value="RM">Malaysian Ringgit (RM)</option>
+                  <option value="USD">US Dollar ($)</option>
+                  <option value="EUR">Euro (€)</option>
+                </select>
+              </div>
+            </div>
+            <div class="settings-item">
+              <div>
+                <div class="settings-label">Default Tax Rate (%)</div>
+                <div class="settings-description">Default tax rate applied to cashbills</div>
+              </div>
+              <div class="settings-control">
+                <input type="number" id="settingsTaxRate" step="0.01" min="0" value="0">
+              </div>
+            </div>
+          </div>
+          
+          <div class="settings-group">
+            <h4>Performance Targets</h4>
+            <div class="settings-item">
+              <div>
+                <div class="settings-label">Crew Cashbill Target</div>
+                <div class="settings-description">Monthly target for crew members</div>
+              </div>
+              <div class="settings-control">
+                <input type="number" id="settingsCrewTarget" min="1" value="10">
+              </div>
+            </div>
+            <div class="settings-item">
+              <div>
+                <div class="settings-label">Crew Revenue Target</div>
+                <div class="settings-description">Monthly revenue target for crew members</div>
+              </div>
+              <div class="settings-control">
+                <input type="number" id="settingsCrewRevenue" step="100" min="0" value="5000">
+              </div>
+            </div>
+          </div>
+          
+          <div class="settings-group">
+            <h4>Notification Settings</h4>
+            <div class="settings-item">
+              <div>
+                <div class="settings-label">Email Notifications</div>
+                <div class="settings-description">Receive email notifications for system events</div>
+              </div>
+              <div class="settings-control">
+                <input type="checkbox" id="settingsEmailNotifications" checked>
+              </div>
+            </div>
+            <div class="settings-item">
+              <div>
+                <div class="settings-label">Low Stock Alerts</div>
+                <div class="settings-description">Get notified when items are low in stock</div>
+              </div>
+              <div class="settings-control">
+                <input type="checkbox" id="settingsStockAlerts" checked>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button onclick="saveSystemSettings()"><i class="fas fa-save"></i> Save Settings</button>
+          <button type="button" class="btn-secondary" onclick="closeSystemSettingsModal()"><i class="fas fa-times"></i> Cancel</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- RESTORE MODAL -->
+    <div id="restoreModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-upload"></i> Restore System</h3>
+          <button class="close-modal" onclick="closeRestoreModal()"><i class="fas fa-times"></i></button>
+        </div>
+        <p>Warning: This will overwrite all current data. Please make sure you have a backup before proceeding.</p>
+        <div class="form-group">
+          <label for="restoreFile">Select Backup File:</label>
+          <input type="file" id="restoreFile" accept=".json">
+        </div>
+        <div class="backup-history">
+          <h4>Recent Backups</h4>
+          <div class="backup-history-item">
+            <div class="backup-info">
+              <div class="backup-date">2023-12-15</div>
+              <div class="backup-size">2.1 MB</div>
+            </div>
+            <div class="backup-actions">
+              <button class="btn-secondary"><i class="fas fa-download"></i> Download</button>
+              <button><i class="fas fa-upload"></i> Restore</button>
+            </div>
+          </div>
+          <div class="backup-history-item">
+            <div class="backup-info">
+              <div class="backup-date">2023-12-08</div>
+              <div class="backup-size">1.9 MB</div>
+            </div>
+            <div class="backup-actions">
+              <button class="btn-secondary"><i class="fas fa-download"></i> Download</button>
+              <button><i class="fas fa-upload"></i> Restore</button>
+            </div>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button onclick="restoreSystem()"><i class="fas fa-upload"></i> Restore</button>
+          <button type="button" class="btn-secondary" onclick="closeRestoreModal()"><i class="fas fa-times"></i> Cancel</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- AUDIT LOG MODAL -->
+    <div id="auditLogModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-history"></i> Audit Log</h3>
+          <button class="close-modal" onclick="closeAuditLogModal()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="audit-log-controls">
+          <div class="audit-log-filters">
+            <div class="filter-group">
+              <label for="auditUser">User:</label>
+              <select id="auditUser">
+                <option value="">All Users</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label for="auditAction">Action:</label>
+              <select id="auditAction">
+                <option value="">All Actions</option>
+                <option value="Login">Login</option>
+                <option value="Logout">Logout</option>
+                <option value="Create Cashbill">Create Cashbill</option>
+                <option value="Edit Cashbill">Edit Cashbill</option>
+                <option value="Delete Cashbill">Delete Cashbill</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label for="auditDateFrom">Date From:</label>
+              <input type="date" id="auditDateFrom">
+            </div>
+            <div class="filter-group">
+              <label for="auditDateTo">Date To:</label>
+              <input type="date" id="auditDateTo">
+            </div>
+          </div>
+          <button onclick="applyAuditFilters()"><i class="fas fa-filter"></i> Apply</button>
+        </div>
+        <div class="activity-log" id="auditLogContent" style="max-height: 400px;">
+          <!-- Audit log will be populated here -->
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" onclick="exportAuditLog()"><i class="fas fa-download"></i> Export</button>
+          <button type="button" class="btn-secondary" onclick="closeAuditLogModal()"><i class="fas fa-times"></i> Close</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- DATA ANALYTICS MODAL -->
+    <div id="dataAnalyticsModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3><i class="fas fa-chart-pie"></i> Advanced Analytics</h3>
+          <button class="close-modal" onclick="closeDataAnalyticsModal()"><i class="fas fa-times"></i></button>
+        </div>
+        
+        <div class="analytics-controls">
+          <div class="analytics-filters">
+            <div class="filter-group">
+              <label for="analyticsPeriodModal">Period:</label>
+              <select id="analyticsPeriodModal">
+                <option value="7">Last 7 Days</option>
+                <option value="30">Last 30 Days</option>
+                <option value="90">Last 90 Days</option>
+                <option value="365">Last Year</option>
+                <option value="custom">Custom Range</option>
+              </select>
+            </div>
+            <div class="filter-group" id="customDateRange" style="display: none;">
+              <label>From:</label>
+              <input type="date" id="analyticsDateFrom">
+              <label>To:</label>
+              <input type="date" id="analyticsDateTo">
+            </div>
+            <div class="filter-group">
+              <label for="analyticsChartType">Chart Type:</label>
+              <select id="analyticsChartType">
+                <option value="line">Line Chart</option>
+                <option value="bar">Bar Chart</option>
+                <option value="pie">Pie Chart</option>
+                <option value="doughnut">Doughnut Chart</option>
+                <option value="radar">Radar Chart</option>
+                <option value="polarArea">Polar Area</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label for="analyticsMetric">Metric:</label>
+              <select id="analyticsMetric">
+                <option value="revenue">Revenue</option>
+                <option value="cashbills">Cashbills</option>
+                <option value="users">User Activity</option>
+                <option value="items">Items Sold</option>
+                <option value="payments">Payment Methods</option>
+                <option value="performance">Performance</option>
+              </select>
+            </div>
+          </div>
+          <button onclick="refreshAnalytics()"><i class="fas fa-sync"></i> Refresh</button>
+        </div>
+        
+        <div class="analytics-chart-container" style="min-height: 400px;">
+          <canvas id="analyticsChart"></canvas>
+        </div>
+        
+        <div class="analytics-summary">
+          <div class="analytics-summary-card">
+            <div class="analytics-summary-value" id="summaryValue1">RM0.00</div>
+            <div class="analytics-summary-label" id="summaryLabel1">Total Revenue</div>
+            <div class="analytics-summary-change positive" id="summaryChange1">+0.0%</div>
+          </div>
+          <div class="analytics-summary-card">
+            <div class="analytics-summary-value" id="summaryValue2">0</div>
+            <div class="analytics-summary-label" id="summaryLabel2">Cashbills</div>
+            <div class="analytics-summary-change positive" id="summaryChange2">+0.0%</div>
+          </div>
+          <div class="analytics-summary-card">
+            <div class="analytics-summary-value" id="summaryValue3">0</div>
+            <div class="analytics-summary-label" id="summaryLabel3">Active Users</div>
+            <div class="analytics-summary-change negative" id="summaryChange3">-0</div>
+          </div>
+          <div class="analytics-summary-card">
+            <div class="analytics-summary-value" id="summaryValue4">0%</div>
+            <div class="analytics-summary-label" id="summaryLabel4">Completion Rate</div>
+            <div class="analytics-summary-change positive" id="summaryChange4">+0.0%</div>
+          </div>
+        </div>
+        
+        <div class="data-export-options">
+          <div class="export-option" onclick="exportAnalyticsPDF()">
+            <i class="fas fa-file-pdf"></i>
+            <span>Export as PDF</span>
+          </div>
+          <div class="export-option" onclick="exportAnalyticsCSV()">
+            <i class="fas fa-file-csv"></i>
+            <span>Export as CSV</span>
+          </div>
+          <div class="export-option" onclick="exportAnalyticsImage()">
+            <i class="fas fa-image"></i>
+            <span>Export as Image</span>
+          </div>
+          <div class="export-option" onclick="exportAnalyticsJSON()">
+            <i class="fas fa-file-code"></i>
+            <span>Export as JSON</span>
+          </div>
+        </div>
+        
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" onclick="closeDataAnalyticsModal()"><i class="fas fa-times"></i> Close</button>
+        </div>
+      </div>
+    </div>
   </div>
   
   <script>
@@ -2233,7 +3356,7 @@
         ]
       }
     ];
-
+    
     // Function to populate item dropdown
     function populateItemDropdown(selectElement) {
       selectElement.innerHTML = '<option value="">Select an item</option>';
@@ -2249,7 +3372,7 @@
         selectElement.appendChild(optgroup);
       });
     }
-
+    
     // API URL for Google Apps Script
     const API_URL = "https://script.google.com/macros/s/AKfycbyekmbibuQZeerhAHQ8Eva_0nzuO397O0-3PJUtXs5Dfq-tHC3z1vap1hfXu-BvJKb-/exec";
     
@@ -3379,27 +4502,12 @@
     
     // Show restore modal
     function showRestoreModal() {
-      const modal = document.createElement('div');
-      modal.className = 'modal';
-      modal.style.display = 'flex';
-      modal.innerHTML = `
-        <div class="modal-content">
-          <div class="modal-header">
-            <h3><i class="fas fa-upload"></i> Restore System</h3>
-            <button class="close-modal" onclick="this.closest('.modal').remove()"><i class="fas fa-times"></i></button>
-          </div>
-          <p>Warning: This will overwrite all current data. Please make sure you have a backup before proceeding.</p>
-          <div class="form-group">
-            <label for="restoreFile">Select Backup File:</label>
-            <input type="file" id="restoreFile" accept=".json">
-          </div>
-          <div class="modal-actions">
-            <button onclick="restoreSystem()"><i class="fas fa-upload"></i> Restore</button>
-            <button type="button" class="btn-secondary" onclick="this.closest('.modal').remove()"><i class="fas fa-times"></i> Cancel</button>
-          </div>
-        </div>
-      `;
-      document.body.appendChild(modal);
+      document.getElementById('restoreModal').style.display = 'flex';
+    }
+    
+    // Close restore modal
+    function closeRestoreModal() {
+      document.getElementById('restoreModal').style.display = 'none';
     }
     
     // Restore system data
@@ -3451,9 +4559,9 @@
             }
             
             // Reload data
-            await loadData();
+            loadData();
             
-            document.querySelector('.modal').remove();
+            closeRestoreModal();
             
             alert('System restored successfully! The page will now reload.');
             setTimeout(() => location.reload(), 1500);
@@ -3468,82 +4576,52 @@
       reader.readAsText(file);
     }
     
-    // Show system settings
+    // Show system settings modal
     function showSystemSettings() {
-      const modal = document.createElement('div');
-      modal.className = 'modal';
-      modal.style.display = 'flex';
-      modal.innerHTML = `
-        <div class="modal-content">
-          <div class="modal-header">
-            <h3><i class="fas fa-cog"></i> System Settings</h3>
-            <button class="close-modal" onclick="this.closest('.modal').remove()"><i class="fas fa-times"></i></button>
-          </div>
-          <form id="systemSettingsForm">
-            <div class="form-group">
-              <label for="companyName">Company Name:</label>
-              <input type="text" id="companyName" value="${systemSettings.companyName}" required>
-            </div>
-            <div class="form-group">
-              <label for="currency">Currency:</label>
-              <select id="currency" required>
-                <option value="RM" ${systemSettings.currency === 'RM' ? 'selected' : ''}>Malaysian Ringgit (RM)</option>
-                <option value="USD" ${systemSettings.currency === 'USD' ? 'selected' : ''}>US Dollar ($)</option>
-                <option value="EUR" ${systemSettings.currency === 'EUR' ? 'selected' : ''}>Euro (€)</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="taxRate">Default Tax Rate (%):</label>
-              <input type="number" id="taxRate" step="0.01" min="0" value="${systemSettings.taxRate}" required>
-            </div>
-            <div class="form-group">
-              <label for="crewCashbillTarget">Crew Cashbill Target:</label>
-              <input type="number" id="crewCashbillTarget" min="1" value="${systemSettings.cashbillTargets.crew}" required>
-            </div>
-            <div class="form-group">
-              <label for="crewRevenueTarget">Crew Revenue Target:</label>
-              <input type="number" id="crewRevenueTarget" step="100" min="0" value="${systemSettings.revenueTargets.crew}" required>
-            </div>
-            <div class="modal-actions">
-              <button type="submit"><i class="fas fa-save"></i> Save Settings</button>
-              <button type="button" class="btn-secondary" onclick="this.closest('.modal').remove()"><i class="fas fa-times"></i> Cancel</button>
-            </div>
-          </form>
-        </div>
-      `;
-      document.body.appendChild(modal);
+      document.getElementById('systemSettingsModal').style.display = 'flex';
       
-      document.getElementById('systemSettingsForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
+      // Populate settings
+      document.getElementById('settingsCompanyName').value = systemSettings.companyName;
+      document.getElementById('settingsCurrency').value = systemSettings.currency;
+      document.getElementById('settingsTaxRate').value = systemSettings.taxRate;
+      document.getElementById('settingsCrewTarget').value = systemSettings.cashbillTargets.crew;
+      document.getElementById('settingsCrewRevenue').value = systemSettings.revenueTargets.crew;
+    }
+    
+    // Close system settings modal
+    function closeSystemSettingsModal() {
+      document.getElementById('systemSettingsModal').style.display = 'none';
+    }
+    
+    // Save system settings
+    async function saveSystemSettings() {
+      systemSettings.companyName = document.getElementById('settingsCompanyName').value;
+      systemSettings.currency = document.getElementById('settingsCurrency').value;
+      systemSettings.taxRate = parseFloat(document.getElementById('settingsTaxRate').value);
+      systemSettings.cashbillTargets.crew = parseInt(document.getElementById('settingsCrewTarget').value);
+      systemSettings.revenueTargets.crew = parseFloat(document.getElementById('settingsCrewRevenue').value);
+      
+      // Update system settings in Google Sheets
+      try {
+        const response = await fetch(`${API_URL}?action=update&sheet=systemSettings&id=1&data=${encodeURIComponent(JSON.stringify(systemSettings))}`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const result = await response.json();
         
-        systemSettings.companyName = document.getElementById('companyName').value;
-        systemSettings.currency = document.getElementById('currency').value;
-        systemSettings.taxRate = parseFloat(document.getElementById('taxRate').value);
-        systemSettings.cashbillTargets.crew = parseInt(document.getElementById('crewCashbillTarget').value);
-        systemSettings.revenueTargets.crew = parseFloat(document.getElementById('crewRevenueTarget').value);
-        
-        // Update system settings in Google Sheets
-        try {
-          const response = await fetch(`${API_URL}?action=update&sheet=systemSettings&id=1&data=${encodeURIComponent(JSON.stringify(systemSettings))}`);
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-          const result = await response.json();
+        if (result.success) {
+          // Update company name in header
+          document.querySelector('header h1').textContent = systemSettings.companyName + ' System';
           
-          if (result.success) {
-            // Update company name in header
-            document.querySelector('header h1').textContent = systemSettings.companyName + ' System';
-            
-            logActivity(currentUser.id, currentUser.name, 'Update System Settings', 'Updated system configuration');
-            
-            alert('Settings saved successfully!');
-            modal.remove();
-          } else {
-            throw new Error(result.error || "Unknown error");
-          }
-        } catch (error) {
-          console.error("Error saving settings:", error);
-          alert("Error saving settings. Please try again.");
+          logActivity(currentUser.id, currentUser.name, 'Update System Settings', 'Updated system configuration');
+          
+          alert('Settings saved successfully!');
+          closeSystemSettingsModal();
+        } else {
+          throw new Error(result.error || "Unknown error");
         }
-      });
+      } catch (error) {
+        console.error("Error saving settings:", error);
+        alert("Error saving settings. Please try again.");
+      }
     }
     
     // Generate system report
@@ -3602,37 +4680,1336 @@
       alert('Report generated successfully!');
     }
     
-    // Show audit log
+    // Show audit log modal
     function showAuditLog() {
-      const modal = document.createElement('div');
-      modal.className = 'modal';
-      modal.style.display = 'flex';
-      modal.innerHTML = `
-        <div class="modal-content">
-          <div class="modal-header">
-            <h3><i class="fas fa-history"></i> Audit Log</h3>
-            <button class="close-modal" onclick="this.closest('.modal').remove()"><i class="fas fa-times"></i></button>
-          </div>
-          <div class="activity-log" style="max-height: 500px;">
-            ${activityLog.map(log => `
-              <div class="log-entry">
-                <strong>${log.username}</strong> ${log.action}
-                ${log.details ? ` - ${log.details}` : ''}
-                <div class="log-time">${new Date(log.timestamp).toLocaleString()}</div>
-              </div>
-            `).join('')}
-          </div>
-          <div class="modal-actions">
-            <button type="button" class="btn-secondary" onclick="this.closest('.modal').remove()"><i class="fas fa-times"></i> Close</button>
-          </div>
-        </div>
-      `;
-      document.body.appendChild(modal);
+      document.getElementById('auditLogModal').style.display = 'flex';
+      
+      // Populate user dropdown
+      const userSelect = document.getElementById('auditUser');
+      userSelect.innerHTML = '<option value="">All Users</option>';
+      
+      users.forEach(user => {
+        const option = document.createElement('option');
+        option.value = user.id;
+        option.textContent = user.name;
+        userSelect.appendChild(option);
+      });
+      
+      // Load audit log
+      loadAuditLog();
     }
     
-    // Show data analytics
+    // Close audit log modal
+    function closeAuditLogModal() {
+      document.getElementById('auditLogModal').style.display = 'none';
+    }
+    
+    // Load audit log
+    function loadAuditLog() {
+      const auditLogContent = document.getElementById('auditLogContent');
+      
+      if (activityLog.length === 0) {
+        auditLogContent.innerHTML = '<p>No audit log entries found.</p>';
+        return;
+      }
+      
+      let html = '';
+      activityLog.forEach(log => {
+        const date = new Date(log.timestamp);
+        const formattedDate = date.toLocaleDateString();
+        const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        html += `
+          <div class="log-entry">
+            <strong>${log.username}</strong> ${log.action}
+            ${log.details ? ` - ${log.details}` : ''}
+            <div class="log-time">${formattedDate} ${formattedTime}</div>
+          </div>
+        `;
+      });
+      
+      auditLogContent.innerHTML = html;
+    }
+    
+    // Apply audit log filters
+    function applyAuditFilters() {
+      // In a real application, this would filter the audit log based on selected filters
+      loadAuditLog();
+    }
+    
+    // Export audit log
+    function exportAuditLog() {
+      showLoading();
+      
+      const auditData = activityLog.map(log => ({
+        User: log.username,
+        Action: log.action,
+        Details: log.details || '',
+        Timestamp: new Date(log.timestamp).toISOString()
+      }));
+      
+      const csv = convertToCSV(auditData);
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `audit_log_${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      
+      hideLoading();
+      
+      logActivity(currentUser.id, currentUser.name, 'Export Data', 'Exported audit log to CSV');
+    }
+    
+    // Show data analytics modal
     function showDataAnalytics() {
-      alert('Data analytics feature would be implemented here with advanced charts and insights.');
+      document.getElementById('dataAnalyticsModal').style.display = 'flex';
+    }
+    
+    // Close data analytics modal
+    function closeDataAnalyticsModal() {
+      document.getElementById('dataAnalyticsModal').style.display = 'none';
+    }
+    
+    // Advanced Analytics Implementation
+    let analyticsChart = null;
+    let analyticsData = {};
+
+    // Initialize analytics when modal is opened
+    function initializeAnalytics() {
+      const ctx = document.getElementById('analyticsChart').getContext('2d');
+      
+      // Destroy existing chart if it exists
+      if (analyticsChart) {
+        analyticsChart.destroy();
+      }
+      
+      // Get selected options
+      const period = document.getElementById('analyticsPeriodModal').value;
+      const chartType = document.getElementById('analyticsChartType').value;
+      const metric = document.getElementById('analyticsMetric').value;
+      
+      // Show/hide custom date range
+      const customDateRange = document.getElementById('customDateRange');
+      if (period === 'custom') {
+        customDateRange.style.display = 'flex';
+      } else {
+        customDateRange.style.display = 'none';
+      }
+      
+      // Get date range
+      let startDate, endDate;
+      if (period === 'custom') {
+        startDate = new Date(document.getElementById('analyticsDateFrom').value);
+        endDate = new Date(document.getElementById('analyticsDateTo').value);
+        if (!startDate || !endDate || startDate > endDate) {
+          alert('Please select a valid date range');
+          return;
+        }
+      } else {
+        endDate = new Date();
+        startDate = new Date();
+        startDate.setDate(endDate.getDate() - parseInt(period));
+      }
+      
+      // Prepare data based on metric
+      let chartData, chartOptions;
+      
+      switch(metric) {
+        case 'revenue':
+          chartData = prepareRevenueData(startDate, endDate, chartType);
+          chartOptions = getRevenueChartOptions(chartType);
+          break;
+        case 'cashbills':
+          chartData = prepareCashbillsData(startDate, endDate, chartType);
+          chartOptions = getCashbillsChartOptions(chartType);
+          break;
+        case 'users':
+          chartData = prepareUsersData(startDate, endDate, chartType);
+          chartOptions = getUsersChartOptions(chartType);
+          break;
+        case 'items':
+          chartData = prepareItemsData(startDate, endDate, chartType);
+          chartOptions = getItemsChartOptions(chartType);
+          break;
+        case 'payments':
+          chartData = preparePaymentsData(startDate, endDate, chartType);
+          chartOptions = getPaymentsChartOptions(chartType);
+          break;
+        case 'performance':
+          chartData = preparePerformanceData(startDate, endDate, chartType);
+          chartOptions = getPerformanceChartOptions(chartType);
+          break;
+      }
+      
+      // Create chart
+      analyticsChart = new Chart(ctx, {
+        type: chartType,
+        data: chartData,
+        options: chartOptions
+      });
+      
+      // Update summary cards
+      updateAnalyticsSummary(startDate, endDate, metric);
+      
+      // Store data for export
+      analyticsData = {
+        period: period,
+        startDate: startDate,
+        endDate: endDate,
+        metric: metric,
+        chartType: chartType,
+        data: chartData
+      };
+    }
+
+    // Prepare revenue data
+    function prepareRevenueData(startDate, endDate, chartType) {
+      // Filter cashbills within period
+      const periodCashbills = cashbills.filter(bill => {
+        const billDate = new Date(bill.date);
+        return billDate >= startDate && billDate <= endDate && bill.status === 'committed';
+      });
+      
+      if (chartType === 'pie' || chartType === 'doughnut' || chartType === 'polarArea') {
+        // Group by user
+        const revenueByUser = {};
+        users.forEach(user => {
+          revenueByUser[user.name] = 0;
+        });
+        
+        periodCashbills.forEach(bill => {
+          const user = users.find(u => u.id === bill.userId);
+          if (user) {
+            revenueByUser[user.name] += bill.grandTotal || 0;
+          }
+        });
+        
+        return {
+          labels: Object.keys(revenueByUser),
+          datasets: [{
+            label: 'Revenue by User',
+            data: Object.values(revenueByUser),
+            backgroundColor: [
+              'rgba(59, 130, 246, 0.7)',
+              'rgba(16, 185, 129, 0.7)',
+              'rgba(245, 158, 11, 0.7)',
+              'rgba(239, 68, 68, 0.7)',
+              'rgba(139, 92, 246, 0.7)'
+            ],
+            borderColor: [
+              'rgba(59, 130, 246, 1)',
+              'rgba(16, 185, 129, 1)',
+              'rgba(245, 158, 11, 1)',
+              'rgba(239, 68, 68, 1)',
+              'rgba(139, 92, 246, 1)'
+            ],
+            borderWidth: 1
+          }]
+        };
+      } else {
+        // Group by day
+        const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+        const revenueByDay = {};
+        
+        for (let i = 0; i < days; i++) {
+          const date = new Date(startDate);
+          date.setDate(startDate.getDate() + i);
+          const dateStr = date.toISOString().split('T')[0];
+          revenueByDay[dateStr] = 0;
+        }
+        
+        periodCashbills.forEach(bill => {
+          const dateStr = new Date(bill.date).toISOString().split('T')[0];
+          if (revenueByDay.hasOwnProperty(dateStr)) {
+            revenueByDay[dateStr] += bill.grandTotal || 0;
+          }
+        });
+        
+        return {
+          labels: Object.keys(revenueByDay).map(date => {
+            const d = new Date(date);
+            return `${d.getDate()}/${d.getMonth() + 1}`;
+          }),
+          datasets: [{
+            label: 'Revenue',
+            data: Object.values(revenueByDay),
+            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+            borderColor: 'rgba(59, 130, 246, 1)',
+            borderWidth: 2,
+            tension: 0.4,
+            fill: true
+          }]
+        };
+      }
+    }
+
+    // Prepare cashbills data
+    function prepareCashbillsData(startDate, endDate, chartType) {
+      const periodCashbills = cashbills.filter(bill => {
+        const billDate = new Date(bill.date);
+        return billDate >= startDate && billDate <= endDate;
+      });
+      
+      if (chartType === 'pie' || chartType === 'doughnut' || chartType === 'polarArea') {
+        // Group by status
+        const cashbillsByStatus = {
+          'Committed': 0,
+          'Draft': 0
+        };
+        
+        periodCashbills.forEach(bill => {
+          cashbillsByStatus[bill.status === 'committed' ? 'Committed' : 'Draft']++;
+        });
+        
+        return {
+          labels: Object.keys(cashbillsByStatus),
+          datasets: [{
+            label: 'Cashbills by Status',
+            data: Object.values(cashbillsByStatus),
+            backgroundColor: [
+              'rgba(16, 185, 129, 0.7)',
+              'rgba(245, 158, 11, 0.7)'
+            ],
+            borderColor: [
+              'rgba(16, 185, 129, 1)',
+              'rgba(245, 158, 11, 1)'
+            ],
+            borderWidth: 1
+          }]
+        };
+      } else {
+        // Group by day and status
+        const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+        const cashbillsByDay = {
+          committed: {},
+          draft: {}
+        };
+        
+        for (let i = 0; i < days; i++) {
+          const date = new Date(startDate);
+          date.setDate(startDate.getDate() + i);
+          const dateStr = date.toISOString().split('T')[0];
+          cashbillsByDay.committed[dateStr] = 0;
+          cashbillsByDay.draft[dateStr] = 0;
+        }
+        
+        periodCashbills.forEach(bill => {
+          const dateStr = new Date(bill.date).toISOString().split('T')[0];
+          if (cashbillsByDay[bill.status].hasOwnProperty(dateStr)) {
+            cashbillsByDay[bill.status][dateStr]++;
+          }
+        });
+        
+        return {
+          labels: Object.keys(cashbillsByDay.committed).map(date => {
+            const d = new Date(date);
+            return `${d.getDate()}/${d.getMonth() + 1}`;
+          }),
+          datasets: [
+            {
+              label: 'Committed',
+              data: Object.values(cashbillsByDay.committed),
+              backgroundColor: 'rgba(16, 185, 129, 0.2)',
+              borderColor: 'rgba(16, 185, 129, 1)',
+              borderWidth: 2
+            },
+            {
+              label: 'Draft',
+              data: Object.values(cashbillsByDay.draft),
+              backgroundColor: 'rgba(245, 158, 11, 0.2)',
+              borderColor: 'rgba(245, 158, 11, 1)',
+              borderWidth: 2
+            }
+          ]
+        };
+      }
+    }
+
+    // Prepare users data
+    function prepareUsersData(startDate, endDate, chartType) {
+      const periodActivities = activityLog.filter(log => {
+        const logDate = new Date(log.timestamp);
+        return logDate >= startDate && logDate <= endDate;
+      });
+      
+      if (chartType === 'radar') {
+        // Group by action type
+        const actionsByType = {};
+        const actionTypes = ['Login', 'Create Cashbill', 'Edit Cashbill', 'Delete Cashbill', 'Save Draft'];
+        
+        actionTypes.forEach(action => {
+          actionsByType[action] = 0;
+        });
+        
+        periodActivities.forEach(log => {
+          if (actionsByType.hasOwnProperty(log.action)) {
+            actionsByType[log.action]++;
+          }
+        });
+        
+        return {
+          labels: Object.keys(actionsByType),
+          datasets: [{
+            label: 'User Activities',
+            data: Object.values(actionsByType),
+            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+            borderColor: 'rgba(59, 130, 246, 1)',
+            borderWidth: 2,
+            pointBackgroundColor: 'rgba(59, 130, 246, 1)'
+          }]
+        };
+      } else {
+        // Group by user
+        const userActivity = {};
+        users.forEach(user => {
+          userActivity[user.name] = 0;
+        });
+        
+        periodActivities.forEach(log => {
+          if (userActivity.hasOwnProperty(log.username)) {
+            userActivity[log.username]++;
+          }
+        });
+        
+        return {
+          labels: Object.keys(userActivity),
+          datasets: [{
+            label: 'Activities',
+            data: Object.values(userActivity),
+            backgroundColor: [
+              'rgba(59, 130, 246, 0.7)',
+              'rgba(16, 185, 129, 0.7)',
+              'rgba(245, 158, 11, 0.7)',
+              'rgba(239, 68, 68, 0.7)',
+              'rgba(139, 92, 246, 0.7)'
+            ],
+            borderColor: [
+              'rgba(59, 130, 246, 1)',
+              'rgba(16, 185, 129, 1)',
+              'rgba(245, 158, 11, 1)',
+              'rgba(239, 68, 68, 1)',
+              'rgba(139, 92, 246, 1)'
+            ],
+            borderWidth: 1
+          }]
+        };
+      }
+    }
+
+    // Prepare items data
+    function prepareItemsData(startDate, endDate, chartType) {
+      const periodCashbills = cashbills.filter(bill => {
+        const billDate = new Date(bill.date);
+        return billDate >= startDate && billDate <= endDate && bill.status === 'committed';
+      });
+      
+      // Aggregate item sales
+      const itemSales = {};
+      
+      periodCashbills.forEach(bill => {
+        if (bill.items && Array.isArray(bill.items)) {
+          bill.items.forEach(item => {
+            if (itemSales[item.description]) {
+              itemSales[item.description] += item.quantity;
+            } else {
+              itemSales[item.description] = item.quantity;
+            }
+          });
+        }
+      });
+      
+      // Sort by quantity sold
+      const sortedItems = Object.entries(itemSales)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 10); // Top 10 items
+      
+      return {
+        labels: sortedItems.map(item => item[0]),
+        datasets: [{
+          label: 'Quantity Sold',
+          data: sortedItems.map(item => item[1]),
+          backgroundColor: 'rgba(16, 185, 129, 0.7)',
+          borderColor: 'rgba(16, 185, 129, 1)',
+          borderWidth: 1
+        }]
+      };
+    }
+
+    // Prepare payments data
+    function preparePaymentsData(startDate, endDate, chartType) {
+      const periodCashbills = cashbills.filter(bill => {
+        const billDate = new Date(bill.date);
+        return billDate >= startDate && billDate <= endDate && bill.status === 'committed';
+      });
+      
+      // Group by payment method
+      const paymentsByMethod = {
+        'Cash': 0,
+        'Card': 0,
+        'QR': 0,
+        'Online Banking': 0
+      };
+      
+      periodCashbills.forEach(bill => {
+        const method = getPaymentMethodDisplayName(bill.paymentMethod);
+        if (paymentsByMethod.hasOwnProperty(method)) {
+          paymentsByMethod[method] += bill.grandTotal || 0;
+        }
+      });
+      
+      return {
+        labels: Object.keys(paymentsByMethod),
+        datasets: [{
+          label: 'Payment Methods',
+          data: Object.values(paymentsByMethod),
+          backgroundColor: [
+            'rgba(59, 130, 246, 0.7)',
+            'rgba(16, 185, 129, 0.7)',
+            'rgba(245, 158, 11, 0.7)',
+            'rgba(239, 68, 68, 0.7)'
+          ],
+          borderColor: [
+            'rgba(59, 130, 246, 1)',
+            'rgba(16, 185, 129, 1)',
+            'rgba(245, 158, 11, 1)',
+            'rgba(239, 68, 68, 1)'
+          ],
+          borderWidth: 1
+        }]
+      };
+    }
+
+    // Prepare performance data
+    function preparePerformanceData(startDate, endDate, chartType) {
+      const periodCashbills = cashbills.filter(bill => {
+        const billDate = new Date(bill.date);
+        return billDate >= startDate && billDate <= endDate;
+      });
+      
+      // Calculate performance metrics for each user
+      const userPerformance = {};
+      
+      users.forEach(user => {
+        const userCashbills = periodCashbills.filter(bill => bill.userId === user.id);
+        const committedCashbills = userCashbills.filter(bill => bill.status === 'committed');
+        const totalRevenue = committedCashbills.reduce((sum, bill) => sum + (bill.grandTotal || 0), 0);
+        
+        userPerformance[user.name] = {
+          cashbills: userCashbills.length,
+          committed: committedCashbills.length,
+          revenue: totalRevenue,
+          completionRate: userCashbills.length > 0 ? 
+            (committedCashbills.length / userCashbills.length * 100) : 0
+        };
+      });
+      
+      if (chartType === 'radar') {
+        return {
+          labels: Object.keys(userPerformance),
+          datasets: [
+            {
+              label: 'Cashbills Created',
+              data: Object.values(userPerformance).map(p => p.cashbills),
+              backgroundColor: 'rgba(59, 130, 246, 0.2)',
+              borderColor: 'rgba(59, 130, 246, 1)',
+              borderWidth: 2,
+              pointBackgroundColor: 'rgba(59, 130, 246, 1)'
+            },
+            {
+              label: 'Completion Rate (%)',
+              data: Object.values(userPerformance).map(p => p.completionRate),
+              backgroundColor: 'rgba(16, 185, 129, 0.2)',
+              borderColor: 'rgba(16, 185, 129, 1)',
+              borderWidth: 2,
+              pointBackgroundColor: 'rgba(16, 185, 129, 1)'
+            }
+          ]
+        };
+      } else {
+        return {
+          labels: Object.keys(userPerformance),
+          datasets: [
+            {
+              label: 'Revenue',
+              data: Object.values(userPerformance).map(p => p.revenue),
+              backgroundColor: 'rgba(59, 130, 246, 0.7)',
+              borderColor: 'rgba(59, 130, 246, 1)',
+              borderWidth: 1
+            },
+            {
+              label: 'Completion Rate',
+              data: Object.values(userPerformance).map(p => p.completionRate),
+              backgroundColor: 'rgba(16, 185, 129, 0.7)',
+              borderColor: 'rgba(16, 185, 129, 1)',
+              borderWidth: 1
+            }
+          ]
+        };
+      }
+    }
+
+    // Get chart options for revenue
+    function getRevenueChartOptions(chartType) {
+      const baseOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Revenue Analysis',
+            font: { size: 16 }
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return `Revenue: ${systemSettings.currency}${context.parsed.y.toFixed(2)}`;
+              }
+            }
+          }
+        }
+      };
+      
+      if (chartType !== 'pie' && chartType !== 'doughnut' && chartType !== 'polarArea') {
+        baseOptions.scales = {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                return systemSettings.currency + value.toFixed(0);
+              }
+            }
+          }
+        };
+      }
+      
+      return baseOptions;
+    }
+
+    // Get chart options for cashbills
+    function getCashbillsChartOptions(chartType) {
+      const baseOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Cashbills Analysis',
+            font: { size: 16 }
+          }
+        }
+      };
+      
+      if (chartType !== 'pie' && chartType !== 'doughnut' && chartType !== 'polarArea') {
+        baseOptions.scales = {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            }
+          }
+        };
+      }
+      
+      return baseOptions;
+    }
+
+    // Get chart options for users
+    function getUsersChartOptions(chartType) {
+      const baseOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          title: {
+            display: true,
+            text: 'User Activity Analysis',
+            font: { size: 16 }
+          }
+        }
+      };
+      
+      if (chartType !== 'pie' && chartType !== 'doughnut' && chartType !== 'polarArea' && chartType !== 'radar') {
+        baseOptions.scales = {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            }
+          }
+        };
+      }
+      
+      return baseOptions;
+    }
+
+    // Get chart options for items
+    function getItemsChartOptions(chartType) {
+      return {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Top Selling Items',
+            font: { size: 16 }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            }
+          }
+        }
+      };
+    }
+
+    // Get chart options for payments
+    function getPaymentsChartOptions(chartType) {
+      const baseOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Payment Methods Distribution',
+            font: { size: 16 }
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return `${context.label}: ${systemSettings.currency}${context.parsed.toFixed(2)}`;
+              }
+            }
+          }
+        }
+      };
+      
+      if (chartType === 'bar') {
+        baseOptions.scales = {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                return systemSettings.currency + value.toFixed(0);
+              }
+            }
+          }
+        };
+      }
+      
+      return baseOptions;
+    }
+
+    // Get chart options for performance
+    function getPerformanceChartOptions(chartType) {
+      const baseOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          title: {
+            display: true,
+            text: 'User Performance',
+            font: { size: 16 }
+          }
+        }
+      };
+      
+      if (chartType !== 'radar') {
+        baseOptions.scales = {
+          y: {
+            beginAtZero: true
+          }
+        };
+      }
+      
+      return baseOptions;
+    }
+
+    // Update analytics summary cards
+    function updateAnalyticsSummary(startDate, endDate, metric) {
+      // Calculate previous period for comparison
+      const periodLength = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+      const prevEndDate = new Date(startDate);
+      const prevStartDate = new Date(prevEndDate);
+      prevStartDate.setDate(prevEndDate.getDate() - periodLength);
+      
+      // Filter cashbills for current and previous periods
+      const currentCashbills = cashbills.filter(bill => {
+        const billDate = new Date(bill.date);
+        return billDate >= startDate && billDate <= endDate && bill.status === 'committed';
+      });
+      
+      const prevCashbills = cashbills.filter(bill => {
+        const billDate = new Date(bill.date);
+        return billDate >= prevStartDate && billDate < prevEndDate && bill.status === 'committed';
+      });
+      
+      // Calculate metrics
+      const currentRevenue = currentCashbills.reduce((sum, bill) => sum + (bill.grandTotal || 0), 0);
+      const prevRevenue = prevCashbills.reduce((sum, bill) => sum + (bill.grandTotal || 0), 0);
+      const revenueChange = prevRevenue > 0 ? ((currentRevenue - prevRevenue) / prevRevenue * 100) : 0;
+      
+      const currentCashbillsCount = currentCashbills.length;
+      const prevCashbillsCount = prevCashbills.length;
+      const cashbillsChange = prevCashbillsCount > 0 ? ((currentCashbillsCount - prevCashbillsCount) / prevCashbillsCount * 100) : 0;
+      
+      // Calculate active users
+      const activeUsers = new Set(currentCashbills.map(bill => bill.userId));
+      const prevActiveUsers = new Set(prevCashbills.map(bill => bill.userId));
+      const usersChange = prevActiveUsers.size > 0 ? (activeUsers.size - prevActiveUsers.size) : 0;
+      
+      // Calculate completion rate
+      const allCurrentCashbills = cashbills.filter(bill => {
+        const billDate = new Date(bill.date);
+        return billDate >= startDate && billDate <= endDate;
+      });
+      const completionRate = allCurrentCashbills.length > 0 ? 
+        (currentCashbillsCount / allCurrentCashbills.length * 100) : 0;
+      
+      const allPrevCashbills = cashbills.filter(bill => {
+        const billDate = new Date(bill.date);
+        return billDate >= prevStartDate && billDate < prevEndDate;
+      });
+      const prevCompletionRate = allPrevCashbills.length > 0 ? 
+        (prevCashbillsCount / allPrevCashbills.length * 100) : 0;
+      const completionChange = prevCompletionRate > 0 ? ((completionRate - prevCompletionRate) / prevCompletionRate * 100) : 0;
+      
+      // Update summary cards based on metric
+      switch(metric) {
+        case 'revenue':
+          document.getElementById('summaryValue1').textContent = systemSettings.currency + currentRevenue.toFixed(0);
+          document.getElementById('summaryLabel1').textContent = 'Total Revenue';
+          document.getElementById('summaryChange1').textContent = 
+            (revenueChange >= 0 ? '+' : '') + revenueChange.toFixed(1) + '%';
+          document.getElementById('summaryChange1').className = 
+            'analytics-summary-change ' + (revenueChange >= 0 ? 'positive' : 'negative');
+          
+          document.getElementById('summaryValue2').textContent = currentCashbillsCount;
+          document.getElementById('summaryLabel2').textContent = 'Cashbills';
+          document.getElementById('summaryChange2').textContent = 
+            (cashbillsChange >= 0 ? '+' : '') + cashbillsChange.toFixed(1) + '%';
+          document.getElementById('summaryChange2').className = 
+            'analytics-summary-change ' + (cashbillsChange >= 0 ? 'positive' : 'negative');
+          break;
+          
+        case 'cashbills':
+          document.getElementById('summaryValue1').textContent = currentCashbillsCount;
+          document.getElementById('summaryLabel1').textContent = 'Total Cashbills';
+          document.getElementById('summaryChange1').textContent = 
+            (cashbillsChange >= 0 ? '+' : '') + cashbillsChange.toFixed(1) + '%';
+          document.getElementById('summaryChange1').className = 
+            'analytics-summary-change ' + (cashbillsChange >= 0 ? 'positive' : 'negative');
+          
+          document.getElementById('summaryValue2').textContent = completionRate.toFixed(1) + '%';
+          document.getElementById('summaryLabel2').textContent = 'Completion Rate';
+          document.getElementById('summaryChange2').textContent = 
+            (completionChange >= 0 ? '+' : '') + completionChange.toFixed(1) + '%';
+          document.getElementById('summaryChange2').className = 
+            'analytics-summary-change ' + (completionChange >= 0 ? 'positive' : 'negative');
+          break;
+          
+        case 'users':
+          document.getElementById('summaryValue1').textContent = activeUsers.size;
+          document.getElementById('summaryLabel1').textContent = 'Active Users';
+          document.getElementById('summaryChange1').textContent = 
+            (usersChange >= 0 ? '+' : '') + usersChange;
+          document.getElementById('summaryChange1').className = 
+            'analytics-summary-change ' + (usersChange >= 0 ? 'positive' : 'negative');
+          
+          const avgActivities = currentCashbills.length / activeUsers.size || 0;
+          document.getElementById('summaryValue2').textContent = avgActivities.toFixed(1);
+          document.getElementById('summaryLabel2').textContent = 'Avg Activities/User';
+          document.getElementById('summaryChange2').textContent = '';
+          break;
+          
+        case 'items':
+          const totalItems = currentCashbills.reduce((sum, bill) => {
+            if (bill.items && Array.isArray(bill.items)) {
+              return sum + bill.items.reduce((itemSum, item) => itemSum + item.quantity, 0);
+            }
+            return sum;
+          }, 0);
+          
+          document.getElementById('summaryValue1').textContent = totalItems;
+          document.getElementById('summaryLabel1').textContent = 'Items Sold';
+          document.getElementById('summaryChange1').textContent = '';
+          
+          const avgItemsPerCashbill = currentCashbillsCount > 0 ? totalItems / currentCashbillsCount : 0;
+          document.getElementById('summaryValue2').textContent = avgItemsPerCashbill.toFixed(1);
+          document.getElementById('summaryLabel2').textContent = 'Avg Items/Cashbill';
+          document.getElementById('summaryChange2').textContent = '';
+          break;
+          
+        case 'payments':
+          document.getElementById('summaryValue1').textContent = systemSettings.currency + currentRevenue.toFixed(0);
+          document.getElementById('summaryLabel1').textContent = 'Total Revenue';
+          document.getElementById('summaryChange1').textContent = 
+            (revenueChange >= 0 ? '+' : '') + revenueChange.toFixed(1) + '%';
+          document.getElementById('summaryChange1').className = 
+            'analytics-summary-change ' + (revenueChange >= 0 ? 'positive' : 'negative');
+          
+          // Most used payment method
+          const paymentMethods = {};
+          currentCashbills.forEach(bill => {
+            const method = getPaymentMethodDisplayName(bill.paymentMethod);
+            paymentMethods[method] = (paymentMethods[method] || 0) + 1;
+          });
+          
+          const mostUsedMethod = Object.entries(paymentMethods)
+            .sort((a, b) => b[1] - a[1])[0];
+          
+          document.getElementById('summaryValue2').textContent = mostUsedMethod ? mostUsedMethod[0] : 'N/A';
+          document.getElementById('summaryLabel2').textContent = 'Most Used Method';
+          document.getElementById('summaryChange2').textContent = '';
+          break;
+          
+        case 'performance':
+          document.getElementById('summaryValue1').textContent = completionRate.toFixed(1) + '%';
+          document.getElementById('summaryLabel1').textContent = 'Completion Rate';
+          document.getElementById('summaryChange1').textContent = 
+            (completionChange >= 0 ? '+' : '') + completionChange.toFixed(1) + '%';
+          document.getElementById('summaryChange1').className = 
+            'analytics-summary-change ' + (completionChange >= 0 ? 'positive' : 'negative');
+          
+          document.getElementById('summaryValue2').textContent = activeUsers.size;
+          document.getElementById('summaryLabel2').textContent = 'Active Users';
+          document.getElementById('summaryChange2').textContent = 
+            (usersChange >= 0 ? '+' : '') + usersChange;
+          document.getElementById('summaryChange2').className = 
+            'analytics-summary-change ' + (usersChange >= 0 ? 'positive' : 'negative');
+          break;
+      }
+      
+      // Always show active users and completion rate in cards 3 and 4
+      document.getElementById('summaryValue3').textContent = activeUsers.size;
+      document.getElementById('summaryLabel3').textContent = 'Active Users';
+      document.getElementById('summaryChange3').textContent = 
+        (usersChange >= 0 ? '+' : '') + usersChange;
+      document.getElementById('summaryChange3').className = 
+        'analytics-summary-change ' + (usersChange >= 0 ? 'positive' : 'negative');
+      
+      document.getElementById('summaryValue4').textContent = completionRate.toFixed(1) + '%';
+      document.getElementById('summaryLabel4').textContent = 'Completion Rate';
+      document.getElementById('summaryChange4').textContent = 
+        (completionChange >= 0 ? '+' : '') + completionChange.toFixed(1) + '%';
+      document.getElementById('summaryChange4').className = 
+        'analytics-summary-change ' + (completionChange >= 0 ? 'positive' : 'negative');
+    }
+
+    // Refresh analytics
+    function refreshAnalytics() {
+      initializeAnalytics();
+    }
+
+    // Export analytics as PDF
+    function exportAnalyticsPDF() {
+      alert('PDF export functionality would be implemented here using a PDF generation library like jsPDF.');
+    }
+
+    // Export analytics as CSV
+    function exportAnalyticsCSV() {
+      if (!analyticsData.data) {
+        alert('No data to export. Please generate analytics first.');
+        return;
+      }
+      
+      let csv = '';
+      
+      if (analyticsData.chartType === 'line' || analyticsData.chartType === 'bar') {
+        // Time series data
+        csv = 'Date,' + analyticsData.data.datasets.map(ds => ds.label).join(',') + '\n';
+        
+        analyticsData.data.labels.forEach((label, index) => {
+          let row = label;
+          analyticsData.data.datasets.forEach(dataset => {
+            row += ',' + (dataset.data[index] || 0);
+          });
+          csv += row + '\n';
+        });
+      } else {
+        // Categorical data
+        csv = 'Category,Value\n';
+        analyticsData.data.labels.forEach((label, index) => {
+          csv += label + ',' + analyticsData.data.datasets[0].data[index] + '\n';
+        });
+      }
+      
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `analytics_${analyticsData.metric}_${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      
+      // Log activity
+      logActivity(currentUser.id, currentUser.name, 'Export Data', `Exported ${analyticsData.metric} analytics to CSV`);
+    }
+
+    // Export analytics as Image
+    function exportAnalyticsImage() {
+      if (!analyticsChart) {
+        alert('No chart to export. Please generate analytics first.');
+        return;
+      }
+      
+      const canvas = document.getElementById('analyticsChart');
+      const url = canvas.toDataURL('image/png');
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `analytics_${analyticsData.metric}_${new Date().toISOString().split('T')[0]}.png`;
+      a.click();
+      
+      // Log activity
+      logActivity(currentUser.id, currentUser.name, 'Export Data', `Exported ${analyticsData.metric} analytics as image`);
+    }
+
+    // Export analytics as JSON
+    function exportAnalyticsJSON() {
+      if (!analyticsData.data) {
+        alert('No data to export. Please generate analytics first.');
+        return;
+      }
+      
+      const exportData = {
+        metadata: {
+          period: analyticsData.period,
+          startDate: analyticsData.startDate.toISOString(),
+          endDate: analyticsData.endDate.toISOString(),
+          metric: analyticsData.metric,
+          chartType: analyticsData.chartType,
+          generatedAt: new Date().toISOString()
+        },
+        data: analyticsData.data
+      };
+      
+      const dataStr = JSON.stringify(exportData, null, 2);
+      const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+      
+      const a = document.createElement('a');
+      a.href = dataUri;
+      a.download = `analytics_${analyticsData.metric}_${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      
+      // Log activity
+      logActivity(currentUser.id, currentUser.name, 'Export Data', `Exported ${analyticsData.metric} analytics to JSON`);
+    }
+
+    // Initialize analytics when modal is opened
+    document.getElementById('dataAnalyticsModal').addEventListener('shown.bs.modal', function() {
+      initializeAnalytics();
+    });
+
+    // Handle period change
+    document.getElementById('analyticsPeriodModal').addEventListener('change', function() {
+      const customDateRange = document.getElementById('customDateRange');
+      if (this.value === 'custom') {
+        customDateRange.style.display = 'flex';
+        // Set default dates
+        const endDate = new Date();
+        const startDate = new Date();
+        startDate.setDate(endDate.getDate() - 30);
+        
+        document.getElementById('analyticsDateFrom').value = startDate.toISOString().split('T')[0];
+        document.getElementById('analyticsDateTo').value = endDate.toISOString().split('T')[0];
+      } else {
+        customDateRange.style.display = 'none';
+      }
+      initializeAnalytics();
+    });
+
+    // Handle date change for custom range
+    document.getElementById('analyticsDateFrom').addEventListener('change', initializeAnalytics);
+    document.getElementById('analyticsDateTo').addEventListener('change', initializeAnalytics);
+    
+    // Handle chart type and metric change
+    document.getElementById('analyticsChartType').addEventListener('change', initializeAnalytics);
+    document.getElementById('analyticsMetric').addEventListener('change', initializeAnalytics);
+    
+    // Generate analytics report
+    function generateAnalyticsReport() {
+      // In a real application, this would generate a detailed analytics report
+      alert('Analytics report would be generated here with detailed insights.');
+    }
+    
+    // Convert array to CSV
+    function convertToCSV(arr) {
+      const array = [Object.keys(arr[0])].concat(arr);
+      return array.map(row => {
+        return Object.values(row).map(String).map(val => {
+          return `"${val.replace(/"/g, '""')}"`;
+        }).join(',');
+      }).join('\n');
+    }
+    
+    // Show add user modal
+    function showAddUserModal() {
+      document.getElementById('addUserModal').style.display = 'flex';
+    }
+    
+    // Close add user modal
+    function closeAddUserModal() {
+      document.getElementById('addUserModal').style.display = 'none';
+      document.getElementById('addUserForm').reset();
+    }
+    
+    // Add user form submission
+    document.getElementById('addUserForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const userId = document.getElementById('newUserId').value;
+      const userName = document.getElementById('newUserName').value;
+      const userRole = document.getElementById('newUserRole').value;
+      const password = document.getElementById('newUserPassword').value;
+      const confirmPassword = document.getElementById('newUserConfirmPassword').value;
+      
+      if (password !== confirmPassword) {
+        alert('Passwords do not match');
+        return;
+      }
+      
+      // Check if user ID already exists
+      if (users.some(u => u.id === userId)) {
+        alert('User ID already exists');
+        return;
+      }
+      
+      const newUser = {
+        id: userId,
+        name: userName,
+        role: userRole,
+        password: password
+      };
+      
+      try {
+        // Add to server
+        const response = await fetch(`${API_URL}?action=add&sheet=users&data=${encodeURIComponent(JSON.stringify(newUser))}`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const result = await response.json();
+        
+        if (result.success) {
+          // Update local cache
+          users.push(newUser);
+          
+          // Log activity
+          logActivity(currentUser.id, currentUser.name, 'Add User', `Added new user: ${userName} (${userId})`);
+          
+          // Close modal and refresh user table
+          closeAddUserModal();
+          updateUserTable();
+          
+          alert('User added successfully!');
+        } else {
+          throw new Error(result.error || "Unknown error");
+        }
+      } catch (error) {
+        console.error("Error adding user:", error);
+        alert("Error adding user. Please try again.");
+      }
+    });
+    
+    // Show user permissions modal
+    function showUserPermissionsModal() {
+      document.getElementById('userPermissionsModal').style.display = 'flex';
+      
+      // Populate user dropdown
+      const userSelect = document.getElementById('permissionUser');
+      userSelect.innerHTML = '<option value="">Select a user</option>';
+      
+      users.forEach(user => {
+        const option = document.createElement('option');
+        option.value = user.id;
+        option.textContent = `${user.name} (${user.id})`;
+        userSelect.appendChild(option);
+      });
+      
+      // Populate role list
+      const roleList = document.getElementById('roleList');
+      roleList.innerHTML = '';
+      
+      users.forEach(user => {
+        const roleItem = document.createElement('div');
+        roleItem.className = 'permission-role-item';
+        roleItem.innerHTML = `
+          <i class="fas fa-${getRoleIcon(user.role)}"></i>
+          <span>${user.name} (${getRoleDisplayName(user.role)})</span>
+        `;
+        roleItem.onclick = function() {
+          document.getElementById('permissionUser').value = user.id;
+          loadUserPermissions();
+          
+          // Update active state
+          document.querySelectorAll('.permission-role-item').forEach(item => {
+            item.classList.remove('active');
+          });
+          this.classList.add('active');
+        };
+        roleList.appendChild(roleItem);
+      });
+    }
+    
+    // Close user permissions modal
+    function closeUserPermissionsModal() {
+      document.getElementById('userPermissionsModal').style.display = 'none';
+    }
+    
+    // Get role icon
+    function getRoleIcon(role) {
+      switch(role) {
+        case 'admin': return 'user-shield';
+        case 'director': return 'user-tie';
+        case 'marketing': return 'user-tag';
+        case 'crew': return 'user';
+        default: return 'user';
+      }
+    }
+    
+    // Load user permissions
+    function loadUserPermissions() {
+      const userId = document.getElementById('permissionUser').value;
+      if (!userId) return;
+      
+      const user = users.find(u => u.id === userId);
+      if (!user) return;
+      
+      const permissionsContainer = document.getElementById('permissionsContainer');
+      
+      // Define permissions based on role
+      const rolePermissions = {
+        crew: ['Create Cashbills', 'View Own Cashbills', 'Save Drafts'],
+        marketing: ['Create Cashbills', 'View Own Cashbills', 'Save Drafts', 'View Reports'],
+        director: ['Create Cashbills', 'View All Cashbills', 'Save Drafts', 'View Reports', 'Edit Own Cashbills'],
+        admin: ['Create Cashbills', 'View All Cashbills', 'Save Drafts', 'View Reports', 'Edit All Cashbills', 'Delete Cashbills', 'Manage Users', 'System Settings']
+      };
+      
+      let html = `<h4>Permissions for ${user.name} (${user.role})</h4>`;
+      html += '<div style="margin-top: 1rem;">';
+      
+      const permissions = rolePermissions[user.role] || [];
+      permissions.forEach(permission => {
+        html += `
+          <div class="permission-item">
+            <input type="checkbox" id="perm_${permission}" checked disabled>
+            <label for="perm_${permission}">${permission}</label>
+          </div>
+        `;
+      });
+      
+      html += '</div>';
+      permissionsContainer.innerHTML = html;
+    }
+    
+    // Save user permissions
+    function saveUserPermissions() {
+      alert('Permissions saved successfully!');
+      closeUserPermissionsModal();
+    }
+    
+    // Show user activity modal
+    function showUserActivityModal() {
+      document.getElementById('userActivityModal').style.display = 'flex';
+      
+      // Populate user dropdown
+      const userSelect = document.getElementById('activityUser');
+      userSelect.innerHTML = '<option value="">Select a user</option>';
+      
+      users.forEach(user => {
+        const option = document.createElement('option');
+        option.value = user.id;
+        option.textContent = `${user.name} (${user.id})`;
+        userSelect.appendChild(option);
+      });
+    }
+    
+    // Close user activity modal
+    function closeUserActivityModal() {
+      document.getElementById('userActivityModal').style.display = 'none';
+    }
+    
+    // Load user activity
+    function loadUserActivity() {
+      const userId = document.getElementById('activityUser').value;
+      if (!userId) return;
+      
+      const user = users.find(u => u.id === userId);
+      if (!user) return;
+      
+      const activityContainer = document.getElementById('userActivityContainer');
+      
+      // Get user's activity
+      const userActivity = activityLog.filter(log => log.userId === userId);
+      
+      if (userActivity.length === 0) {
+        activityContainer.innerHTML = '<p>No activity found for this user.</p>';
+        return;
+      }
+      
+      // Calculate statistics
+      const cashbillsCreated = userActivity.filter(log => log.action === 'Create Cashbill').length;
+      const loginsCount = userActivity.filter(log => log.action === 'Login').length;
+      const lastActivity = userActivity[0].timestamp;
+      
+      let html = `
+        <div class="user-activity-summary">
+          <div class="activity-summary-card">
+            <div class="activity-summary-value">${cashbillsCreated}</div>
+            <div class="activity-summary-label">Cashbills Created</div>
+          </div>
+          <div class="activity-summary-card">
+            <div class="activity-summary-value">${loginsCount}</div>
+            <div class="activity-summary-label">Logins</div>
+          </div>
+          <div class="activity-summary-card">
+            <div class="activity-summary-value">${new Date(lastActivity).toLocaleDateString()}</div>
+            <div class="activity-summary-label">Last Activity</div>
+          </div>
+        </div>
+        
+        <h4>Activity Timeline</h4>
+        <div class="user-activity-timeline">
+      `;
+      
+      userActivity.slice(0, 20).forEach(activity => {
+        const date = new Date(activity.timestamp);
+        const formattedDate = date.toLocaleDateString();
+        const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        html += `
+          <div class="timeline-item">
+            <div class="timeline-content">
+              <div class="timeline-action">${activity.action}</div>
+              <div class="timeline-details">${activity.details || ''}</div>
+              <div class="timeline-time">${formattedDate} at ${formattedTime}</div>
+            </div>
+          </div>
+        `;
+      });
+      
+      html += '</div>';
+      activityContainer.innerHTML = html;
+    }
+    
+    // Save security settings
+    function saveSecuritySettings() {
+      const sessionTimeout = document.getElementById('sessionTimeout').value;
+      const maxLoginAttempts = document.getElementById('maxLoginAttempts').value;
+      
+      // In a real application, these would be saved to the server
+      alert(`Security settings saved:\nSession Timeout: ${sessionTimeout} minutes\nMax Login Attempts: ${maxLoginAttempts}`);
+      
+      // Log activity
+      logActivity(currentUser.id, currentUser.name, 'Update Security Settings', 'Updated system security configuration');
+    }
+    
+    // Update user table
+    function updateUserTable() {
+      // Update total users count
+      document.getElementById('totalUsersCount').textContent = users.length;
+      document.getElementById('activeUsersInfo').textContent = users.length;
+      document.getElementById('activeUsersCount').textContent = users.length;
     }
     
     // Update reports page
@@ -4182,6 +6559,25 @@
     
     // Update admin panel
     function updateAdminPanel() {
+      // Update user table
+      updateUserTable();
+      
+      // Update system logs
+      updateSystemLogs();
+      
+      // Populate temporary access user dropdown
+      const tempAccessUser = document.getElementById('tempAccessUser');
+      if (tempAccessUser) {
+        tempAccessUser.innerHTML = '<option value="">Select a user</option>';
+        
+        users.filter(u => u.role !== 'admin').forEach(user => {
+          const option = document.createElement('option');
+          option.value = user.id;
+          option.textContent = `${user.name} (${user.id})`;
+          tempAccessUser.appendChild(option);
+        });
+      }
+      
       // Update system activity log
       const systemActivityLog = document.getElementById('systemActivityLog');
       
@@ -4191,15 +6587,15 @@
         let logHTML = '';
         const recentLogs = activityLog.slice(0, 20); // Show only 20 most recent
         
-        recentLogs.forEach(log => {
-          const date = new Date(log.timestamp);
+        recentLogs.forEach(activity => {
+          const date = new Date(activity.timestamp);
           const formattedDate = date.toLocaleDateString();
-          const formattedTime = date.toLocaleTimeString();
+          const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
           
           logHTML += `
             <div class="log-entry">
-              <strong>${log.username}</strong> ${log.action}
-              ${log.details ? ` - ${log.details}` : ''}
+              <strong>${activity.username}</strong> ${activity.action}
+              ${activity.details ? ` - ${activity.details}` : ''}
               <div class="log-time">${formattedDate} ${formattedTime}</div>
             </div>
           `;
@@ -4209,28 +6605,48 @@
       }
     }
     
-    // Keyboard shortcuts
-    document.addEventListener('keydown', function(e) {
-      // Only apply shortcuts if not in an input field
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+    // Update system logs
+    function updateSystemLogs() {
+      const systemLogs = document.getElementById('systemLogs');
+      
+      // Get system-related activities
+      const systemActivities = activityLog.filter(log => 
+        log.action.includes('System') || 
+        log.action.includes('Backup') || 
+        log.action.includes('Restore') ||
+        log.action.includes('Settings') ||
+        log.action.includes('User') ||
+        log.action.includes('Security')
+      );
+      
+      if (systemActivities.length === 0) {
+        systemLogs.innerHTML = '<p>No system logs available.</p>';
         return;
       }
       
-      switch(e.key.toLowerCase()) {
-        case 'n':
-          if (currentUser) showPage('newCashbillPage');
-          break;
-        case 'd':
-          if (currentUser) showPage('dashboardPage');
-          break;
-        case 'r':
-          if (currentUser) showPage('reportsPage');
-          break;
-        case 'l':
-          if (currentUser) confirmLogout();
-          break;
-      }
-    });
+      let html = '';
+      systemActivities.slice(0, 10).forEach(activity => {
+        const date = new Date(activity.timestamp);
+        const formattedDate = date.toLocaleDateString();
+        const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        html += `
+          <div class="log-entry">
+            <strong>${activity.username}</strong> ${activity.action}
+            ${activity.details ? ` - ${activity.details}` : ''}
+            <div class="log-time">${formattedDate} ${formattedTime}</div>
+          </div>
+        `;
+      });
+      
+      systemLogs.innerHTML = html;
+    }
+    
+    // Apply log filters
+    function applyLogFilters() {
+      // In a real application, this would filter the system logs based on selected filters
+      updateSystemLogs();
+    }
     
     // Load all data from Google Sheets
     async function loadData() {
@@ -4344,6 +6760,29 @@
       }
     }
     
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+      // Only apply shortcuts if not in an input field
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+        return;
+      }
+      
+      switch(e.key.toLowerCase()) {
+        case 'n':
+          if (currentUser) showPage('newCashbillPage');
+          break;
+        case 'd':
+          if (currentUser) showPage('dashboardPage');
+          break;
+        case 'r':
+          if (currentUser) showPage('reportsPage');
+          break;
+        case 'l':
+          if (currentUser) confirmLogout();
+          break;
+      }
+    });
+    
     // Initialize the app
     window.addEventListener('load', async function() {
       // Load system settings
@@ -4357,4 +6796,4 @@
     });
   </script>
 </body>
-</html> 
+</html>
