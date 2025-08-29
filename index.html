@@ -3,74 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PNE ARENA System - Advanced Management Solution</title>
+  <title>PNE ARENA System - Professional Billing Management</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
   <style>
     :root {
-      /* Color Variables */
-      --primary: #1e3a8a;
-      --primary-dark: #1e293b;
-      --secondary: #3b82f6;
-      --success: #10b981;
-      --danger: #ef4444;
-      --warning: #f59e0b;
-      --info: #06b6d4;
-      --light: #f8fafc;
-      --dark: #0f172a;
+      /* Color Variables - Clean White & Soft Grey Theme */
+      --primary: #4a6fa5;
+      --primary-dark: #2c4c7c;
+      --secondary: #6c757d;
+      --success: #28a745;
+      --danger: #dc3545;
+      --warning: #ffc107;
+      --info: #17a2b8;
+      --light: #f8f9fa;
+      --dark: #343a40;
+      --white: #ffffff;
+      --grey-50: #f9fafb;
+      --grey-100: #f3f4f6;
+      --grey-200: #e5e7eb;
+      --grey-300: #d1d5db;
+      --grey-400: #9ca3af;
+      --grey-500: #6b7280;
+      --grey-600: #4b5563;
+      --grey-700: #374151;
+      --grey-800: #1f2937;
+      --grey-900: #111827;
+      
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
       --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
       --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
       --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
       --radius: 0.5rem;
-      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      
-      /* Light mode */
-      --bg-primary: #ffffff;
-      --bg-secondary: #f1f5f9;
-      --bg-tertiary: #e2e8f0;
-      --text-primary: #1e293b;
-      --text-secondary: #64748b;
-      --text-tertiary: #94a3b8;
-      --border-color: #e2e8f0;
-      --input-bg: #ffffff;
-      --input-border: #cbd5e1;
-      --card-bg: #ffffff;
-      --table-bg: #ffffff;
-      --table-header-bg: #f8fafc;
-      --hover-bg: #f1f5f9;
-    }
-    
-    /* Dark mode */
-    [data-theme="dark"] {
-      --bg-primary: #0f172a;
-      --bg-secondary: #1e293b;
-      --bg-tertiary: #334155;
-      --text-primary: #f8fafc;
-      --text-secondary: #cbd5e1;
-      --text-tertiary: #94a3b8;
-      --border-color: #334155;
-      --input-bg: #1e293b;
-      --input-border: #475569;
-      --card-bg: #1e293b;
-      --table-bg: #1e293b;
-      --table-header-bg: #334155;
-      --hover-bg: #334155;
-      
-      --primary: #60a5fa;
-      --primary-dark: #3b82f6;
-      --secondary: #60a5fa;
-      --success: #34d399;
-      --danger: #f87171;
-      --warning: #fbbf24;
-      --info: #22d3ee;
-      --light: #334155;
-      --dark: #f8fafc;
-      --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+      --transition: all 0.2s ease;
     }
     
     * {
@@ -81,8 +47,8 @@
     
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
+      background: var(--grey-50);
+      color: var(--grey-800);
       min-height: 100vh;
       line-height: 1.6;
       transition: var(--transition);
@@ -93,84 +59,87 @@
     .container {
       max-width: 1400px;
       margin: 0 auto;
-      background: var(--bg-primary);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-lg);
+      background: var(--white);
+      min-height: 100vh;
+      box-shadow: var(--shadow-md);
       overflow: hidden;
-      transition: var(--transition);
-      border: 1px solid var(--border-color);
     }
     
     /* Header */
     header {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-      color: white;
-      padding: 2rem;
-      text-align: center;
-      position: relative;
-      border-bottom: 4px solid var(--secondary);
+      background: var(--white);
+      color: var(--grey-800);
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--grey-200);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
     
     header h1 {
-      font-size: 2.5rem;
+      font-size: 1.75rem;
       font-weight: 700;
-      margin-bottom: 0.5rem;
-      letter-spacing: -0.5px;
+      color: var(--primary);
     }
     
     header p {
-      opacity: 0.9;
-      font-size: 1.1rem;
+      color: var(--grey-500);
+      font-size: 0.95rem;
+    }
+    
+    .header-left {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
     }
     
     /* Theme Toggle */
     .theme-toggle {
-      position: absolute;
-      top: 1.5rem;
-      right: 1.5rem;
-      background: rgba(255, 255, 255, 0.2);
-      border: none;
-      color: white;
-      width: 44px;
-      height: 44px;
+      background: var(--grey-100);
+      border: 1px solid var(--grey-200);
+      color: var(--grey-600);
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.3rem;
-      transition: background 0.3s ease;
+      font-size: 1.1rem;
+      transition: var(--transition);
     }
     
     .theme-toggle:hover {
-      background: rgba(255, 255, 255, 0.3);
+      background: var(--grey-200);
     }
     
     /* Notification Toggle */
     .notification-toggle {
-      position: absolute;
-      top: 1.5rem;
-      right: 5.5rem;
+      position: relative;
     }
     
     .notification-toggle button {
-      background: rgba(255, 255, 255, 0.2);
-      border: none;
-      color: white;
-      width: 44px;
-      height: 44px;
+      background: var(--grey-100);
+      border: 1px solid var(--grey-200);
+      color: var(--grey-600);
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.3rem;
-      transition: background 0.3s ease;
-      position: relative;
+      font-size: 1.1rem;
+      transition: var(--transition);
     }
     
     .notification-toggle button:hover {
-      background: rgba(255, 255, 255, 0.3);
+      background: var(--grey-200);
     }
     
     .notification-badge {
@@ -180,22 +149,22 @@
       background: var(--danger);
       color: white;
       border-radius: 50%;
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: bold;
     }
     
     /* Pages */
     .page {
       display: none;
-      padding: 2rem;
-      animation: fadeIn 0.4s ease-in-out;
-      background: var(--bg-primary);
-      color: var(--text-primary);
+      padding: 0;
+      animation: fadeIn 0.3s ease-in-out;
+      background: var(--white);
+      color: var(--grey-800);
     }
     
     .page.active {
@@ -203,30 +172,27 @@
     }
     
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
     
     /* Navigation */
     nav {
-      background: var(--bg-secondary);
+      background: var(--white);
       padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid var(--border-color);
-      flex-wrap: wrap;
-      gap: 1rem;
+      border-bottom: 1px solid var(--grey-200);
     }
     
     .nav-links {
       display: flex;
       gap: 0.5rem;
-      flex-wrap: wrap;
     }
     
     nav a {
-      color: var(--secondary);
+      color: var(--grey-600);
       text-decoration: none;
       font-weight: 500;
       padding: 0.5rem 1rem;
@@ -235,50 +201,69 @@
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
     
     nav a:hover {
-      background: rgba(59, 130, 246, 0.1);
+      background: var(--grey-100);
+      color: var(--primary);
     }
     
     .user-info {
       font-weight: 500;
-      color: var(--text-primary);
+      color: var(--grey-700);
       display: flex;
       align-items: center;
       gap: 1rem;
     }
     
     .user-role {
-      background: var(--success);
+      background: var(--primary);
       color: white;
       padding: 0.25rem 0.75rem;
       border-radius: 24px;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 500;
+    }
+    
+    /* Mobile Navigation */
+    .mobile-nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--grey-600);
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 0.5rem;
     }
     
     /* Cards */
     .card {
-      background: var(--card-bg);
+      background: var(--white);
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 2rem;
-      margin-bottom: 2rem;
+      box-shadow: var(--shadow-sm);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
       transition: var(--transition);
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--grey-200);
     }
     
     .card h2 {
-      color: var(--text-primary);
-      margin-bottom: 1.5rem;
-      padding-bottom: 1rem;
-      border-bottom: 2px solid var(--border-color);
+      color: var(--grey-800);
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--grey-200);
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      font-size: 1.5rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    
+    .card h3 {
+      color: var(--grey-800);
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
       font-weight: 600;
     }
     
@@ -291,13 +276,13 @@
     }
     
     .stat-card {
-      background: var(--card-bg);
+      background: var(--white);
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
+      box-shadow: var(--shadow-sm);
       padding: 1.5rem;
       text-align: center;
       transition: all 0.3s ease;
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--grey-200);
       position: relative;
       overflow: hidden;
     }
@@ -307,46 +292,46 @@
       position: absolute;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 4px;
-      background: linear-gradient(90deg, var(--secondary), var(--primary));
+      width: 4px;
+      height: 100%;
+      background: var(--primary);
     }
     
     .stat-card:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
     }
     
     .stat-card h3 {
-      font-size: 2rem;
+      font-size: 1.75rem;
       margin-bottom: 0.5rem;
-      color: var(--text-primary);
+      color: var(--grey-800);
       font-weight: 700;
     }
     
     .stat-card p {
-      color: var(--text-secondary);
+      color: var(--grey-600);
       font-weight: 500;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
     
     /* Quick Actions */
     .quick-actions {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 1rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
     
     .quick-action-btn {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
+      background: var(--grey-50);
+      border: 1px solid var(--grey-200);
       border-radius: var(--radius);
-      padding: 1.5rem;
+      padding: 1.25rem;
       text-align: center;
       cursor: pointer;
       transition: all 0.3s ease;
@@ -358,20 +343,21 @@
     }
     
     .quick-action-btn:hover {
-      background: var(--hover-bg);
+      background: var(--grey-100);
       transform: translateY(-3px);
-      box-shadow: var(--shadow-md);
+      box-shadow: var(--shadow);
+      border-color: var(--primary);
     }
     
     .quick-action-btn i {
-      font-size: 2rem;
-      color: var(--secondary);
+      font-size: 1.75rem;
+      color: var(--primary);
     }
     
     .quick-action-btn h3 {
       margin: 0;
-      font-size: 1rem;
-      color: var(--text-primary);
+      font-size: 0.95rem;
+      color: var(--grey-700);
       font-weight: 500;
     }
     
@@ -380,14 +366,14 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 1.5rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
     
     .metric-card {
-      background: var(--bg-secondary);
+      background: var(--grey-50);
       border-radius: var(--radius);
-      padding: 1.5rem;
-      border: 1px solid var(--border-color);
+      padding: 1.25rem;
+      border: 1px solid var(--grey-200);
       transition: all 0.3s ease;
     }
     
@@ -396,9 +382,9 @@
     }
     
     .metric-card h3 {
-      font-size: 1.1rem;
+      font-size: 1rem;
       margin-bottom: 1rem;
-      color: var(--text-primary);
+      color: var(--grey-800);
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -407,7 +393,7 @@
     
     .progress-bar {
       height: 8px;
-      background: var(--bg-tertiary);
+      background: var(--grey-200);
       border-radius: 4px;
       overflow: hidden;
       margin-bottom: 0.5rem;
@@ -415,7 +401,7 @@
     
     .progress-fill {
       height: 100%;
-      background: linear-gradient(90deg, var(--secondary), var(--primary));
+      background: var(--primary);
       border-radius: 4px;
       transition: width 1s ease;
     }
@@ -423,23 +409,23 @@
     .metric-value {
       display: flex;
       justify-content: space-between;
-      font-size: 0.9rem;
-      color: var(--text-secondary);
+      font-size: 0.85rem;
+      color: var(--grey-600);
     }
     
     /* System Health */
     .system-health {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 1.5rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
     
     .health-indicator {
-      background: var(--bg-secondary);
+      background: var(--grey-50);
       border-radius: var(--radius);
-      padding: 1.5rem;
-      border: 1px solid var(--border-color);
+      padding: 1.25rem;
+      border: 1px solid var(--grey-200);
       text-align: center;
       transition: all 0.3s ease;
     }
@@ -449,7 +435,7 @@
     }
     
     .health-indicator i {
-      font-size: 2rem;
+      font-size: 1.75rem;
       margin-bottom: 0.75rem;
     }
     
@@ -466,25 +452,25 @@
     }
     
     .health-indicator h3 {
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       margin-bottom: 0.25rem;
-      color: var(--text-primary);
+      color: var(--grey-800);
       font-weight: 600;
     }
     
     .health-indicator p {
-      color: var(--text-secondary);
-      font-size: 0.9rem;
+      color: var(--grey-600);
+      font-size: 0.85rem;
     }
     
     /* User Activity Chart */
     .user-activity-chart {
       height: 250px;
-      background: var(--bg-secondary);
+      background: var(--grey-50);
       border-radius: var(--radius);
-      padding: 1.5rem;
-      margin-top: 1.5rem;
-      border: 1px solid var(--border-color);
+      padding: 1.25rem;
+      margin-top: 1rem;
+      border: 1px solid var(--grey-200);
       position: relative;
     }
     
@@ -498,7 +484,7 @@
     
     .chart-bar {
       width: 40px;
-      background: linear-gradient(to top, var(--secondary), var(--primary));
+      background: var(--primary);
       border-radius: 4px 4px 0 0;
       transition: height 1s ease;
       position: relative;
@@ -514,8 +500,8 @@
       left: 0;
       width: 100%;
       text-align: center;
-      font-size: 0.8rem;
-      color: var(--text-secondary);
+      font-size: 0.75rem;
+      color: var(--grey-600);
     }
     
     .chart-value {
@@ -524,24 +510,24 @@
       left: 0;
       width: 100%;
       text-align: center;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 500;
-      color: var(--text-primary);
+      color: var(--grey-800);
     }
     
     /* System Tools */
     .system-tools {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
       gap: 1rem;
-      margin-top: 1.5rem;
+      margin-top: 1rem;
     }
     
     .tool-btn {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
+      background: var(--grey-50);
+      border: 1px solid var(--grey-200);
       border-radius: var(--radius);
-      padding: 1.5rem;
+      padding: 1.25rem;
       text-align: center;
       cursor: pointer;
       transition: all 0.3s ease;
@@ -552,20 +538,21 @@
     }
     
     .tool-btn:hover {
-      background: var(--hover-bg);
+      background: var(--grey-100);
       transform: translateY(-3px);
-      box-shadow: var(--shadow-md);
+      box-shadow: var(--shadow);
+      border-color: var(--primary);
     }
     
     .tool-btn i {
-      font-size: 1.8rem;
-      color: var(--secondary);
+      font-size: 1.5rem;
+      color: var(--primary);
     }
     
     .tool-btn h3 {
       margin: 0;
-      font-size: 0.95rem;
-      color: var(--text-primary);
+      font-size: 0.9rem;
+      color: var(--grey-700);
       font-weight: 500;
     }
     
@@ -573,16 +560,16 @@
     .recent-activity {
       max-height: 300px;
       overflow-y: auto;
-      background: var(--bg-secondary);
+      background: var(--grey-50);
       border-radius: var(--radius);
-      padding: 1.5rem;
-      margin-top: 1.5rem;
-      border: 1px solid var(--border-color);
+      padding: 1.25rem;
+      margin-top: 1rem;
+      border: 1px solid var(--grey-200);
     }
     
     .activity-item {
       padding: 0.75rem 0;
-      border-bottom: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--grey-200);
       display: flex;
       align-items: center;
       gap: 1rem;
@@ -593,8 +580,8 @@
     }
     
     .activity-icon {
-      width: 36px;
-      height: 36px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -603,22 +590,22 @@
     }
     
     .activity-icon.create {
-      background: rgba(16, 185, 129, 0.1);
+      background: rgba(40, 167, 69, 0.1);
       color: var(--success);
     }
     
     .activity-icon.edit {
-      background: rgba(59, 130, 246, 0.1);
-      color: var(--secondary);
+      background: rgba(74, 111, 165, 0.1);
+      color: var(--primary);
     }
     
     .activity-icon.delete {
-      background: rgba(239, 68, 68, 0.1);
+      background: rgba(220, 53, 69, 0.1);
       color: var(--danger);
     }
     
     .activity-icon.login {
-      background: rgba(245, 158, 11, 0.1);
+      background: rgba(255, 193, 7, 0.1);
       color: var(--warning);
     }
     
@@ -628,63 +615,63 @@
     
     .activity-title {
       font-weight: 500;
-      color: var(--text-primary);
+      color: var(--grey-800);
       margin-bottom: 0.2rem;
     }
     
     .activity-time {
-      font-size: 0.8rem;
-      color: var(--text-secondary);
+      font-size: 0.75rem;
+      color: var(--grey-500);
     }
     
     /* Forms */
     form {
-      background: var(--bg-secondary);
-      padding: 2rem;
+      background: var(--grey-50);
+      padding: 1.5rem;
       border-radius: var(--radius);
-      border: 1px solid var(--border-color);
-      margin-bottom: 2rem;
+      border: 1px solid var(--grey-200);
+      margin-bottom: 1.5rem;
       transition: var(--transition);
     }
     
     .form-group {
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
     }
     
     label {
       display: block;
       margin-bottom: 0.5rem;
       font-weight: 500;
-      color: var(--text-primary);
+      color: var(--grey-700);
       font-size: 0.9rem;
     }
     
     input, select, textarea {
       width: 100%;
       padding: 0.75rem 1rem;
-      border: 1px solid var(--input-border);
+      border: 1px solid var(--grey-300);
       border-radius: 6px;
       font-size: 0.95rem;
       transition: var(--transition);
-      background: var(--input-bg);
-      color: var(--text-primary);
+      background: var(--white);
+      color: var(--grey-800);
     }
     
     input:focus, select:focus, textarea:focus {
       outline: none;
-      border-color: var(--secondary);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.1);
     }
     
     /* Buttons */
     button {
-      background: var(--secondary);
+      background: var(--primary);
       color: white;
       border: none;
-      padding: 0.75rem 1.5rem;
+      padding: 0.75rem 1.25rem;
       border-radius: 6px;
       cursor: pointer;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       font-weight: 500;
       transition: var(--transition);
       display: inline-flex;
@@ -695,7 +682,7 @@
     button:hover {
       background: var(--primary-dark);
       transform: translateY(-2px);
-      box-shadow: var(--shadow-md);
+      box-shadow: var(--shadow);
     }
     
     button:active {
@@ -703,7 +690,7 @@
     }
     
     button:disabled {
-      background: var(--text-secondary);
+      background: var(--grey-400);
       cursor: not-allowed;
       transform: none;
     }
@@ -713,7 +700,7 @@
     }
     
     .btn-secondary:hover {
-      background: #059669;
+      background: #218838;
     }
     
     .btn-danger {
@@ -721,15 +708,16 @@
     }
     
     .btn-danger:hover {
-      background: #dc2626;
+      background: #c82333;
     }
     
     .btn-warning {
       background: var(--warning);
+      color: var(--grey-800);
     }
     
     .btn-warning:hover {
-      background: #d97706;
+      background: #e0a800;
     }
     
     .btn-info {
@@ -737,7 +725,7 @@
     }
     
     .btn-info:hover {
-      background: #0891b2;
+      background: #138496;
     }
     
     /* Messages */
@@ -753,7 +741,7 @@
       align-items: center;
       justify-content: center;
       gap: 0.75rem;
-      font-size: 1rem;
+      font-size: 0.95rem;
     }
     
     .error-message {
@@ -768,12 +756,12 @@
       align-items: center;
       justify-content: center;
       gap: 0.75rem;
-      font-size: 1rem;
+      font-size: 0.95rem;
     }
     
     .warning-message {
       background: var(--warning);
-      color: white;
+      color: var(--grey-800);
       padding: 1rem;
       border-radius: var(--radius);
       margin-bottom: 1.5rem;
@@ -783,7 +771,7 @@
       align-items: center;
       justify-content: center;
       gap: 0.75rem;
-      font-size: 1rem;
+      font-size: 0.95rem;
     }
     
     .info-message {
@@ -798,16 +786,16 @@
       align-items: center;
       justify-content: center;
       gap: 0.75rem;
-      font-size: 1rem;
+      font-size: 0.95rem;
     }
     
     /* Indicators */
     .permission-denied {
       background: var(--warning);
-      color: white;
-      padding: 0.5rem 1rem;
+      color: var(--grey-800);
+      padding: 0.4rem 0.8rem;
       border-radius: 6px;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-weight: 500;
       display: inline-flex;
       align-items: center;
@@ -816,10 +804,10 @@
     
     .draft-indicator {
       background: var(--warning);
-      color: white;
-      padding: 0.25rem 0.75rem;
+      color: var(--grey-800);
+      padding: 0.2rem 0.6rem;
       border-radius: 24px;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       margin-left: 0.75rem;
       font-weight: 500;
     }
@@ -827,9 +815,9 @@
     .committed-indicator {
       background: var(--success);
       color: white;
-      padding: 0.25rem 0.75rem;
+      padding: 0.2rem 0.6rem;
       border-radius: 24px;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       margin-left: 0.75rem;
       font-weight: 500;
     }
@@ -837,39 +825,39 @@
     /* Tables */
     .table-container {
       overflow-x: auto;
-      margin-top: 1.5rem;
+      margin-top: 1rem;
     }
     
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 1.5rem;
-      background: var(--table-bg);
+      margin-top: 1rem;
+      background: var(--white);
       border-radius: var(--radius);
       overflow: hidden;
-      box-shadow: var(--shadow);
-      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--grey-200);
     }
     
     th, td {
-      padding: 1rem 1.5rem;
+      padding: 1rem 1.25rem;
       text-align: left;
-      border-bottom: 1px solid var(--border-color);
-      color: var(--text-primary);
-      font-size: 0.95rem;
+      border-bottom: 1px solid var(--grey-200);
+      color: var(--grey-800);
+      font-size: 0.9rem;
     }
     
     th {
-      background: var(--table-header-bg);
+      background: var(--grey-50);
       font-weight: 600;
-      color: var(--text-primary);
+      color: var(--grey-700);
       text-transform: uppercase;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       letter-spacing: 0.5px;
     }
     
     tr:hover {
-      background: var(--hover-bg);
+      background: var(--grey-50);
     }
     
     /* Action Buttons */
@@ -877,27 +865,27 @@
       background: var(--danger);
       color: white;
       border: none;
-      padding: 0.5rem 1rem;
+      padding: 0.4rem 0.8rem;
       border-radius: 6px;
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
     }
     
     .btn-delete:hover {
-      background: #dc2626;
+      background: #c82333;
     }
     
     .btn-edit {
-      background: var(--secondary);
+      background: var(--primary);
       color: white;
       border: none;
-      padding: 0.5rem 1rem;
+      padding: 0.4rem 0.8rem;
       border-radius: 6px;
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       margin-right: 0.5rem;
       display: inline-flex;
       align-items: center;
@@ -912,7 +900,7 @@
     .empty-state {
       text-align: center;
       padding: 3rem;
-      color: var(--text-secondary);
+      color: var(--grey-500);
     }
     
     .empty-state svg {
@@ -924,21 +912,21 @@
     
     /* Filters */
     .filter-container {
-      background: var(--bg-secondary);
-      padding: 1.5rem;
+      background: var(--grey-50);
+      padding: 1.25rem;
       border-radius: var(--radius);
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
       display: flex;
       flex-wrap: wrap;
       gap: 1rem;
       align-items: flex-end;
       transition: var(--transition);
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--grey-200);
     }
     
     .filter-group {
       flex: 1;
-      min-width: 200px;
+      min-width: 180px;
     }
     
     .filter-group label {
@@ -946,7 +934,7 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      color: var(--text-primary);
+      color: var(--grey-700);
     }
     
     .filter-actions {
@@ -958,27 +946,27 @@
     .pagination {
       display: flex;
       justify-content: center;
-      margin-top: 2rem;
+      margin-top: 1.5rem;
       gap: 0.25rem;
     }
     
     .pagination button {
-      padding: 0.75rem 1rem;
-      background: var(--bg-secondary);
-      color: var(--text-primary);
-      border: 1px solid var(--border-color);
+      padding: 0.6rem 1rem;
+      background: var(--white);
+      color: var(--grey-700);
+      border: 1px solid var(--grey-300);
       border-radius: 6px;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
     
     .pagination button.active {
-      background: var(--secondary);
+      background: var(--primary);
       color: white;
-      border-color: var(--secondary);
+      border-color: var(--primary);
     }
     
     .pagination button:hover:not(.active) {
-      background: var(--hover-bg);
+      background: var(--grey-100);
     }
     
     /* Items */
@@ -988,78 +976,78 @@
       gap: 1rem;
       align-items: end;
       margin-bottom: 1rem;
-      padding: 1.5rem;
-      background: var(--bg-secondary);
+      padding: 1.25rem;
+      background: var(--grey-50);
       border-radius: var(--radius);
       transition: var(--transition);
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--grey-200);
     }
     
     .items-container {
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
     }
     
     .add-item-btn {
       background: var(--success);
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
     }
     
     .add-item-btn:hover {
-      background: #059669;
+      background: #218838;
     }
     
     .remove-item-btn {
       background: var(--danger);
-      padding: 0.5rem 1rem;
-      font-size: 0.9rem;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.85rem;
     }
     
     .remove-item-btn:hover {
-      background: #dc2626;
+      background: #c82333;
     }
     
     /* Totals */
     .total-section {
-      background: var(--bg-secondary);
-      padding: 1.5rem;
+      background: var(--grey-50);
+      padding: 1.25rem;
       border-radius: var(--radius);
-      margin-top: 1.5rem;
+      margin-top: 1.25rem;
       transition: var(--transition);
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--grey-200);
     }
     
     .total-row {
       display: flex;
       justify-content: space-between;
       margin-bottom: 0.75rem;
-      color: var(--text-primary);
-      font-size: 1rem;
+      color: var(--grey-800);
+      font-size: 0.95rem;
     }
     
     .total-row.final {
       font-weight: 600;
-      font-size: 1.2rem;
-      border-top: 1px solid var(--border-color);
-      padding-top: 1.25rem;
-      margin-top: 1.25rem;
+      font-size: 1.1rem;
+      border-top: 1px solid var(--grey-200);
+      padding-top: 1rem;
+      margin-top: 1rem;
     }
     
     /* Activity Log */
     .activity-log {
       max-height: 350px;
       overflow-y: auto;
-      background: var(--bg-secondary);
-      padding: 1.5rem;
+      background: var(--grey-50);
+      padding: 1.25rem;
       border-radius: var(--radius);
-      margin-top: 1.5rem;
-      border: 1px solid var(--border-color);
+      margin-top: 1.25rem;
+      border: 1px solid var(--grey-200);
     }
     
     .log-entry {
       padding: 0.75rem 0;
-      border-bottom: 1px solid var(--border-color);
-      font-size: 0.95rem;
-      color: var(--text-primary);
+      border-bottom: 1px solid var(--grey-200);
+      font-size: 0.9rem;
+      color: var(--grey-800);
     }
     
     .log-entry:last-child {
@@ -1067,17 +1055,17 @@
     }
     
     .log-time {
-      color: var(--text-secondary);
-      font-size: 0.85rem;
+      color: var(--grey-500);
+      font-size: 0.8rem;
     }
     
     /* Admin Badge */
     .admin-badge {
       background: var(--danger);
       color: white;
-      padding: 0.15rem 0.5rem;
+      padding: 0.15rem 0.4rem;
       border-radius: 4px;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       margin-left: 0.5rem;
       font-weight: 500;
     }
@@ -1089,20 +1077,20 @@
       right: 1rem;
       background: var(--primary);
       color: white;
-      padding: 0.75rem 1rem;
+      padding: 0.6rem 1rem;
       border-radius: var(--radius);
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       opacity: 0.8;
       box-shadow: var(--shadow);
     }
     
     /* Edit Items */
     .edit-items-container {
-      margin-top: 1.5rem;
+      margin-top: 1.25rem;
       max-height: 400px;
       overflow-y: auto;
       padding: 1rem;
-      background: var(--bg-tertiary);
+      background: var(--grey-100);
       border-radius: var(--radius);
     }
     
@@ -1113,10 +1101,10 @@
       align-items: end;
       margin-bottom: 1rem;
       padding: 1.25rem;
-      background: var(--bg-secondary);
+      background: var(--grey-50);
       border-radius: var(--radius);
       transition: var(--transition);
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--grey-200);
     }
     
     /* Modals */
@@ -1127,7 +1115,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0, 0, 0, 0.5);
       z-index: 1000;
       justify-content: center;
       align-items: center;
@@ -1135,14 +1123,14 @@
     }
     
     .modal-content {
-      background: var(--card-bg);
-      padding: 2rem;
+      background: var(--white);
+      padding: 1.5rem;
       border-radius: var(--radius);
       max-width: 800px;
       width: 100%;
       transition: var(--transition);
       box-shadow: var(--shadow-lg);
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--grey-200);
       max-height: 95vh;
       overflow-y: auto;
     }
@@ -1151,28 +1139,28 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
       padding-bottom: 1rem;
-      border-bottom: 2px solid var(--border-color);
+      border-bottom: 1px solid var(--grey-200);
     }
     
     .modal-header h3 {
-      color: var(--text-primary);
+      color: var(--grey-800);
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       font-weight: 600;
     }
     
     .close-modal {
       background: none;
       border: none;
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       cursor: pointer;
-      color: var(--text-primary);
-      width: 36px;
-      height: 36px;
+      color: var(--grey-600);
+      width: 32px;
+      height: 32px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1181,16 +1169,16 @@
     }
     
     .close-modal:hover {
-      background: var(--hover-bg);
+      background: var(--grey-100);
     }
     
     .modal-actions {
       display: flex;
       justify-content: flex-end;
       gap: 1rem;
-      margin-top: 1.5rem;
+      margin-top: 1.25rem;
       padding-top: 1rem;
-      border-top: 1px solid var(--border-color);
+      border-top: 1px solid var(--grey-200);
     }
     
     /* Notification Panel */
@@ -1200,10 +1188,10 @@
       right: 20px;
       width: 350px;
       max-height: 400px;
-      background: var(--card-bg);
+      background: var(--white);
       border-radius: var(--radius);
       box-shadow: var(--shadow-lg);
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--grey-200);
       z-index: 100;
       overflow: hidden;
       transition: all 0.3s ease;
@@ -1217,7 +1205,7 @@
     .notification-header {
       background: var(--primary);
       color: white;
-      padding: 1rem 1.5rem;
+      padding: 1rem 1.25rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -1225,7 +1213,7 @@
     
     .notification-header h3 {
       margin: 0;
-      font-size: 1.1rem;
+      font-size: 1rem;
       font-weight: 500;
     }
     
@@ -1235,13 +1223,13 @@
     }
     
     .notification-item {
-      padding: 1rem 1.5rem;
-      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--grey-200);
       transition: all 0.3s ease;
     }
     
     .notification-item:hover {
-      background: var(--hover-bg);
+      background: var(--grey-50);
     }
     
     .notification-item:last-child {
@@ -1250,18 +1238,18 @@
     
     .notification-title {
       font-weight: 500;
-      color: var(--text-primary);
+      color: var(--grey-800);
       margin-bottom: 0.25rem;
     }
     
     .notification-message {
-      font-size: 0.9rem;
-      color: var(--text-secondary);
+      font-size: 0.85rem;
+      color: var(--grey-600);
     }
     
     .notification-time {
-      font-size: 0.8rem;
-      color: var(--text-tertiary);
+      font-size: 0.75rem;
+      color: var(--grey-500);
       margin-top: 0.25rem;
     }
     
@@ -1272,7 +1260,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(255, 255, 255, 0.8);
       display: none;
       justify-content: center;
       align-items: center;
@@ -1280,11 +1268,11 @@
     }
     
     .spinner {
-      border: 4px solid rgba(255, 255, 255, 0.3);
+      border: 4px solid rgba(74, 111, 165, 0.1);
       border-radius: 50%;
-      border-top: 4px solid var(--secondary);
-      width: 50px;
-      height: 50px;
+      border-top: 4px solid var(--primary);
+      width: 40px;
+      height: 40px;
       animation: spin 1s linear infinite;
     }
     
@@ -1293,257 +1281,123 @@
       100% { transform: rotate(360deg); }
     }
     
-    /* Responsive */
-    @media (max-width: 768px) {
-      .container {
-        margin: 0;
-        border-radius: 0;
-      }
-      
-      .dashboard-stats {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 1rem;
-      }
-      
-      .quick-actions {
-        grid-template-columns: 1fr;
-      }
-      
-      .performance-metrics {
-        grid-template-columns: 1fr;
-      }
-      
-      .system-health {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      
-      .system-tools {
-        grid-template-columns: 1fr;
-      }
-      
-      .item-row, .edit-item-row {
-        grid-template-columns: 1fr;
-      }
-      
-      .filter-container {
-        flex-direction: column;
-      }
-      
-      .filter-group {
-        width: 100%;
-      }
-      
-      .nav-links {
-        flex-direction: column;
-        gap: 0.25rem;
-        width: 100%;
-      }
-      
-      nav {
-        flex-direction: column;
-        gap: 1rem;
-      }
-      
-      .user-info {
-        flex-direction: column;
-        gap: 0.5rem;
-        text-align: center;
-      }
-      
-      .shortcuts {
-        display: none;
-      }
-      
-      .modal-content {
-        max-width: 98%;
-        padding: 1.5rem;
-        margin: 0.5rem;
-      }
-      
-      .cashbill-details {
-        padding: 1.5rem;
-        font-size: 0.95rem;
-      }
-      
-      .cashbill-details h3 {
-        font-size: 1.25rem;
-      }
-      
-      .detail-row {
-        font-size: 0.95rem;
-      }
-      
-      .detail-row.final {
-        font-size: 1.1rem;
-      }
-      
-      .notification-panel {
-        width: calc(100% - 40px);
-        right: 20px;
-        left: 20px;
-      }
-    }
-    
-    @media (min-width: 1200px) {
-      .modal-content {
-        max-width: 900px;
-      }
-    }
-    
-    /* Login Form Enhancements */
-    .login-form-container {
-      max-width: 400px;
-      margin: 0 auto;
-    }
-    
-    .login-header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    
-    .login-header h2 {
-      font-size: 1.8rem;
-      margin-bottom: 0.5rem;
-    }
-    
-    .login-header p {
-      color: var(--text-secondary);
-      font-size: 0.95rem;
-    }
-    
-    .login-form {
-      background: var(--card-bg);
-      border-radius: var(--radius);
+    /* Page Content Container */
+    .page-content {
       padding: 2rem;
-      box-shadow: var(--shadow-md);
-      border: 1px solid var(--border-color);
     }
     
-    .login-form .form-group {
+    /* Cashbill List Page Styles */
+    .cashbill-list-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 1.5rem;
     }
     
-    .login-form label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-      color: var(--text-primary);
+    .cashbill-list-header h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: var(--grey-800);
     }
     
-    .login-form input {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      border: 1px solid var(--input-border);
+    .create-cashbill-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
       border-radius: 6px;
-      font-size: 0.95rem;
-      transition: var(--transition);
-      background: var(--input-bg);
-      color: var(--text-primary);
-    }
-    
-    .login-form input:focus {
-      outline: none;
-      border-color: var(--secondary);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-    }
-    
-    .login-form button {
-      width: 100%;
-      padding: 0.75rem;
-      font-size: 1rem;
-      margin-top: 1rem;
-    }
-    
-    .user-id-display {
-      background: var(--bg-secondary);
-      border-radius: var(--radius);
-      padding: 0.5rem 1rem;
-      margin-bottom: 1rem;
-      text-align: center;
-      font-weight: 500;
-      color: var(--text-secondary);
+      cursor: pointer;
       font-size: 0.9rem;
-    }
-    
-    .permission-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-      margin-top: 1.5rem;
-    }
-    
-    .permission-card {
-      background: var(--bg-secondary);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      border: 1px solid var(--border-color);
-    }
-    
-    .permission-card h4 {
-      margin-bottom: 1rem;
-      color: var(--text-primary);
-      display: flex;
+      font-weight: 500;
+      transition: var(--transition);
+      display: inline-flex;
       align-items: center;
       gap: 0.5rem;
     }
     
-    .permission-card ul {
-      list-style-type: none;
-      padding-left: 0;
+    .create-cashbill-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
     }
     
-    .permission-card li {
-      padding: 0.5rem 0;
-      border-bottom: 1px solid var(--border-color);
-      color: var(--text-secondary);
-    }
-    
-    .permission-card li:last-child {
-      border-bottom: none;
-    }
-    
-    .permission-card li::before {
-      content: "✓";
-      color: var(--success);
-      font-weight: bold;
-      margin-right: 0.5rem;
-    }
-    
-    .cashbill-details {
-      background: var(--bg-secondary);
-      border-radius: var(--radius);
-      padding: 2rem;
-      margin-top: 1.5rem;
-      border: 1px solid var(--border-color);
-    }
-    
-    .cashbill-details h3 {
+    /* Cashbill View Page Styles */
+    .cashbill-view-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 1.5rem;
       padding-bottom: 1rem;
-      border-bottom: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--grey-200);
+    }
+    
+    .cashbill-view-title {
+      font-size: 1.5rem;
+      color: var(--grey-800);
+      margin: 0;
       display: flex;
       align-items: center;
       gap: 0.75rem;
     }
     
-    .detail-row {
+    .cashbill-view-actions {
       display: flex;
-      justify-content: space-between;
-      padding: 0.75rem 0;
-      border-bottom: 1px solid var(--border-color);
+      gap: 0.75rem;
     }
     
-    .detail-row:last-child {
-      border-bottom: none;
+    .cashbill-info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
     }
     
-    /* New styles for item dropdown */
+    .cashbill-info-card {
+      background: var(--grey-50);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      border: 1px solid var(--grey-200);
+    }
+    
+    .cashbill-info-card h4 {
+      font-size: 0.9rem;
+      color: var(--grey-600);
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .cashbill-info-card p {
+      font-size: 1.1rem;
+      color: var(--grey-800);
+      margin: 0;
+      font-weight: 600;
+    }
+    
+    .cashbill-items-table {
+      margin-bottom: 2rem;
+    }
+    
+    .cashbill-summary {
+      background: var(--grey-50);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      border: 1px solid var(--grey-200);
+    }
+    
+    .cashbill-summary h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+      color: var(--grey-800);
+    }
+    
+    /* Additional styles for item dropdown */
     .item-select {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
     
     .min-order-note {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       color: var(--warning);
       margin-top: 0.25rem;
     }
@@ -1560,19 +1414,576 @@
       margin: 0;
     }
     
-    /* Advanced Admin Features */
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      /* Mobile Navigation */
+      .mobile-nav-toggle {
+        display: block;
+      }
+      
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: var(--white);
+        flex-direction: column;
+        padding: 1rem;
+        box-shadow: var(--shadow);
+        z-index: 10;
+      }
+      
+      .nav-links.active {
+        display: flex;
+      }
+      
+      nav {
+        position: relative;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .user-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        width: 100%;
+      }
+      
+      /* Header */
+      header {
+        padding: 1rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+      
+      header h1 {
+        font-size: 1.5rem;
+      }
+      
+      .header-right {
+        margin-top: 0.5rem;
+      }
+      
+      /* Page Content */
+      .page-content {
+        padding: 1rem;
+      }
+      
+      /* Dashboard Stats */
+      .dashboard-stats {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      /* Quick Actions */
+      .quick-actions {
+        grid-template-columns: 1fr;
+      }
+      
+      /* Performance Metrics */
+      .performance-metrics {
+        grid-template-columns: 1fr;
+      }
+      
+      /* System Health */
+      .system-health {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      /* System Tools */
+      .system-tools {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      /* Items */
+      .item-row, .edit-item-row {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+      
+      .item-row > div, .edit-item-row > div {
+        margin-bottom: 0.5rem;
+      }
+      
+      /* Filters */
+      .filter-container {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      .filter-group {
+        width: 100%;
+        min-width: auto;
+      }
+      
+      /* Tables */
+      .table-container {
+        overflow-x: auto;
+        margin: 1rem -1rem;
+        padding: 0 1rem;
+      }
+      
+      table {
+        min-width: 600px;
+      }
+      
+      /* Pagination */
+      .pagination {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      
+      .pagination button {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8rem;
+      }
+      
+      /* Modals */
+      .modal-content {
+        max-width: 95%;
+        padding: 1rem;
+        margin: 0.5rem;
+      }
+      
+      .modal-header {
+        padding-bottom: 0.75rem;
+        margin-bottom: 1rem;
+      }
+      
+      .modal-header h3 {
+        font-size: 1.1rem;
+      }
+      
+      .modal-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      
+      /* Notification Panel */
+      .notification-panel {
+        width: calc(100% - 40px);
+        right: 20px;
+        left: 20px;
+        max-height: 50vh;
+      }
+      
+      /* Buttons */
+      button {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+      }
+      
+      /* Forms */
+      .form-group {
+        margin-bottom: 1rem;
+      }
+      
+      /* Cashbill List Header */
+      .cashbill-list-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      
+      .create-cashbill-btn {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      /* Cashbill View Header */
+      .cashbill-view-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      
+      .cashbill-view-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+      
+      /* Cashbill Info Grid */
+      .cashbill-info-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      /* Shortcuts */
+      .shortcuts {
+        display: none;
+      }
+      
+      /* Activity Item */
+      .activity-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+      
+      .activity-icon {
+        align-self: flex-start;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      /* Dashboard Stats */
+      .stat-card h3 {
+        font-size: 1.5rem;
+      }
+      
+      /* System Health */
+      .system-health {
+        grid-template-columns: 1fr;
+      }
+      
+      /* System Tools */
+      .system-tools {
+        grid-template-columns: 1fr;
+      }
+      
+      /* Buttons */
+      button {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8rem;
+      }
+      
+      /* Modals */
+      .modal-content {
+        padding: 0.75rem;
+      }
+      
+      .modal-header h3 {
+        font-size: 1rem;
+      }
+      
+      /* Notification Panel */
+      .notification-panel {
+        top: 70px;
+      }
+    }
+    
+    @media (min-width: 1200px) {
+      /* Larger screens */
+      .dashboard-stats {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      
+      .quick-actions {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      
+      .performance-metrics {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      
+      .system-health {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      
+      .system-tools {
+        grid-template-columns: repeat(6, 1fr);
+      }
+    }
+    
+    /* Login Form Enhancements */
+    .login-form-container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    .login-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .login-header h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+    }
+    
+    .login-header p {
+      color: var(--grey-600);
+      font-size: 0.95rem;
+    }
+    
+    .login-form {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--grey-200);
+    }
+    
+    .login-form .form-group {
+      margin-bottom: 1.25rem;
+    }
+    
+    .login-form label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--grey-700);
+    }
+    
+    .login-form input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--grey-300);
+      border-radius: 6px;
+      font-size: 0.95rem;
+      transition: var(--transition);
+      background: var(--white);
+      color: var(--grey-800);
+    }
+    
+    .login-form input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.1);
+    }
+    
+    .login-form button {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .user-id-display {
+      background: var(--grey-100);
+      border-radius: var(--radius);
+      padding: 0.5rem 1rem;
+      margin-bottom: 1rem;
+      text-align: center;
+      font-weight: 500;
+      color: var(--grey-600);
+      font-size: 0.9rem;
+    }
+    
+    .permission-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1.25rem;
+    }
+    
+    .permission-card {
+      background: var(--grey-50);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      border: 1px solid var(--grey-200);
+    }
+    
+    .permission-card h4 {
+      margin-bottom: 1rem;
+      color: var(--grey-800);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .permission-card ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    
+    .permission-card li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--grey-200);
+      color: var(--grey-600);
+    }
+    
+    .permission-card li:last-child {
+      border-bottom: none;
+    }
+    
+    .permission-card li::before {
+      content: "✓";
+      color: var(--success);
+      font-weight: bold;
+      margin-right: 0.5rem;
+    }
+    
+    .cashbill-details {
+      background: var(--grey-50);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-top: 1.25rem;
+      border: 1px solid var(--grey-200);
+    }
+    
+    .cashbill-details h3 {
+      margin-bottom: 1.25rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--grey-200);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--grey-200);
+    }
+    
+    .detail-row:last-child {
+      border-bottom: none;
+    }
+    
+    /* New styles for item dropdown */
+    .item-select {
+      font-size: 0.9rem;
+    }
+    
+    .min-order-note {
+      font-size: 0.75rem;
+      color: var(--warning);
+      margin-top: 0.25rem;
+    }
+    
+    .member-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .member-checkbox input[type="checkbox"] {
+      width: auto;
+      margin: 0;
+    }
+    
+    /* Page Content Container */
+    .page-content {
+      padding: 2rem;
+    }
+    
+    /* Cashbill List Page Styles */
+    .cashbill-list-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .cashbill-list-header h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: var(--grey-800);
+    }
+    
+    .create-cashbill-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .create-cashbill-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    
+    /* Cashbill View Page Styles */
+    .cashbill-view-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--grey-200);
+    }
+    
+    .cashbill-view-title {
+      font-size: 1.5rem;
+      color: var(--grey-800);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .cashbill-view-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+    
+    .cashbill-info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .cashbill-info-card {
+      background: var(--grey-50);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      border: 1px solid var(--grey-200);
+    }
+    
+    .cashbill-info-card h4 {
+      font-size: 0.9rem;
+      color: var(--grey-600);
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .cashbill-info-card p {
+      font-size: 1.1rem;
+      color: var(--grey-800);
+      margin: 0;
+      font-weight: 600;
+    }
+    
+    .cashbill-items-table {
+      margin-bottom: 2rem;
+    }
+    
+    .cashbill-summary {
+      background: var(--grey-50);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      border: 1px solid var(--grey-200);
+    }
+    
+    .cashbill-summary h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+      color: var(--grey-800);
+    }
+    
+    /* Additional styles for admin features */
     .admin-feature-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
-      margin-top: 1.5rem;
+      gap: 1.25rem;
+      margin-top: 1.25rem;
     }
     
     .feature-card {
-      background: var(--bg-secondary);
+      background: var(--grey-50);
       border-radius: var(--radius);
-      padding: 1.5rem;
-      border: 1px solid var(--border-color);
+      padding: 1.25rem;
+      border: 1px solid var(--grey-200);
       transition: all 0.3s ease;
     }
     
@@ -1582,7 +1993,7 @@
     }
     
     .feature-card h4 {
-      color: var(--text-primary);
+      color: var(--grey-800);
       margin-bottom: 1rem;
       display: flex;
       align-items: center;
@@ -1590,7 +2001,7 @@
     }
     
     .feature-card p {
-      color: var(--text-secondary);
+      color: var(--grey-600);
       margin-bottom: 1rem;
     }
     
@@ -1611,34 +2022,34 @@
     }
     
     .feature-stat-label {
-      font-size: 0.85rem;
-      color: var(--text-secondary);
+      font-size: 0.8rem;
+      color: var(--grey-600);
     }
     
     .user-management-actions {
       display: flex;
       gap: 0.75rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
       flex-wrap: wrap;
     }
     
     .security-settings-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
+      gap: 1.25rem;
     }
     
     .security-setting {
-      background: var(--bg-tertiary);
+      background: var(--grey-100);
       border-radius: var(--radius);
-      padding: 1.25rem;
-      border: 1px solid var(--border-color);
+      padding: 1rem;
+      border: 1px solid var(--grey-200);
     }
     
     .security-setting h5 {
-      color: var(--text-primary);
+      color: var(--grey-800);
       margin-bottom: 0.75rem;
-      font-size: 1rem;
+      font-size: 0.95rem;
     }
     
     .security-setting input {
@@ -1653,11 +2064,11 @@
     }
     
     .info-item {
-      background: var(--bg-tertiary);
+      background: var(--grey-100);
       border-radius: var(--radius);
       padding: 1rem;
       text-align: center;
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--grey-200);
     }
     
     .info-value {
@@ -1668,8 +2079,8 @@
     }
     
     .info-label {
-      font-size: 0.85rem;
-      color: var(--text-secondary);
+      font-size: 0.8rem;
+      color: var(--grey-600);
     }
     
     .audit-log-controls {
@@ -1692,11 +2103,11 @@
     }
     
     .user-activity-chart-container {
-      background: var(--bg-secondary);
+      background: var(--grey-50);
       border-radius: var(--radius);
-      padding: 1.5rem;
-      margin-top: 1.5rem;
-      border: 1px solid var(--border-color);
+      padding: 1.25rem;
+      margin-top: 1.25rem;
+      border: 1px solid var(--grey-200);
     }
     
     .chart-controls {
@@ -1712,11 +2123,11 @@
     }
     
     .chart-period-btn {
-      padding: 0.5rem 1rem;
-      background: var(--bg-tertiary);
-      border: 1px solid var(--border-color);
+      padding: 0.4rem 0.8rem;
+      background: var(--grey-100);
+      border: 1px solid var(--grey-200);
       border-radius: 6px;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       cursor: pointer;
       transition: all 0.3s ease;
     }
@@ -1728,7 +2139,7 @@
     }
     
     .chart-period-btn:hover:not(.active) {
-      background: var(--hover-bg);
+      background: var(--grey-200);
     }
     
     .data-export-options {
@@ -1742,34 +2153,34 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.75rem 1rem;
-      background: var(--bg-tertiary);
-      border: 1px solid var(--border-color);
+      padding: 0.6rem 1rem;
+      background: var(--grey-100);
+      border: 1px solid var(--grey-200);
       border-radius: 6px;
       cursor: pointer;
       transition: all 0.3s ease;
     }
     
     .export-option:hover {
-      background: var(--hover-bg);
+      background: var(--grey-200);
     }
     
     .export-option i {
-      color: var(--secondary);
+      color: var(--primary);
     }
     
     .system-health-monitor {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-      margin-top: 1.5rem;
+      gap: 1.25rem;
+      margin-top: 1.25rem;
     }
     
     .health-monitor-card {
-      background: var(--bg-secondary);
+      background: var(--grey-50);
       border-radius: var(--radius);
-      padding: 1.5rem;
-      border: 1px solid var(--border-color);
+      padding: 1.25rem;
+      border: 1px solid var(--grey-200);
       position: relative;
       overflow: hidden;
     }
@@ -1804,52 +2215,52 @@
     
     .health-monitor-title {
       font-weight: 600;
-      color: var(--text-primary);
+      color: var(--grey-800);
     }
     
     .health-monitor-status {
-      padding: 0.25rem 0.75rem;
+      padding: 0.2rem 0.6rem;
       border-radius: 24px;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       font-weight: 500;
     }
     
     .health-monitor-status.good {
-      background: rgba(16, 185, 129, 0.1);
+      background: rgba(40, 167, 69, 0.1);
       color: var(--success);
     }
     
     .health-monitor-status.warning {
-      background: rgba(245, 158, 11, 0.1);
+      background: rgba(255, 193, 7, 0.1);
       color: var(--warning);
     }
     
     .health-monitor-status.danger {
-      background: rgba(239, 68, 68, 0.1);
+      background: rgba(220, 53, 69, 0.1);
       color: var(--danger);
     }
     
     .health-monitor-value {
-      font-size: 2rem;
+      font-size: 1.75rem;
       font-weight: 700;
-      color: var(--text-primary);
+      color: var(--grey-800);
       margin-bottom: 0.5rem;
     }
     
     .health-monitor-details {
-      color: var(--text-secondary);
-      font-size: 0.9rem;
+      color: var(--grey-600);
+      font-size: 0.85rem;
     }
     
     .backup-restore-controls {
       display: flex;
       gap: 1rem;
-      margin-top: 1.5rem;
+      margin-top: 1.25rem;
       flex-wrap: wrap;
     }
     
     .backup-history {
-      margin-top: 1.5rem;
+      margin-top: 1.25rem;
     }
     
     .backup-history-item {
@@ -1857,10 +2268,10 @@
       justify-content: space-between;
       align-items: center;
       padding: 1rem;
-      background: var(--bg-tertiary);
+      background: var(--grey-100);
       border-radius: var(--radius);
       margin-bottom: 0.75rem;
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--grey-200);
     }
     
     .backup-info {
@@ -1869,13 +2280,13 @@
     
     .backup-date {
       font-weight: 500;
-      color: var(--text-primary);
+      color: var(--grey-800);
       margin-bottom: 0.25rem;
     }
     
     .backup-size {
-      font-size: 0.85rem;
-      color: var(--text-secondary);
+      font-size: 0.8rem;
+      color: var(--grey-600);
     }
     
     .backup-actions {
@@ -1884,49 +2295,49 @@
     }
     
     .backup-actions button {
-      padding: 0.5rem 1rem;
-      font-size: 0.85rem;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.8rem;
     }
     
     .user-activity-summary {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 1rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
     }
     
     .activity-summary-card {
-      background: var(--bg-tertiary);
+      background: var(--grey-100);
       border-radius: var(--radius);
-      padding: 1.25rem;
+      padding: 1rem;
       text-align: center;
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--grey-200);
     }
     
     .activity-summary-value {
-      font-size: 1.75rem;
+      font-size: 1.5rem;
       font-weight: 700;
       color: var(--primary);
       margin-bottom: 0.5rem;
     }
     
     .activity-summary-label {
-      font-size: 0.9rem;
-      color: var(--text-secondary);
+      font-size: 0.85rem;
+      color: var(--grey-600);
     }
     
     .user-activity-timeline {
       max-height: 400px;
       overflow-y: auto;
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--grey-200);
       border-radius: var(--radius);
-      background: var(--bg-secondary);
+      background: var(--grey-50);
     }
     
     .timeline-item {
       position: relative;
-      padding: 1rem 1.5rem;
-      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--grey-200);
     }
     
     .timeline-item:last-child {
@@ -1936,51 +2347,51 @@
     .timeline-item::before {
       content: '';
       position: absolute;
-      left: 1.5rem;
-      top: 1.5rem;
+      left: 1.25rem;
+      top: 1.25rem;
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: var(--secondary);
+      background: var(--primary);
     }
     
     .timeline-content {
-      margin-left: 1.5rem;
+      margin-left: 1.25rem;
     }
     
     .timeline-action {
       font-weight: 500;
-      color: var(--text-primary);
+      color: var(--grey-800);
       margin-bottom: 0.25rem;
     }
     
     .timeline-details {
-      font-size: 0.9rem;
-      color: var(--text-secondary);
+      font-size: 0.85rem;
+      color: var(--grey-600);
       margin-bottom: 0.25rem;
     }
     
     .timeline-time {
-      font-size: 0.8rem;
-      color: var(--text-tertiary);
+      font-size: 0.75rem;
+      color: var(--grey-500);
     }
     
     .permission-management-grid {
       display: grid;
       grid-template-columns: 1fr 2fr;
-      gap: 1.5rem;
-      margin-top: 1.5rem;
+      gap: 1.25rem;
+      margin-top: 1.25rem;
     }
     
     .permission-role-selector {
-      background: var(--bg-secondary);
+      background: var(--grey-50);
       border-radius: var(--radius);
-      padding: 1.5rem;
-      border: 1px solid var(--border-color);
+      padding: 1.25rem;
+      border: 1px solid var(--grey-200);
     }
     
     .permission-role-item {
-      padding: 0.75rem;
+      padding: 0.6rem;
       margin-bottom: 0.5rem;
       border-radius: 6px;
       cursor: pointer;
@@ -1991,7 +2402,7 @@
     }
     
     .permission-role-item:hover {
-      background: var(--hover-bg);
+      background: var(--grey-100);
     }
     
     .permission-role-item.active {
@@ -2000,25 +2411,25 @@
     }
     
     .permission-role-item i {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
     }
     
     .permission-details {
-      background: var(--bg-secondary);
+      background: var(--grey-50);
       border-radius: var(--radius);
-      padding: 1.5rem;
-      border: 1px solid var(--border-color);
+      padding: 1.25rem;
+      border: 1px solid var(--grey-200);
     }
     
     .permission-category {
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
     }
     
     .permission-category h5 {
-      color: var(--text-primary);
+      color: var(--grey-800);
       margin-bottom: 1rem;
-      font-size: 1.1rem;
-      border-bottom: 1px solid var(--border-color);
+      font-size: 1rem;
+      border-bottom: 1px solid var(--grey-200);
       padding-bottom: 0.5rem;
     }
     
@@ -2039,21 +2450,21 @@
     }
     
     .system-settings-section {
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
     
     .settings-group {
-      background: var(--bg-secondary);
+      background: var(--grey-50);
       border-radius: var(--radius);
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-      border: 1px solid var(--border-color);
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+      border: 1px solid var(--grey-200);
     }
     
     .settings-group h4 {
-      color: var(--text-primary);
+      color: var(--grey-800);
       margin-bottom: 1rem;
-      font-size: 1.1rem;
+      font-size: 1rem;
     }
     
     .settings-item {
@@ -2061,7 +2472,7 @@
       justify-content: space-between;
       align-items: center;
       padding: 0.75rem 0;
-      border-bottom: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--grey-200);
     }
     
     .settings-item:last-child {
@@ -2070,12 +2481,12 @@
     
     .settings-label {
       font-weight: 500;
-      color: var(--text-primary);
+      color: var(--grey-800);
     }
     
     .settings-description {
-      font-size: 0.85rem;
-      color: var(--text-secondary);
+      font-size: 0.8rem;
+      color: var(--grey-600);
       margin-top: 0.25rem;
     }
     
@@ -2098,14 +2509,14 @@
     }
     
     .advanced-analytics-container {
-      margin-top: 1.5rem;
+      margin-top: 1.25rem;
     }
     
     .analytics-controls {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
       flex-wrap: wrap;
       gap: 1rem;
     }
@@ -2117,11 +2528,11 @@
     }
     
     .analytics-chart-container {
-      background: var(--bg-secondary);
+      background: var(--grey-50);
       border-radius: var(--radius);
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-      border: 1px solid var(--border-color);
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+      border: 1px solid var(--grey-200);
       min-height: 300px;
       display: flex;
       align-items: center;
@@ -2130,7 +2541,7 @@
     
     .analytics-placeholder {
       text-align: center;
-      color: var(--text-secondary);
+      color: var(--grey-600);
     }
     
     .analytics-placeholder i {
@@ -2146,27 +2557,27 @@
     }
     
     .analytics-summary-card {
-      background: var(--bg-tertiary);
+      background: var(--grey-100);
       border-radius: var(--radius);
-      padding: 1.25rem;
+      padding: 1rem;
       text-align: center;
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--grey-200);
     }
     
     .analytics-summary-value {
-      font-size: 1.75rem;
+      font-size: 1.5rem;
       font-weight: 700;
       color: var(--primary);
       margin-bottom: 0.5rem;
     }
     
     .analytics-summary-label {
-      font-size: 0.9rem;
-      color: var(--text-secondary);
+      font-size: 0.85rem;
+      color: var(--grey-600);
     }
     
     .analytics-summary-change {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       margin-top: 0.5rem;
     }
     
@@ -2177,20 +2588,761 @@
     .analytics-summary-change.negative {
       color: var(--danger);
     }
+    
+    /* Dark Theme */
+    body.dark-theme {
+      background: var(--grey-900);
+      color: var(--grey-200);
+    }
+    
+    body.dark-theme .container {
+      background: var(--grey-800);
+    }
+    
+    body.dark-theme header {
+      background: var(--grey-800);
+      color: var(--grey-200);
+      border-bottom: 1px solid var(--grey-700);
+    }
+    
+    body.dark-theme nav {
+      background: var(--grey-800);
+      border-bottom: 1px solid var(--grey-700);
+    }
+    
+    body.dark-theme nav a {
+      color: var(--grey-300);
+    }
+    
+    body.dark-theme nav a:hover {
+      background: var(--grey-700);
+      color: var(--grey-100);
+    }
+    
+    body.dark-theme .card {
+      background: var(--grey-800);
+      border: 1px solid var(--grey-700);
+      color: var(--grey-200);
+    }
+    
+    body.dark-theme .card h2 {
+      color: var(--grey-100);
+      border-bottom: 1px solid var(--grey-700);
+    }
+    
+    body.dark-theme .card h3 {
+      color: var(--grey-100);
+    }
+    
+    body.dark-theme .stat-card {
+      background: var(--grey-800);
+      border: 1px solid var(--grey-700);
+    }
+    
+    body.dark-theme .stat-card h3 {
+      color: var(--grey-100);
+    }
+    
+    body.dark-theme .stat-card p {
+      color: var(--grey-400);
+    }
+    
+    body.dark-theme .quick-action-btn {
+      background: var(--grey-700);
+      border: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .quick-action-btn:hover {
+      background: var(--grey-600);
+      border-color: var(--primary);
+    }
+    
+    body.dark-theme .quick-action-btn i {
+      color: var(--primary);
+    }
+    
+    body.dark-theme .quick-action-btn h3 {
+      color: var(--grey-200);
+    }
+    
+    body.dark-theme .metric-card {
+      background: var(--grey-700);
+      border: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .metric-card h3 {
+      color: var(--grey-100);
+    }
+    
+    body.dark-theme .metric-value {
+      color: var(--grey-300);
+    }
+    
+    body.dark-theme .progress-bar {
+      background: var(--grey-600);
+    }
+    
+    body.dark-theme .health-indicator {
+      background: var(--grey-700);
+      border: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .health-indicator h3 {
+      color: var(--grey-100);
+    }
+    
+    body.dark-theme .health-indicator p {
+      color: var(--grey-400);
+    }
+    
+    body.dark-theme .user-activity-chart {
+      background: var(--grey-700);
+      border: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .chart-bar {
+      background: var(--primary);
+    }
+    
+    body.dark-theme .chart-label {
+      color: var(--grey-400);
+    }
+    
+    body.dark-theme .chart-value {
+      color: var(--grey-200);
+    }
+    
+    body.dark-theme .tool-btn {
+      background: var(--grey-700);
+      border: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .tool-btn:hover {
+      background: var(--grey-600);
+      border-color: var(--primary);
+    }
+    
+    body.dark-theme .tool-btn i {
+      color: var(--primary);
+    }
+    
+    body.dark-theme .tool-btn h3 {
+      color: var(--grey-200);
+    }
+    
+    body.dark-theme .recent-activity {
+      background: var(--grey-700);
+      border: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .activity-item {
+      border-bottom: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .activity-title {
+      color: var(--grey-100);
+    }
+    
+    body.dark-theme .activity-time {
+      color: var(--grey-500);
+    }
+    
+    body.dark-theme form {
+      background: var(--grey-700);
+      border: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme label {
+      color: var(--grey-200);
+    }
+    
+    body.dark-theme input, 
+    body.dark-theme select, 
+    body.dark-theme textarea {
+      background: var(--grey-800);
+      border: 1px solid var(--grey-600);
+      color: var(--grey-100);
+    }
+    
+    body.dark-theme input:focus, 
+    body.dark-theme select:focus, 
+    body.dark-theme textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.3);
+    }
+    
+    body.dark-theme button {
+      background: var(--primary);
+    }
+    
+    body.dark-theme button:hover {
+      background: var(--primary-dark);
+    }
+    
+    body.dark-theme .btn-secondary {
+      background: var(--success);
+    }
+    
+    body.dark-theme .btn-secondary:hover {
+      background: #218838;
+    }
+    
+    body.dark-theme .btn-danger {
+      background: var(--danger);
+    }
+    
+    body.dark-theme .btn-danger:hover {
+      background: #c82333;
+    }
+    
+    body.dark-theme .btn-warning {
+      background: var(--warning);
+      color: var(--grey-800);
+    }
+    
+    body.dark-theme .btn-warning:hover {
+      background: #e0a800;
+    }
+    
+    body.dark-theme .btn-info {
+      background: var(--info);
+    }
+    
+    body.dark-theme .btn-info:hover {
+      background: #138496;
+    }
+    
+    body.dark-theme .table-container {
+      background: var(--grey-800);
+    }
+    
+    body.dark-theme table {
+      background: var(--grey-800);
+      border: 1px solid var(--grey-700);
+    }
+    
+    body.dark-theme th {
+      background: var(--grey-700);
+      color: var(--grey-200);
+      border-bottom: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme td {
+      color: var(--grey-200);
+      border-bottom: 1px solid var(--grey-700);
+    }
+    
+    body.dark-theme tr:hover {
+      background: var(--grey-750);
+    }
+    
+    body.dark-theme .filter-container {
+      background: var(--grey-700);
+      border: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .filter-group label {
+      color: var(--grey-200);
+    }
+    
+    body.dark-theme .item-row, 
+    body.dark-theme .edit-item-row {
+      background: var(--grey-700);
+      border: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .total-section {
+      background: var(--grey-700);
+      border: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .total-row {
+      color: var(--grey-200);
+    }
+    
+    body.dark-theme .activity-log {
+      background: var(--grey-700);
+      border: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .log-entry {
+      color: var(--grey-200);
+      border-bottom: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .log-time {
+      color: var(--grey-500);
+    }
+    
+    body.dark-theme .modal-content {
+      background: var(--grey-800);
+      border: 1px solid var(--grey-700);
+    }
+    
+    body.dark-theme .modal-header {
+      border-bottom: 1px solid var(--grey-700);
+    }
+    
+    body.dark-theme .modal-header h3 {
+      color: var(--grey-100);
+    }
+    
+    body.dark-theme .close-modal {
+      color: var(--grey-400);
+    }
+    
+    body.dark-theme .close-modal:hover {
+      background: var(--grey-700);
+    }
+    
+    body.dark-theme .modal-actions {
+      border-top: 1px solid var(--grey-700);
+    }
+    
+    body.dark-theme .notification-panel {
+      background: var(--grey-800);
+      border: 1px solid var(--grey-700);
+    }
+    
+    body.dark-theme .notification-item {
+      border-bottom: 1px solid var(--grey-700);
+    }
+    
+    body.dark-theme .notification-item:hover {
+      background: var(--grey-750);
+    }
+    
+    body.dark-theme .notification-title {
+      color: var(--grey-100);
+    }
+    
+    body.dark-theme .notification-message {
+      color: var(--grey-400);
+    }
+    
+    body.dark-theme .notification-time {
+      color: var(--grey-500);
+    }
+    
+    body.dark-theme .cashbill-details {
+      background: var(--grey-700);
+      border: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .cashbill-details h3 {
+      color: var(--grey-100);
+      border-bottom: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .detail-row {
+      color: var(--grey-200);
+      border-bottom: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .feature-card {
+      background: var(--grey-700);
+      border: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .feature-card h4 {
+      color: var(--grey-100);
+    }
+    
+    body.dark-theme .feature-card p {
+      color: var(--grey-400);
+    }
+    
+    body.dark-theme .security-setting {
+      background: var(--grey-700);
+      border: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .security-setting h5 {
+      color: var(--grey-100);
+    }
+    
+    body.dark-theme .info-item {
+      background: var(--grey-700);
+      border: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .info-value {
+      color: var(--primary);
+    }
+    
+    body.dark-theme .info-label {
+      color: var(--grey-400);
+    }
+    
+    body.dark-theme .user-activity-chart-container {
+      background: var(--grey-700);
+      border: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .chart-period-btn {
+      background: var(--grey-600);
+      border: 1px solid var(--grey-500);
+    }
+    
+    body.dark-theme .chart-period-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+    
+    body.dark-theme .chart-period-btn:hover:not(.active) {
+      background: var(--grey-500);
+    }
+    
+    body.dark-theme .export-option {
+      background: var(--grey-600);
+      border: 1px solid var(--grey-500);
+    }
+    
+    body.dark-theme .export-option:hover {
+      background: var(--grey-500);
+    }
+    
+    body.dark-theme .health-monitor-card {
+      background: var(--grey-700);
+      border: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .health-monitor-title {
+      color: var(--grey-100);
+    }
+    
+    body.dark-theme .health-monitor-value {
+      color: var(--grey-100);
+    }
+    
+    body.dark-theme .health-monitor-details {
+      color: var(--grey-400);
+    }
+    
+    body.dark-theme .backup-history-item {
+      background: var(--grey-700);
+      border: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .backup-date {
+      color: var(--grey-100);
+    }
+    
+    body.dark-theme .backup-size {
+      color: var(--grey-400);
+    }
+    
+    body.dark-theme .activity-summary-card {
+      background: var(--grey-700);
+      border: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .activity-summary-value {
+      color: var(--primary);
+    }
+    
+    body.dark-theme .activity-summary-label {
+      color: var(--grey-400);
+    }
+    
+    body.dark-theme .user-activity-timeline {
+      background: var(--grey-700);
+      border: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .timeline-item {
+      border-bottom: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .timeline-action {
+      color: var(--grey-100);
+    }
+    
+    body.dark-theme .timeline-details {
+      color: var(--grey-400);
+    }
+    
+    body.dark-theme .timeline-time {
+      color: var(--grey-500);
+    }
+    
+    body.dark-theme .permission-role-selector {
+      background: var(--grey-700);
+      border: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .permission-role-item:hover {
+      background: var(--grey-600);
+    }
+    
+    body.dark-theme .permission-role-item.active {
+      background: var(--primary);
+    }
+    
+    body.dark-theme .permission-details {
+      background: var(--grey-700);
+      border: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .permission-category h5 {
+      color: var(--grey-100);
+      border-bottom: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .permission-item label {
+      color: var(--grey-200);
+    }
+    
+    body.dark-theme .settings-group {
+      background: var(--grey-700);
+      border: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .settings-group h4 {
+      color: var(--grey-100);
+    }
+    
+    body.dark-theme .settings-item {
+      border-bottom: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .settings-label {
+      color: var(--grey-100);
+    }
+    
+    body.dark-theme .settings-description {
+      color: var(--grey-500);
+    }
+    
+    body.dark-theme .analytics-chart-container {
+      background: var(--grey-700);
+      border: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .analytics-placeholder {
+      color: var(--grey-400);
+    }
+    
+    body.dark-theme .analytics-summary-card {
+      background: var(--grey-700);
+      border: 1px solid var(--grey-600);
+    }
+    
+    body.dark-theme .analytics-summary-value {
+      color: var(--primary);
+    }
+    
+    body.dark-theme .analytics-summary-label {
+      color: var(--grey-400);
+    }
+    
+    body.dark-theme .analytics-summary-change.positive {
+      color: var(--success);
+    }
+    
+    body.dark-theme .analytics-summary-change.negative {
+      color: var(--danger);
+    }
+    
+    /* Device Detection Styles */
+    .mobile-device .desktop-only {
+      display: none !important;
+    }
+    
+    .desktop-device .mobile-only {
+      display: none !important;
+    }
+    
+    /* Touch-friendly styles for mobile */
+    .mobile-device button, 
+    .mobile-device .btn-edit, 
+    .mobile-device .btn-delete, 
+    .mobile-device .quick-action-btn, 
+    .mobile-device .tool-btn {
+      min-height: 44px; /* Minimum touch target size */
+      min-width: 44px;
+    }
+    
+    .mobile-device .nav-links a {
+      padding: 0.75rem 1rem;
+    }
+    
+    .mobile-device .stat-card, 
+    .mobile-device .metric-card, 
+    .mobile-device .health-indicator, 
+    .mobile-device .tool-btn {
+      padding: 1.25rem;
+    }
+    
+    .mobile-device .card {
+      margin-bottom: 1rem;
+    }
+    
+    .mobile-device .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    .mobile-device input, 
+    .mobile-device select, 
+    .mobile-device textarea {
+      padding: 0.875rem;
+      font-size: 1rem;
+    }
+    
+    .mobile-device .modal-content {
+      padding: 1.25rem;
+    }
+    
+    .mobile-device .modal-header {
+      padding-bottom: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    
+    .mobile-device .modal-header h3 {
+      font-size: 1.1rem;
+    }
+    
+    .mobile-device .modal-actions {
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    
+    .mobile-device .modal-actions button {
+      width: 100%;
+      justify-content: center;
+    }
+    
+    /* Desktop-specific enhancements */
+    .desktop-device .nav-links {
+      flex-wrap: nowrap;
+    }
+    
+    .desktop-device .user-info {
+      white-space: nowrap;
+    }
+    
+    .desktop-device .dashboard-stats {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+    
+    .desktop-device .quick-actions {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+    
+    .desktop-device .performance-metrics {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+    
+    .desktop-device .system-health {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+    
+    .desktop-device .system-tools {
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+    
+    .desktop-device .cashbill-info-grid {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+    
+    .desktop-device .admin-feature-grid {
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    }
+    
+    .desktop-device .security-settings-grid {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+    
+    .desktop-device .system-info-grid {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+    
+    .desktop-device .user-activity-summary {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+    
+    .desktop-device .analytics-summary {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+    
+    /* High contrast mode for accessibility */
+    @media (prefers-contrast: high) {
+      :root {
+        --primary: #0056b3;
+        --primary-dark: #003d82;
+        --success: #1e7e34;
+        --danger: #bd2130;
+        --warning: #e0a800;
+        --info: #117a8b;
+        --grey-50: #ffffff;
+        --grey-100: #f8f9fa;
+        --grey-200: #e9ecef;
+        --grey-300: #dee2e6;
+        --grey-400: #ced4da;
+        --grey-500: #adb5bd;
+        --grey-600: #868e96;
+        --grey-700: #495057;
+        --grey-800: #343a40;
+        --grey-900: #212529;
+      }
+    }
+    
+    /* Reduced motion for accessibility */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+    
+    /* Focus styles for keyboard navigation */
+    button:focus, 
+    input:focus, 
+    select:focus, 
+    textarea:focus, 
+    a:focus {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+    
+    /* Skip to content link for accessibility */
+    .skip-to-content {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: var(--primary);
+      color: white;
+      padding: 8px;
+      text-decoration: none;
+      border-radius: 0 0 4px 0;
+      z-index: 100;
+    }
+    
+    .skip-to-content:focus {
+      top: 0;
+    }
   </style>
 </head>
 <body>
+  <a href="#main-content" class="skip-to-content">Skip to main content</a>
+  
   <div class="container">
     <header>
-      <h1>PNE ARENA System</h1>
-      <p>Professional Billing Management Solution</p>
-      <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">
-        <i class="fas fa-moon"></i>
-      </button>
-      <div class="notification-toggle">
-        <button onclick="toggleNotifications()">
-          <i class="fas fa-bell"></i>
-          <span id="notificationCount" class="notification-badge" style="display: none;">0</span>
+      <div class="header-left">
+        <h1>PNE ARENA System</h1>
+        <p>Professional Billing Management Solution</p>
+      </div>
+      <div class="header-right">
+        <div class="notification-toggle">
+          <button onclick="toggleNotifications()" aria-label="Notifications">
+            <i class="fas fa-bell"></i>
+            <span id="notificationCount" class="notification-badge" style="display: none;">0</span>
+          </button>
+        </div>
+        <button class="theme-toggle" id="themeToggle" title="Toggle dark mode" aria-label="Toggle dark mode">
+          <i class="fas fa-moon"></i>
         </button>
       </div>
     </header>
@@ -2206,11 +3358,11 @@
           <form id="loginForm">
             <div class="form-group">
               <label for="userId">User ID:</label>
-              <input type="text" id="userId" required placeholder="Enter your User ID">
+              <input type="text" id="userId" required placeholder="Enter your User ID" autocomplete="username">
             </div>
             <div class="form-group">
               <label for="password">Password:</label>
-              <input type="password" id="password" required placeholder="Enter your password">
+              <input type="password" id="password" required placeholder="Enter your password" autocomplete="current-password">
             </div>
             <button type="submit"><i class="fas fa-sign-in-alt"></i> Login</button>
           </form>
@@ -2224,8 +3376,12 @@
     <!-- DASHBOARD PAGE -->
     <div id="dashboardPage" class="page">
       <nav>
-        <div class="nav-links">
+        <button class="mobile-nav-toggle mobile-only" id="mobileMenuToggle" aria-label="Toggle navigation menu">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="nav-links" id="navLinks">
           <a onclick="showPage('newCashbillPage')"><i class="fas fa-plus"></i> Create New Cashbill</a>
+          <a onclick="showPage('cashbillListPage')"><i class="fas fa-list"></i> View Cashbills</a>
           <a onclick="showPage('reportsPage')"><i class="fas fa-chart-bar"></i> View Reports</a>
           <a id="adminPanelLink" onclick="showPage('adminPanelPage')" style="display: none;"><i class="fas fa-cogs"></i> Admin Panel</a>
         </div>
@@ -2236,194 +3392,200 @@
         </div>
       </nav>
       
-      <!-- Crew Features -->
-      <div id="crewFeatures" style="display: none;">
-        <div class="card">
-          <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
-          <div class="quick-actions">
-            <div class="quick-action-btn" onclick="showPage('newCashbillPage')">
-              <i class="fas fa-plus-circle"></i>
-              <h3>New Cashbill</h3>
-            </div>
-            <div class="quick-action-btn" onclick="showDrafts()">
-              <i class="fas fa-file-alt"></i>
-              <h3>My Drafts</h3>
-              <span id="draftCountBadge" class="notification-badge" style="display: none;">0</span>
-            </div>
-            <div class="quick-action-btn" onclick="showMyCashbills()">
-              <i class="fas fa-receipt"></i>
-              <h3>My Cashbills</h3>
-            </div>
-            <div class="quick-action-btn" onclick="showPerformanceReport()">
-              <i class="fas fa-chart-line"></i>
-              <h3>Performance</h3>
-            </div>
-          </div>
-        </div>
-        
-        <div class="card">
-          <h2><i class="fas fa-chart-line"></i> My Performance</h2>
-          <div class="performance-metrics">
-            <div class="metric-card">
-              <h3><i class="fas fa-file-invoice"></i> Cashbills Created</h3>
-              <div class="progress-bar">
-                <div id="myCashbillsProgress" class="progress-fill" style="width: 0%;"></div>
+      <div class="page-content" id="main-content">
+        <!-- Crew Features -->
+        <div id="crewFeatures" style="display: none;">
+          <div class="card">
+            <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
+            <div class="quick-actions">
+              <div class="quick-action-btn" onclick="showPage('newCashbillPage')">
+                <i class="fas fa-plus-circle"></i>
+                <h3>New Cashbill</h3>
               </div>
-              <div class="metric-value">
-                <span id="myCashbillsCount">0</span>
-                <span id="myCashbillsTarget">Target: 10</span>
+              <div class="quick-action-btn" onclick="showDrafts()">
+                <i class="fas fa-file-alt"></i>
+                <h3>My Drafts</h3>
+                <span id="draftCountBadge" class="notification-badge" style="display: none;">0</span>
               </div>
-            </div>
-            <div class="metric-card">
-              <h3><i class="fas fa-money-bill-wave"></i> Revenue Generated</h3>
-              <div class="progress-bar">
-                <div id="myRevenueProgress" class="progress-fill" style="width: 0%;"></div>
+              <div class="quick-action-btn" onclick="showMyCashbills()">
+                <i class="fas fa-receipt"></i>
+                <h3>My Cashbills</h3>
               </div>
-              <div class="metric-value">
-                <span id="myRevenueAmount">RM0.00</span>
-                <span id="myRevenueTarget">Target: RM5000</span>
-              </div>
-            </div>
-            <div class="metric-card">
-              <h3><i class="fas fa-percentage"></i> Completion Rate</h3>
-              <div class="progress-bar">
-                <div id="myCompletionProgress" class="progress-fill" style="width: 0%;"></div>
-              </div>
-              <div class="metric-value">
-                <span id="myCompletionRate">0%</span>
-                <span>Committed vs Draft</span>
+              <div class="quick-action-btn" onclick="showPerformanceReport()">
+                <i class="fas fa-chart-line"></i>
+                <h3>Performance</h3>
               </div>
             </div>
           </div>
-        </div>
-        
-        <div class="card">
-          <h2><i class="fas fa-history"></i> Recent Activity</h2>
-          <div class="recent-activity" id="myRecentActivity">
-            <!-- Will be populated by JavaScript -->
+          
+          <div class="card">
+            <h2><i class="fas fa-chart-line"></i> My Performance</h2>
+            <div class="performance-metrics">
+              <div class="metric-card">
+                <h3><i class="fas fa-file-invoice"></i> Cashbills Created</h3>
+                <div class="progress-bar">
+                  <div id="myCashbillsProgress" class="progress-fill" style="width: 0%;"></div>
+                </div>
+                <div class="metric-value">
+                  <span id="myCashbillsCount">0</span>
+                  <span id="myCashbillsTarget">Target: 10</span>
+                </div>
+              </div>
+              <div class="metric-card">
+                <h3><i class="fas fa-money-bill-wave"></i> Revenue Generated</h3>
+                <div class="progress-bar">
+                  <div id="myRevenueProgress" class="progress-fill" style="width: 0%;"></div>
+                </div>
+                <div class="metric-value">
+                  <span id="myRevenueAmount">RM0.00</span>
+                  <span id="myRevenueTarget">Target: RM5000</span>
+                </div>
+              </div>
+              <div class="metric-card">
+                <h3><i class="fas fa-percentage"></i> Completion Rate</h3>
+                <div class="progress-bar">
+                  <div id="myCompletionProgress" class="progress-fill" style="width: 0%;"></div>
+                </div>
+                <div class="metric-value">
+                  <span id="myCompletionRate">0%</span>
+                  <span>Committed vs Draft</span>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      
-      <!-- Admin Features -->
-      <div id="adminFeatures" style="display: none;">
-        <div class="card">
-          <h2><i class="fas fa-heartbeat"></i> System Health</h2>
-          <div class="system-health">
-            <div class="health-indicator">
-              <i class="fas fa-file-invoice health-good"></i>
-              <h3 id="totalCashbillsCount">0</h3>
-              <p>Total Cashbills</p>
-            </div>
-            <div class="health-indicator">
-              <i class="fas fa-server health-good"></i>
-              <h3>99.9%</h3>
-              <p>System Uptime</p>
-            </div>
-            <div class="health-indicator">
-              <i class="fas fa-database health-warning"></i>
-              <h3>78%</h3>
-              <p>Storage Used</p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="card">
-          <h2><i class="fas fa-chart-bar"></i> User Activity</h2>
-          <div class="user-activity-chart">
-            <div class="chart-container" id="userActivityChart">
+          
+          <div class="card">
+            <h2><i class="fas fa-history"></i> Recent Activity</h2>
+            <div class="recent-activity" id="myRecentActivity">
               <!-- Will be populated by JavaScript -->
             </div>
           </div>
         </div>
         
-        <div class="card">
-          <h2><i class="fas fa-tools"></i> System Tools</h2>
-          <div class="system-tools">
-            <div class="tool-btn" onclick="backupSystem()">
-              <i class="fas fa-download"></i>
-              <h3>Backup Data</h3>
+        <!-- Admin Features -->
+        <div id="adminFeatures" style="display: none;">
+          <div class="card">
+            <h2><i class="fas fa-heartbeat"></i> System Health</h2>
+            <div class="system-health">
+              <div class="health-indicator">
+                <i class="fas fa-file-invoice health-good"></i>
+                <h3 id="totalCashbillsCount">0</h3>
+                <p>Total Cashbills</p>
+              </div>
+              <div class="health-indicator">
+                <i class="fas fa-server health-good"></i>
+                <h3>99.9%</h3>
+                <p>System Uptime</p>
+              </div>
+              <div class="health-indicator">
+                <i class="fas fa-database health-warning"></i>
+                <h3>78%</h3>
+                <p>Storage Used</p>
+              </div>
             </div>
-            <div class="tool-btn" onclick="showRestoreModal()">
-              <i class="fas fa-upload"></i>
-              <h3>Restore Data</h3>
+          </div>
+          
+          <div class="card">
+            <h2><i class="fas fa-chart-bar"></i> User Activity</h2>
+            <div class="user-activity-chart">
+              <div class="chart-container" id="userActivityChart">
+                <!-- Will be populated by JavaScript -->
+              </div>
             </div>
-            <div class="tool-btn" onclick="showSystemSettings()">
-              <i class="fas fa-cog"></i>
-              <h3>System Settings</h3>
+          </div>
+          
+          <div class="card">
+            <h2><i class="fas fa-tools"></i> System Tools</h2>
+            <div class="system-tools">
+              <div class="tool-btn" onclick="backupSystem()">
+                <i class="fas fa-download"></i>
+                <h3>Backup Data</h3>
+              </div>
+              <div class="tool-btn" onclick="showRestoreModal()">
+                <i class="fas fa-upload"></i>
+                <h3>Restore Data</h3>
+              </div>
+              <div class="tool-btn" onclick="showSystemSettings()">
+                <i class="fas fa-cog"></i>
+                <h3>System Settings</h3>
+              </div>
+              <div class="tool-btn" onclick="generateReport()">
+                <i class="fas fa-file-alt"></i>
+                <h3>Generate Report</h3>
+              </div>
+              <div class="tool-btn" onclick="showAuditLog()">
+                <i class="fas fa-history"></i>
+                <h3>Audit Log</h3>
+              </div>
+              <div class="tool-btn" onclick="showDataAnalytics()">
+                <i class="fas fa-chart-pie"></i>
+                <h3>Analytics</h3>
+              </div>
             </div>
-            <div class="tool-btn" onclick="generateReport()">
-              <i class="fas fa-file-alt"></i>
-              <h3>Generate Report</h3>
-            </div>
-            <div class="tool-btn" onclick="showAuditLog()">
-              <i class="fas fa-history"></i>
-              <h3>Audit Log</h3>
-            </div>
-            <div class="tool-btn" onclick="showDataAnalytics()">
-              <i class="fas fa-chart-pie"></i>
-              <h3>Analytics</h3>
+          </div>
+          
+          <div class="card">
+            <h2><i class="fas fa-history"></i> System Activity</h2>
+            <div class="recent-activity" id="systemRecentActivity">
+              <!-- Will be populated by JavaScript -->
             </div>
           </div>
         </div>
         
-        <div class="card">
-          <h2><i class="fas fa-history"></i> System Activity</h2>
-          <div class="recent-activity" id="systemRecentActivity">
-            <!-- Will be populated by JavaScript -->
+        <!-- Common Dashboard Features -->
+        <div class="dashboard-stats">
+          <div class="stat-card">
+            <h3 id="totalCashbills">0</h3>
+            <p><i class="fas fa-file-invoice"></i> Total Cashbills</p>
+          </div>
+          <div class="stat-card">
+            <h3 id="totalRevenue">RM0.00</h3>
+            <p><i class="fas fa-money-bill-wave"></i> Total Revenue</p>
+          </div>
+          <div class="stat-card">
+            <h3 id="cashPayments">0</h3>
+            <p><i class="fas fa-money-bill"></i> Cash Payments</p>
+          </div>
+          <div class="stat-card">
+            <h3 id="cardPayments">0</h3>
+            <p><i class="fas fa-credit-card"></i> Card Payments</p>
+          </div>
+          <div class="stat-card">
+            <h3 id="qrPayments">0</h3>
+            <p><i class="fas fa-qrcode"></i> QR Payments</p>
+          </div>
+          <div class="stat-card">
+            <h3 id="onlineBankingPayments">0</h3>
+            <p><i class="fas fa-university"></i> Online Banking</p>
           </div>
         </div>
-      </div>
-      
-      <!-- Common Dashboard Features -->
-      <div class="dashboard-stats">
-        <div class="stat-card">
-          <h3 id="totalCashbills">0</h3>
-          <p><i class="fas fa-file-invoice"></i> Total Cashbills</p>
+        
+        <div class="card">
+          <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
+          <p>Welcome to PNE ARENA System. Any bugs contact Danial Danish (Admin).</p>
+          <div id="dashboardMessage" class="warning-message" style="display: none;">
+            <i class="fas fa-exclamation-triangle"></i> You have <span id="draftCount">0</span> draft cashbills. <a onclick="showPage('cashbillListPage')" style="color: var(--grey-800); text-decoration: underline;">View them now</a>.
+          </div>
         </div>
-        <div class="stat-card">
-          <h3 id="totalRevenue">RM0.00</h3>
-          <p><i class="fas fa-money-bill-wave"></i> Total Revenue</p>
-        </div>
-        <div class="stat-card">
-          <h3 id="cashPayments">0</h3>
-          <p><i class="fas fa-money-bill"></i> Cash Payments</p>
-        </div>
-        <div class="stat-card">
-          <h3 id="cardPayments">0</h3>
-          <p><i class="fas fa-credit-card"></i> Card Payments</p>
-        </div>
-        <div class="stat-card">
-          <h3 id="qrPayments">0</h3>
-          <p><i class="fas fa-qrcode"></i> QR Payments</p>
-        </div>
-        <div class="stat-card">
-          <h3 id="onlineBankingPayments">0</h3>
-          <p><i class="fas fa-university"></i> Online Banking</p>
-        </div>
-      </div>
-      
-      <div class="card">
-        <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
-        <p>Welcome to PNE ARENA System. Any bugs contact Danial Danish (Admin).</p>
-        <div id="dashboardMessage" class="warning-message" style="display: none;">
-          <i class="fas fa-exclamation-triangle"></i> You have <span id="draftCount">0</span> draft cashbills. <a onclick="showPage('reportsPage')" style="color: white; text-decoration: underline;">View them now</a>.
-        </div>
-      </div>
-      
-      <div class="card" id="activityLogCard" style="display: none;">
-        <h2><i class="fas fa-history"></i> Recent Activity</h2>
-        <div class="activity-log" id="activityLog">
-          <!-- Activity log will be populated here -->
+        
+        <div class="card" id="activityLogCard" style="display: none;">
+          <h2><i class="fas fa-history"></i> Recent Activity</h2>
+          <div class="activity-log" id="activityLog">
+            <!-- Activity log will be populated here -->
+          </div>
         </div>
       </div>
     </div>
     
-    <!-- NEW CASHBILL PAGE -->
-    <div id="newCashbillPage" class="page">
+    <!-- CASHBILL LIST PAGE -->
+    <div id="cashbillListPage" class="page">
       <nav>
-        <div class="nav-links">
+        <button class="mobile-nav-toggle mobile-only" id="mobileMenuToggle2" aria-label="Toggle navigation menu">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="nav-links" id="navLinks2">
           <a onclick="showPage('dashboardPage')"><i class="fas fa-home"></i> Dashboard</a>
+          <a onclick="showPage('newCashbillPage')"><i class="fas fa-plus"></i> Create New Cashbill</a>
           <a onclick="showPage('reportsPage')"><i class="fas fa-chart-bar"></i> View Reports</a>
           <a id="adminPanelLink2" onclick="showPage('adminPanelPage')" style="display: none;"><i class="fas fa-cogs"></i> Admin Panel</a>
         </div>
@@ -2434,145 +3596,13 @@
         </div>
       </nav>
       
-      <div class="card">
-        <h2><i class="fas fa-file-invoice"></i> Create New Cashbill</h2>
-        <form id="cashbillForm">
-          <div class="form-group">
-            <label for="customerName">Customer Name:</label>
-            <input type="text" id="customerName" required placeholder="Enter customer name">
-          </div>
-          
-          <div class="member-checkbox">
-            <input type="checkbox" id="isMember">
-            <label for="isMember">Is Member?</label>
-          </div>
-          
-          <div class="items-container">
-            <h3>Items</h3>
-            <div id="itemsContainer">
-              <div class="item-row">
-                <div class="form-group">
-                  <label>Item</label>
-                  <select class="item-select" required>
-                    <option value="">Select an item</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label>Quantity</label>
-                  <input type="number" class="item-quantity" min="1" value="1" required>
-                  <div class="min-order-note" style="display: none; font-size: 0.8rem; color: var(--warning);">Minimum order: <span class="min-order-value"></span> sets</div>
-                </div>
-                <div class="form-group">
-                  <label>Unit Price (RM)</label>
-                  <input type="number" class="item-price" step="0.01" min="0" required placeholder="0.00">
-                </div>
-                <div class="form-group">
-                  <label>Tax (%)</label>
-                  <input type="number" class="item-tax" step="0.01" min="0" value="0" placeholder="0">
-                </div>
-                <div class="form-group">
-                  <label>Discount (RM)</label>
-                  <input type="number" class="item-discount" step="0.01" min="0" value="0" placeholder="0">
-                </div>
-                <div>
-                  <button type="button" class="remove-item-btn" onclick="removeItem(this)"><i class="fas fa-trash"></i> Remove</button>
-                </div>
-              </div>
-            </div>
-            <button type="button" class="add-item-btn" onclick="addItem()"><i class="fas fa-plus"></i> Add Item</button>
-          </div>
-          
-          <div class="total-section">
-            <div class="total-row">
-              <span>Subtotal:</span>
-              <span id="subtotal">RM0.00</span>
-            </div>
-            <div class="total-row">
-              <span>Tax:</span>
-              <span id="totalTax">RM0.00</span>
-            </div>
-            <div class="total-row">
-              <span>Discount:</span>
-              <span id="totalDiscount">RM0.00</span>
-            </div>
-            <div class="total-row final">
-              <span>Total:</span>
-              <span id="grandTotal">RM0.00</span>
-            </div>
-          </div>
-          
-          <div class="form-group">
-            <label for="paymentMethod">Payment Method:</label>
-            <select id="paymentMethod" required>
-              <option value="">Select payment method</option>
-              <option value="cash">Cash</option>
-              <option value="card">Card</option>
-              <option value="qr">QR</option>
-              <option value="online_banking">Online Banking</option>
-            </select>
-          </div>
-          
-          <div class="form-group">
-            <label for="notes">Notes (Optional):</label>
-            <textarea id="notes" rows="3" placeholder="Additional notes..."></textarea>
-          </div>
-          
-          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-            <button type="submit"><i class="fas fa-file-invoice"></i> Generate Cashbill</button>
-            <button type="button" class="btn-secondary" onclick="saveDraft()"><i class="fas fa-save"></i> Save Draft</button>
-            <button type="button" onclick="resetForm()"><i class="fas fa-redo"></i> Reset</button>
-          </div>
-        </form>
-      </div>
-    </div>
-    
-    <!-- SUCCESS PAGE -->
-    <div id="successPage" class="page">
-      <nav>
-        <div class="nav-links">
-          <a onclick="showPage('newCashbillPage')"><i class="fas fa-plus"></i> Create Another</a>
-          <a onclick="showPage('dashboardPage')"><i class="fas fa-home"></i> Dashboard</a>
-          <a onclick="showPage('reportsPage')"><i class="fas fa-chart-bar"></i> View Reports</a>
-          <a id="adminPanelLink3" onclick="showPage('adminPanelPage')" style="display: none;"><i class="fas fa-cogs"></i> Admin Panel</a>
+      <div class="page-content">
+        <div class="cashbill-list-header">
+          <h2>Cashbills</h2>
+          <button class="create-cashbill-btn" onclick="showPage('newCashbillPage')">
+            <i class="fas fa-plus"></i> Create New Cashbill
+          </button>
         </div>
-        <div class="user-info">
-          Welcome, <span id="currentUser3">Admin</span> 
-          <span id="currentUserRole3" class="user-role">Admin</span> | 
-          <a onclick="confirmLogout()" style="color: var(--danger);"><i class="fas fa-sign-out-alt"></i> Logout</a>
-        </div>
-      </nav>
-      
-      <div class="success-message">
-        <i class="fas fa-check-circle"></i> Cashbill Created Successfully!
-      </div>
-      
-      <div class="cashbill-details" id="cashbillDetails">
-        <!-- Cashbill details will be populated here -->
-      </div>
-      
-      <div style="text-align: center; margin-top: 2rem;">
-        <button onclick="showPage('newCashbillPage')"><i class="fas fa-file-invoice"></i> Create Another Cashbill</button>
-        <button class="btn-secondary" onclick="exportCashbill()"><i class="fas fa-file-pdf"></i> Export as PDF</button>
-      </div>
-    </div>
-    
-    <!-- REPORTS PAGE -->
-    <div id="reportsPage" class="page">
-      <nav>
-        <div class="nav-links">
-          <a onclick="showPage('dashboardPage')"><i class="fas fa-home"></i> Dashboard</a>
-          <a onclick="showPage('newCashbillPage')"><i class="fas fa-plus"></i> Create New Cashbill</a>
-          <a id="adminPanelLink4" onclick="showPage('adminPanelPage')" style="display: none;"><i class="fas fa-cogs"></i> Admin Panel</a>
-        </div>
-        <div class="user-info">
-          Welcome, <span id="currentUser4">Admin</span> 
-          <span id="currentUserRole4" class="user-role">Admin</span> | 
-          <a onclick="confirmLogout()" style="color: var(--danger);"><i class="fas fa-sign-out-alt"></i> Logout</a>
-        </div>
-      </nav>
-      
-      <div class="card">
-        <h2><i class="fas fa-chart-bar"></i> Cashbill Reports</h2>
         
         <div class="filter-container">
           <div class="filter-group">
@@ -2612,8 +3642,8 @@
           </div>
         </div>
         
-        <div id="reportsContent">
-          <!-- Reports will be populated here -->
+        <div id="cashbillListContent">
+          <!-- Cashbill list will be populated here -->
         </div>
         
         <div id="pagination" class="pagination">
@@ -2622,13 +3652,273 @@
       </div>
     </div>
     
-    <!-- ADMIN PANEL PAGE -->
-    <div id="adminPanelPage" class="page">
+    <!-- CASHBILL VIEW PAGE -->
+    <div id="cashbillViewPage" class="page">
       <nav>
-        <div class="nav-links">
+        <button class="mobile-nav-toggle mobile-only" id="mobileMenuToggle3" aria-label="Toggle navigation menu">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="nav-links" id="navLinks3">
           <a onclick="showPage('dashboardPage')"><i class="fas fa-home"></i> Dashboard</a>
+          <a onclick="showPage('cashbillListPage')"><i class="fas fa-list"></i> Back to List</a>
           <a onclick="showPage('newCashbillPage')"><i class="fas fa-plus"></i> Create New Cashbill</a>
           <a onclick="showPage('reportsPage')"><i class="fas fa-chart-bar"></i> View Reports</a>
+          <a id="adminPanelLink3" onclick="showPage('adminPanelPage')" style="display: none;"><i class="fas fa-cogs"></i> Admin Panel</a>
+        </div>
+        <div class="user-info">
+          Welcome, <span id="currentUser3">Admin</span> 
+          <span id="currentUserRole3" class="user-role">Admin</span> | 
+          <a onclick="confirmLogout()" style="color: var(--danger);"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+      </nav>
+      
+      <div class="page-content">
+        <div class="cashbill-view-header">
+          <h2 class="cashbill-view-title">
+            <i class="fas fa-file-invoice"></i> Cashbill Details
+          </h2>
+          <div class="cashbill-view-actions">
+            <button class="btn-secondary" onclick="exportCashbill()"><i class="fas fa-file-pdf"></i> Export as PDF</button>
+            <button onclick="editCashbillFromView()"><i class="fas fa-edit"></i> Edit</button>
+          </div>
+        </div>
+        
+        <div class="cashbill-info-grid">
+          <div class="cashbill-info-card">
+            <h4>Invoice Number</h4>
+            <p id="viewInvoiceNumber">#INV0001</p>
+          </div>
+          <div class="cashbill-info-card">
+            <h4>Customer Name</h4>
+            <p id="viewCustomerName">Customer Name</p>
+          </div>
+          <div class="cashbill-info-card">
+            <h4>Date</h4>
+            <p id="viewDate">Jan 1, 2023</p>
+          </div>
+          <div class="cashbill-info-card">
+            <h4>Status</h4>
+            <p id="viewStatus">Committed</p>
+          </div>
+          <div class="cashbill-info-card">
+            <h4>Payment Method</h4>
+            <p id="viewPaymentMethod">Cash</p>
+          </div>
+          <div class="cashbill-info-card">
+            <h4>Created By</h4>
+            <p id="viewCreatedBy">Admin</p>
+          </div>
+        </div>
+        
+        <div class="card">
+          <h3>Items</h3>
+          <div class="table-container">
+            <table class="cashbill-items-table">
+              <thead>
+                <tr>
+                  <th>Description</th>
+                  <th>Quantity</th>
+                  <th>Unit Price</th>
+                  <th>Tax</th>
+                  <th>Discount</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody id="viewItemsTableBody">
+                <!-- Items will be populated here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        <div class="cashbill-summary">
+          <h3>Summary</h3>
+          <div class="total-row">
+            <span>Subtotal:</span>
+            <span id="viewSubtotal">RM0.00</span>
+          </div>
+          <div class="total-row">
+            <span>Tax:</span>
+            <span id="viewTotalTax">RM0.00</span>
+          </div>
+          <div class="total-row">
+            <span>Discount:</span>
+            <span id="viewTotalDiscount">RM0.00</span>
+          </div>
+          <div class="total-row final">
+            <span>Total Amount:</span>
+            <span id="viewGrandTotal">RM0.00</span>
+          </div>
+        </div>
+        
+        <div class="card" id="viewNotesCard" style="display: none;">
+          <h3>Notes</h3>
+          <p id="viewNotes">No notes available</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- NEW CASHBILL PAGE -->
+    <div id="newCashbillPage" class="page">
+      <nav>
+        <button class="mobile-nav-toggle mobile-only" id="mobileMenuToggle4" aria-label="Toggle navigation menu">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="nav-links" id="navLinks4">
+          <a onclick="showPage('dashboardPage')"><i class="fas fa-home"></i> Dashboard</a>
+          <a onclick="showPage('cashbillListPage')"><i class="fas fa-list"></i> View Cashbills</a>
+          <a onclick="showPage('reportsPage')"><i class="fas fa-chart-bar"></i> View Reports</a>
+          <a id="adminPanelLink4" onclick="showPage('adminPanelPage')" style="display: none;"><i class="fas fa-cogs"></i> Admin Panel</a>
+        </div>
+        <div class="user-info">
+          Welcome, <span id="currentUser4">Admin</span> 
+          <span id="currentUserRole4" class="user-role">Admin</span> | 
+          <a onclick="confirmLogout()" style="color: var(--danger);"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+      </nav>
+      
+      <div class="page-content">
+        <div class="card">
+          <h2><i class="fas fa-file-invoice"></i> Create New Cashbill</h2>
+          <form id="cashbillForm">
+            <div class="form-group">
+              <label for="customerName">Customer Name:</label>
+              <input type="text" id="customerName" required placeholder="Enter customer name">
+            </div>
+            
+            <div class="member-checkbox">
+              <input type="checkbox" id="isMember">
+              <label for="isMember">Is Member?</label>
+            </div>
+            
+            <div class="items-container">
+              <h3>Items</h3>
+              <div id="itemsContainer">
+                <div class="item-row">
+                  <div class="form-group">
+                    <label>Item</label>
+                    <select class="item-select" required>
+                      <option value="">Select an item</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Quantity</label>
+                    <input type="number" class="item-quantity" min="1" value="1" required>
+                    <div class="min-order-note" style="display: none; font-size: 0.8rem; color: var(--warning);">Minimum order: <span class="min-order-value"></span> sets</div>
+                  </div>
+                  <div class="form-group">
+                    <label>Unit Price (RM)</label>
+                    <input type="number" class="item-price" step="0.01" min="0" required placeholder="0.00">
+                  </div>
+                  <div class="form-group">
+                    <label>Tax (%)</label>
+                    <input type="number" class="item-tax" step="0.01" min="0" value="0" placeholder="0">
+                  </div>
+                  <div class="form-group">
+                    <label>Discount (RM)</label>
+                    <input type="number" class="item-discount" step="0.01" min="0" value="0" placeholder="0">
+                  </div>
+                  <div>
+                    <button type="button" class="remove-item-btn" onclick="removeItem(this)"><i class="fas fa-trash"></i> Remove</button>
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="add-item-btn" onclick="addItem()"><i class="fas fa-plus"></i> Add Item</button>
+            </div>
+            
+            <div class="total-section">
+              <div class="total-row">
+                <span>Subtotal:</span>
+                <span id="subtotal">RM0.00</span>
+              </div>
+              <div class="total-row">
+                <span>Tax:</span>
+                <span id="totalTax">RM0.00</span>
+              </div>
+              <div class="total-row">
+                <span>Discount:</span>
+                <span id="totalDiscount">RM0.00</span>
+              </div>
+              <div class="total-row final">
+                <span>Total:</span>
+                <span id="grandTotal">RM0.00</span>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="paymentMethod">Payment Method:</label>
+              <select id="paymentMethod" required>
+                <option value="">Select payment method</option>
+                <option value="cash">Cash</option>
+                <option value="card">Card</option>
+                <option value="qr">QR</option>
+                <option value="online_banking">Online Banking</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="notes">Notes (Optional):</label>
+              <textarea id="notes" rows="3" placeholder="Additional notes..."></textarea>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+              <button type="submit"><i class="fas fa-file-invoice"></i> Generate Cashbill</button>
+              <button type="button" class="btn-secondary" onclick="saveDraft()"><i class="fas fa-save"></i> Save Draft</button>
+              <button type="button" onclick="resetForm()"><i class="fas fa-redo"></i> Reset</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <!-- SUCCESS PAGE -->
+    <div id="successPage" class="page">
+      <nav>
+        <button class="mobile-nav-toggle mobile-only" id="mobileMenuToggle5" aria-label="Toggle navigation menu">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="nav-links" id="navLinks5">
+          <a onclick="showPage('newCashbillPage')"><i class="fas fa-plus"></i> Create Another</a>
+          <a onclick="showPage('dashboardPage')"><i class="fas fa-home"></i> Dashboard</a>
+          <a onclick="showPage('cashbillListPage')"><i class="fas fa-list"></i> View Cashbills</a>
+          <a onclick="showPage('reportsPage')"><i class="fas fa-chart-bar"></i> View Reports</a>
+          <a id="adminPanelLink5" onclick="showPage('adminPanelPage')" style="display: none;"><i class="fas fa-cogs"></i> Admin Panel</a>
+        </div>
+        <div class="user-info">
+          Welcome, <span id="currentUser5">Admin</span> 
+          <span id="currentUserRole5" class="user-role">Admin</span> | 
+          <a onclick="confirmLogout()" style="color: var(--danger);"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+      </nav>
+      
+      <div class="page-content">
+        <div class="success-message">
+          <i class="fas fa-check-circle"></i> Cashbill Created Successfully!
+        </div>
+        
+        <div class="cashbill-details" id="cashbillDetails">
+          <!-- Cashbill details will be populated here -->
+        </div>
+        
+        <div style="text-align: center; margin-top: 2rem;">
+          <button onclick="showPage('newCashbillPage')"><i class="fas fa-file-invoice"></i> Create Another Cashbill</button>
+          <button class="btn-secondary" onclick="exportCashbill()"><i class="fas fa-file-pdf"></i> Export as PDF</button>
+          <button class="btn-secondary" onclick="showPage('cashbillListPage')"><i class="fas fa-list"></i> View All Cashbills</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- REPORTS PAGE -->
+    <div id="reportsPage" class="page">
+      <nav>
+        <button class="mobile-nav-toggle mobile-only" id="mobileMenuToggle6" aria-label="Toggle navigation menu">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="nav-links" id="navLinks6">
+          <a onclick="showPage('dashboardPage')"><i class="fas fa-home"></i> Dashboard</a>
+          <a onclick="showPage('cashbillListPage')"><i class="fas fa-list"></i> View Cashbills</a>
+          <a onclick="showPage('newCashbillPage')"><i class="fas fa-plus"></i> Create New Cashbill</a>
+          <a id="adminPanelLink6" onclick="showPage('adminPanelPage')" style="display: none;"><i class="fas fa-cogs"></i> Admin Panel</a>
         </div>
         <div class="user-info">
           Welcome, <span id="currentUser6">Admin</span> 
@@ -2637,154 +3927,228 @@
         </div>
       </nav>
       
-      <div class="card">
-        <h2><i class="fas fa-cogs"></i> Admin Panel</h2>
-        <p>System administration and settings.</p>
-        
-        <div class="admin-feature-grid">
-          <div class="feature-card">
-            <h4><i class="fas fa-users-cog"></i> User Management</h4>
-            <p>Manage system users, roles, and permissions</p>
-            <div class="feature-stats">
-              <div class="feature-stat">
-                <div class="feature-stat-value" id="totalUsersCount">0</div>
-                <div class="feature-stat-label">Total Users</div>
-              </div>
-              <div class="feature-stat">
-                <div class="feature-stat-value" id="activeUsersCount">0</div>
-                <div class="feature-stat-label">Active Today</div>
-              </div>
+      <div class="page-content">
+        <div class="card">
+          <h2><i class="fas fa-chart-bar"></i> Cashbill Reports</h2>
+          
+          <div class="filter-container">
+            <div class="filter-group">
+              <label for="reportSearchCustomer">Search Customer:</label>
+              <input type="text" id="reportSearchCustomer" placeholder="Customer name">
             </div>
-            <div class="user-management-actions">
-              <button onclick="showAddUserModal()"><i class="fas fa-user-plus"></i> Add User</button>
-              <button onclick="showUserPermissionsModal()"><i class="fas fa-user-shield"></i> Permissions</button>
-              <button onclick="showUserActivityModal()"><i class="fas fa-chart-line"></i> Activity</button>
+            <div class="filter-group">
+              <label for="reportFilterStatus">Status:</label>
+              <select id="reportFilterStatus">
+                <option value="">All</option>
+                <option value="committed">Committed</option>
+                <option value="draft">Draft</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label for="reportFilterPayment">Payment Method:</label>
+              <select id="reportFilterPayment">
+                <option value="">All</option>
+                <option value="cash">Cash</option>
+                <option value="card">Card</option>
+                <option value="qr">QR</option>
+                <option value="online_banking">Online Banking</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label for="reportDateFrom">Date From:</label>
+              <input type="date" id="reportDateFrom">
+            </div>
+            <div class="filter-group">
+              <label for="reportDateTo">Date To:</label>
+              <input type="date" id="reportDateTo">
+            </div>
+            <div class="filter-actions">
+              <button onclick="applyReportFilters()"><i class="fas fa-filter"></i> Apply Filters</button>
+              <button type="button" class="btn-secondary" onclick="resetReportFilters()"><i class="fas fa-redo"></i> Reset</button>
+              <button type="button" class="btn-secondary" onclick="exportReportToCSV()"><i class="fas fa-file-csv"></i> Export CSV</button>
             </div>
           </div>
           
-          <div class="feature-card">
-            <h4><i class="fas fa-shield-alt"></i> Security Settings</h4>
-            <p>Configure system security and access controls</p>
-            <div class="security-settings-grid">
-              <div class="security-setting">
-                <h5>Session Control</h5>
-                <label for="sessionTimeout">Session Timeout (min):</label>
-                <input type="number" id="sessionTimeout" min="5" max="120" value="30">
-              </div>
-              <div class="security-setting">
-                <h5>Login Protection</h5>
-                <label for="maxLoginAttempts">Max Login Attempts:</label>
-                <input type="number" id="maxLoginAttempts" min="1" max="10" value="3">
-              </div>
-            </div>
-            <button onclick="saveSecuritySettings()" style="margin-top: 1rem;"><i class="fas fa-save"></i> Save Settings</button>
+          <div id="reportsContent">
+            <!-- Reports will be populated here -->
+          </div>
+          
+          <div id="reportPagination" class="pagination">
+            <!-- Pagination will be populated here -->
           </div>
         </div>
-        
-        <div class="card" style="margin-top: 2rem;">
-          <h2><i class="fas fa-server"></i> System Information</h2>
-          <div class="system-info-grid">
-            <div class="info-item">
-              <div class="info-value">2.4 GB</div>
-              <div class="info-label">Database Size</div>
+      </div>
+    </div>
+    
+    <!-- ADMIN PANEL PAGE -->
+    <div id="adminPanelPage" class="page">
+      <nav>
+        <button class="mobile-nav-toggle mobile-only" id="mobileMenuToggle7" aria-label="Toggle navigation menu">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="nav-links" id="navLinks7">
+          <a onclick="showPage('dashboardPage')"><i class="fas fa-home"></i> Dashboard</a>
+          <a onclick="showPage('cashbillListPage')"><i class="fas fa-list"></i> View Cashbills</a>
+          <a onclick="showPage('newCashbillPage')"><i class="fas fa-plus"></i> Create New Cashbill</a>
+          <a onclick="showPage('reportsPage')"><i class="fas fa-chart-bar"></i> View Reports</a>
+        </div>
+        <div class="user-info">
+          Welcome, <span id="currentUser7">Admin</span> 
+          <span id="currentUserRole7" class="user-role">Admin</span> | 
+          <a onclick="confirmLogout()" style="color: var(--danger);"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+      </nav>
+      
+      <div class="page-content">
+        <div class="card">
+          <h2><i class="fas fa-cogs"></i> Admin Panel</h2>
+          <p>System administration and settings.</p>
+          
+          <div class="admin-feature-grid">
+            <div class="feature-card">
+              <h4><i class="fas fa-users-cog"></i> User Management</h4>
+              <p>Manage system users, roles, and permissions</p>
+              <div class="feature-stats">
+                <div class="feature-stat">
+                  <div class="feature-stat-value" id="totalUsersCount">0</div>
+                  <div class="feature-stat-label">Total Users</div>
+                </div>
+                <div class="feature-stat">
+                  <div class="feature-stat-value" id="activeUsersCount">0</div>
+                  <div class="feature-stat-label">Active Today</div>
+                </div>
+              </div>
+              <div class="user-management-actions">
+                <button onclick="showAddUserModal()"><i class="fas fa-user-plus"></i> Add User</button>
+                <button onclick="showUserPermissionsModal()"><i class="fas fa-user-shield"></i> Permissions</button>
+                <button onclick="showUserActivityModal()"><i class="fas fa-chart-line"></i> Activity</button>
+              </div>
             </div>
-            <div class="info-item">
-              <div class="info-value" id="activeUsersInfo">0</div>
-              <div class="info-label">Active Users</div>
-            </div>
-            <div class="info-item">
-              <div class="info-value">24/7</div>
-              <div class="info-label">System Uptime</div>
-            </div>
-            <div class="info-item">
-              <div class="info-value">78%</div>
-              <div class="info-label">Storage Used</div>
+            
+            <div class="feature-card">
+              <h4><i class="fas fa-shield-alt"></i> Security Settings</h4>
+              <p>Configure system security and access controls</p>
+              <div class="security-settings-grid">
+                <div class="security-setting">
+                  <h5>Session Control</h5>
+                  <label for="sessionTimeout">Session Timeout (min):</label>
+                  <input type="number" id="sessionTimeout" min="5" max="120" value="30">
+                </div>
+                <div class="security-setting">
+                  <h5>Login Protection</h5>
+                  <label for="maxLoginAttempts">Max Login Attempts:</label>
+                  <input type="number" id="maxLoginAttempts" min="1" max="10" value="3">
+                </div>
+              </div>
+              <button onclick="saveSecuritySettings()" style="margin-top: 1rem;"><i class="fas fa-save"></i> Save Settings</button>
             </div>
           </div>
           
-          <div style="margin-top: 1.5rem;">
-            <h3>System Logs</h3>
-            <div class="audit-log-controls">
-              <div class="audit-log-filters">
-                <div class="filter-group">
-                  <label for="logType">Log Type:</label>
-                  <select id="logType">
-                    <option value="">All</option>
-                    <option value="security">Security</option>
-                    <option value="user">User</option>
-                    <option value="system">System</option>
-                  </select>
-                </div>
-                <div class="filter-group">
-                  <label for="logDateFrom">Date From:</label>
-                  <input type="date" id="logDateFrom">
-                </div>
-                <div class="filter-group">
-                  <label for="logDateTo">Date To:</label>
-                  <input type="date" id="logDateTo">
-                </div>
+          <div class="card" style="margin-top: 1.5rem;">
+            <h2><i class="fas fa-server"></i> System Information</h2>
+            <div class="system-info-grid">
+              <div class="info-item">
+                <div class="info-value">2.4 GB</div>
+                <div class="info-label">Database Size</div>
               </div>
-              <button onclick="applyLogFilters()"><i class="fas fa-filter"></i> Apply</button>
+              <div class="info-item">
+                <div class="info-value" id="activeUsersInfo">0</div>
+                <div class="info-label">Active Users</div>
+              </div>
+              <div class="info-item">
+                <div class="info-value">24/7</div>
+                <div class="info-label">System Uptime</div>
+              </div>
+              <div class="info-item">
+                <div class="info-value">78%</div>
+                <div class="info-label">Storage Used</div>
+              </div>
             </div>
-            <div class="activity-log" id="systemLogs" style="max-height: 300px;">
-              <!-- Will be populated by JavaScript -->
+            
+            <div style="margin-top: 1.25rem;">
+              <h3>System Logs</h3>
+              <div class="audit-log-controls">
+                <div class="audit-log-filters">
+                  <div class="filter-group">
+                    <label for="logType">Log Type:</label>
+                    <select id="logType">
+                      <option value="">All</option>
+                      <option value="security">Security</option>
+                      <option value="user">User</option>
+                      <option value="system">System</option>
+                    </select>
+                  </div>
+                  <div class="filter-group">
+                    <label for="logDateFrom">Date From:</label>
+                    <input type="date" id="logDateFrom">
+                  </div>
+                  <div class="filter-group">
+                    <label for="logDateTo">Date To:</label>
+                    <input type="date" id="logDateTo">
+                  </div>
+                </div>
+                <button onclick="applyLogFilters()"><i class="fas fa-filter"></i> Apply</button>
+              </div>
+              <div class="activity-log" id="systemLogs" style="max-height: 300px;">
+                <!-- Will be populated by JavaScript -->
+              </div>
             </div>
           </div>
-        </div>
-        
-        <div class="card" style="margin-top: 2rem;">
-          <h2><i class="fas fa-chart-pie"></i> Advanced Analytics</h2>
-          <div class="advanced-analytics-container">
-            <div class="analytics-controls">
-              <div class="analytics-filters">
-                <div class="filter-group">
-                  <label for="analyticsPeriod">Period:</label>
-                  <select id="analyticsPeriod">
-                    <option value="7">Last 7 Days</option>
-                    <option value="30">Last 30 Days</option>
-                    <option value="90">Last 90 Days</option>
-                    <option value="365">Last Year</option>
-                  </select>
+          
+          <div class="card" style="margin-top: 1.5rem;">
+            <h2><i class="fas fa-chart-pie"></i> Advanced Analytics</h2>
+            <div class="advanced-analytics-container">
+              <div class="analytics-controls">
+                <div class="analytics-filters">
+                  <div class="filter-group">
+                    <label for="analyticsPeriod">Period:</label>
+                    <select id="analyticsPeriod">
+                      <option value="7">Last 7 Days</option>
+                      <option value="30">Last 30 Days</option>
+                      <option value="90">Last 90 Days</option>
+                      <option value="365">Last Year</option>
+                    </select>
+                  </div>
+                  <div class="filter-group">
+                    <label for="analyticsMetric">Metric:</label>
+                    <select id="analyticsMetric">
+                      <option value="revenue">Revenue</option>
+                      <option value="cashbills">Cashbills</option>
+                      <option value="users">User Activity</option>
+                    </select>
+                  </div>
                 </div>
-                <div class="filter-group">
-                  <label for="analyticsMetric">Metric:</label>
-                  <select id="analyticsMetric">
-                    <option value="revenue">Revenue</option>
-                    <option value="cashbills">Cashbills</option>
-                    <option value="users">User Activity</option>
-                  </select>
+                <button onclick="generateAnalyticsReport()"><i class="fas fa-sync"></i> Refresh</button>
+              </div>
+              
+              <div class="analytics-chart-container">
+                <div class="analytics-placeholder">
+                  <i class="fas fa-chart-line"></i>
+                  <p>Analytics chart will be displayed here</p>
                 </div>
               </div>
-              <button onclick="generateAnalyticsReport()"><i class="fas fa-sync"></i> Refresh</button>
-            </div>
-            
-            <div class="analytics-chart-container">
-              <div class="analytics-placeholder">
-                <i class="fas fa-chart-line"></i>
-                <p>Analytics chart will be displayed here</p>
-              </div>
-            </div>
-            
-            <div class="analytics-summary">
-              <div class="analytics-summary-card">
-                <div class="analytics-summary-value">RM12,450</div>
-                <div class="analytics-summary-label">Total Revenue</div>
-                <div class="analytics-summary-change positive">+12.5%</div>
-              </div>
-              <div class="analytics-summary-card">
-                <div class="analytics-summary-value">48</div>
-                <div class="analytics-summary-label">Cashbills</div>
-                <div class="analytics-summary-change positive">+8.2%</div>
-              </div>
-              <div class="analytics-summary-card">
-                <div class="analytics-summary-value">4</div>
-                <div class="analytics-summary-label">Active Users</div>
-                <div class="analytics-summary-change negative">-1</div>
-              </div>
-              <div class="analytics-summary-card">
-                <div class="analytics-summary-value">92%</div>
-                <div class="analytics-summary-label">Completion Rate</div>
-                <div class="analytics-summary-change positive">+3.1%</div>
+              
+              <div class="analytics-summary">
+                <div class="analytics-summary-card">
+                  <div class="analytics-summary-value">RM12,450</div>
+                  <div class="analytics-summary-label">Total Revenue</div>
+                  <div class="analytics-summary-change positive">+12.5%</div>
+                </div>
+                <div class="analytics-summary-card">
+                  <div class="analytics-summary-value">48</div>
+                  <div class="analytics-summary-label">Cashbills</div>
+                  <div class="analytics-summary-change positive">+8.2%</div>
+                </div>
+                <div class="analytics-summary-card">
+                  <div class="analytics-summary-value">4</div>
+                  <div class="analytics-summary-label">Active Users</div>
+                  <div class="analytics-summary-change negative">-1</div>
+                </div>
+                <div class="analytics-summary-card">
+                  <div class="analytics-summary-value">92%</div>
+                  <div class="analytics-summary-label">Completion Rate</div>
+                  <div class="analytics-summary-change positive">+3.1%</div>
+                </div>
               </div>
             </div>
           </div>
@@ -2797,7 +4161,9 @@
       <div class="modal-content">
         <div class="modal-header">
           <h3><i class="fas fa-edit"></i> Edit Cashbill</h3>
-          <button class="close-modal" onclick="closeEditModal()"><i class="fas fa-times"></i></button>
+          <button class="close-modal" onclick="closeEditModal()" aria-label="Close modal">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
         <form id="editCashbillForm">
           <input type="hidden" id="editCashbillId">
@@ -2867,7 +4233,9 @@
       <div class="modal-content">
         <div class="modal-header">
           <h3 id="confirmTitle"><i class="fas fa-question-circle"></i> Confirm Action</h3>
-          <button class="close-modal" onclick="closeConfirmModal()"><i class="fas fa-times"></i></button>
+          <button class="close-modal" onclick="closeConfirmModal()" aria-label="Close modal">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
         <p id="confirmMessage">Are you sure you want to proceed?</p>
         <div class="modal-actions">
@@ -2881,7 +4249,9 @@
     <div id="notificationPanel" class="notification-panel">
       <div class="notification-header">
         <h3>Notifications</h3>
-        <button onclick="toggleNotifications()"><i class="fas fa-times"></i></button>
+        <button onclick="toggleNotifications()" aria-label="Close notifications">
+          <i class="fas fa-times"></i>
+        </button>
       </div>
       <div class="notification-list" id="notificationList">
         <!-- Notifications will be populated here -->
@@ -2894,8 +4264,8 @@
     </div>
     
     <!-- KEYBOARD SHORTCUTS -->
-    <div class="shortcuts">
-      <i class="fas fa-keyboard"></i> Shortcuts: N=New, D=Dashboard, R=Reports, L=Logout
+    <div class="shortcuts desktop-only">
+      <i class="fas fa-keyboard"></i> Shortcuts: N=New, D=Dashboard, L=List, R=Reports
     </div>
     
     <!-- ADD USER MODAL -->
@@ -2903,7 +4273,9 @@
       <div class="modal-content">
         <div class="modal-header">
           <h3><i class="fas fa-user-plus"></i> Add New User</h3>
-          <button class="close-modal" onclick="closeAddUserModal()"><i class="fas fa-times"></i></button>
+          <button class="close-modal" onclick="closeAddUserModal()" aria-label="Close modal">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
         <form id="addUserForm">
           <div class="form-group">
@@ -2944,7 +4316,9 @@
       <div class="modal-content">
         <div class="modal-header">
           <h3><i class="fas fa-user-shield"></i> Manage User Permissions</h3>
-          <button class="close-modal" onclick="closeUserPermissionsModal()"><i class="fas fa-times"></i></button>
+          <button class="close-modal" onclick="closeUserPermissionsModal()" aria-label="Close modal">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
         <div class="permission-management-grid">
           <div class="permission-role-selector">
@@ -2975,7 +4349,9 @@
       <div class="modal-content">
         <div class="modal-header">
           <h3><i class="fas fa-chart-line"></i> User Activity Report</h3>
-          <button class="close-modal" onclick="closeUserActivityModal()"><i class="fas fa-times"></i></button>
+          <button class="close-modal" onclick="closeUserActivityModal()" aria-label="Close modal">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
         <div class="form-group">
           <label for="activityUser">Select User:</label>
@@ -2983,7 +4359,7 @@
             <option value="">Select a user</option>
           </select>
         </div>
-        <div id="userActivityContainer" style="margin-top: 1.5rem;">
+        <div id="userActivityContainer" style="margin-top: 1.25rem;">
           <!-- Will be populated by JavaScript -->
         </div>
         <div class="modal-actions">
@@ -2997,7 +4373,9 @@
       <div class="modal-content">
         <div class="modal-header">
           <h3><i class="fas fa-cog"></i> System Settings</h3>
-          <button class="close-modal" onclick="closeSystemSettingsModal()"><i class="fas fa-times"></i></button>
+          <button class="close-modal" onclick="closeSystemSettingsModal()" aria-label="Close modal">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
         <div class="system-settings-section">
           <div class="settings-group">
@@ -3091,7 +4469,9 @@
       <div class="modal-content">
         <div class="modal-header">
           <h3><i class="fas fa-upload"></i> Restore System</h3>
-          <button class="close-modal" onclick="closeRestoreModal()"><i class="fas fa-times"></i></button>
+          <button class="close-modal" onclick="closeRestoreModal()" aria-label="Close modal">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
         <p>Warning: This will overwrite all current data. Please make sure you have a backup before proceeding.</p>
         <div class="form-group">
@@ -3133,7 +4513,9 @@
       <div class="modal-content">
         <div class="modal-header">
           <h3><i class="fas fa-history"></i> Audit Log</h3>
-          <button class="close-modal" onclick="closeAuditLogModal()"><i class="fas fa-times"></i></button>
+          <button class="close-modal" onclick="closeAuditLogModal()" aria-label="Close modal">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
         <div class="audit-log-controls">
           <div class="audit-log-filters">
@@ -3180,7 +4562,9 @@
       <div class="modal-content">
         <div class="modal-header">
           <h3><i class="fas fa-chart-pie"></i> Advanced Analytics</h3>
-          <button class="close-modal" onclick="closeDataAnalyticsModal()"><i class="fas fa-times"></i></button>
+          <button class="close-modal" onclick="closeDataAnalyticsModal()" aria-label="Close modal">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
         
         <div class="analytics-controls">
@@ -3281,6 +4665,19 @@
   </div>
   
   <script>
+    // Device detection
+    function isMobileDevice() {
+      return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1) || 
+             (window.innerWidth <= 768) || (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+    }
+    
+    // Apply device class to body
+    if (isMobileDevice()) {
+      document.body.classList.add('mobile-device');
+    } else {
+      document.body.classList.add('desktop-device');
+    }
+    
     // Define items list with categories and pricing
     const itemsList = [
       {
@@ -3398,6 +4795,7 @@
     const itemsPerPage = 10;
     let filteredCashbills = [];
     let confirmedAction = null;
+    let currentViewingCashbill = null;
     
     // Get next invoice number
     function getNextInvoiceNumber() {
@@ -3523,19 +4921,16 @@
     
     // Theme toggle
     document.getElementById('themeToggle').addEventListener('click', function() {
-      const currentTheme = document.documentElement.getAttribute('data-theme');
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', newTheme);
-      localStorage.setItem('theme', newTheme);
-      
-      // Update theme toggle icon
-      this.innerHTML = newTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+      // Simple theme toggle implementation
+      const body = document.body;
+      if (body.classList.contains('dark-theme')) {
+        body.classList.remove('dark-theme');
+        this.innerHTML = '<i class="fas fa-moon"></i>';
+      } else {
+        body.classList.add('dark-theme');
+        this.innerHTML = '<i class="fas fa-sun"></i>';
+      }
     });
-    
-    // Load saved theme
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    document.getElementById('themeToggle').innerHTML = savedTheme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
     
     // Page navigation
     function showPage(pageId) {
@@ -3549,6 +4944,11 @@
         updateActivityLog();
       }
       
+      // Update cashbill list when list page is shown
+      if (pageId === 'cashbillListPage') {
+        updateCashbillListPage();
+      }
+      
       // Update reports when reports page is shown
       if (pageId === 'reportsPage') {
         updateReportsPage();
@@ -3558,7 +4958,30 @@
       if (pageId === 'adminPanelPage') {
         updateAdminPanel();
       }
+      
+      // Close mobile menu if open
+      closeMobileMenu();
     }
+    
+    // Close mobile menu
+    function closeMobileMenu() {
+      const navLinks = document.querySelectorAll('.nav-links');
+      navLinks.forEach(nav => {
+        nav.classList.remove('active');
+      });
+    }
+    
+    // Mobile menu toggle
+    document.addEventListener('DOMContentLoaded', function() {
+      const mobileMenuToggles = document.querySelectorAll('.mobile-nav-toggle');
+      
+      mobileMenuToggles.forEach(toggle => {
+        toggle.addEventListener('click', function() {
+          const navLinks = this.closest('nav').querySelector('.nav-links');
+          navLinks.classList.toggle('active');
+        });
+      });
+    });
     
     // Login functionality
     document.getElementById('loginForm').addEventListener('submit', function(e) {
@@ -3588,14 +5011,18 @@
       document.getElementById('currentUser2').textContent = currentUser.name;
       document.getElementById('currentUser3').textContent = currentUser.name;
       document.getElementById('currentUser4').textContent = currentUser.name;
+      document.getElementById('currentUser5').textContent = currentUser.name;
       document.getElementById('currentUser6').textContent = currentUser.name;
+      document.getElementById('currentUser7').textContent = currentUser.name;
       
       // Update role in all pages
       document.getElementById('currentUserRole').textContent = getRoleDisplayName(currentUser.role);
       document.getElementById('currentUserRole2').textContent = getRoleDisplayName(currentUser.role);
       document.getElementById('currentUserRole3').textContent = getRoleDisplayName(currentUser.role);
       document.getElementById('currentUserRole4').textContent = getRoleDisplayName(currentUser.role);
+      document.getElementById('currentUserRole5').textContent = getRoleDisplayName(currentUser.role);
       document.getElementById('currentUserRole6').textContent = getRoleDisplayName(currentUser.role);
+      document.getElementById('currentUserRole7').textContent = getRoleDisplayName(currentUser.role);
       
       // Show/hide admin panel link based on role
       const adminPanelLinks = document.querySelectorAll('[id^="adminPanelLink"]');
@@ -4163,7 +5590,7 @@
           <span>Status:</span>
           <span>${cashbill.status === 'draft' ? 'Draft' : 'Committed'}</span>
         </div>
-        <div style="margin-top: 1.5rem;">
+        <div style="margin-top: 1.25rem;">
           <h4>Items:</h4>
           ${itemsHTML}
         </div>
@@ -4457,13 +5884,13 @@
     function showDrafts() {
       document.getElementById('filterStatus').value = 'draft';
       applyFilters();
-      showPage('reportsPage');
+      showPage('cashbillListPage');
     }
     
     // Show cashbills for current user
     function showMyCashbills() {
       resetFilters();
-      showPage('reportsPage');
+      showPage('cashbillListPage');
     }
     
     // Show performance report
@@ -4674,9 +6101,11 @@
       linkElement.setAttribute('download', exportFileDefaultName);
       linkElement.click();
       
+      // Log activity
+      logActivity(currentUser.id, currentUser.name, 'Generate Report', 'Generated system report');
+      
       hideLoading();
       
-      logActivity(currentUser.id, currentUser.name, 'Generate Report', 'Generated system report');
       alert('Report generated successfully!');
     }
     
@@ -4759,6 +6188,7 @@
       
       hideLoading();
       
+      // Log activity
       logActivity(currentUser.id, currentUser.name, 'Export Data', 'Exported audit log to CSV');
     }
     
@@ -4775,7 +6205,7 @@
     // Advanced Analytics Implementation
     let analyticsChart = null;
     let analyticsData = {};
-
+    
     // Initialize analytics when modal is opened
     function initializeAnalytics() {
       const ctx = document.getElementById('analyticsChart').getContext('2d');
@@ -4794,6 +6224,13 @@
       const customDateRange = document.getElementById('customDateRange');
       if (period === 'custom') {
         customDateRange.style.display = 'flex';
+        // Set default dates
+        const endDate = new Date();
+        const startDate = new Date();
+        startDate.setDate(endDate.getDate() - 30);
+        
+        document.getElementById('analyticsDateFrom').value = startDate.toISOString().split('T')[0];
+        document.getElementById('analyticsDateTo').value = endDate.toISOString().split('T')[0];
       } else {
         customDateRange.style.display = 'none';
       }
@@ -4863,7 +6300,7 @@
         data: chartData
       };
     }
-
+    
     // Prepare revenue data
     function prepareRevenueData(startDate, endDate, chartType) {
       // Filter cashbills within period
@@ -4892,18 +6329,18 @@
             label: 'Revenue by User',
             data: Object.values(revenueByUser),
             backgroundColor: [
-              'rgba(59, 130, 246, 0.7)',
-              'rgba(16, 185, 129, 0.7)',
-              'rgba(245, 158, 11, 0.7)',
-              'rgba(239, 68, 68, 0.7)',
-              'rgba(139, 92, 246, 0.7)'
+              'rgba(74, 111, 165, 0.7)',
+              'rgba(40, 167, 69, 0.7)',
+              'rgba(255, 193, 7, 0.7)',
+              'rgba(220, 53, 69, 0.7)',
+              'rgba(108, 117, 125, 0.7)'
             ],
             borderColor: [
-              'rgba(59, 130, 246, 1)',
-              'rgba(16, 185, 129, 1)',
-              'rgba(245, 158, 11, 1)',
-              'rgba(239, 68, 68, 1)',
-              'rgba(139, 92, 246, 1)'
+              'rgba(74, 111, 165, 1)',
+              'rgba(40, 167, 69, 1)',
+              'rgba(255, 193, 7, 1)',
+              'rgba(220, 53, 69, 1)',
+              'rgba(108, 117, 125, 1)'
             ],
             borderWidth: 1
           }]
@@ -4935,8 +6372,8 @@
           datasets: [{
             label: 'Revenue',
             data: Object.values(revenueByDay),
-            backgroundColor: 'rgba(59, 130, 246, 0.2)',
-            borderColor: 'rgba(59, 130, 246, 1)',
+            backgroundColor: 'rgba(74, 111, 165, 0.2)',
+            borderColor: 'rgba(74, 111, 165, 1)',
             borderWidth: 2,
             tension: 0.4,
             fill: true
@@ -4944,7 +6381,7 @@
         };
       }
     }
-
+    
     // Prepare cashbills data
     function prepareCashbillsData(startDate, endDate, chartType) {
       const periodCashbills = cashbills.filter(bill => {
@@ -4969,12 +6406,12 @@
             label: 'Cashbills by Status',
             data: Object.values(cashbillsByStatus),
             backgroundColor: [
-              'rgba(16, 185, 129, 0.7)',
-              'rgba(245, 158, 11, 0.7)'
+              'rgba(40, 167, 69, 0.7)',
+              'rgba(255, 193, 7, 0.7)'
             ],
             borderColor: [
-              'rgba(16, 185, 129, 1)',
-              'rgba(245, 158, 11, 1)'
+              'rgba(40, 167, 69, 1)',
+              'rgba(255, 193, 7, 1)'
             ],
             borderWidth: 1
           }]
@@ -5011,22 +6448,22 @@
             {
               label: 'Committed',
               data: Object.values(cashbillsByDay.committed),
-              backgroundColor: 'rgba(16, 185, 129, 0.2)',
-              borderColor: 'rgba(16, 185, 129, 1)',
+              backgroundColor: 'rgba(40, 167, 69, 0.2)',
+              borderColor: 'rgba(40, 167, 69, 1)',
               borderWidth: 2
             },
             {
               label: 'Draft',
               data: Object.values(cashbillsByDay.draft),
-              backgroundColor: 'rgba(245, 158, 11, 0.2)',
-              borderColor: 'rgba(245, 158, 11, 1)',
+              backgroundColor: 'rgba(255, 193, 7, 0.2)',
+              borderColor: 'rgba(255, 193, 7, 1)',
               borderWidth: 2
             }
           ]
         };
       }
     }
-
+    
     // Prepare users data
     function prepareUsersData(startDate, endDate, chartType) {
       const periodActivities = activityLog.filter(log => {
@@ -5054,10 +6491,10 @@
           datasets: [{
             label: 'User Activities',
             data: Object.values(actionsByType),
-            backgroundColor: 'rgba(59, 130, 246, 0.2)',
-            borderColor: 'rgba(59, 130, 246, 1)',
+            backgroundColor: 'rgba(74, 111, 165, 0.2)',
+            borderColor: 'rgba(74, 111, 165, 1)',
             borderWidth: 2,
-            pointBackgroundColor: 'rgba(59, 130, 246, 1)'
+            pointBackgroundColor: 'rgba(74, 111, 165, 1)'
           }]
         };
       } else {
@@ -5079,25 +6516,25 @@
             label: 'Activities',
             data: Object.values(userActivity),
             backgroundColor: [
-              'rgba(59, 130, 246, 0.7)',
-              'rgba(16, 185, 129, 0.7)',
-              'rgba(245, 158, 11, 0.7)',
-              'rgba(239, 68, 68, 0.7)',
-              'rgba(139, 92, 246, 0.7)'
+              'rgba(74, 111, 165, 0.7)',
+              'rgba(40, 167, 69, 0.7)',
+              'rgba(255, 193, 7, 0.7)',
+              'rgba(220, 53, 69, 0.7)',
+              'rgba(108, 117, 125, 0.7)'
             ],
             borderColor: [
-              'rgba(59, 130, 246, 1)',
-              'rgba(16, 185, 129, 1)',
-              'rgba(245, 158, 11, 1)',
-              'rgba(239, 68, 68, 1)',
-              'rgba(139, 92, 246, 1)'
+              'rgba(74, 111, 165, 1)',
+              'rgba(40, 167, 69, 1)',
+              'rgba(255, 193, 7, 1)',
+              'rgba(220, 53, 69, 1)',
+              'rgba(108, 117, 125, 1)'
             ],
             borderWidth: 1
           }]
         };
       }
     }
-
+    
     // Prepare items data
     function prepareItemsData(startDate, endDate, chartType) {
       const periodCashbills = cashbills.filter(bill => {
@@ -5130,13 +6567,13 @@
         datasets: [{
           label: 'Quantity Sold',
           data: sortedItems.map(item => item[1]),
-          backgroundColor: 'rgba(16, 185, 129, 0.7)',
-          borderColor: 'rgba(16, 185, 129, 1)',
+          backgroundColor: 'rgba(40, 167, 69, 0.7)',
+          borderColor: 'rgba(40, 167, 69, 1)',
           borderWidth: 1
         }]
       };
     }
-
+    
     // Prepare payments data
     function preparePaymentsData(startDate, endDate, chartType) {
       const periodCashbills = cashbills.filter(bill => {
@@ -5165,22 +6602,22 @@
           label: 'Payment Methods',
           data: Object.values(paymentsByMethod),
           backgroundColor: [
-            'rgba(59, 130, 246, 0.7)',
-            'rgba(16, 185, 129, 0.7)',
-            'rgba(245, 158, 11, 0.7)',
-            'rgba(239, 68, 68, 0.7)'
+            'rgba(74, 111, 165, 0.7)',
+            'rgba(40, 167, 69, 0.7)',
+            'rgba(255, 193, 7, 0.7)',
+            'rgba(220, 53, 69, 0.7)'
           ],
           borderColor: [
-            'rgba(59, 130, 246, 1)',
-            'rgba(16, 185, 129, 1)',
-            'rgba(245, 158, 11, 1)',
-            'rgba(239, 68, 68, 1)'
+            'rgba(74, 111, 165, 1)',
+            'rgba(40, 167, 69, 1)',
+            'rgba(255, 193, 7, 1)',
+            'rgba(220, 53, 69, 1)'
           ],
           borderWidth: 1
         }]
       };
     }
-
+    
     // Prepare performance data
     function preparePerformanceData(startDate, endDate, chartType) {
       const periodCashbills = cashbills.filter(bill => {
@@ -5212,18 +6649,18 @@
             {
               label: 'Cashbills Created',
               data: Object.values(userPerformance).map(p => p.cashbills),
-              backgroundColor: 'rgba(59, 130, 246, 0.2)',
-              borderColor: 'rgba(59, 130, 246, 1)',
+              backgroundColor: 'rgba(74, 111, 165, 0.2)',
+              borderColor: 'rgba(74, 111, 165, 1)',
               borderWidth: 2,
-              pointBackgroundColor: 'rgba(59, 130, 246, 1)'
+              pointBackgroundColor: 'rgba(74, 111, 165, 1)'
             },
             {
               label: 'Completion Rate (%)',
               data: Object.values(userPerformance).map(p => p.completionRate),
-              backgroundColor: 'rgba(16, 185, 129, 0.2)',
-              borderColor: 'rgba(16, 185, 129, 1)',
+              backgroundColor: 'rgba(40, 167, 69, 0.2)',
+              borderColor: 'rgba(40, 167, 69, 1)',
               borderWidth: 2,
-              pointBackgroundColor: 'rgba(16, 185, 129, 1)'
+              pointBackgroundColor: 'rgba(40, 167, 69, 1)'
             }
           ]
         };
@@ -5234,22 +6671,22 @@
             {
               label: 'Revenue',
               data: Object.values(userPerformance).map(p => p.revenue),
-              backgroundColor: 'rgba(59, 130, 246, 0.7)',
-              borderColor: 'rgba(59, 130, 246, 1)',
+              backgroundColor: 'rgba(74, 111, 165, 0.7)',
+              borderColor: 'rgba(74, 111, 165, 1)',
               borderWidth: 1
             },
             {
               label: 'Completion Rate',
               data: Object.values(userPerformance).map(p => p.completionRate),
-              backgroundColor: 'rgba(16, 185, 129, 0.7)',
-              borderColor: 'rgba(16, 185, 129, 1)',
+              backgroundColor: 'rgba(40, 167, 69, 0.7)',
+              borderColor: 'rgba(40, 167, 69, 1)',
               borderWidth: 1
             }
           ]
         };
       }
     }
-
+    
     // Get chart options for revenue
     function getRevenueChartOptions(chartType) {
       const baseOptions = {
@@ -5286,7 +6723,7 @@
       
       return baseOptions;
     }
-
+    
     // Get chart options for cashbills
     function getCashbillsChartOptions(chartType) {
       const baseOptions = {
@@ -5314,7 +6751,7 @@
       
       return baseOptions;
     }
-
+    
     // Get chart options for users
     function getUsersChartOptions(chartType) {
       const baseOptions = {
@@ -5342,7 +6779,7 @@
       
       return baseOptions;
     }
-
+    
     // Get chart options for items
     function getItemsChartOptions(chartType) {
       return {
@@ -5365,7 +6802,7 @@
         }
       };
     }
-
+    
     // Get chart options for payments
     function getPaymentsChartOptions(chartType) {
       const baseOptions = {
@@ -5402,7 +6839,7 @@
       
       return baseOptions;
     }
-
+    
     // Get chart options for performance
     function getPerformanceChartOptions(chartType) {
       const baseOptions = {
@@ -5427,7 +6864,7 @@
       
       return baseOptions;
     }
-
+    
     // Update analytics summary cards
     function updateAnalyticsSummary(startDate, endDate, metric) {
       // Calculate previous period for comparison
@@ -5598,17 +7035,17 @@
       document.getElementById('summaryChange4').className = 
         'analytics-summary-change ' + (completionChange >= 0 ? 'positive' : 'negative');
     }
-
+    
     // Refresh analytics
     function refreshAnalytics() {
       initializeAnalytics();
     }
-
+    
     // Export analytics as PDF
     function exportAnalyticsPDF() {
       alert('PDF export functionality would be implemented here using a PDF generation library like jsPDF.');
     }
-
+    
     // Export analytics as CSV
     function exportAnalyticsCSV() {
       if (!analyticsData.data) {
@@ -5648,7 +7085,7 @@
       // Log activity
       logActivity(currentUser.id, currentUser.name, 'Export Data', `Exported ${analyticsData.metric} analytics to CSV`);
     }
-
+    
     // Export analytics as Image
     function exportAnalyticsImage() {
       if (!analyticsChart) {
@@ -5666,7 +7103,7 @@
       // Log activity
       logActivity(currentUser.id, currentUser.name, 'Export Data', `Exported ${analyticsData.metric} analytics as image`);
     }
-
+    
     // Export analytics as JSON
     function exportAnalyticsJSON() {
       if (!analyticsData.data) {
@@ -5697,12 +7134,12 @@
       // Log activity
       logActivity(currentUser.id, currentUser.name, 'Export Data', `Exported ${analyticsData.metric} analytics to JSON`);
     }
-
+    
     // Initialize analytics when modal is opened
     document.getElementById('dataAnalyticsModal').addEventListener('shown.bs.modal', function() {
       initializeAnalytics();
     });
-
+    
     // Handle period change
     document.getElementById('analyticsPeriodModal').addEventListener('change', function() {
       const customDateRange = document.getElementById('customDateRange');
@@ -5720,7 +7157,7 @@
       }
       initializeAnalytics();
     });
-
+    
     // Handle date change for custom range
     document.getElementById('analyticsDateFrom').addEventListener('change', initializeAnalytics);
     document.getElementById('analyticsDateTo').addEventListener('change', initializeAnalytics);
@@ -6012,18 +7449,18 @@
       document.getElementById('activeUsersCount').textContent = users.length;
     }
     
-    // Update reports page
-    function updateReportsPage() {
-      const reportsContent = document.getElementById('reportsContent');
+    // Update cashbill list page
+    function updateCashbillListPage() {
+      const cashbillListContent = document.getElementById('cashbillListContent');
       
       if (filteredCashbills.length === 0) {
-        reportsContent.innerHTML = `
+        cashbillListContent.innerHTML = `
           <div class="empty-state">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
             <h3>No cashbills found</h3>
-            <p>Create your first cashbill to see reports here.</p>
+            <p>Create your first cashbill to see them here.</p>
           </div>
         `;
         document.getElementById('pagination').innerHTML = '';
@@ -6071,6 +7508,13 @@
           `;
         }
         
+        // Add view button for all cashbills
+        if (actionsHTML) {
+          actionsHTML += `<button class="btn-secondary" onclick="viewCashbill(${bill.id})"><i class="fas fa-eye"></i> View</button>`;
+        } else {
+          actionsHTML = `<button class="btn-secondary" onclick="viewCashbill(${bill.id})"><i class="fas fa-eye"></i> View</button>`;
+        }
+        
         tableHTML += `
           <tr>
             <td>${bill.invoiceNumber}</td>
@@ -6091,10 +7535,78 @@
         </div>
       `;
       
-      reportsContent.innerHTML = tableHTML;
+      cashbillListContent.innerHTML = tableHTML;
       
       // Update pagination
       updatePagination(filteredCashbills.length);
+    }
+    
+    // View cashbill details
+    function viewCashbill(id) {
+      const cashbill = cashbills.find(bill => bill.id === id);
+      if (!cashbill) return;
+      
+      currentViewingCashbill = cashbill;
+      
+      // Populate cashbill view page
+      document.getElementById('viewInvoiceNumber').textContent = cashbill.invoiceNumber + 
+        (cashbill.status === 'draft' ? ' <span class="draft-indicator">Draft</span>' : ' <span class="committed-indicator">Committed</span>');
+      document.getElementById('viewCustomerName').textContent = cashbill.customerName;
+      document.getElementById('viewDate').textContent = new Date(cashbill.date).toLocaleDateString();
+      document.getElementById('viewStatus').textContent = cashbill.status === 'draft' ? 'Draft' : 'Committed';
+      document.getElementById('viewPaymentMethod').textContent = getPaymentMethodDisplayName(cashbill.paymentMethod);
+      
+      // Use userName if available, otherwise fall back to finding user by ID
+      const userName = cashbill.userName || (users.find(u => u.id === cashbill.userId)?.name || 'Unknown');
+      document.getElementById('viewCreatedBy').textContent = userName;
+      
+      // Populate items table
+      const itemsTableBody = document.getElementById('viewItemsTableBody');
+      let itemsHTML = '';
+      
+      cashbill.items.forEach(item => {
+        const itemTotal = item.quantity * item.unitPrice;
+        const itemTax = itemTotal * (item.taxRate / 100);
+        const itemTotalWithTax = itemTotal + itemTax - item.discount;
+        
+        itemsHTML += `
+          <tr>
+            <td>${item.description}</td>
+            <td>${item.quantity}</td>
+            <td>${systemSettings.currency}${item.unitPrice.toFixed(2)}</td>
+            <td>${item.taxRate}%</td>
+            <td>${systemSettings.currency}${item.discount.toFixed(2)}</td>
+            <td>${systemSettings.currency}${itemTotalWithTax.toFixed(2)}</td>
+          </tr>
+        `;
+      });
+      
+      itemsTableBody.innerHTML = itemsHTML;
+      
+      // Update summary
+      document.getElementById('viewSubtotal').textContent = `${systemSettings.currency}${cashbill.subtotal.toFixed(2)}`;
+      document.getElementById('viewTotalTax').textContent = `${systemSettings.currency}${cashbill.totalTax.toFixed(2)}`;
+      document.getElementById('viewTotalDiscount').textContent = `${systemSettings.currency}${cashbill.totalDiscount.toFixed(2)}`;
+      document.getElementById('viewGrandTotal').textContent = `${systemSettings.currency}${cashbill.grandTotal.toFixed(2)}`;
+      
+      // Show/hide notes
+      const notesCard = document.getElementById('viewNotesCard');
+      if (cashbill.notes) {
+        document.getElementById('viewNotes').textContent = cashbill.notes;
+        notesCard.style.display = 'block';
+      } else {
+        notesCard.style.display = 'none';
+      }
+      
+      // Navigate to cashbill view page
+      showPage('cashbillViewPage');
+    }
+    
+    // Edit cashbill from view page
+    function editCashbillFromView() {
+      if (currentViewingCashbill) {
+        editCashbill(currentViewingCashbill.id);
+      }
     }
     
     // Update pagination
@@ -6122,7 +7634,7 @@
       if (page < 1 || page > totalPages) return;
       
       currentPage = page;
-      updateReportsPage();
+      updateCashbillListPage();
     }
     
     // Apply filters
@@ -6164,7 +7676,7 @@
       });
       
       currentPage = 1;
-      updateReportsPage();
+      updateCashbillListPage();
       hideLoading();
     }
     
@@ -6178,7 +7690,7 @@
       
       filteredCashbills = [...cashbills];
       currentPage = 1;
-      updateReportsPage();
+      updateCashbillListPage();
     }
     
     // Export to CSV
@@ -6450,7 +7962,7 @@
           logActivity(currentUser.id, currentUser.name, 'Edit Cashbill', `${actionText} cashbill ${cashbills[cashbillIndex].invoiceNumber}`);
           
           closeEditModal();
-          updateReportsPage();
+          updateCashbillListPage();
           updateDashboardStats();
         } else {
           throw new Error(result.error || "Unknown error");
@@ -6502,7 +8014,7 @@
           // Log activity
           logActivity(currentUser.id, currentUser.name, 'Delete Cashbill', `Deleted cashbill ${cashbill.invoiceNumber}`);
           
-          updateReportsPage();
+          updateCashbillListPage();
           updateDashboardStats();
           closeConfirmModal();
         } else {
@@ -6584,7 +8096,7 @@
       if (activityLog.length === 0) {
         systemActivityLog.innerHTML = '<p>No system activity recorded.</p>';
       } else {
-        let logHTML = '';
+        let html = '';
         const recentLogs = activityLog.slice(0, 20); // Show only 20 most recent
         
         recentLogs.forEach(activity => {
@@ -6592,7 +8104,7 @@
           const formattedDate = date.toLocaleDateString();
           const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
           
-          logHTML += `
+          html += `
             <div class="log-entry">
               <strong>${activity.username}</strong> ${activity.action}
               ${activity.details ? ` - ${activity.details}` : ''}
@@ -6601,7 +8113,7 @@
           `;
         });
         
-        systemActivityLog.innerHTML = logHTML;
+        systemActivityLog.innerHTML = html;
       }
     }
     
@@ -6646,6 +8158,185 @@
     function applyLogFilters() {
       // In a real application, this would filter the system logs based on selected filters
       updateSystemLogs();
+    }
+    
+    // Update reports page
+    function updateReportsPage() {
+      const reportsContent = document.getElementById('reportsContent');
+      
+      if (filteredCashbills.length === 0) {
+        reportsContent.innerHTML = `
+          <div class="empty-state">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <h3>No cashbills found</h3>
+            <p>Create your first cashbill to see reports here.</p>
+          </div>
+        `;
+        document.getElementById('reportPagination').innerHTML = '';
+        return;
+      }
+      
+      // Pagination
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      const paginatedCashbills = filteredCashbills.slice(startIndex, endIndex);
+      
+      let tableHTML = `
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Invoice #</th>
+                <th>Customer</th>
+                <th>User</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Payment</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+      `;
+      
+      paginatedCashbills.forEach(bill => {
+        // Use userName if available, otherwise fall back to finding user by ID
+        const userName = bill.userName || (users.find(u => u.id === bill.userId)?.name || 'Unknown');
+        const totalAmount = bill.grandTotal || 0;
+        
+        tableHTML += `
+          <tr>
+            <td>${bill.invoiceNumber}</td>
+            <td>${bill.customerName}</td>
+            <td>${userName}</td>
+            <td>${new Date(bill.date).toLocaleDateString()}</td>
+            <td>${systemSettings.currency}${totalAmount.toFixed(2)}</td>
+            <td>${getPaymentMethodDisplayName(bill.paymentMethod)}</td>
+            <td>${bill.status === 'draft' ? 'Draft' : 'Committed'}</td>
+          </tr>
+        `;
+      });
+      
+      tableHTML += `
+            </tbody>
+          </table>
+        </div>
+      `;
+      
+      reportsContent.innerHTML = tableHTML;
+      
+      // Update pagination
+      updateReportPagination(filteredCashbills.length);
+    }
+    
+    // Update report pagination
+    function updateReportPagination(totalItems) {
+      const totalPages = Math.ceil(totalItems / itemsPerPage);
+      let paginationHTML = '';
+      
+      if (totalPages > 1) {
+        paginationHTML += `<button onclick="changeReportPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i> Previous</button>`;
+        
+        for (let i = 1; i <= totalPages; i++) {
+          paginationHTML += `<button onclick="changeReportPage(${i})" class="${i === currentPage ? 'active' : ''}">${i}</button>`;
+        }
+        
+        paginationHTML += `<button onclick="changeReportPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>Next <i class="fas fa-chevron-right"></i></button>`;
+      }
+      
+      document.getElementById('reportPagination').innerHTML = paginationHTML;
+    }
+    
+    // Change report page
+    function changeReportPage(page) {
+      const totalPages = Math.ceil(filteredCashbills.length / itemsPerPage);
+      
+      if (page < 1 || page > totalPages) return;
+      
+      currentPage = page;
+      updateReportsPage();
+    }
+    
+    // Apply report filters
+    function applyReportFilters() {
+      showLoading();
+      
+      const searchCustomer = document.getElementById('reportSearchCustomer').value.toLowerCase();
+      const filterStatus = document.getElementById('reportFilterStatus').value;
+      const filterPayment = document.getElementById('reportFilterPayment').value;
+      const dateFrom = document.getElementById('reportDateFrom').value;
+      const dateTo = document.getElementById('reportDateTo').value;
+      
+      filteredCashbills = cashbills.filter(bill => {
+        // Customer name filter
+        if (searchCustomer && !bill.customerName.toLowerCase().includes(searchCustomer)) {
+          return false;
+        }
+        
+        // Status filter
+        if (filterStatus && bill.status !== filterStatus) {
+          return false;
+        }
+        
+        // Payment method filter
+        if (filterPayment && bill.paymentMethod !== filterPayment) {
+          return false;
+        }
+        
+        // Date range filter
+        const billDate = new Date(bill.date).toISOString().split('T')[0];
+        if (dateFrom && billDate < dateFrom) {
+          return false;
+        }
+        if (dateTo && billDate > dateTo) {
+          return false;
+        }
+        
+        return true;
+      });
+      
+      currentPage = 1;
+      updateReportsPage();
+      hideLoading();
+    }
+    
+    // Reset report filters
+    function resetReportFilters() {
+      document.getElementById('reportSearchCustomer').value = '';
+      document.getElementById('reportFilterStatus').value = '';
+      document.getElementById('reportFilterPayment').value = '';
+      document.getElementById('reportDateFrom').value = '';
+      document.getElementById('reportDateTo').value = '';
+      
+      filteredCashbills = [...cashbills];
+      currentPage = 1;
+      updateReportsPage();
+    }
+    
+    // Export report to CSV
+    function exportReportToCSV() {
+      showLoading();
+      
+      let csv = 'Invoice Number,Customer,User,Date,Subtotal,Tax,Discount,Total,Payment Method,Status\n';
+      
+      filteredCashbills.forEach(bill => {
+        const user = users.find(u => u.id === bill.userId);
+        csv += `${bill.invoiceNumber},"${bill.customerName}",${user ? user.name : 'Unknown'},${new Date(bill.date).toLocaleDateString()},${(bill.subtotal || 0).toFixed(2)},${(bill.totalTax || 0).toFixed(2)},${(bill.totalDiscount || 0).toFixed(2)},${(bill.grandTotal || 0).toFixed(2)},${getPaymentMethodDisplayName(bill.paymentMethod)},${bill.status === 'draft' ? 'Draft' : 'Committed'}\n`;
+      });
+      
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `cashbills_report_${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      
+      // Log activity
+      logActivity(currentUser.id, currentUser.name, 'Export Data', 'Exported cashbills report to CSV');
+      
+      hideLoading();
     }
     
     // Load all data from Google Sheets
@@ -6751,6 +8442,9 @@
           console.error("Error loading users:", error);
         }
         
+        // Initialize filtered cashbills
+        filteredCashbills = [...cashbills];
+        
         // Update UI
         updateDashboardStats();
         updateNotificationBadge();
@@ -6774,11 +8468,11 @@
         case 'd':
           if (currentUser) showPage('dashboardPage');
           break;
+        case 'l':
+          if (currentUser) showPage('cashbillListPage');
+          break;
         case 'r':
           if (currentUser) showPage('reportsPage');
-          break;
-        case 'l':
-          if (currentUser) confirmLogout();
           break;
       }
     });
