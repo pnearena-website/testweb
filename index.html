@@ -6,19 +6,19 @@
   <title>PNE ARENA System - Professional Billing Management</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     :root {
-      /* Color Variables - Clean White & Soft Grey Theme */
-      --primary: #4a6fa5;
-      --primary-dark: #2c4c7c;
-      --secondary: #6c757d;
-      --success: #28a745;
-      --danger: #dc3545;
-      --warning: #ffc107;
-      --info: #17a2b8;
-      --light: #f8f9fa;
-      --dark: #343a40;
+      /* Clean White & Soft Black Theme */
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --secondary: #64748b;
+      --success: #22c55e;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --info: #3b82f6;
+      --light: #f8fafc;
+      --dark: #1e293b;
       --white: #ffffff;
       --grey-50: #f9fafb;
       --grey-100: #f3f4f6;
@@ -96,26 +96,6 @@
       display: flex;
       align-items: center;
       gap: 1rem;
-    }
-    
-    /* Theme Toggle */
-    .theme-toggle {
-      background: var(--grey-100);
-      border: 1px solid var(--grey-200);
-      color: var(--grey-600);
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      transition: var(--transition);
-    }
-    
-    .theme-toggle:hover {
-      background: var(--grey-200);
     }
     
     /* Notification Toggle */
@@ -595,17 +575,17 @@
     }
     
     .activity-icon.edit {
-      background: rgba(74, 111, 165, 0.1);
+      background: rgba(37, 99, 235, 0.1);
       color: var(--primary);
     }
     
     .activity-icon.delete {
-      background: rgba(220, 53, 69, 0.1);
+      background: rgba(239, 68, 68, 0.1);
       color: var(--danger);
     }
     
     .activity-icon.login {
-      background: rgba(255, 193, 7, 0.1);
+      background: rgba(245, 158, 11, 0.1);
       color: var(--warning);
     }
     
@@ -660,7 +640,7 @@
     input:focus, select:focus, textarea:focus {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.1);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
     }
     
     /* Buttons */
@@ -700,7 +680,7 @@
     }
     
     .btn-secondary:hover {
-      background: #218838;
+      background: #16a34a;
     }
     
     .btn-danger {
@@ -708,7 +688,7 @@
     }
     
     .btn-danger:hover {
-      background: #c82333;
+      background: #dc2626;
     }
     
     .btn-warning {
@@ -717,7 +697,7 @@
     }
     
     .btn-warning:hover {
-      background: #e0a800;
+      background: #d97706;
     }
     
     .btn-info {
@@ -725,7 +705,7 @@
     }
     
     .btn-info:hover {
-      background: #138496;
+      background: #2563eb;
     }
     
     /* Messages */
@@ -812,6 +792,16 @@
       font-weight: 500;
     }
     
+    .pending-indicator {
+      background: var(--info);
+      color: white;
+      padding: 0.2rem 0.6rem;
+      border-radius: 24px;
+      font-size: 0.8rem;
+      margin-left: 0.75rem;
+      font-weight: 500;
+    }
+    
     .committed-indicator {
       background: var(--success);
       color: white;
@@ -875,7 +865,7 @@
     }
     
     .btn-delete:hover {
-      background: #c82333;
+      background: #dc2626;
     }
     
     .btn-edit {
@@ -993,7 +983,7 @@
     }
     
     .add-item-btn:hover {
-      background: #218838;
+      background: #16a34a;
     }
     
     .remove-item-btn {
@@ -1003,7 +993,33 @@
     }
     
     .remove-item-btn:hover {
-      background: #c82333;
+      background: #dc2626;
+    }
+    
+    /* Custom Item Section */
+    .custom-item-section {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: var(--grey-100);
+      border-radius: var(--radius);
+      border: 1px dashed var(--grey-300);
+    }
+    
+    .custom-item-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+      font-weight: 500;
+      color: var(--grey-700);
+    }
+    
+    .custom-item-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr auto;
+      gap: 1rem;
+      align-items: end;
+      margin-bottom: 0.75rem;
     }
     
     /* Totals */
@@ -1268,7 +1284,7 @@
     }
     
     .spinner {
-      border: 4px solid rgba(74, 111, 165, 0.1);
+      border: 4px solid rgba(37, 99, 235, 0.1);
       border-radius: 50%;
       border-top: 4px solid var(--primary);
       width: 40px;
@@ -1414,6 +1430,159 @@
       margin: 0;
     }
     
+    /* Page Content Container */
+    .page-content {
+      padding: 2rem;
+    }
+    
+    /* Cashbill List Page Styles */
+    .cashbill-list-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .cashbill-list-header h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: var(--grey-800);
+    }
+    
+    .create-cashbill-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .create-cashbill-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    
+    /* Cashbill View Page Styles */
+    .cashbill-view-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--grey-200);
+    }
+    
+    .cashbill-view-title {
+      font-size: 1.5rem;
+      color: var(--grey-800);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .cashbill-view-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+    
+    .cashbill-info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .cashbill-info-card {
+      background: var(--grey-50);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      border: 1px solid var(--grey-200);
+    }
+    
+    .cashbill-info-card h4 {
+      font-size: 0.9rem;
+      color: var(--grey-600);
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .cashbill-info-card p {
+      font-size: 1.1rem;
+      color: var(--grey-800);
+      margin: 0;
+      font-weight: 600;
+    }
+    
+    .cashbill-items-table {
+      margin-bottom: 2rem;
+    }
+    
+    .cashbill-summary {
+      background: var(--grey-50);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      border: 1px solid var(--grey-200);
+    }
+    
+    .cashbill-summary h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+      color: var(--grey-800);
+    }
+    
+    /* PDF Generation Styles */
+    .pdf-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .pdf-company-name {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    
+    .pdf-info-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+    
+    .pdf-separator {
+      border-top: 1px solid #000;
+      margin: 15px 0;
+    }
+    
+    .pdf-items-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    
+    .pdf-items-table th, .pdf-items-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    
+    .pdf-items-table th {
+      background-color: #f2f2f2;
+    }
+    
+    .pdf-total-row {
+      font-weight: bold;
+    }
+    
     /* Responsive Styles */
     @media (max-width: 768px) {
       /* Mobile Navigation */
@@ -1507,6 +1676,12 @@
       
       .item-row > div, .edit-item-row > div {
         margin-bottom: 0.5rem;
+      }
+      
+      /* Custom Item Row */
+      .custom-item-row {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
       }
       
       /* Filters */
@@ -1745,7 +1920,7 @@
     .login-form input:focus {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.1);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
     }
     
     .login-form button {
@@ -1836,1312 +2011,6 @@
     
     .detail-row:last-child {
       border-bottom: none;
-    }
-    
-    /* New styles for item dropdown */
-    .item-select {
-      font-size: 0.9rem;
-    }
-    
-    .min-order-note {
-      font-size: 0.75rem;
-      color: var(--warning);
-      margin-top: 0.25rem;
-    }
-    
-    .member-checkbox {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
-    }
-    
-    .member-checkbox input[type="checkbox"] {
-      width: auto;
-      margin: 0;
-    }
-    
-    /* Page Content Container */
-    .page-content {
-      padding: 2rem;
-    }
-    
-    /* Cashbill List Page Styles */
-    .cashbill-list-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-    }
-    
-    .cashbill-list-header h2 {
-      margin: 0;
-      font-size: 1.5rem;
-      color: var(--grey-800);
-    }
-    
-    .create-cashbill-btn {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: var(--transition);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    
-    .create-cashbill-btn:hover {
-      background: var(--primary-dark);
-      transform: translateY(-2px);
-      box-shadow: var(--shadow);
-    }
-    
-    /* Cashbill View Page Styles */
-    .cashbill-view-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid var(--grey-200);
-    }
-    
-    .cashbill-view-title {
-      font-size: 1.5rem;
-      color: var(--grey-800);
-      margin: 0;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-    
-    .cashbill-view-actions {
-      display: flex;
-      gap: 0.75rem;
-    }
-    
-    .cashbill-info-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-    
-    .cashbill-info-card {
-      background: var(--grey-50);
-      border-radius: var(--radius);
-      padding: 1.25rem;
-      border: 1px solid var(--grey-200);
-    }
-    
-    .cashbill-info-card h4 {
-      font-size: 0.9rem;
-      color: var(--grey-600);
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-    }
-    
-    .cashbill-info-card p {
-      font-size: 1.1rem;
-      color: var(--grey-800);
-      margin: 0;
-      font-weight: 600;
-    }
-    
-    .cashbill-items-table {
-      margin-bottom: 2rem;
-    }
-    
-    .cashbill-summary {
-      background: var(--grey-50);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      border: 1px solid var(--grey-200);
-    }
-    
-    .cashbill-summary h3 {
-      margin-top: 0;
-      margin-bottom: 1rem;
-      font-size: 1.1rem;
-      color: var(--grey-800);
-    }
-    
-    /* Additional styles for admin features */
-    .admin-feature-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.25rem;
-      margin-top: 1.25rem;
-    }
-    
-    .feature-card {
-      background: var(--grey-50);
-      border-radius: var(--radius);
-      padding: 1.25rem;
-      border: 1px solid var(--grey-200);
-      transition: all 0.3s ease;
-    }
-    
-    .feature-card:hover {
-      box-shadow: var(--shadow);
-      transform: translateY(-3px);
-    }
-    
-    .feature-card h4 {
-      color: var(--grey-800);
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    
-    .feature-card p {
-      color: var(--grey-600);
-      margin-bottom: 1rem;
-    }
-    
-    .feature-card .feature-stats {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 1rem;
-    }
-    
-    .feature-stat {
-      text-align: center;
-    }
-    
-    .feature-stat-value {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: var(--primary);
-    }
-    
-    .feature-stat-label {
-      font-size: 0.8rem;
-      color: var(--grey-600);
-    }
-    
-    .user-management-actions {
-      display: flex;
-      gap: 0.75rem;
-      margin-bottom: 1.25rem;
-      flex-wrap: wrap;
-    }
-    
-    .security-settings-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.25rem;
-    }
-    
-    .security-setting {
-      background: var(--grey-100);
-      border-radius: var(--radius);
-      padding: 1rem;
-      border: 1px solid var(--grey-200);
-    }
-    
-    .security-setting h5 {
-      color: var(--grey-800);
-      margin-bottom: 0.75rem;
-      font-size: 0.95rem;
-    }
-    
-    .security-setting input {
-      margin-bottom: 0.5rem;
-    }
-    
-    .system-info-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-    
-    .info-item {
-      background: var(--grey-100);
-      border-radius: var(--radius);
-      padding: 1rem;
-      text-align: center;
-      border: 1px solid var(--grey-200);
-    }
-    
-    .info-value {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: var(--primary);
-      margin-bottom: 0.25rem;
-    }
-    
-    .info-label {
-      font-size: 0.8rem;
-      color: var(--grey-600);
-    }
-    
-    .audit-log-controls {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 1rem;
-      flex-wrap: wrap;
-    }
-    
-    .audit-log-filters {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin-bottom: 1rem;
-    }
-    
-    .audit-log-filters .filter-group {
-      flex: 1;
-      min-width: 150px;
-    }
-    
-    .user-activity-chart-container {
-      background: var(--grey-50);
-      border-radius: var(--radius);
-      padding: 1.25rem;
-      margin-top: 1.25rem;
-      border: 1px solid var(--grey-200);
-    }
-    
-    .chart-controls {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-    }
-    
-    .chart-period-selector {
-      display: flex;
-      gap: 0.5rem;
-    }
-    
-    .chart-period-btn {
-      padding: 0.4rem 0.8rem;
-      background: var(--grey-100);
-      border: 1px solid var(--grey-200);
-      border-radius: 6px;
-      font-size: 0.8rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .chart-period-btn.active {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-    }
-    
-    .chart-period-btn:hover:not(.active) {
-      background: var(--grey-200);
-    }
-    
-    .data-export-options {
-      display: flex;
-      gap: 1rem;
-      margin-top: 1rem;
-      flex-wrap: wrap;
-    }
-    
-    .export-option {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.6rem 1rem;
-      background: var(--grey-100);
-      border: 1px solid var(--grey-200);
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .export-option:hover {
-      background: var(--grey-200);
-    }
-    
-    .export-option i {
-      color: var(--primary);
-    }
-    
-    .system-health-monitor {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.25rem;
-      margin-top: 1.25rem;
-    }
-    
-    .health-monitor-card {
-      background: var(--grey-50);
-      border-radius: var(--radius);
-      padding: 1.25rem;
-      border: 1px solid var(--grey-200);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .health-monitor-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 4px;
-      height: 100%;
-    }
-    
-    .health-monitor-card.good::before {
-      background: var(--success);
-    }
-    
-    .health-monitor-card.warning::before {
-      background: var(--warning);
-    }
-    
-    .health-monitor-card.danger::before {
-      background: var(--danger);
-    }
-    
-    .health-monitor-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-    }
-    
-    .health-monitor-title {
-      font-weight: 600;
-      color: var(--grey-800);
-    }
-    
-    .health-monitor-status {
-      padding: 0.2rem 0.6rem;
-      border-radius: 24px;
-      font-size: 0.7rem;
-      font-weight: 500;
-    }
-    
-    .health-monitor-status.good {
-      background: rgba(40, 167, 69, 0.1);
-      color: var(--success);
-    }
-    
-    .health-monitor-status.warning {
-      background: rgba(255, 193, 7, 0.1);
-      color: var(--warning);
-    }
-    
-    .health-monitor-status.danger {
-      background: rgba(220, 53, 69, 0.1);
-      color: var(--danger);
-    }
-    
-    .health-monitor-value {
-      font-size: 1.75rem;
-      font-weight: 700;
-      color: var(--grey-800);
-      margin-bottom: 0.5rem;
-    }
-    
-    .health-monitor-details {
-      color: var(--grey-600);
-      font-size: 0.85rem;
-    }
-    
-    .backup-restore-controls {
-      display: flex;
-      gap: 1rem;
-      margin-top: 1.25rem;
-      flex-wrap: wrap;
-    }
-    
-    .backup-history {
-      margin-top: 1.25rem;
-    }
-    
-    .backup-history-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem;
-      background: var(--grey-100);
-      border-radius: var(--radius);
-      margin-bottom: 0.75rem;
-      border: 1px solid var(--grey-200);
-    }
-    
-    .backup-info {
-      flex: 1;
-    }
-    
-    .backup-date {
-      font-weight: 500;
-      color: var(--grey-800);
-      margin-bottom: 0.25rem;
-    }
-    
-    .backup-size {
-      font-size: 0.8rem;
-      color: var(--grey-600);
-    }
-    
-    .backup-actions {
-      display: flex;
-      gap: 0.5rem;
-    }
-    
-    .backup-actions button {
-      padding: 0.4rem 0.8rem;
-      font-size: 0.8rem;
-    }
-    
-    .user-activity-summary {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-      margin-bottom: 1.25rem;
-    }
-    
-    .activity-summary-card {
-      background: var(--grey-100);
-      border-radius: var(--radius);
-      padding: 1rem;
-      text-align: center;
-      border: 1px solid var(--grey-200);
-    }
-    
-    .activity-summary-value {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 0.5rem;
-    }
-    
-    .activity-summary-label {
-      font-size: 0.85rem;
-      color: var(--grey-600);
-    }
-    
-    .user-activity-timeline {
-      max-height: 400px;
-      overflow-y: auto;
-      border: 1px solid var(--grey-200);
-      border-radius: var(--radius);
-      background: var(--grey-50);
-    }
-    
-    .timeline-item {
-      position: relative;
-      padding: 1rem 1.25rem;
-      border-bottom: 1px solid var(--grey-200);
-    }
-    
-    .timeline-item:last-child {
-      border-bottom: none;
-    }
-    
-    .timeline-item::before {
-      content: '';
-      position: absolute;
-      left: 1.25rem;
-      top: 1.25rem;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--primary);
-    }
-    
-    .timeline-content {
-      margin-left: 1.25rem;
-    }
-    
-    .timeline-action {
-      font-weight: 500;
-      color: var(--grey-800);
-      margin-bottom: 0.25rem;
-    }
-    
-    .timeline-details {
-      font-size: 0.85rem;
-      color: var(--grey-600);
-      margin-bottom: 0.25rem;
-    }
-    
-    .timeline-time {
-      font-size: 0.75rem;
-      color: var(--grey-500);
-    }
-    
-    .permission-management-grid {
-      display: grid;
-      grid-template-columns: 1fr 2fr;
-      gap: 1.25rem;
-      margin-top: 1.25rem;
-    }
-    
-    .permission-role-selector {
-      background: var(--grey-50);
-      border-radius: var(--radius);
-      padding: 1.25rem;
-      border: 1px solid var(--grey-200);
-    }
-    
-    .permission-role-item {
-      padding: 0.6rem;
-      margin-bottom: 0.5rem;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-    
-    .permission-role-item:hover {
-      background: var(--grey-100);
-    }
-    
-    .permission-role-item.active {
-      background: var(--primary);
-      color: white;
-    }
-    
-    .permission-role-item i {
-      font-size: 1.1rem;
-    }
-    
-    .permission-details {
-      background: var(--grey-50);
-      border-radius: var(--radius);
-      padding: 1.25rem;
-      border: 1px solid var(--grey-200);
-    }
-    
-    .permission-category {
-      margin-bottom: 1.25rem;
-    }
-    
-    .permission-category h5 {
-      color: var(--grey-800);
-      margin-bottom: 1rem;
-      font-size: 1rem;
-      border-bottom: 1px solid var(--grey-200);
-      padding-bottom: 0.5rem;
-    }
-    
-    .permission-item {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 0.75rem;
-    }
-    
-    .permission-item input[type="checkbox"] {
-      width: auto;
-    }
-    
-    .permission-item label {
-      margin-bottom: 0;
-      cursor: pointer;
-    }
-    
-    .system-settings-section {
-      margin-bottom: 1.5rem;
-    }
-    
-    .settings-group {
-      background: var(--grey-50);
-      border-radius: var(--radius);
-      padding: 1.25rem;
-      margin-bottom: 1.25rem;
-      border: 1px solid var(--grey-200);
-    }
-    
-    .settings-group h4 {
-      color: var(--grey-800);
-      margin-bottom: 1rem;
-      font-size: 1rem;
-    }
-    
-    .settings-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.75rem 0;
-      border-bottom: 1px solid var(--grey-200);
-    }
-    
-    .settings-item:last-child {
-      border-bottom: none;
-    }
-    
-    .settings-label {
-      font-weight: 500;
-      color: var(--grey-800);
-    }
-    
-    .settings-description {
-      font-size: 0.8rem;
-      color: var(--grey-600);
-      margin-top: 0.25rem;
-    }
-    
-    .settings-control {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-    
-    .settings-control input[type="checkbox"] {
-      width: auto;
-    }
-    
-    .settings-control input[type="number"] {
-      width: 80px;
-    }
-    
-    .settings-control select {
-      width: 150px;
-    }
-    
-    .advanced-analytics-container {
-      margin-top: 1.25rem;
-    }
-    
-    .analytics-controls {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.25rem;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-    
-    .analytics-filters {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-    
-    .analytics-chart-container {
-      background: var(--grey-50);
-      border-radius: var(--radius);
-      padding: 1.25rem;
-      margin-bottom: 1.25rem;
-      border: 1px solid var(--grey-200);
-      min-height: 300px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .analytics-placeholder {
-      text-align: center;
-      color: var(--grey-600);
-    }
-    
-    .analytics-placeholder i {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-      opacity: 0.5;
-    }
-    
-    .analytics-summary {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-    }
-    
-    .analytics-summary-card {
-      background: var(--grey-100);
-      border-radius: var(--radius);
-      padding: 1rem;
-      text-align: center;
-      border: 1px solid var(--grey-200);
-    }
-    
-    .analytics-summary-value {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 0.5rem;
-    }
-    
-    .analytics-summary-label {
-      font-size: 0.85rem;
-      color: var(--grey-600);
-    }
-    
-    .analytics-summary-change {
-      font-size: 0.8rem;
-      margin-top: 0.5rem;
-    }
-    
-    .analytics-summary-change.positive {
-      color: var(--success);
-    }
-    
-    .analytics-summary-change.negative {
-      color: var(--danger);
-    }
-    
-    /* Dark Theme */
-    body.dark-theme {
-      background: var(--grey-900);
-      color: var(--grey-200);
-    }
-    
-    body.dark-theme .container {
-      background: var(--grey-800);
-    }
-    
-    body.dark-theme header {
-      background: var(--grey-800);
-      color: var(--grey-200);
-      border-bottom: 1px solid var(--grey-700);
-    }
-    
-    body.dark-theme nav {
-      background: var(--grey-800);
-      border-bottom: 1px solid var(--grey-700);
-    }
-    
-    body.dark-theme nav a {
-      color: var(--grey-300);
-    }
-    
-    body.dark-theme nav a:hover {
-      background: var(--grey-700);
-      color: var(--grey-100);
-    }
-    
-    body.dark-theme .card {
-      background: var(--grey-800);
-      border: 1px solid var(--grey-700);
-      color: var(--grey-200);
-    }
-    
-    body.dark-theme .card h2 {
-      color: var(--grey-100);
-      border-bottom: 1px solid var(--grey-700);
-    }
-    
-    body.dark-theme .card h3 {
-      color: var(--grey-100);
-    }
-    
-    body.dark-theme .stat-card {
-      background: var(--grey-800);
-      border: 1px solid var(--grey-700);
-    }
-    
-    body.dark-theme .stat-card h3 {
-      color: var(--grey-100);
-    }
-    
-    body.dark-theme .stat-card p {
-      color: var(--grey-400);
-    }
-    
-    body.dark-theme .quick-action-btn {
-      background: var(--grey-700);
-      border: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .quick-action-btn:hover {
-      background: var(--grey-600);
-      border-color: var(--primary);
-    }
-    
-    body.dark-theme .quick-action-btn i {
-      color: var(--primary);
-    }
-    
-    body.dark-theme .quick-action-btn h3 {
-      color: var(--grey-200);
-    }
-    
-    body.dark-theme .metric-card {
-      background: var(--grey-700);
-      border: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .metric-card h3 {
-      color: var(--grey-100);
-    }
-    
-    body.dark-theme .metric-value {
-      color: var(--grey-300);
-    }
-    
-    body.dark-theme .progress-bar {
-      background: var(--grey-600);
-    }
-    
-    body.dark-theme .health-indicator {
-      background: var(--grey-700);
-      border: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .health-indicator h3 {
-      color: var(--grey-100);
-    }
-    
-    body.dark-theme .health-indicator p {
-      color: var(--grey-400);
-    }
-    
-    body.dark-theme .user-activity-chart {
-      background: var(--grey-700);
-      border: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .chart-bar {
-      background: var(--primary);
-    }
-    
-    body.dark-theme .chart-label {
-      color: var(--grey-400);
-    }
-    
-    body.dark-theme .chart-value {
-      color: var(--grey-200);
-    }
-    
-    body.dark-theme .tool-btn {
-      background: var(--grey-700);
-      border: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .tool-btn:hover {
-      background: var(--grey-600);
-      border-color: var(--primary);
-    }
-    
-    body.dark-theme .tool-btn i {
-      color: var(--primary);
-    }
-    
-    body.dark-theme .tool-btn h3 {
-      color: var(--grey-200);
-    }
-    
-    body.dark-theme .recent-activity {
-      background: var(--grey-700);
-      border: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .activity-item {
-      border-bottom: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .activity-title {
-      color: var(--grey-100);
-    }
-    
-    body.dark-theme .activity-time {
-      color: var(--grey-500);
-    }
-    
-    body.dark-theme form {
-      background: var(--grey-700);
-      border: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme label {
-      color: var(--grey-200);
-    }
-    
-    body.dark-theme input, 
-    body.dark-theme select, 
-    body.dark-theme textarea {
-      background: var(--grey-800);
-      border: 1px solid var(--grey-600);
-      color: var(--grey-100);
-    }
-    
-    body.dark-theme input:focus, 
-    body.dark-theme select:focus, 
-    body.dark-theme textarea:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.3);
-    }
-    
-    body.dark-theme button {
-      background: var(--primary);
-    }
-    
-    body.dark-theme button:hover {
-      background: var(--primary-dark);
-    }
-    
-    body.dark-theme .btn-secondary {
-      background: var(--success);
-    }
-    
-    body.dark-theme .btn-secondary:hover {
-      background: #218838;
-    }
-    
-    body.dark-theme .btn-danger {
-      background: var(--danger);
-    }
-    
-    body.dark-theme .btn-danger:hover {
-      background: #c82333;
-    }
-    
-    body.dark-theme .btn-warning {
-      background: var(--warning);
-      color: var(--grey-800);
-    }
-    
-    body.dark-theme .btn-warning:hover {
-      background: #e0a800;
-    }
-    
-    body.dark-theme .btn-info {
-      background: var(--info);
-    }
-    
-    body.dark-theme .btn-info:hover {
-      background: #138496;
-    }
-    
-    body.dark-theme .table-container {
-      background: var(--grey-800);
-    }
-    
-    body.dark-theme table {
-      background: var(--grey-800);
-      border: 1px solid var(--grey-700);
-    }
-    
-    body.dark-theme th {
-      background: var(--grey-700);
-      color: var(--grey-200);
-      border-bottom: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme td {
-      color: var(--grey-200);
-      border-bottom: 1px solid var(--grey-700);
-    }
-    
-    body.dark-theme tr:hover {
-      background: var(--grey-750);
-    }
-    
-    body.dark-theme .filter-container {
-      background: var(--grey-700);
-      border: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .filter-group label {
-      color: var(--grey-200);
-    }
-    
-    body.dark-theme .item-row, 
-    body.dark-theme .edit-item-row {
-      background: var(--grey-700);
-      border: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .total-section {
-      background: var(--grey-700);
-      border: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .total-row {
-      color: var(--grey-200);
-    }
-    
-    body.dark-theme .activity-log {
-      background: var(--grey-700);
-      border: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .log-entry {
-      color: var(--grey-200);
-      border-bottom: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .log-time {
-      color: var(--grey-500);
-    }
-    
-    body.dark-theme .modal-content {
-      background: var(--grey-800);
-      border: 1px solid var(--grey-700);
-    }
-    
-    body.dark-theme .modal-header {
-      border-bottom: 1px solid var(--grey-700);
-    }
-    
-    body.dark-theme .modal-header h3 {
-      color: var(--grey-100);
-    }
-    
-    body.dark-theme .close-modal {
-      color: var(--grey-400);
-    }
-    
-    body.dark-theme .close-modal:hover {
-      background: var(--grey-700);
-    }
-    
-    body.dark-theme .modal-actions {
-      border-top: 1px solid var(--grey-700);
-    }
-    
-    body.dark-theme .notification-panel {
-      background: var(--grey-800);
-      border: 1px solid var(--grey-700);
-    }
-    
-    body.dark-theme .notification-item {
-      border-bottom: 1px solid var(--grey-700);
-    }
-    
-    body.dark-theme .notification-item:hover {
-      background: var(--grey-750);
-    }
-    
-    body.dark-theme .notification-title {
-      color: var(--grey-100);
-    }
-    
-    body.dark-theme .notification-message {
-      color: var(--grey-400);
-    }
-    
-    body.dark-theme .notification-time {
-      color: var(--grey-500);
-    }
-    
-    body.dark-theme .cashbill-details {
-      background: var(--grey-700);
-      border: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .cashbill-details h3 {
-      color: var(--grey-100);
-      border-bottom: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .detail-row {
-      color: var(--grey-200);
-      border-bottom: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .feature-card {
-      background: var(--grey-700);
-      border: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .feature-card h4 {
-      color: var(--grey-100);
-    }
-    
-    body.dark-theme .feature-card p {
-      color: var(--grey-400);
-    }
-    
-    body.dark-theme .security-setting {
-      background: var(--grey-700);
-      border: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .security-setting h5 {
-      color: var(--grey-100);
-    }
-    
-    body.dark-theme .info-item {
-      background: var(--grey-700);
-      border: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .info-value {
-      color: var(--primary);
-    }
-    
-    body.dark-theme .info-label {
-      color: var(--grey-400);
-    }
-    
-    body.dark-theme .user-activity-chart-container {
-      background: var(--grey-700);
-      border: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .chart-period-btn {
-      background: var(--grey-600);
-      border: 1px solid var(--grey-500);
-    }
-    
-    body.dark-theme .chart-period-btn.active {
-      background: var(--primary);
-      border-color: var(--primary);
-    }
-    
-    body.dark-theme .chart-period-btn:hover:not(.active) {
-      background: var(--grey-500);
-    }
-    
-    body.dark-theme .export-option {
-      background: var(--grey-600);
-      border: 1px solid var(--grey-500);
-    }
-    
-    body.dark-theme .export-option:hover {
-      background: var(--grey-500);
-    }
-    
-    body.dark-theme .health-monitor-card {
-      background: var(--grey-700);
-      border: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .health-monitor-title {
-      color: var(--grey-100);
-    }
-    
-    body.dark-theme .health-monitor-value {
-      color: var(--grey-100);
-    }
-    
-    body.dark-theme .health-monitor-details {
-      color: var(--grey-400);
-    }
-    
-    body.dark-theme .backup-history-item {
-      background: var(--grey-700);
-      border: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .backup-date {
-      color: var(--grey-100);
-    }
-    
-    body.dark-theme .backup-size {
-      color: var(--grey-400);
-    }
-    
-    body.dark-theme .activity-summary-card {
-      background: var(--grey-700);
-      border: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .activity-summary-value {
-      color: var(--primary);
-    }
-    
-    body.dark-theme .activity-summary-label {
-      color: var(--grey-400);
-    }
-    
-    body.dark-theme .user-activity-timeline {
-      background: var(--grey-700);
-      border: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .timeline-item {
-      border-bottom: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .timeline-action {
-      color: var(--grey-100);
-    }
-    
-    body.dark-theme .timeline-details {
-      color: var(--grey-400);
-    }
-    
-    body.dark-theme .timeline-time {
-      color: var(--grey-500);
-    }
-    
-    body.dark-theme .permission-role-selector {
-      background: var(--grey-700);
-      border: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .permission-role-item:hover {
-      background: var(--grey-600);
-    }
-    
-    body.dark-theme .permission-role-item.active {
-      background: var(--primary);
-    }
-    
-    body.dark-theme .permission-details {
-      background: var(--grey-700);
-      border: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .permission-category h5 {
-      color: var(--grey-100);
-      border-bottom: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .permission-item label {
-      color: var(--grey-200);
-    }
-    
-    body.dark-theme .settings-group {
-      background: var(--grey-700);
-      border: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .settings-group h4 {
-      color: var(--grey-100);
-    }
-    
-    body.dark-theme .settings-item {
-      border-bottom: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .settings-label {
-      color: var(--grey-100);
-    }
-    
-    body.dark-theme .settings-description {
-      color: var(--grey-500);
-    }
-    
-    body.dark-theme .analytics-chart-container {
-      background: var(--grey-700);
-      border: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .analytics-placeholder {
-      color: var(--grey-400);
-    }
-    
-    body.dark-theme .analytics-summary-card {
-      background: var(--grey-700);
-      border: 1px solid var(--grey-600);
-    }
-    
-    body.dark-theme .analytics-summary-value {
-      color: var(--primary);
-    }
-    
-    body.dark-theme .analytics-summary-label {
-      color: var(--grey-400);
-    }
-    
-    body.dark-theme .analytics-summary-change.positive {
-      color: var(--success);
-    }
-    
-    body.dark-theme .analytics-summary-change.negative {
-      color: var(--danger);
     }
     
     /* Device Detection Styles */
@@ -3265,38 +2134,6 @@
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     }
     
-    /* High contrast mode for accessibility */
-    @media (prefers-contrast: high) {
-      :root {
-        --primary: #0056b3;
-        --primary-dark: #003d82;
-        --success: #1e7e34;
-        --danger: #bd2130;
-        --warning: #e0a800;
-        --info: #117a8b;
-        --grey-50: #ffffff;
-        --grey-100: #f8f9fa;
-        --grey-200: #e9ecef;
-        --grey-300: #dee2e6;
-        --grey-400: #ced4da;
-        --grey-500: #adb5bd;
-        --grey-600: #868e96;
-        --grey-700: #495057;
-        --grey-800: #343a40;
-        --grey-900: #212529;
-      }
-    }
-    
-    /* Reduced motion for accessibility */
-    @media (prefers-reduced-motion: reduce) {
-      * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-      }
-    }
-    
     /* Focus styles for keyboard navigation */
     button:focus, 
     input:focus, 
@@ -3341,9 +2178,6 @@
             <span id="notificationCount" class="notification-badge" style="display: none;">0</span>
           </button>
         </div>
-        <button class="theme-toggle" id="themeToggle" title="Toggle dark mode" aria-label="Toggle dark mode">
-          <i class="fas fa-moon"></i>
-        </button>
       </div>
     </header>
     
@@ -3614,6 +2448,7 @@
             <select id="filterStatus">
               <option value="">All</option>
               <option value="committed">Committed</option>
+              <option value="pending">Pending</option>
               <option value="draft">Draft</option>
             </select>
           </div>
@@ -3678,7 +2513,7 @@
             <i class="fas fa-file-invoice"></i> Cashbill Details
           </h2>
           <div class="cashbill-view-actions">
-            <button class="btn-secondary" onclick="exportCashbill()"><i class="fas fa-file-pdf"></i> Export as PDF</button>
+            <button class="btn-secondary" onclick="generateCashbillPDF()"><i class="fas fa-file-pdf"></i> Generate PDF</button>
             <button onclick="editCashbillFromView()"><i class="fas fa-edit"></i> Edit</button>
           </div>
         </div>
@@ -3824,6 +2659,27 @@
                 </div>
               </div>
               <button type="button" class="add-item-btn" onclick="addItem()"><i class="fas fa-plus"></i> Add Item</button>
+              
+              <!-- Custom Item Section -->
+              <div class="custom-item-section">
+                <div class="custom-item-header">
+                  <i class="fas fa-plus-circle"></i>
+                  <span>Add Custom Item</span>
+                </div>
+                <div class="custom-item-row">
+                  <div class="form-group">
+                    <label>Item Name</label>
+                    <input type="text" id="customItemName" placeholder="Enter item name">
+                  </div>
+                  <div class="form-group">
+                    <label>Price (RM)</label>
+                    <input type="number" id="customItemPrice" step="0.01" min="0" placeholder="0.00">
+                  </div>
+                  <div>
+                    <button type="button" class="btn-secondary" onclick="addCustomItem()"><i class="fas fa-plus"></i> Add</button>
+                  </div>
+                </div>
+              </div>
             </div>
             
             <div class="total-section">
@@ -3853,6 +2709,15 @@
                 <option value="card">Card</option>
                 <option value="qr">QR</option>
                 <option value="online_banking">Online Banking</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="status">Status:</label>
+              <select id="status" required>
+                <option value="committed">Committed</option>
+                <option value="pending">Pending</option>
+                <option value="draft">Draft</option>
               </select>
             </div>
             
@@ -3902,7 +2767,7 @@
         
         <div style="text-align: center; margin-top: 2rem;">
           <button onclick="showPage('newCashbillPage')"><i class="fas fa-file-invoice"></i> Create Another Cashbill</button>
-          <button class="btn-secondary" onclick="exportCashbill()"><i class="fas fa-file-pdf"></i> Export as PDF</button>
+          <button class="btn-secondary" onclick="generateCashbillPDF()"><i class="fas fa-file-pdf"></i> Generate PDF</button>
           <button class="btn-secondary" onclick="showPage('cashbillListPage')"><i class="fas fa-list"></i> View All Cashbills</button>
         </div>
       </div>
@@ -3941,6 +2806,7 @@
               <select id="reportFilterStatus">
                 <option value="">All</option>
                 <option value="committed">Committed</option>
+                <option value="pending">Pending</option>
                 <option value="draft">Draft</option>
               </select>
             </div>
@@ -4094,64 +2960,6 @@
               </div>
             </div>
           </div>
-          
-          <div class="card" style="margin-top: 1.5rem;">
-            <h2><i class="fas fa-chart-pie"></i> Advanced Analytics</h2>
-            <div class="advanced-analytics-container">
-              <div class="analytics-controls">
-                <div class="analytics-filters">
-                  <div class="filter-group">
-                    <label for="analyticsPeriod">Period:</label>
-                    <select id="analyticsPeriod">
-                      <option value="7">Last 7 Days</option>
-                      <option value="30">Last 30 Days</option>
-                      <option value="90">Last 90 Days</option>
-                      <option value="365">Last Year</option>
-                    </select>
-                  </div>
-                  <div class="filter-group">
-                    <label for="analyticsMetric">Metric:</label>
-                    <select id="analyticsMetric">
-                      <option value="revenue">Revenue</option>
-                      <option value="cashbills">Cashbills</option>
-                      <option value="users">User Activity</option>
-                    </select>
-                  </div>
-                </div>
-                <button onclick="generateAnalyticsReport()"><i class="fas fa-sync"></i> Refresh</button>
-              </div>
-              
-              <div class="analytics-chart-container">
-                <div class="analytics-placeholder">
-                  <i class="fas fa-chart-line"></i>
-                  <p>Analytics chart will be displayed here</p>
-                </div>
-              </div>
-              
-              <div class="analytics-summary">
-                <div class="analytics-summary-card">
-                  <div class="analytics-summary-value">RM12,450</div>
-                  <div class="analytics-summary-label">Total Revenue</div>
-                  <div class="analytics-summary-change positive">+12.5%</div>
-                </div>
-                <div class="analytics-summary-card">
-                  <div class="analytics-summary-value">48</div>
-                  <div class="analytics-summary-label">Cashbills</div>
-                  <div class="analytics-summary-change positive">+8.2%</div>
-                </div>
-                <div class="analytics-summary-card">
-                  <div class="analytics-summary-value">4</div>
-                  <div class="analytics-summary-label">Active Users</div>
-                  <div class="analytics-summary-change negative">-1</div>
-                </div>
-                <div class="analytics-summary-card">
-                  <div class="analytics-summary-value">92%</div>
-                  <div class="analytics-summary-label">Completion Rate</div>
-                  <div class="analytics-summary-change positive">+3.1%</div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -4184,6 +2992,7 @@
             <label for="editStatus">Status:</label>
             <select id="editStatus" required>
               <option value="draft">Draft</option>
+              <option value="pending">Pending</option>
               <option value="committed">Committed</option>
             </select>
           </div>
@@ -4387,6 +3196,15 @@
               </div>
               <div class="settings-control">
                 <input type="text" id="settingsCompanyName" value="PNE ARENA">
+              </div>
+            </div>
+            <div class="settings-item">
+              <div>
+                <div class="settings-label">Company Address</div>
+                <div class="settings-description">Company address for PDF generation</div>
+              </div>
+              <div class="settings-control">
+                <textarea id="settingsCompanyAddress" rows="3">123 Business Street, City, Country</textarea>
               </div>
             </div>
             <div class="settings-item">
@@ -4664,6 +3482,7 @@
     </div>
   </div>
   
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     // Device detection
     function isMobileDevice() {
@@ -4785,6 +3604,7 @@
     let notifications = [];
     let systemSettings = {
       companyName: 'PNE ARENA',
+      companyAddress: '123 Business Street, City, Country',
       currency: 'RM',
       taxRate: 0,
       cashbillTargets: { crew: 10, manager: 20, marketing: 15, admin: 0 },
@@ -4918,19 +3738,6 @@
       
       list.innerHTML = html;
     }
-    
-    // Theme toggle
-    document.getElementById('themeToggle').addEventListener('click', function() {
-      // Simple theme toggle implementation
-      const body = document.body;
-      if (body.classList.contains('dark-theme')) {
-        body.classList.remove('dark-theme');
-        this.innerHTML = '<i class="fas fa-moon"></i>';
-      } else {
-        body.classList.add('dark-theme');
-        this.innerHTML = '<i class="fas fa-sun"></i>';
-      }
-    });
     
     // Page navigation
     function showPage(pageId) {
@@ -5139,6 +3946,59 @@
       });
     }
     
+    // Add custom item
+    function addCustomItem() {
+      const itemName = document.getElementById('customItemName').value;
+      const itemPrice = parseFloat(document.getElementById('customItemPrice').value) || 0;
+      
+      if (!itemName || itemPrice <= 0) {
+        alert('Please enter a valid item name and price');
+        return;
+      }
+      
+      const itemsContainer = document.getElementById('itemsContainer');
+      const newItem = document.createElement('div');
+      newItem.className = 'item-row';
+      newItem.innerHTML = `
+        <div class="form-group">
+          <label>Item</label>
+          <input type="text" class="item-description" value="${itemName}" required placeholder="Item description">
+        </div>
+        <div class="form-group">
+          <label>Quantity</label>
+          <input type="number" class="item-quantity" min="1" value="1" required>
+        </div>
+        <div class="form-group">
+          <label>Unit Price (RM)</label>
+          <input type="number" class="item-price" step="0.01" min="0" value="${itemPrice}" required placeholder="0.00">
+        </div>
+        <div class="form-group">
+          <label>Tax (%)</label>
+          <input type="number" class="item-tax" step="0.01" min="0" value="0" placeholder="0">
+        </div>
+        <div class="form-group">
+          <label>Discount (RM)</label>
+          <input type="number" class="item-discount" step="0.01" min="0" value="0" placeholder="0">
+        </div>
+        <div>
+          <button type="button" class="remove-item-btn" onclick="removeItem(this)"><i class="fas fa-trash"></i> Remove</button>
+        </div>
+      `;
+      itemsContainer.appendChild(newItem);
+      
+      // Add event listeners to calculate totals
+      newItem.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', calculateTotals);
+      });
+      
+      // Clear custom item inputs
+      document.getElementById('customItemName').value = '';
+      document.getElementById('customItemPrice').value = '';
+      
+      // Recalculate totals
+      calculateTotals();
+    }
+    
     // Remove item from cashbill form
     function removeItem(button) {
       const itemRow = button.closest('.item-row');
@@ -5286,30 +4146,54 @@
       const customerName = document.getElementById('customerName').value;
       const isMember = document.getElementById('isMember').checked;
       const paymentMethod = document.getElementById('paymentMethod').value;
+      const status = document.getElementById('status').value;
       const notes = document.getElementById('notes').value;
       
       // Get items
       const items = [];
       document.querySelectorAll('.item-row').forEach(row => {
         const select = row.querySelector('.item-select');
-        if (select.value) {
+        const descriptionInput = row.querySelector('.item-description');
+        
+        let description, regularPrice, memberPrice, minOrder, freeCap;
+        
+        if (select && select.value) {
+          // Predefined item
           const itemData = JSON.parse(select.value);
-          const quantity = parseInt(row.querySelector('.item-quantity').value) || 0;
-          const unitPrice = parseFloat(row.querySelector('.item-price').value) || 0;
-          const taxRate = parseFloat(row.querySelector('.item-tax').value) || 0;
-          const discount = parseFloat(row.querySelector('.item-discount').value) || 0;
-          
-          items.push({
-            description: itemData.description,
-            quantity,
-            unitPrice,
-            taxRate,
-            discount,
-            isMember: isMember,
-            memberPrice: itemData.memberPrice,
-            regularPrice: itemData.price
-          });
+          description = itemData.description;
+          regularPrice = itemData.price;
+          memberPrice = itemData.memberPrice;
+          minOrder = itemData.minOrder;
+          freeCap = itemData.freeCap;
+        } else if (descriptionInput) {
+          // Custom item
+          description = descriptionInput.value;
+          regularPrice = parseFloat(row.querySelector('.item-price').value) || 0;
+          memberPrice = regularPrice;
+          minOrder = null;
+          freeCap = false;
+        } else {
+          // Skip if no valid item
+          return;
         }
+        
+        const quantity = parseInt(row.querySelector('.item-quantity').value) || 0;
+        const unitPrice = parseFloat(row.querySelector('.item-price').value) || 0;
+        const taxRate = parseFloat(row.querySelector('.item-tax').value) || 0;
+        const discount = parseFloat(row.querySelector('.item-discount').value) || 0;
+        
+        items.push({
+          description,
+          quantity,
+          unitPrice,
+          taxRate,
+          discount,
+          isMember: isMember,
+          memberPrice: memberPrice,
+          regularPrice: regularPrice,
+          minOrder: minOrder,
+          freeCap: freeCap
+        });
       });
       
       if (items.length === 0) {
@@ -5349,7 +4233,7 @@
         totalTax,
         totalDiscount,
         grandTotal,
-        status: 'committed',
+        status: status,
         date: new Date().toISOString()
       };
       
@@ -5395,24 +4279,47 @@
       const items = [];
       document.querySelectorAll('.item-row').forEach(row => {
         const select = row.querySelector('.item-select');
-        if (select.value) {
+        const descriptionInput = row.querySelector('.item-description');
+        
+        let description, regularPrice, memberPrice, minOrder, freeCap;
+        
+        if (select && select.value) {
+          // Predefined item
           const itemData = JSON.parse(select.value);
-          const quantity = parseInt(row.querySelector('.item-quantity').value) || 0;
-          const unitPrice = parseFloat(row.querySelector('.item-price').value) || 0;
-          const taxRate = parseFloat(row.querySelector('.item-tax').value) || 0;
-          const discount = parseFloat(row.querySelector('.item-discount').value) || 0;
-          
-          items.push({
-            description: itemData.description,
-            quantity,
-            unitPrice,
-            taxRate,
-            discount,
-            isMember: isMember,
-            memberPrice: itemData.memberPrice,
-            regularPrice: itemData.price
-          });
+          description = itemData.description;
+          regularPrice = itemData.price;
+          memberPrice = itemData.memberPrice;
+          minOrder = itemData.minOrder;
+          freeCap = itemData.freeCap;
+        } else if (descriptionInput) {
+          // Custom item
+          description = descriptionInput.value;
+          regularPrice = parseFloat(row.querySelector('.item-price').value) || 0;
+          memberPrice = regularPrice;
+          minOrder = null;
+          freeCap = false;
+        } else {
+          // Skip if no valid item
+          return;
         }
+        
+        const quantity = parseInt(row.querySelector('.item-quantity').value) || 0;
+        const unitPrice = parseFloat(row.querySelector('.item-price').value) || 0;
+        const taxRate = parseFloat(row.querySelector('.item-tax').value) || 0;
+        const discount = parseFloat(row.querySelector('.item-discount').value) || 0;
+        
+        items.push({
+          description,
+          quantity,
+          unitPrice,
+          taxRate,
+          discount,
+          isMember: isMember,
+          memberPrice: memberPrice,
+          regularPrice: regularPrice,
+          minOrder: minOrder,
+          freeCap: freeCap
+        });
       });
       
       if (items.length === 0) {
@@ -5573,7 +4480,7 @@
       });
       
       detailsContainer.innerHTML = `
-        <h3>${cashbill.invoiceNumber} ${cashbill.status === 'draft' ? '<span class="draft-indicator">Draft</span>' : '<span class="committed-indicator">Committed</span>'}</h3>
+        <h3>${cashbill.invoiceNumber} ${cashbill.status === 'draft' ? '<span class="draft-indicator">Draft</span>' : cashbill.status === 'pending' ? '<span class="pending-indicator">Pending</span>' : '<span class="committed-indicator">Committed</span>'}</h3>
         <div class="detail-row">
           <span>Customer Name:</span>
           <span>${cashbill.customerName}</span>
@@ -5588,7 +4495,7 @@
         </div>
         <div class="detail-row">
           <span>Status:</span>
-          <span>${cashbill.status === 'draft' ? 'Draft' : 'Committed'}</span>
+          <span>${cashbill.status === 'draft' ? 'Draft' : cashbill.status === 'pending' ? 'Pending' : 'Committed'}</span>
         </div>
         <div style="margin-top: 1.25rem;">
           <h4>Items:</h4>
@@ -5618,6 +4525,7 @@
     function updateDashboardStats() {
       const committedCashbills = cashbills.filter(bill => bill.status === 'committed');
       const draftCashbills = cashbills.filter(bill => bill.status === 'draft');
+      const pendingCashbills = cashbills.filter(bill => bill.status === 'pending');
       
       const totalCashbills = committedCashbills.length;
       const totalRevenue = committedCashbills.reduce((sum, bill) => sum + (bill.grandTotal || 0), 0);
@@ -5658,6 +4566,7 @@
       const myCashbills = cashbills.filter(bill => bill.userId === currentUser.id);
       const myCommittedCashbills = myCashbills.filter(bill => bill.status === 'committed');
       const myDraftCashbills = myCashbills.filter(bill => bill.status === 'draft');
+      const myPendingCashbills = myCashbills.filter(bill => bill.status === 'pending');
       const myTotalRevenue = myCommittedCashbills.reduce((sum, bill) => sum + (bill.grandTotal || 0), 0);
       
       // Update performance metrics
@@ -6009,6 +4918,7 @@
       
       // Populate settings
       document.getElementById('settingsCompanyName').value = systemSettings.companyName;
+      document.getElementById('settingsCompanyAddress').value = systemSettings.companyAddress;
       document.getElementById('settingsCurrency').value = systemSettings.currency;
       document.getElementById('settingsTaxRate').value = systemSettings.taxRate;
       document.getElementById('settingsCrewTarget').value = systemSettings.cashbillTargets.crew;
@@ -6023,6 +4933,7 @@
     // Save system settings
     async function saveSystemSettings() {
       systemSettings.companyName = document.getElementById('settingsCompanyName').value;
+      systemSettings.companyAddress = document.getElementById('settingsCompanyAddress').value;
       systemSettings.currency = document.getElementById('settingsCurrency').value;
       systemSettings.taxRate = parseFloat(document.getElementById('settingsTaxRate').value);
       systemSettings.cashbillTargets.crew = parseInt(document.getElementById('settingsCrewTarget').value);
@@ -6329,18 +5240,18 @@
             label: 'Revenue by User',
             data: Object.values(revenueByUser),
             backgroundColor: [
-              'rgba(74, 111, 165, 0.7)',
-              'rgba(40, 167, 69, 0.7)',
-              'rgba(255, 193, 7, 0.7)',
-              'rgba(220, 53, 69, 0.7)',
-              'rgba(108, 117, 125, 0.7)'
+              'rgba(37, 99, 235, 0.7)',
+              'rgba(34, 197, 94, 0.7)',
+              'rgba(245, 158, 11, 0.7)',
+              'rgba(239, 68, 68, 0.7)',
+              'rgba(107, 114, 128, 0.7)'
             ],
             borderColor: [
-              'rgba(74, 111, 165, 1)',
-              'rgba(40, 167, 69, 1)',
-              'rgba(255, 193, 7, 1)',
-              'rgba(220, 53, 69, 1)',
-              'rgba(108, 117, 125, 1)'
+              'rgba(37, 99, 235, 1)',
+              'rgba(34, 197, 94, 1)',
+              'rgba(245, 158, 11, 1)',
+              'rgba(239, 68, 68, 1)',
+              'rgba(107, 114, 128, 1)'
             ],
             borderWidth: 1
           }]
@@ -6372,8 +5283,8 @@
           datasets: [{
             label: 'Revenue',
             data: Object.values(revenueByDay),
-            backgroundColor: 'rgba(74, 111, 165, 0.2)',
-            borderColor: 'rgba(74, 111, 165, 1)',
+            backgroundColor: 'rgba(37, 99, 235, 0.2)',
+            borderColor: 'rgba(37, 99, 235, 1)',
             borderWidth: 2,
             tension: 0.4,
             fill: true
@@ -6393,11 +5304,12 @@
         // Group by status
         const cashbillsByStatus = {
           'Committed': 0,
+          'Pending': 0,
           'Draft': 0
         };
         
         periodCashbills.forEach(bill => {
-          cashbillsByStatus[bill.status === 'committed' ? 'Committed' : 'Draft']++;
+          cashbillsByStatus[bill.status === 'committed' ? 'Committed' : bill.status === 'pending' ? 'Pending' : 'Draft']++;
         });
         
         return {
@@ -6406,12 +5318,14 @@
             label: 'Cashbills by Status',
             data: Object.values(cashbillsByStatus),
             backgroundColor: [
-              'rgba(40, 167, 69, 0.7)',
-              'rgba(255, 193, 7, 0.7)'
+              'rgba(34, 197, 94, 0.7)',
+              'rgba(59, 130, 246, 0.7)',
+              'rgba(245, 158, 11, 0.7)'
             ],
             borderColor: [
-              'rgba(40, 167, 69, 1)',
-              'rgba(255, 193, 7, 1)'
+              'rgba(34, 197, 94, 1)',
+              'rgba(59, 130, 246, 1)',
+              'rgba(245, 158, 11, 1)'
             ],
             borderWidth: 1
           }]
@@ -6421,6 +5335,7 @@
         const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
         const cashbillsByDay = {
           committed: {},
+          pending: {},
           draft: {}
         };
         
@@ -6429,6 +5344,7 @@
           date.setDate(startDate.getDate() + i);
           const dateStr = date.toISOString().split('T')[0];
           cashbillsByDay.committed[dateStr] = 0;
+          cashbillsByDay.pending[dateStr] = 0;
           cashbillsByDay.draft[dateStr] = 0;
         }
         
@@ -6448,15 +5364,22 @@
             {
               label: 'Committed',
               data: Object.values(cashbillsByDay.committed),
-              backgroundColor: 'rgba(40, 167, 69, 0.2)',
-              borderColor: 'rgba(40, 167, 69, 1)',
+              backgroundColor: 'rgba(34, 197, 94, 0.2)',
+              borderColor: 'rgba(34, 197, 94, 1)',
+              borderWidth: 2
+            },
+            {
+              label: 'Pending',
+              data: Object.values(cashbillsByDay.pending),
+              backgroundColor: 'rgba(59, 130, 246, 0.2)',
+              borderColor: 'rgba(59, 130, 246, 1)',
               borderWidth: 2
             },
             {
               label: 'Draft',
               data: Object.values(cashbillsByDay.draft),
-              backgroundColor: 'rgba(255, 193, 7, 0.2)',
-              borderColor: 'rgba(255, 193, 7, 1)',
+              backgroundColor: 'rgba(245, 158, 11, 0.2)',
+              borderColor: 'rgba(245, 158, 11, 1)',
               borderWidth: 2
             }
           ]
@@ -6491,10 +5414,10 @@
           datasets: [{
             label: 'User Activities',
             data: Object.values(actionsByType),
-            backgroundColor: 'rgba(74, 111, 165, 0.2)',
-            borderColor: 'rgba(74, 111, 165, 1)',
+            backgroundColor: 'rgba(37, 99, 235, 0.2)',
+            borderColor: 'rgba(37, 99, 235, 1)',
             borderWidth: 2,
-            pointBackgroundColor: 'rgba(74, 111, 165, 1)'
+            pointBackgroundColor: 'rgba(37, 99, 235, 1)'
           }]
         };
       } else {
@@ -6516,18 +5439,18 @@
             label: 'Activities',
             data: Object.values(userActivity),
             backgroundColor: [
-              'rgba(74, 111, 165, 0.7)',
-              'rgba(40, 167, 69, 0.7)',
-              'rgba(255, 193, 7, 0.7)',
-              'rgba(220, 53, 69, 0.7)',
-              'rgba(108, 117, 125, 0.7)'
+              'rgba(37, 99, 235, 0.7)',
+              'rgba(34, 197, 94, 0.7)',
+              'rgba(245, 158, 11, 0.7)',
+              'rgba(239, 68, 68, 0.7)',
+              'rgba(107, 114, 128, 0.7)'
             ],
             borderColor: [
-              'rgba(74, 111, 165, 1)',
-              'rgba(40, 167, 69, 1)',
-              'rgba(255, 193, 7, 1)',
-              'rgba(220, 53, 69, 1)',
-              'rgba(108, 117, 125, 1)'
+              'rgba(37, 99, 235, 1)',
+              'rgba(34, 197, 94, 1)',
+              'rgba(245, 158, 11, 1)',
+              'rgba(239, 68, 68, 1)',
+              'rgba(107, 114, 128, 1)'
             ],
             borderWidth: 1
           }]
@@ -6567,8 +5490,8 @@
         datasets: [{
           label: 'Quantity Sold',
           data: sortedItems.map(item => item[1]),
-          backgroundColor: 'rgba(40, 167, 69, 0.7)',
-          borderColor: 'rgba(40, 167, 69, 1)',
+          backgroundColor: 'rgba(34, 197, 94, 0.7)',
+          borderColor: 'rgba(34, 197, 94, 1)',
           borderWidth: 1
         }]
       };
@@ -6602,16 +5525,16 @@
           label: 'Payment Methods',
           data: Object.values(paymentsByMethod),
           backgroundColor: [
-            'rgba(74, 111, 165, 0.7)',
-            'rgba(40, 167, 69, 0.7)',
-            'rgba(255, 193, 7, 0.7)',
-            'rgba(220, 53, 69, 0.7)'
+            'rgba(37, 99, 235, 0.7)',
+            'rgba(34, 197, 94, 0.7)',
+            'rgba(245, 158, 11, 0.7)',
+            'rgba(239, 68, 68, 0.7)'
           ],
           borderColor: [
-            'rgba(74, 111, 165, 1)',
-            'rgba(40, 167, 69, 1)',
-            'rgba(255, 193, 7, 1)',
-            'rgba(220, 53, 69, 1)'
+            'rgba(37, 99, 235, 1)',
+            'rgba(34, 197, 94, 1)',
+            'rgba(245, 158, 11, 1)',
+            'rgba(239, 68, 68, 1)'
           ],
           borderWidth: 1
         }]
@@ -6649,18 +5572,18 @@
             {
               label: 'Cashbills Created',
               data: Object.values(userPerformance).map(p => p.cashbills),
-              backgroundColor: 'rgba(74, 111, 165, 0.2)',
-              borderColor: 'rgba(74, 111, 165, 1)',
+              backgroundColor: 'rgba(37, 99, 235, 0.2)',
+              borderColor: 'rgba(37, 99, 235, 1)',
               borderWidth: 2,
-              pointBackgroundColor: 'rgba(74, 111, 165, 1)'
+              pointBackgroundColor: 'rgba(37, 99, 235, 1)'
             },
             {
               label: 'Completion Rate (%)',
               data: Object.values(userPerformance).map(p => p.completionRate),
-              backgroundColor: 'rgba(40, 167, 69, 0.2)',
-              borderColor: 'rgba(40, 167, 69, 1)',
+              backgroundColor: 'rgba(34, 197, 94, 0.2)',
+              borderColor: 'rgba(34, 197, 94, 1)',
               borderWidth: 2,
-              pointBackgroundColor: 'rgba(40, 167, 69, 1)'
+              pointBackgroundColor: 'rgba(34, 197, 94, 1)'
             }
           ]
         };
@@ -6671,15 +5594,15 @@
             {
               label: 'Revenue',
               data: Object.values(userPerformance).map(p => p.revenue),
-              backgroundColor: 'rgba(74, 111, 165, 0.7)',
-              borderColor: 'rgba(74, 111, 165, 1)',
+              backgroundColor: 'rgba(37, 99, 235, 0.7)',
+              borderColor: 'rgba(37, 99, 235, 1)',
               borderWidth: 1
             },
             {
               label: 'Completion Rate',
               data: Object.values(userPerformance).map(p => p.completionRate),
-              backgroundColor: 'rgba(40, 167, 69, 0.7)',
-              borderColor: 'rgba(40, 167, 69, 1)',
+              backgroundColor: 'rgba(34, 197, 94, 0.7)',
+              borderColor: 'rgba(34, 197, 94, 1)',
               borderWidth: 1
             }
           ]
@@ -7523,7 +6446,7 @@
             <td>${new Date(bill.date).toLocaleDateString()}</td>
             <td>${systemSettings.currency}${totalAmount.toFixed(2)}</td>
             <td>${getPaymentMethodDisplayName(bill.paymentMethod)}</td>
-            <td>${bill.status === 'draft' ? 'Draft' : 'Committed'}</td>
+            <td>${bill.status === 'draft' ? 'Draft' : bill.status === 'pending' ? 'Pending' : 'Committed'}</td>
             <td>${actionsHTML}</td>
           </tr>
         `;
@@ -7550,10 +6473,11 @@
       
       // Populate cashbill view page
       document.getElementById('viewInvoiceNumber').textContent = cashbill.invoiceNumber + 
-        (cashbill.status === 'draft' ? ' <span class="draft-indicator">Draft</span>' : ' <span class="committed-indicator">Committed</span>');
+        (cashbill.status === 'draft' ? ' <span class="draft-indicator">Draft</span>' : 
+         cashbill.status === 'pending' ? ' <span class="pending-indicator">Pending</span>' : ' <span class="committed-indicator">Committed</span>');
       document.getElementById('viewCustomerName').textContent = cashbill.customerName;
       document.getElementById('viewDate').textContent = new Date(cashbill.date).toLocaleDateString();
-      document.getElementById('viewStatus').textContent = cashbill.status === 'draft' ? 'Draft' : 'Committed';
+      document.getElementById('viewStatus').textContent = cashbill.status === 'draft' ? 'Draft' : cashbill.status === 'pending' ? 'Pending' : 'Committed';
       document.getElementById('viewPaymentMethod').textContent = getPaymentMethodDisplayName(cashbill.paymentMethod);
       
       // Use userName if available, otherwise fall back to finding user by ID
@@ -7701,7 +6625,7 @@
       
       filteredCashbills.forEach(bill => {
         const user = users.find(u => u.id === bill.userId);
-        csv += `${bill.invoiceNumber},"${bill.customerName}",${user ? user.name : 'Unknown'},${new Date(bill.date).toLocaleDateString()},${(bill.subtotal || 0).toFixed(2)},${(bill.totalTax || 0).toFixed(2)},${(bill.totalDiscount || 0).toFixed(2)},${(bill.grandTotal || 0).toFixed(2)},${getPaymentMethodDisplayName(bill.paymentMethod)},${bill.status === 'draft' ? 'Draft' : 'Committed'}\n`;
+        csv += `${bill.invoiceNumber},"${bill.customerName}",${user ? user.name : 'Unknown'},${new Date(bill.date).toLocaleDateString()},${(bill.subtotal || 0).toFixed(2)},${(bill.totalTax || 0).toFixed(2)},${(bill.totalDiscount || 0).toFixed(2)},${(bill.grandTotal || 0).toFixed(2)},${getPaymentMethodDisplayName(bill.paymentMethod)},${bill.status === 'draft' ? 'Draft' : bill.status === 'pending' ? 'Pending' : 'Committed'}\n`;
       });
       
       const blob = new Blob([csv], { type: 'text/csv' });
@@ -7718,9 +6642,82 @@
       hideLoading();
     }
     
-    // Export cashbill as PDF (simulated)
-    function exportCashbill() {
-      alert('PDF export would be implemented here. In a real application, this would generate a PDF file.');
+    // Generate cashbill PDF
+    function generateCashbillPDF() {
+      if (!currentViewingCashbill) {
+        alert('No cashbill selected for PDF generation');
+        return;
+      }
+      
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      
+      // Company name at top center
+      doc.setFontSize(18);
+      doc.setFont(undefined, 'bold');
+      doc.text(systemSettings.companyName, doc.internal.pageSize.getWidth() / 2, 20, { align: 'center' });
+      
+      // Customer info on left, company address on right
+      doc.setFontSize(12);
+      doc.setFont(undefined, 'normal');
+      
+      // Left column - customer info
+      const leftX = 20;
+      let leftY = 35;
+      doc.text(`Customer: ${currentViewingCashbill.customerName}`, leftX, leftY);
+      leftY += 8;
+      doc.text(`Invoice: ${currentViewingCashbill.invoiceNumber}`, leftX, leftY);
+      leftY += 8;
+      doc.text(`Date: ${new Date(currentViewingCashbill.date).toLocaleDateString()}`, leftX, leftY);
+      
+      // Right column - company address
+      const rightX = doc.internal.pageSize.getWidth() - 20;
+      let rightY = 35;
+      doc.text(systemSettings.companyAddress, rightX, rightY, { align: 'right' });
+      
+      // Separator line
+      doc.setLineWidth(0.5);
+      doc.line(20, 55, doc.internal.pageSize.getWidth() - 20, 55);
+      
+      // Items table
+      let tableY = 65;
+      
+      // Table headers
+      doc.setFont(undefined, 'bold');
+      doc.text('Description', 20, tableY);
+      doc.text('Qty', 100, tableY);
+      doc.text('Price', 130, tableY);
+      doc.text('Total', 160, tableY);
+      
+      tableY += 10;
+      
+      // Table content
+      doc.setFont(undefined, 'normal');
+      currentViewingCashbill.items.forEach(item => {
+        const itemTotal = item.quantity * item.unitPrice;
+        
+        doc.text(item.description, 20, tableY, { maxWidth: 70 });
+        doc.text(item.quantity.toString(), 100, tableY);
+        doc.text(`${systemSettings.currency}${item.unitPrice.toFixed(2)}`, 130, tableY);
+        doc.text(`${systemSettings.currency}${itemTotal.toFixed(2)}`, 160, tableY);
+        
+        tableY += 8;
+      });
+      
+      // Total amount
+      tableY += 5;
+      doc.setLineWidth(0.2);
+      doc.line(20, tableY, 170, tableY);
+      tableY += 8;
+      
+      doc.setFont(undefined, 'bold');
+      doc.text(`Total: ${systemSettings.currency}${currentViewingCashbill.grandTotal.toFixed(2)}`, 160, tableY, { align: 'right' });
+      
+      // Save the PDF
+      doc.save(`${currentViewingCashbill.invoiceNumber.replace('#', '')}.pdf`);
+      
+      // Log activity
+      logActivity(currentUser.id, currentUser.name, 'Export Data', `Generated PDF for cashbill ${currentViewingCashbill.invoiceNumber}`);
     }
     
     // Edit cashbill
@@ -7898,7 +6895,7 @@
         const discount = parseFloat(row.querySelector('.edit-item-discount').value) || 0;
         
         items.push({
-          description: description, // Keep as user entered
+          description, // Keep as user entered
           quantity,
           unitPrice,
           taxRate,
@@ -7958,7 +6955,7 @@
           }
           
           // Log activity
-          const actionText = status === 'committed' ? 'committed' : 'uncommitted';
+          const actionText = status === 'committed' ? 'committed' : status === 'pending' ? 'marked as pending' : 'uncommitted';
           logActivity(currentUser.id, currentUser.name, 'Edit Cashbill', `${actionText} cashbill ${cashbills[cashbillIndex].invoiceNumber}`);
           
           closeEditModal();
@@ -8213,7 +7210,7 @@
             <td>${new Date(bill.date).toLocaleDateString()}</td>
             <td>${systemSettings.currency}${totalAmount.toFixed(2)}</td>
             <td>${getPaymentMethodDisplayName(bill.paymentMethod)}</td>
-            <td>${bill.status === 'draft' ? 'Draft' : 'Committed'}</td>
+            <td>${bill.status === 'draft' ? 'Draft' : bill.status === 'pending' ? 'Pending' : 'Committed'}</td>
           </tr>
         `;
       });
@@ -8322,7 +7319,7 @@
       
       filteredCashbills.forEach(bill => {
         const user = users.find(u => u.id === bill.userId);
-        csv += `${bill.invoiceNumber},"${bill.customerName}",${user ? user.name : 'Unknown'},${new Date(bill.date).toLocaleDateString()},${(bill.subtotal || 0).toFixed(2)},${(bill.totalTax || 0).toFixed(2)},${(bill.totalDiscount || 0).toFixed(2)},${(bill.grandTotal || 0).toFixed(2)},${getPaymentMethodDisplayName(bill.paymentMethod)},${bill.status === 'draft' ? 'Draft' : 'Committed'}\n`;
+        csv += `${bill.invoiceNumber},"${bill.customerName}",${user ? user.name : 'Unknown'},${new Date(bill.date).toLocaleDateString()},${(bill.subtotal || 0).toFixed(2)},${(bill.totalTax || 0).toFixed(2)},${(bill.totalDiscount || 0).toFixed(2)},${(bill.grandTotal || 0).toFixed(2)},${getPaymentMethodDisplayName(bill.paymentMethod)},${bill.status === 'draft' ? 'Draft' : bill.status === 'pending' ? 'Pending' : 'Committed'}\n`;
       });
       
       const blob = new Blob([csv], { type: 'text/csv' });
