@@ -3,33 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PNE ARENA System - Professional Billing Management</title>
+  <title>PNE ARENA PORTAL</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Load jsPDF library properly -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
+    /* Black & White Theme */
     :root {
-      /* Clean White & Soft Black Theme */
-      --primary: #2563eb;
-      --primary-dark: #1d4ed8;
-      --secondary: #64748b;
-      --success: #22c55e;
-      --danger: #ef4444;
-      --warning: #f59e0b;
-      --info: #3b82f6;
-      --light: #f8fafc;
-      --dark: #1e293b;
-      --white: #ffffff;
-      --grey-50: #f9fafb;
-      --grey-100: #f3f4f6;
-      --grey-200: #e5e7eb;
-      --grey-300: #d1d5db;
-      --grey-400: #9ca3af;
-      --grey-500: #6b7280;
-      --grey-600: #4b5563;
-      --grey-700: #374151;
-      --grey-800: #1f2937;
-      --grey-900: #111827;
+      --primary: #000000; /* Black */
+      --primary-dark: #212121; /* Very dark gray */
+      --secondary: #616161; /* Medium gray */
+      --success: #2E7D32; /* Dark green */
+      --danger: #C62828; /* Dark red */
+      --warning: #F57C00; /* Dark orange */
+      --info: #1565C0; /* Dark blue */
+      --light: #FFFFFF; /* White */
+      --dark: #000000; /* Black */
+      --white: #FFFFFF; /* White */
+      --grey-50: #F9F9F9;
+      --grey-100: #F1F1F1;
+      --grey-200: #E0E0E0;
+      --grey-300: #BDBDBD;
+      --grey-400: #9E9E9E;
+      --grey-500: #757575;
+      --grey-600: #616161;
+      --grey-700: #424242;
+      --grey-800: #212121;
+      --grey-900: #000000;
       
       --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
       --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
@@ -47,7 +48,7 @@
     
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--grey-50);
+      background: #f5f7fa;
       color: var(--grey-800);
       min-height: 100vh;
       line-height: 1.6;
@@ -55,7 +56,6 @@
       font-size: 14px;
     }
     
-    /* Container */
     .container {
       max-width: 1400px;
       margin: 0 auto;
@@ -65,7 +65,6 @@
       overflow: hidden;
     }
     
-    /* Header */
     header {
       background: var(--white);
       color: var(--grey-800);
@@ -74,17 +73,20 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: relative;
     }
     
     header h1 {
       font-size: 1.75rem;
       font-weight: 700;
       color: var(--primary);
+      letter-spacing: -0.5px;
     }
     
     header p {
       color: var(--grey-500);
       font-size: 0.95rem;
+      margin-top: 0.25rem;
     }
     
     .header-left {
@@ -96,6 +98,21 @@
       display: flex;
       align-items: center;
       gap: 1rem;
+    }
+    
+    /* Date Display */
+    .date-display {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      font-size: 0.9rem;
+      color: var(--grey-600);
+    }
+    
+    .date-display .date {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--grey-800);
     }
     
     /* Notification Toggle */
@@ -138,6 +155,106 @@
       font-weight: bold;
     }
     
+    /* Desktop Hamburger Menu */
+    .hamburger-menu {
+      background: var(--grey-100);
+      border: 1px solid var(--grey-200);
+      color: var(--grey-600);
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      transition: var(--transition);
+      z-index: 101;
+    }
+    
+    .hamburger-menu:hover {
+      background: var(--grey-200);
+    }
+    
+    /* Desktop Navigation */
+    .desktop-nav {
+      position: absolute;
+      top: 100%;
+      right: 20px;
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--grey-200);
+      z-index: 100;
+      min-width: 280px;
+      display: none;
+      flex-direction: column;
+      padding: 1rem;
+      margin-top: 10px;
+    }
+    
+    .desktop-nav.active {
+      display: flex;
+    }
+    
+    .desktop-nav .nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--grey-200);
+    }
+    
+    .desktop-nav a {
+      color: var(--grey-600);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.95rem;
+    }
+    
+    .desktop-nav a:hover {
+      background: var(--grey-100);
+      color: var(--primary);
+    }
+    
+    .desktop-nav .user-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .desktop-nav .user-name {
+      font-weight: 600;
+      color: var(--grey-800);
+    }
+    
+    .desktop-nav .user-role {
+      background: var(--primary);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 24px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      align-self: flex-start;
+    }
+    
+    .desktop-nav .logout-btn {
+      color: var(--danger);
+      text-decoration: none;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0;
+    }
+    
     /* Pages */
     .page {
       display: none;
@@ -156,68 +273,12 @@
       to { opacity: 1; }
     }
     
-    /* Navigation */
-    nav {
-      background: var(--white);
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid var(--grey-200);
+    /* Page Content Container */
+    .page-content {
+      padding: 2rem;
     }
     
-    .nav-links {
-      display: flex;
-      gap: 0.5rem;
-    }
-    
-    nav a {
-      color: var(--grey-600);
-      text-decoration: none;
-      font-weight: 500;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      transition: var(--transition);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.9rem;
-    }
-    
-    nav a:hover {
-      background: var(--grey-100);
-      color: var(--primary);
-    }
-    
-    .user-info {
-      font-weight: 500;
-      color: var(--grey-700);
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-    
-    .user-role {
-      background: var(--primary);
-      color: white;
-      padding: 0.25rem 0.75rem;
-      border-radius: 24px;
-      font-size: 0.8rem;
-      font-weight: 500;
-    }
-    
-    /* Mobile Navigation */
-    .mobile-nav-toggle {
-      display: none;
-      background: none;
-      border: none;
-      color: var(--grey-600);
-      font-size: 1.2rem;
-      cursor: pointer;
-      padding: 0.5rem;
-    }
-    
-    /* Cards */
+    /* All existing styles remain the same */
     .card {
       background: var(--white);
       border-radius: var(--radius);
@@ -393,56 +454,6 @@
       color: var(--grey-600);
     }
     
-    /* System Health */
-    .system-health {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-    
-    .health-indicator {
-      background: var(--grey-50);
-      border-radius: var(--radius);
-      padding: 1.25rem;
-      border: 1px solid var(--grey-200);
-      text-align: center;
-      transition: all 0.3s ease;
-    }
-    
-    .health-indicator:hover {
-      box-shadow: var(--shadow);
-    }
-    
-    .health-indicator i {
-      font-size: 1.75rem;
-      margin-bottom: 0.75rem;
-    }
-    
-    .health-good {
-      color: var(--success);
-    }
-    
-    .health-warning {
-      color: var(--warning);
-    }
-    
-    .health-danger {
-      color: var(--danger);
-    }
-    
-    .health-indicator h3 {
-      font-size: 1.25rem;
-      margin-bottom: 0.25rem;
-      color: var(--grey-800);
-      font-weight: 600;
-    }
-    
-    .health-indicator p {
-      color: var(--grey-600);
-      font-size: 0.85rem;
-    }
-    
     /* User Activity Chart */
     .user-activity-chart {
       height: 250px;
@@ -570,22 +581,22 @@
     }
     
     .activity-icon.create {
-      background: rgba(40, 167, 69, 0.1);
+      background: rgba(46, 125, 50, 0.1);
       color: var(--success);
     }
     
     .activity-icon.edit {
-      background: rgba(37, 99, 235, 0.1);
+      background: rgba(0, 0, 0, 0.1);
       color: var(--primary);
     }
     
     .activity-icon.delete {
-      background: rgba(239, 68, 68, 0.1);
+      background: rgba(198, 40, 40, 0.1);
       color: var(--danger);
     }
     
     .activity-icon.login {
-      background: rgba(245, 158, 11, 0.1);
+      background: rgba(245, 124, 0, 0.1);
       color: var(--warning);
     }
     
@@ -640,7 +651,7 @@
     input:focus, select:focus, textarea:focus {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
     }
     
     /* Buttons */
@@ -680,7 +691,7 @@
     }
     
     .btn-secondary:hover {
-      background: #16a34a;
+      background: #2E7D32;
     }
     
     .btn-danger {
@@ -688,7 +699,7 @@
     }
     
     .btn-danger:hover {
-      background: #dc2626;
+      background: #B71C1C;
     }
     
     .btn-warning {
@@ -697,7 +708,7 @@
     }
     
     .btn-warning:hover {
-      background: #d97706;
+      background: #E65100;
     }
     
     .btn-info {
@@ -705,7 +716,7 @@
     }
     
     .btn-info:hover {
-      background: #2563eb;
+      background: #0D47A1;
     }
     
     /* Messages */
@@ -865,7 +876,7 @@
     }
     
     .btn-delete:hover {
-      background: #dc2626;
+      background: #B71C1C;
     }
     
     .btn-edit {
@@ -884,6 +895,23 @@
     
     .btn-edit:hover {
       background: var(--primary-dark);
+    }
+    
+    .btn-view {
+      background: var(--success);
+      color: white;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .btn-view:hover {
+      background: #2E7D32;
     }
     
     /* Empty State */
@@ -983,7 +1011,7 @@
     }
     
     .add-item-btn:hover {
-      background: #16a34a;
+      background: #2E7D32;
     }
     
     .remove-item-btn {
@@ -993,7 +1021,7 @@
     }
     
     .remove-item-btn:hover {
-      background: #dc2626;
+      background: #B71C1C;
     }
     
     /* Custom Item Section */
@@ -1284,7 +1312,7 @@
     }
     
     .spinner {
-      border: 4px solid rgba(37, 99, 235, 0.1);
+      border: 4px solid rgba(0, 0, 0, 0.1);
       border-radius: 50%;
       border-top: 4px solid var(--primary);
       width: 40px;
@@ -1295,11 +1323,6 @@
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
-    }
-    
-    /* Page Content Container */
-    .page-content {
-      padding: 2rem;
     }
     
     /* Cashbill List Page Styles */
@@ -1430,440 +1453,6 @@
       margin: 0;
     }
     
-    /* Page Content Container */
-    .page-content {
-      padding: 2rem;
-    }
-    
-    /* Cashbill List Page Styles */
-    .cashbill-list-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-    }
-    
-    .cashbill-list-header h2 {
-      margin: 0;
-      font-size: 1.5rem;
-      color: var(--grey-800);
-    }
-    
-    .create-cashbill-btn {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: var(--transition);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    
-    .create-cashbill-btn:hover {
-      background: var(--primary-dark);
-      transform: translateY(-2px);
-      box-shadow: var(--shadow);
-    }
-    
-    /* Cashbill View Page Styles */
-    .cashbill-view-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid var(--grey-200);
-    }
-    
-    .cashbill-view-title {
-      font-size: 1.5rem;
-      color: var(--grey-800);
-      margin: 0;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-    
-    .cashbill-view-actions {
-      display: flex;
-      gap: 0.75rem;
-    }
-    
-    .cashbill-info-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-    
-    .cashbill-info-card {
-      background: var(--grey-50);
-      border-radius: var(--radius);
-      padding: 1.25rem;
-      border: 1px solid var(--grey-200);
-    }
-    
-    .cashbill-info-card h4 {
-      font-size: 0.9rem;
-      color: var(--grey-600);
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-    }
-    
-    .cashbill-info-card p {
-      font-size: 1.1rem;
-      color: var(--grey-800);
-      margin: 0;
-      font-weight: 600;
-    }
-    
-    .cashbill-items-table {
-      margin-bottom: 2rem;
-    }
-    
-    .cashbill-summary {
-      background: var(--grey-50);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      border: 1px solid var(--grey-200);
-    }
-    
-    .cashbill-summary h3 {
-      margin-top: 0;
-      margin-bottom: 1rem;
-      font-size: 1.1rem;
-      color: var(--grey-800);
-    }
-    
-    /* PDF Generation Styles */
-    .pdf-header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    
-    .pdf-company-name {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-    
-    .pdf-info-row {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 5px;
-    }
-    
-    .pdf-separator {
-      border-top: 1px solid #000;
-      margin: 15px 0;
-    }
-    
-    .pdf-items-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 15px 0;
-    }
-    
-    .pdf-items-table th, .pdf-items-table td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: left;
-    }
-    
-    .pdf-items-table th {
-      background-color: #f2f2f2;
-    }
-    
-    .pdf-total-row {
-      font-weight: bold;
-    }
-    
-    /* Responsive Styles */
-    @media (max-width: 768px) {
-      /* Mobile Navigation */
-      .mobile-nav-toggle {
-        display: block;
-      }
-      
-      .nav-links {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        background: var(--white);
-        flex-direction: column;
-        padding: 1rem;
-        box-shadow: var(--shadow);
-        z-index: 10;
-      }
-      
-      .nav-links.active {
-        display: flex;
-      }
-      
-      nav {
-        position: relative;
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      
-      .user-info {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
-        margin-top: 1rem;
-        width: 100%;
-      }
-      
-      /* Header */
-      header {
-        padding: 1rem;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
-      }
-      
-      header h1 {
-        font-size: 1.5rem;
-      }
-      
-      .header-right {
-        margin-top: 0.5rem;
-      }
-      
-      /* Page Content */
-      .page-content {
-        padding: 1rem;
-      }
-      
-      /* Dashboard Stats */
-      .dashboard-stats {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-      }
-      
-      /* Quick Actions */
-      .quick-actions {
-        grid-template-columns: 1fr;
-      }
-      
-      /* Performance Metrics */
-      .performance-metrics {
-        grid-template-columns: 1fr;
-      }
-      
-      /* System Health */
-      .system-health {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      
-      /* System Tools */
-      .system-tools {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      
-      /* Items */
-      .item-row, .edit-item-row {
-        grid-template-columns: 1fr;
-        gap: 0.5rem;
-      }
-      
-      .item-row > div, .edit-item-row > div {
-        margin-bottom: 0.5rem;
-      }
-      
-      /* Custom Item Row */
-      .custom-item-row {
-        grid-template-columns: 1fr;
-        gap: 0.5rem;
-      }
-      
-      /* Filters */
-      .filter-container {
-        flex-direction: column;
-        gap: 0.5rem;
-      }
-      
-      .filter-group {
-        width: 100%;
-        min-width: auto;
-      }
-      
-      /* Tables */
-      .table-container {
-        overflow-x: auto;
-        margin: 1rem -1rem;
-        padding: 0 1rem;
-      }
-      
-      table {
-        min-width: 600px;
-      }
-      
-      /* Pagination */
-      .pagination {
-        flex-wrap: wrap;
-        gap: 0.5rem;
-      }
-      
-      .pagination button {
-        padding: 0.5rem 0.75rem;
-        font-size: 0.8rem;
-      }
-      
-      /* Modals */
-      .modal-content {
-        max-width: 95%;
-        padding: 1rem;
-        margin: 0.5rem;
-      }
-      
-      .modal-header {
-        padding-bottom: 0.75rem;
-        margin-bottom: 1rem;
-      }
-      
-      .modal-header h3 {
-        font-size: 1.1rem;
-      }
-      
-      .modal-actions {
-        flex-direction: column;
-        gap: 0.5rem;
-      }
-      
-      /* Notification Panel */
-      .notification-panel {
-        width: calc(100% - 40px);
-        right: 20px;
-        left: 20px;
-        max-height: 50vh;
-      }
-      
-      /* Buttons */
-      button {
-        padding: 0.6rem 1rem;
-        font-size: 0.85rem;
-      }
-      
-      /* Forms */
-      .form-group {
-        margin-bottom: 1rem;
-      }
-      
-      /* Cashbill List Header */
-      .cashbill-list-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
-      }
-      
-      .create-cashbill-btn {
-        width: 100%;
-        justify-content: center;
-      }
-      
-      /* Cashbill View Header */
-      .cashbill-view-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
-      }
-      
-      .cashbill-view-actions {
-        width: 100%;
-        justify-content: space-between;
-      }
-      
-      /* Cashbill Info Grid */
-      .cashbill-info-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-      }
-      
-      /* Shortcuts */
-      .shortcuts {
-        display: none;
-      }
-      
-      /* Activity Item */
-      .activity-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.5rem;
-      }
-      
-      .activity-icon {
-        align-self: flex-start;
-      }
-    }
-    
-    @media (max-width: 480px) {
-      /* Dashboard Stats */
-      .stat-card h3 {
-        font-size: 1.5rem;
-      }
-      
-      /* System Health */
-      .system-health {
-        grid-template-columns: 1fr;
-      }
-      
-      /* System Tools */
-      .system-tools {
-        grid-template-columns: 1fr;
-      }
-      
-      /* Buttons */
-      button {
-        padding: 0.5rem 0.75rem;
-        font-size: 0.8rem;
-      }
-      
-      /* Modals */
-      .modal-content {
-        padding: 0.75rem;
-      }
-      
-      .modal-header h3 {
-        font-size: 1rem;
-      }
-      
-      /* Notification Panel */
-      .notification-panel {
-        top: 70px;
-      }
-    }
-    
-    @media (min-width: 1200px) {
-      /* Larger screens */
-      .dashboard-stats {
-        grid-template-columns: repeat(3, 1fr);
-      }
-      
-      .quick-actions {
-        grid-template-columns: repeat(4, 1fr);
-      }
-      
-      .performance-metrics {
-        grid-template-columns: repeat(3, 1fr);
-      }
-      
-      .system-health {
-        grid-template-columns: repeat(3, 1fr);
-      }
-      
-      .system-tools {
-        grid-template-columns: repeat(6, 1fr);
-      }
-    }
-    
     /* Login Form Enhancements */
     .login-form-container {
       max-width: 400px;
@@ -1920,7 +1509,7 @@
     .login-form input:focus {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
     }
     
     .login-form button {
@@ -2013,125 +1602,495 @@
       border-bottom: none;
     }
     
-    /* Device Detection Styles */
-    .mobile-device .desktop-only {
-      display: none !important;
+    /* PDF Generation Styles */
+    .pdf-header {
+      text-align: center;
+      margin-bottom: 20px;
     }
     
-    .desktop-device .mobile-only {
-      display: none !important;
+    .pdf-company-name {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
     }
     
-    /* Touch-friendly styles for mobile */
-    .mobile-device button, 
-    .mobile-device .btn-edit, 
-    .mobile-device .btn-delete, 
-    .mobile-device .quick-action-btn, 
-    .mobile-device .tool-btn {
-      min-height: 44px; /* Minimum touch target size */
-      min-width: 44px;
+    .pdf-company-address {
+      font-size: 10px;
+      margin-bottom: 5px;
     }
     
-    .mobile-device .nav-links a {
-      padding: 0.75rem 1rem;
+    .pdf-info-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
     }
     
-    .mobile-device .stat-card, 
-    .mobile-device .metric-card, 
-    .mobile-device .health-indicator, 
-    .mobile-device .tool-btn {
-      padding: 1.25rem;
+    .pdf-separator {
+      border-top: 1px solid #000;
+      margin: 15px 0;
     }
     
-    .mobile-device .card {
-      margin-bottom: 1rem;
-    }
-    
-    .mobile-device .form-group {
-      margin-bottom: 1rem;
-    }
-    
-    .mobile-device input, 
-    .mobile-device select, 
-    .mobile-device textarea {
-      padding: 0.875rem;
-      font-size: 1rem;
-    }
-    
-    .mobile-device .modal-content {
-      padding: 1.25rem;
-    }
-    
-    .mobile-device .modal-header {
-      padding-bottom: 0.75rem;
-      margin-bottom: 1rem;
-    }
-    
-    .mobile-device .modal-header h3 {
-      font-size: 1.1rem;
-    }
-    
-    .mobile-device .modal-actions {
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-    
-    .mobile-device .modal-actions button {
+    .pdf-items-table {
       width: 100%;
-      justify-content: center;
+      border-collapse: collapse;
+      margin: 15px 0;
     }
     
-    /* Desktop-specific enhancements */
-    .desktop-device .nav-links {
-      flex-wrap: nowrap;
+    .pdf-items-table th, .pdf-items-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+      font-size: 10px;
     }
     
-    .desktop-device .user-info {
-      white-space: nowrap;
+    .pdf-items-table th {
+      background-color: #f2f2f2;
+      font-weight: bold;
     }
     
-    .desktop-device .dashboard-stats {
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    .pdf-total-row {
+      font-weight: bold;
     }
     
-    .desktop-device .quick-actions {
+    /* Enhanced Admin Panel Styles */
+    .admin-feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    
+    .feature-card {
+      background: var(--grey-50);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      border: 1px solid var(--grey-200);
+      transition: var(--transition);
+    }
+    
+    .feature-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-3px);
+    }
+    
+    .feature-card h4 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      color: var(--grey-800);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .feature-card p {
+      color: var(--grey-600);
+      margin-bottom: 1.25rem;
+    }
+    
+    .feature-stats {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    
+    .feature-stat {
+      flex: 1;
+      text-align: center;
+      padding: 1rem;
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--grey-200);
+    }
+    
+    .feature-stat-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+    }
+    
+    .feature-stat-label {
+      font-size: 0.85rem;
+      color: var(--grey-600);
+    }
+    
+    .user-management-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    
+    .security-settings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .security-setting {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      border: 1px solid var(--grey-200);
+    }
+    
+    .security-setting h5 {
+      margin-top: 0;
+      margin-bottom: 0.75rem;
+      color: var(--grey-800);
+    }
+    
+    .system-info-grid {
+      display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
     }
     
-    .desktop-device .performance-metrics {
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    .info-item {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      border: 1px solid var(--grey-200);
+      text-align: center;
     }
     
-    .desktop-device .system-health {
+    .info-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+    
+    .info-label {
+      font-size: 0.85rem;
+      color: var(--grey-600);
+    }
+    
+    .audit-log-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .audit-log-filters {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    
+    .permission-management-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 1.5rem;
+    }
+    
+    .permission-role-selector {
+      background: var(--grey-50);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      border: 1px solid var(--grey-200);
+    }
+    
+    .permission-role-item {
+      padding: 0.75rem;
+      border-radius: var(--radius);
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+    }
+    
+    .permission-role-item:hover {
+      background: var(--grey-100);
+    }
+    
+    .permission-role-item.active {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .permission-details {
+      background: var(--grey-50);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      border: 1px solid var(--grey-200);
+    }
+    
+    .permission-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+    
+    .user-activity-summary {
+      display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
     }
     
-    .desktop-device .system-tools {
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    .activity-summary-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      border: 1px solid var(--grey-200);
+      text-align: center;
     }
     
-    .desktop-device .cashbill-info-grid {
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    .activity-summary-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
     }
     
-    .desktop-device .admin-feature-grid {
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    .activity-summary-label {
+      font-size: 0.85rem;
+      color: var(--grey-600);
     }
     
-    .desktop-device .security-settings-grid {
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    .user-activity-timeline {
+      margin-top: 1.25rem;
     }
     
-    .desktop-device .system-info-grid {
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    .timeline-item {
+      position: relative;
+      padding-left: 1.5rem;
+      padding-bottom: 1rem;
+      border-left: 2px solid var(--grey-200);
     }
     
-    .desktop-device .user-activity-summary {
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    .timeline-item:last-child {
+      border-left: 2px solid transparent;
     }
     
-    .desktop-device .analytics-summary {
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -6px;
+      top: 0;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+    
+    .timeline-content {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 1rem;
+      border: 1px solid var(--grey-200);
+    }
+    
+    .timeline-action {
+      font-weight: 500;
+      color: var(--grey-800);
+      margin-bottom: 0.25rem;
+    }
+    
+    .timeline-details {
+      color: var(--grey-600);
+      margin-bottom: 0.5rem;
+    }
+    
+    .timeline-time {
+      font-size: 0.75rem;
+      color: var(--grey-500);
+    }
+    
+    .system-settings-section {
+      margin-bottom: 1.5rem;
+    }
+    
+    .settings-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .settings-group h4 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      color: var(--grey-800);
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--grey-200);
+    }
+    
+    .settings-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--grey-200);
+    }
+    
+    .settings-item:last-child {
+      border-bottom: none;
+    }
+    
+    .settings-label {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .settings-label span {
+      font-weight: 500;
+      color: var(--grey-800);
+      margin-bottom: 0.25rem;
+    }
+    
+    .settings-description {
+      font-size: 0.85rem;
+      color: var(--grey-600);
+    }
+    
+    .settings-control {
+      flex: 1;
+      max-width: 200px;
+    }
+    
+    .backup-history {
+      margin-top: 1.5rem;
+    }
+    
+    .backup-history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--grey-200);
+      margin-bottom: 0.75rem;
+    }
+    
+    .backup-info {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .backup-date {
+      font-weight: 500;
+      color: var(--grey-800);
+    }
+    
+    .backup-size {
+      font-size: 0.85rem;
+      color: var(--grey-600);
+    }
+    
+    .backup-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .analytics-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .analytics-filters {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    
+    .analytics-chart-container {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+    
+    .analytics-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .analytics-summary-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      border: 1px solid var(--grey-200);
+      text-align: center;
+      position: relative;
+    }
+    
+    .analytics-summary-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--grey-800);
+      margin-bottom: 0.5rem;
+    }
+    
+    .analytics-summary-label {
+      font-size: 0.85rem;
+      color: var(--grey-600);
+    }
+    
+    .analytics-summary-change {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+    }
+    
+    .analytics-summary-change.positive {
+      background: rgba(46, 125, 50, 0.1);
+      color: var(--success);
+    }
+    
+    .analytics-summary-change.negative {
+      background: rgba(198, 40, 40, 0.1);
+      color: var(--danger);
+    }
+    
+    .data-export-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    
+    .export-option {
+      background: var(--grey-50);
+      border: 1px solid var(--grey-200);
+      border-radius: var(--radius);
+      padding: 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .export-option:hover {
+      background: var(--grey-100);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow);
+      border-color: var(--primary);
+    }
+    
+    .export-option i {
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+    
+    .export-option span {
+      font-size: 0.85rem;
+      color: var(--grey-700);
+      font-weight: 500;
     }
     
     /* Focus styles for keyboard navigation */
@@ -2168,25 +2127,47 @@
   <div class="container">
     <header>
       <div class="header-left">
-        <h1>PNE ARENA System</h1>
-        <p>Professional Billing Management Solution</p>
+        <h1>PNE ARENA</h1>
+        <p> Billing Management </p>
       </div>
       <div class="header-right">
+        <div class="date-display">
+          <div class="date" id="currentDate"></div>
+          <div id="currentMonthYear"></div>
+        </div>
         <div class="notification-toggle">
           <button onclick="toggleNotifications()" aria-label="Notifications">
             <i class="fas fa-bell"></i>
             <span id="notificationCount" class="notification-badge" style="display: none;">0</span>
           </button>
         </div>
+        <div class="hamburger-menu" onclick="toggleDesktopMenu()">
+          <i class="fas fa-bars"></i>
+        </div>
       </div>
+      
+      <!-- Desktop Navigation -->
+      <nav id="desktopNav" class="desktop-nav">
+        <div class="nav-links">
+          <a onclick="showPage('newCashbillPage'); toggleDesktopMenu();"><i class="fas fa-plus"></i> Create New Cashbill</a>
+          <a onclick="showPage('cashbillListPage'); toggleDesktopMenu();"><i class="fas fa-list"></i> View Cashbills</a>
+          <a onclick="showPage('reportsPage'); toggleDesktopMenu();"><i class="fas fa-chart-bar"></i> View Reports</a>
+          <a id="adminPanelLink" onclick="showPage('adminPanelPage'); toggleDesktopMenu();" style="display: none;"><i class="fas fa-cogs"></i> Admin Panel</a>
+        </div>
+        <div class="user-info">
+          <div class="user-name">Hi, <span id="currentUser">Admin</span></div>
+          <div class="user-role" id="currentUserRole">Admin</div>
+          <a class="logout-btn" onclick="confirmLogout(); toggleDesktopMenu();"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+      </nav>
     </header>
     
     <!-- LOGIN PAGE -->
     <div id="loginPage" class="page active">
       <div class="login-form-container">
         <div class="login-header">
-          <h2>PNE ARENA System</h2>
-          <p>Professional Billing Management Solution</p>
+          <h2>PNE ARENA</h2>
+          <p> Billing Portal</p>
         </div>
         <div class="login-form">
           <form id="loginForm">
@@ -2209,23 +2190,6 @@
     
     <!-- DASHBOARD PAGE -->
     <div id="dashboardPage" class="page">
-      <nav>
-        <button class="mobile-nav-toggle mobile-only" id="mobileMenuToggle" aria-label="Toggle navigation menu">
-          <i class="fas fa-bars"></i>
-        </button>
-        <div class="nav-links" id="navLinks">
-          <a onclick="showPage('newCashbillPage')"><i class="fas fa-plus"></i> Create New Cashbill</a>
-          <a onclick="showPage('cashbillListPage')"><i class="fas fa-list"></i> View Cashbills</a>
-          <a onclick="showPage('reportsPage')"><i class="fas fa-chart-bar"></i> View Reports</a>
-          <a id="adminPanelLink" onclick="showPage('adminPanelPage')" style="display: none;"><i class="fas fa-cogs"></i> Admin Panel</a>
-        </div>
-        <div class="user-info">
-          Welcome, <span id="currentUser">Admin</span> 
-          <span id="currentUserRole" class="user-role">Admin</span> | 
-          <a onclick="confirmLogout()" style="color: var(--danger);"><i class="fas fa-sign-out-alt"></i> Logout</a>
-        </div>
-      </nav>
-      
       <div class="page-content" id="main-content">
         <!-- Crew Features -->
         <div id="crewFeatures" style="display: none;">
@@ -2299,36 +2263,6 @@
         <!-- Admin Features -->
         <div id="adminFeatures" style="display: none;">
           <div class="card">
-            <h2><i class="fas fa-heartbeat"></i> System Health</h2>
-            <div class="system-health">
-              <div class="health-indicator">
-                <i class="fas fa-file-invoice health-good"></i>
-                <h3 id="totalCashbillsCount">0</h3>
-                <p>Total Cashbills</p>
-              </div>
-              <div class="health-indicator">
-                <i class="fas fa-server health-good"></i>
-                <h3>99.9%</h3>
-                <p>System Uptime</p>
-              </div>
-              <div class="health-indicator">
-                <i class="fas fa-database health-warning"></i>
-                <h3>78%</h3>
-                <p>Storage Used</p>
-              </div>
-            </div>
-          </div>
-          
-          <div class="card">
-            <h2><i class="fas fa-chart-bar"></i> User Activity</h2>
-            <div class="user-activity-chart">
-              <div class="chart-container" id="userActivityChart">
-                <!-- Will be populated by JavaScript -->
-              </div>
-            </div>
-          </div>
-          
-          <div class="card">
             <h2><i class="fas fa-tools"></i> System Tools</h2>
             <div class="system-tools">
               <div class="tool-btn" onclick="backupSystem()">
@@ -2396,7 +2330,7 @@
         
         <div class="card">
           <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
-          <p>Welcome to PNE ARENA System. Any bugs contact Danial Danish (Admin).</p>
+          <p>Hi, to PNE ARENA PORTAL. Any bugs contact Danial Danish - 0001 (Admin).</p>
           <div id="dashboardMessage" class="warning-message" style="display: none;">
             <i class="fas fa-exclamation-triangle"></i> You have <span id="draftCount">0</span> draft cashbills. <a onclick="showPage('cashbillListPage')" style="color: var(--grey-800); text-decoration: underline;">View them now</a>.
           </div>
@@ -2413,23 +2347,6 @@
     
     <!-- CASHBILL LIST PAGE -->
     <div id="cashbillListPage" class="page">
-      <nav>
-        <button class="mobile-nav-toggle mobile-only" id="mobileMenuToggle2" aria-label="Toggle navigation menu">
-          <i class="fas fa-bars"></i>
-        </button>
-        <div class="nav-links" id="navLinks2">
-          <a onclick="showPage('dashboardPage')"><i class="fas fa-home"></i> Dashboard</a>
-          <a onclick="showPage('newCashbillPage')"><i class="fas fa-plus"></i> Create New Cashbill</a>
-          <a onclick="showPage('reportsPage')"><i class="fas fa-chart-bar"></i> View Reports</a>
-          <a id="adminPanelLink2" onclick="showPage('adminPanelPage')" style="display: none;"><i class="fas fa-cogs"></i> Admin Panel</a>
-        </div>
-        <div class="user-info">
-          Welcome, <span id="currentUser2">Admin</span> 
-          <span id="currentUserRole2" class="user-role">Admin</span> | 
-          <a onclick="confirmLogout()" style="color: var(--danger);"><i class="fas fa-sign-out-alt"></i> Logout</a>
-        </div>
-      </nav>
-      
       <div class="page-content">
         <div class="cashbill-list-header">
           <h2>Cashbills</h2>
@@ -2489,24 +2406,6 @@
     
     <!-- CASHBILL VIEW PAGE -->
     <div id="cashbillViewPage" class="page">
-      <nav>
-        <button class="mobile-nav-toggle mobile-only" id="mobileMenuToggle3" aria-label="Toggle navigation menu">
-          <i class="fas fa-bars"></i>
-        </button>
-        <div class="nav-links" id="navLinks3">
-          <a onclick="showPage('dashboardPage')"><i class="fas fa-home"></i> Dashboard</a>
-          <a onclick="showPage('cashbillListPage')"><i class="fas fa-list"></i> Back to List</a>
-          <a onclick="showPage('newCashbillPage')"><i class="fas fa-plus"></i> Create New Cashbill</a>
-          <a onclick="showPage('reportsPage')"><i class="fas fa-chart-bar"></i> View Reports</a>
-          <a id="adminPanelLink3" onclick="showPage('adminPanelPage')" style="display: none;"><i class="fas fa-cogs"></i> Admin Panel</a>
-        </div>
-        <div class="user-info">
-          Welcome, <span id="currentUser3">Admin</span> 
-          <span id="currentUserRole3" class="user-role">Admin</span> | 
-          <a onclick="confirmLogout()" style="color: var(--danger);"><i class="fas fa-sign-out-alt"></i> Logout</a>
-        </div>
-      </nav>
-      
       <div class="page-content">
         <div class="cashbill-view-header">
           <h2 class="cashbill-view-title">
@@ -2595,23 +2494,6 @@
     
     <!-- NEW CASHBILL PAGE -->
     <div id="newCashbillPage" class="page">
-      <nav>
-        <button class="mobile-nav-toggle mobile-only" id="mobileMenuToggle4" aria-label="Toggle navigation menu">
-          <i class="fas fa-bars"></i>
-        </button>
-        <div class="nav-links" id="navLinks4">
-          <a onclick="showPage('dashboardPage')"><i class="fas fa-home"></i> Dashboard</a>
-          <a onclick="showPage('cashbillListPage')"><i class="fas fa-list"></i> View Cashbills</a>
-          <a onclick="showPage('reportsPage')"><i class="fas fa-chart-bar"></i> View Reports</a>
-          <a id="adminPanelLink4" onclick="showPage('adminPanelPage')" style="display: none;"><i class="fas fa-cogs"></i> Admin Panel</a>
-        </div>
-        <div class="user-info">
-          Welcome, <span id="currentUser4">Admin</span> 
-          <span id="currentUserRole4" class="user-role">Admin</span> | 
-          <a onclick="confirmLogout()" style="color: var(--danger);"><i class="fas fa-sign-out-alt"></i> Logout</a>
-        </div>
-      </nav>
-      
       <div class="page-content">
         <div class="card">
           <h2><i class="fas fa-file-invoice"></i> Create New Cashbill</h2>
@@ -2738,24 +2620,6 @@
     
     <!-- SUCCESS PAGE -->
     <div id="successPage" class="page">
-      <nav>
-        <button class="mobile-nav-toggle mobile-only" id="mobileMenuToggle5" aria-label="Toggle navigation menu">
-          <i class="fas fa-bars"></i>
-        </button>
-        <div class="nav-links" id="navLinks5">
-          <a onclick="showPage('newCashbillPage')"><i class="fas fa-plus"></i> Create Another</a>
-          <a onclick="showPage('dashboardPage')"><i class="fas fa-home"></i> Dashboard</a>
-          <a onclick="showPage('cashbillListPage')"><i class="fas fa-list"></i> View Cashbills</a>
-          <a onclick="showPage('reportsPage')"><i class="fas fa-chart-bar"></i> View Reports</a>
-          <a id="adminPanelLink5" onclick="showPage('adminPanelPage')" style="display: none;"><i class="fas fa-cogs"></i> Admin Panel</a>
-        </div>
-        <div class="user-info">
-          Welcome, <span id="currentUser5">Admin</span> 
-          <span id="currentUserRole5" class="user-role">Admin</span> | 
-          <a onclick="confirmLogout()" style="color: var(--danger);"><i class="fas fa-sign-out-alt"></i> Logout</a>
-        </div>
-      </nav>
-      
       <div class="page-content">
         <div class="success-message">
           <i class="fas fa-check-circle"></i> Cashbill Created Successfully!
@@ -2775,23 +2639,6 @@
     
     <!-- REPORTS PAGE -->
     <div id="reportsPage" class="page">
-      <nav>
-        <button class="mobile-nav-toggle mobile-only" id="mobileMenuToggle6" aria-label="Toggle navigation menu">
-          <i class="fas fa-bars"></i>
-        </button>
-        <div class="nav-links" id="navLinks6">
-          <a onclick="showPage('dashboardPage')"><i class="fas fa-home"></i> Dashboard</a>
-          <a onclick="showPage('cashbillListPage')"><i class="fas fa-list"></i> View Cashbills</a>
-          <a onclick="showPage('newCashbillPage')"><i class="fas fa-plus"></i> Create New Cashbill</a>
-          <a id="adminPanelLink6" onclick="showPage('adminPanelPage')" style="display: none;"><i class="fas fa-cogs"></i> Admin Panel</a>
-        </div>
-        <div class="user-info">
-          Welcome, <span id="currentUser6">Admin</span> 
-          <span id="currentUserRole6" class="user-role">Admin</span> | 
-          <a onclick="confirmLogout()" style="color: var(--danger);"><i class="fas fa-sign-out-alt"></i> Logout</a>
-        </div>
-      </nav>
-      
       <div class="page-content">
         <div class="card">
           <h2><i class="fas fa-chart-bar"></i> Cashbill Reports</h2>
@@ -2848,23 +2695,6 @@
     
     <!-- ADMIN PANEL PAGE -->
     <div id="adminPanelPage" class="page">
-      <nav>
-        <button class="mobile-nav-toggle mobile-only" id="mobileMenuToggle7" aria-label="Toggle navigation menu">
-          <i class="fas fa-bars"></i>
-        </button>
-        <div class="nav-links" id="navLinks7">
-          <a onclick="showPage('dashboardPage')"><i class="fas fa-home"></i> Dashboard</a>
-          <a onclick="showPage('cashbillListPage')"><i class="fas fa-list"></i> View Cashbills</a>
-          <a onclick="showPage('newCashbillPage')"><i class="fas fa-plus"></i> Create New Cashbill</a>
-          <a onclick="showPage('reportsPage')"><i class="fas fa-chart-bar"></i> View Reports</a>
-        </div>
-        <div class="user-info">
-          Welcome, <span id="currentUser7">Admin</span> 
-          <span id="currentUserRole7" class="user-role">Admin</span> | 
-          <a onclick="confirmLogout()" style="color: var(--danger);"><i class="fas fa-sign-out-alt"></i> Logout</a>
-        </div>
-      </nav>
-      
       <div class="page-content">
         <div class="card">
           <h2><i class="fas fa-cogs"></i> Admin Panel</h2>
@@ -3073,7 +2903,7 @@
     </div>
     
     <!-- KEYBOARD SHORTCUTS -->
-    <div class="shortcuts desktop-only">
+    <div class="shortcuts">
       <i class="fas fa-keyboard"></i> Shortcuts: N=New, D=Dashboard, L=List, R=Reports
     </div>
     
@@ -3204,7 +3034,7 @@
                 <div class="settings-description">Company address for PDF generation</div>
               </div>
               <div class="settings-control">
-                <textarea id="settingsCompanyAddress" rows="3">123 Business Street, City, Country</textarea>
+                <textarea id="settingsCompanyAddress" rows="3">58, Bandar Laguna Merbok, 08000 Sungai Petani, Kedah</textarea>
               </div>
             </div>
             <div class="settings-item">
@@ -3484,17 +3314,13 @@
   
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    // Device detection
-    function isMobileDevice() {
-      return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1) || 
-             (window.innerWidth <= 768) || (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
-    }
-    
-    // Apply device class to body
-    if (isMobileDevice()) {
-      document.body.classList.add('mobile-device');
-    } else {
-      document.body.classList.add('desktop-device');
+    // Helper function to format date as dd/mm/yyyy
+    function formatDateToDDMMYYYY(dateString) {
+      const date = new Date(dateString);
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      return `${day}/${month}/${year}`;
     }
     
     // Define items list with categories and pricing
@@ -3604,7 +3430,7 @@
     let notifications = [];
     let systemSettings = {
       companyName: 'PNE ARENA',
-      companyAddress: '123 Business Street, City, Country',
+      companyAddress: '58, Bandar Laguna Merbok, 08000 Sungai Petani, Kedah',
       currency: 'RM',
       taxRate: 0,
       cashbillTargets: { crew: 10, manager: 20, marketing: 15, admin: 0 },
@@ -3712,31 +3538,45 @@
       }
     }
     
-    // Update notification list
-    function updateNotificationList() {
-      const list = document.getElementById('notificationList');
+    // Toggle desktop menu
+    function toggleDesktopMenu() {
+      const desktopNav = document.getElementById('desktopNav');
+      desktopNav.classList.toggle('active');
       
-      if (notifications.length === 0) {
-        list.innerHTML = '<div class="notification-item"><div class="notification-title">No notifications</div></div>';
-        return;
+      // Close notification panel if open
+      const notificationPanel = document.getElementById('notificationPanel');
+      if (notificationPanel.classList.contains('active')) {
+        notificationPanel.classList.remove('active');
+      }
+    }
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(event) {
+      const desktopNav = document.getElementById('desktopNav');
+      const hamburgerMenu = document.querySelector('.hamburger-menu');
+      const notificationPanel = document.getElementById('notificationPanel');
+      const notificationToggle = document.querySelector('.notification-toggle');
+      
+      // Close desktop nav if clicking outside
+      if (!desktopNav.contains(event.target) && !hamburgerMenu.contains(event.target) && desktopNav.classList.contains('active')) {
+        desktopNav.classList.remove('active');
       }
       
-      let html = '';
-      notifications.forEach(notification => {
-        const date = new Date(notification.timestamp);
-        const formattedDate = date.toLocaleDateString();
-        const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        
-        html += `
-          <div class="notification-item">
-            <div class="notification-title">${notification.username} ${notification.action.toLowerCase()}</div>
-            <div class="notification-message">${notification.details}</div>
-            <div class="notification-time">${formattedDate} at ${formattedTime}</div>
-          </div>
-        `;
-      });
+      // Close notification panel if clicking outside
+      if (!notificationPanel.contains(event.target) && !notificationToggle.contains(event.target) && notificationPanel.classList.contains('active')) {
+        notificationPanel.classList.remove('active');
+      }
+    });
+    
+    // Update current date and month/year
+    function updateDate() {
+      const now = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      const dateStr = now.toLocaleDateString('en-US', options);
+      const monthYearStr = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
       
-      list.innerHTML = html;
+      document.getElementById('currentDate').textContent = dateStr;
+      document.getElementById('currentMonthYear').textContent = monthYearStr;
     }
     
     // Page navigation
@@ -3765,30 +3605,7 @@
       if (pageId === 'adminPanelPage') {
         updateAdminPanel();
       }
-      
-      // Close mobile menu if open
-      closeMobileMenu();
     }
-    
-    // Close mobile menu
-    function closeMobileMenu() {
-      const navLinks = document.querySelectorAll('.nav-links');
-      navLinks.forEach(nav => {
-        nav.classList.remove('active');
-      });
-    }
-    
-    // Mobile menu toggle
-    document.addEventListener('DOMContentLoaded', function() {
-      const mobileMenuToggles = document.querySelectorAll('.mobile-nav-toggle');
-      
-      mobileMenuToggles.forEach(toggle => {
-        toggle.addEventListener('click', function() {
-          const navLinks = this.closest('nav').querySelector('.nav-links');
-          navLinks.classList.toggle('active');
-        });
-      });
-    });
     
     // Login functionality
     document.getElementById('loginForm').addEventListener('submit', function(e) {
@@ -3815,21 +3632,9 @@
       
       // Update username in all pages
       document.getElementById('currentUser').textContent = currentUser.name;
-      document.getElementById('currentUser2').textContent = currentUser.name;
-      document.getElementById('currentUser3').textContent = currentUser.name;
-      document.getElementById('currentUser4').textContent = currentUser.name;
-      document.getElementById('currentUser5').textContent = currentUser.name;
-      document.getElementById('currentUser6').textContent = currentUser.name;
-      document.getElementById('currentUser7').textContent = currentUser.name;
       
       // Update role in all pages
       document.getElementById('currentUserRole').textContent = getRoleDisplayName(currentUser.role);
-      document.getElementById('currentUserRole2').textContent = getRoleDisplayName(currentUser.role);
-      document.getElementById('currentUserRole3').textContent = getRoleDisplayName(currentUser.role);
-      document.getElementById('currentUserRole4').textContent = getRoleDisplayName(currentUser.role);
-      document.getElementById('currentUserRole5').textContent = getRoleDisplayName(currentUser.role);
-      document.getElementById('currentUserRole6').textContent = getRoleDisplayName(currentUser.role);
-      document.getElementById('currentUserRole7').textContent = getRoleDisplayName(currentUser.role);
       
       // Show/hide admin panel link based on role
       const adminPanelLinks = document.querySelectorAll('[id^="adminPanelLink"]');
@@ -4105,6 +3910,10 @@
           });
         });
       }
+      
+      // Update date display
+      updateDate();
+      setInterval(updateDate, 60000); // Update every minute
     });
     
     // Add event listeners to initial inputs
@@ -4487,7 +4296,7 @@
         </div>
         <div class="detail-row">
           <span>Date:</span>
-          <span>${new Date(cashbill.date).toLocaleDateString()}</span>
+          <span>${formatDateToDDMMYYYY(cashbill.date)}</span>
         </div>
         <div class="detail-row">
           <span>Payment Method:</span>
@@ -4578,7 +4387,7 @@
       const revenueTarget = systemSettings.revenueTargets.crew;
       const cashbillsProgress = Math.min(100, (myCashbills.length / cashbillsTarget) * 100);
       const revenueProgress = Math.min(100, (myTotalRevenue / revenueTarget) * 100);
-      const completionRate = myCashbills.length > 0 ? (myCommittedCashbills.length / myCashbills.length) * 100 : 0;
+      const completionRate = myCashbills.length > 0 ? (myCommittedCashbills.length / myCashbills.length * 100) : 0;
       
       document.getElementById('myCashbillsProgress').style.width = `${cashbillsProgress}%`;
       document.getElementById('myRevenueProgress').style.width = `${revenueProgress}%`;
@@ -4600,12 +4409,6 @@
     
     // Update admin features
     function updateAdminFeatures() {
-      // Update system health
-      document.getElementById('totalCashbillsCount').textContent = cashbills.length;
-      
-      // Update user activity chart
-      updateUserActivityChart();
-      
       // Update system activity
       updateSystemRecentActivity();
     }
@@ -4625,7 +4428,7 @@
       let html = '';
       myActivities.forEach(activity => {
         const date = new Date(activity.timestamp);
-        const formattedDate = date.toLocaleDateString();
+        const formattedDate = formatDateToDDMMYYYY(date);
         const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         
         let iconClass = '';
@@ -4663,7 +4466,7 @@
       let html = '';
       recentActivities.forEach(activity => {
         const date = new Date(activity.timestamp);
-        const formattedDate = date.toLocaleDateString();
+        const formattedDate = formatDateToDDMMYYYY(date);
         const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         
         let iconClass = '';
@@ -4709,57 +4512,6 @@
       }
     }
     
-    // Update user activity chart
-    function updateUserActivityChart() {
-      const container = document.getElementById('userActivityChart');
-      container.innerHTML = '';
-      
-      // Get the last 30 days
-      const today = new Date();
-      const thirtyDaysAgo = new Date(today);
-      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-      
-      // Filter cashbills in the last 30 days
-      const recentCashbills = cashbills.filter(bill => {
-        const billDate = new Date(bill.date);
-        return billDate >= thirtyDaysAgo && billDate <= today;
-      });
-      
-      // Group by user
-      const userActivity = {};
-      users.forEach(user => {
-        userActivity[user.name] = 0;
-      });
-      
-      recentCashbills.forEach(bill => {
-        const user = users.find(u => u.id === bill.userId);
-        if (user) {
-          userActivity[user.name]++;
-        }
-      });
-      
-      // Find max value for scaling
-      const maxCount = Math.max(...Object.values(userActivity), 1);
-      
-      // Create bars
-      Object.entries(userActivity).forEach(([username, count]) => {
-        const barHeight = (count / maxCount) * 100; // percentage of max
-        const bar = document.createElement('div');
-        bar.style.flex = '1';
-        bar.style.display = 'flex';
-        bar.style.flexDirection = 'column';
-        bar.style.alignItems = 'center';
-        bar.style.position = 'relative';
-        bar.innerHTML = `
-          <div class="chart-bar" style="height: ${barHeight}%; min-height: 5px;">
-            <div class="chart-value">${count}</div>
-          </div>
-          <div class="chart-label">${username}</div>
-        `;
-        container.appendChild(bar);
-      });
-    }
-    
     // Update activity log
     function updateActivityLog() {
       const activityLogContainer = document.getElementById('activityLog');
@@ -4774,7 +4526,7 @@
       
       recentLogs.forEach(log => {
         const date = new Date(log.timestamp);
-        const formattedDate = date.toLocaleDateString();
+        const formattedDate = formatDateToDDMMYYYY(date);
         const formattedTime = date.toLocaleTimeString();
         
         logHTML += `
@@ -5008,7 +4760,7 @@
       const exportFileDefaultName = `pne_arena_report_${new Date().toISOString().split('T')[0]}.json`;
       
       const linkElement = document.createElement('a');
-      linkElement.setAttribute('href', dataUri);
+      linkElement.href = dataUri;
       linkElement.setAttribute('download', exportFileDefaultName);
       linkElement.click();
       
@@ -5056,7 +4808,7 @@
       let html = '';
       activityLog.forEach(log => {
         const date = new Date(log.timestamp);
-        const formattedDate = date.toLocaleDateString();
+        const formattedDate = formatDateToDDMMYYYY(date);
         const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         
         html += `
@@ -5240,17 +4992,17 @@
             label: 'Revenue by User',
             data: Object.values(revenueByUser),
             backgroundColor: [
-              'rgba(37, 99, 235, 0.7)',
-              'rgba(34, 197, 94, 0.7)',
-              'rgba(245, 158, 11, 0.7)',
-              'rgba(239, 68, 68, 0.7)',
+              'rgba(0, 0, 0, 0.7)',
+              'rgba(46, 125, 50, 0.7)',
+              'rgba(245, 124, 0, 0.7)',
+              'rgba(198, 40, 40, 0.7)',
               'rgba(107, 114, 128, 0.7)'
             ],
             borderColor: [
-              'rgba(37, 99, 235, 1)',
-              'rgba(34, 197, 94, 1)',
-              'rgba(245, 158, 11, 1)',
-              'rgba(239, 68, 68, 1)',
+              'rgba(0, 0, 0, 1)',
+              'rgba(46, 125, 50, 1)',
+              'rgba(245, 124, 0, 1)',
+              'rgba(198, 40, 40, 1)',
               'rgba(107, 114, 128, 1)'
             ],
             borderWidth: 1
@@ -5283,8 +5035,8 @@
           datasets: [{
             label: 'Revenue',
             data: Object.values(revenueByDay),
-            backgroundColor: 'rgba(37, 99, 235, 0.2)',
-            borderColor: 'rgba(37, 99, 235, 1)',
+            backgroundColor: 'rgba(0, 0, 0, 0.2)',
+            borderColor: 'rgba(0, 0, 0, 1)',
             borderWidth: 2,
             tension: 0.4,
             fill: true
@@ -5318,14 +5070,14 @@
             label: 'Cashbills by Status',
             data: Object.values(cashbillsByStatus),
             backgroundColor: [
-              'rgba(34, 197, 94, 0.7)',
-              'rgba(59, 130, 246, 0.7)',
-              'rgba(245, 158, 11, 0.7)'
+              'rgba(46, 125, 50, 0.7)',
+              'rgba(21, 101, 192, 0.7)',
+              'rgba(245, 124, 0, 0.7)'
             ],
             borderColor: [
-              'rgba(34, 197, 94, 1)',
-              'rgba(59, 130, 246, 1)',
-              'rgba(245, 158, 11, 1)'
+              'rgba(46, 125, 50, 1)',
+              'rgba(21, 101, 192, 1)',
+              'rgba(245, 124, 0, 1)'
             ],
             borderWidth: 1
           }]
@@ -5364,22 +5116,22 @@
             {
               label: 'Committed',
               data: Object.values(cashbillsByDay.committed),
-              backgroundColor: 'rgba(34, 197, 94, 0.2)',
-              borderColor: 'rgba(34, 197, 94, 1)',
+              backgroundColor: 'rgba(46, 125, 50, 0.2)',
+              borderColor: 'rgba(46, 125, 50, 1)',
               borderWidth: 2
             },
             {
               label: 'Pending',
               data: Object.values(cashbillsByDay.pending),
-              backgroundColor: 'rgba(59, 130, 246, 0.2)',
-              borderColor: 'rgba(59, 130, 246, 1)',
+              backgroundColor: 'rgba(21, 101, 192, 0.2)',
+              borderColor: 'rgba(21, 101, 192, 1)',
               borderWidth: 2
             },
             {
               label: 'Draft',
               data: Object.values(cashbillsByDay.draft),
-              backgroundColor: 'rgba(245, 158, 11, 0.2)',
-              borderColor: 'rgba(245, 158, 11, 1)',
+              backgroundColor: 'rgba(245, 124, 0, 0.2)',
+              borderColor: 'rgba(245, 124, 0, 1)',
               borderWidth: 2
             }
           ]
@@ -5414,10 +5166,10 @@
           datasets: [{
             label: 'User Activities',
             data: Object.values(actionsByType),
-            backgroundColor: 'rgba(37, 99, 235, 0.2)',
-            borderColor: 'rgba(37, 99, 235, 1)',
+            backgroundColor: 'rgba(0, 0, 0, 0.2)',
+            borderColor: 'rgba(0, 0, 0, 1)',
             borderWidth: 2,
-            pointBackgroundColor: 'rgba(37, 99, 235, 1)'
+            pointBackgroundColor: 'rgba(0, 0, 0, 1)'
           }]
         };
       } else {
@@ -5439,17 +5191,17 @@
             label: 'Activities',
             data: Object.values(userActivity),
             backgroundColor: [
-              'rgba(37, 99, 235, 0.7)',
-              'rgba(34, 197, 94, 0.7)',
-              'rgba(245, 158, 11, 0.7)',
-              'rgba(239, 68, 68, 0.7)',
+              'rgba(0, 0, 0, 0.7)',
+              'rgba(46, 125, 50, 0.7)',
+              'rgba(245, 124, 0, 0.7)',
+              'rgba(198, 40, 40, 0.7)',
               'rgba(107, 114, 128, 0.7)'
             ],
             borderColor: [
-              'rgba(37, 99, 235, 1)',
-              'rgba(34, 197, 94, 1)',
-              'rgba(245, 158, 11, 1)',
-              'rgba(239, 68, 68, 1)',
+              'rgba(0, 0, 0, 1)',
+              'rgba(46, 125, 50, 1)',
+              'rgba(245, 124, 0, 1)',
+              'rgba(198, 40, 40, 1)',
               'rgba(107, 114, 128, 1)'
             ],
             borderWidth: 1
@@ -5490,8 +5242,8 @@
         datasets: [{
           label: 'Quantity Sold',
           data: sortedItems.map(item => item[1]),
-          backgroundColor: 'rgba(34, 197, 94, 0.7)',
-          borderColor: 'rgba(34, 197, 94, 1)',
+          backgroundColor: 'rgba(46, 125, 50, 0.7)',
+          borderColor: 'rgba(46, 125, 50, 1)',
           borderWidth: 1
         }]
       };
@@ -5525,16 +5277,16 @@
           label: 'Payment Methods',
           data: Object.values(paymentsByMethod),
           backgroundColor: [
-            'rgba(37, 99, 235, 0.7)',
-            'rgba(34, 197, 94, 0.7)',
-            'rgba(245, 158, 11, 0.7)',
-            'rgba(239, 68, 68, 0.7)'
+            'rgba(0, 0, 0, 0.7)',
+            'rgba(46, 125, 50, 0.7)',
+            'rgba(245, 124, 0, 0.7)',
+            'rgba(198, 40, 40, 0.7)'
           ],
           borderColor: [
-            'rgba(37, 99, 235, 1)',
-            'rgba(34, 197, 94, 1)',
-            'rgba(245, 158, 11, 1)',
-            'rgba(239, 68, 68, 1)'
+            'rgba(0, 0, 0, 1)',
+            'rgba(46, 125, 50, 1)',
+            'rgba(245, 124, 0, 1)',
+            'rgba(198, 40, 40, 1)'
           ],
           borderWidth: 1
         }]
@@ -5572,18 +5324,18 @@
             {
               label: 'Cashbills Created',
               data: Object.values(userPerformance).map(p => p.cashbills),
-              backgroundColor: 'rgba(37, 99, 235, 0.2)',
-              borderColor: 'rgba(37, 99, 235, 1)',
+              backgroundColor: 'rgba(0, 0, 0, 0.2)',
+              borderColor: 'rgba(0, 0, 0, 1)',
               borderWidth: 2,
-              pointBackgroundColor: 'rgba(37, 99, 235, 1)'
+              pointBackgroundColor: 'rgba(0, 0, 0, 1)'
             },
             {
               label: 'Completion Rate (%)',
               data: Object.values(userPerformance).map(p => p.completionRate),
-              backgroundColor: 'rgba(34, 197, 94, 0.2)',
-              borderColor: 'rgba(34, 197, 94, 1)',
+              backgroundColor: 'rgba(46, 125, 50, 0.2)',
+              borderColor: 'rgba(46, 125, 50, 1)',
               borderWidth: 2,
-              pointBackgroundColor: 'rgba(34, 197, 94, 1)'
+              pointBackgroundColor: 'rgba(46, 125, 50, 1)'
             }
           ]
         };
@@ -5594,15 +5346,15 @@
             {
               label: 'Revenue',
               data: Object.values(userPerformance).map(p => p.revenue),
-              backgroundColor: 'rgba(37, 99, 235, 0.7)',
-              borderColor: 'rgba(37, 99, 235, 1)',
+              backgroundColor: 'rgba(0, 0, 0, 0.7)',
+              borderColor: 'rgba(0, 0, 0, 1)',
               borderWidth: 1
             },
             {
               label: 'Completion Rate',
               data: Object.values(userPerformance).map(p => p.completionRate),
-              backgroundColor: 'rgba(34, 197, 94, 0.7)',
-              borderColor: 'rgba(34, 197, 94, 1)',
+              backgroundColor: 'rgba(46, 125, 50, 0.7)',
+              borderColor: 'rgba(46, 125, 50, 1)',
               borderWidth: 1
             }
           ]
@@ -6323,7 +6075,7 @@
             <div class="activity-summary-label">Logins</div>
           </div>
           <div class="activity-summary-card">
-            <div class="activity-summary-value">${new Date(lastActivity).toLocaleDateString()}</div>
+            <div class="activity-summary-value">${formatDateToDDMMYYYY(lastActivity)}</div>
             <div class="activity-summary-label">Last Activity</div>
           </div>
         </div>
@@ -6334,7 +6086,7 @@
       
       userActivity.slice(0, 20).forEach(activity => {
         const date = new Date(activity.timestamp);
-        const formattedDate = date.toLocaleDateString();
+        const formattedDate = formatDateToDDMMYYYY(date);
         const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         
         html += `
@@ -6376,7 +6128,10 @@
     function updateCashbillListPage() {
       const cashbillListContent = document.getElementById('cashbillListContent');
       
-      if (filteredCashbills.length === 0) {
+      // Sort cashbills by date (latest first)
+      const sortedCashbills = [...filteredCashbills].sort((a, b) => new Date(b.date) - new Date(a.date));
+      
+      if (sortedCashbills.length === 0) {
         cashbillListContent.innerHTML = `
           <div class="empty-state">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -6393,7 +6148,7 @@
       // Pagination
       const startIndex = (currentPage - 1) * itemsPerPage;
       const endIndex = startIndex + itemsPerPage;
-      const paginatedCashbills = filteredCashbills.slice(startIndex, endIndex);
+      const paginatedCashbills = sortedCashbills.slice(startIndex, endIndex);
       
       let tableHTML = `
         <div class="table-container">
@@ -6433,9 +6188,9 @@
         
         // Add view button for all cashbills
         if (actionsHTML) {
-          actionsHTML += `<button class="btn-secondary" onclick="viewCashbill(${bill.id})"><i class="fas fa-eye"></i> View</button>`;
+          actionsHTML += `<button class="btn-view" onclick="viewCashbill(${bill.id})"><i class="fas fa-eye"></i> View</button>`;
         } else {
-          actionsHTML = `<button class="btn-secondary" onclick="viewCashbill(${bill.id})"><i class="fas fa-eye"></i> View</button>`;
+          actionsHTML = `<button class="btn-view" onclick="viewCashbill(${bill.id})"><i class="fas fa-eye"></i> View</button>`;
         }
         
         tableHTML += `
@@ -6443,7 +6198,7 @@
             <td>${bill.invoiceNumber}</td>
             <td>${bill.customerName}</td>
             <td>${userName}</td>
-            <td>${new Date(bill.date).toLocaleDateString()}</td>
+            <td>${formatDateToDDMMYYYY(bill.date)}</td>
             <td>${systemSettings.currency}${totalAmount.toFixed(2)}</td>
             <td>${getPaymentMethodDisplayName(bill.paymentMethod)}</td>
             <td>${bill.status === 'draft' ? 'Draft' : bill.status === 'pending' ? 'Pending' : 'Committed'}</td>
@@ -6461,7 +6216,7 @@
       cashbillListContent.innerHTML = tableHTML;
       
       // Update pagination
-      updatePagination(filteredCashbills.length);
+      updatePagination(sortedCashbills.length);
     }
     
     // View cashbill details
@@ -6476,7 +6231,7 @@
         (cashbill.status === 'draft' ? ' <span class="draft-indicator">Draft</span>' : 
          cashbill.status === 'pending' ? ' <span class="pending-indicator">Pending</span>' : ' <span class="committed-indicator">Committed</span>');
       document.getElementById('viewCustomerName').textContent = cashbill.customerName;
-      document.getElementById('viewDate').textContent = new Date(cashbill.date).toLocaleDateString();
+      document.getElementById('viewDate').textContent = formatDateToDDMMYYYY(cashbill.date);
       document.getElementById('viewStatus').textContent = cashbill.status === 'draft' ? 'Draft' : cashbill.status === 'pending' ? 'Pending' : 'Committed';
       document.getElementById('viewPaymentMethod').textContent = getPaymentMethodDisplayName(cashbill.paymentMethod);
       
@@ -6625,7 +6380,7 @@
       
       filteredCashbills.forEach(bill => {
         const user = users.find(u => u.id === bill.userId);
-        csv += `${bill.invoiceNumber},"${bill.customerName}",${user ? user.name : 'Unknown'},${new Date(bill.date).toLocaleDateString()},${(bill.subtotal || 0).toFixed(2)},${(bill.totalTax || 0).toFixed(2)},${(bill.totalDiscount || 0).toFixed(2)},${(bill.grandTotal || 0).toFixed(2)},${getPaymentMethodDisplayName(bill.paymentMethod)},${bill.status === 'draft' ? 'Draft' : bill.status === 'pending' ? 'Pending' : 'Committed'}\n`;
+        csv += `${bill.invoiceNumber},"${bill.customerName}",${user ? user.name : 'Unknown'},${formatDateToDDMMYYYY(bill.date)},${(bill.subtotal || 0).toFixed(2)},${(bill.totalTax || 0).toFixed(2)},${(bill.totalDiscount || 0).toFixed(2)},${(bill.grandTotal || 0).toFixed(2)},${getPaymentMethodDisplayName(bill.paymentMethod)},${bill.status === 'draft' ? 'Draft' : bill.status === 'pending' ? 'Pending' : 'Committed'}\n`;
       });
       
       const blob = new Blob([csv], { type: 'text/csv' });
@@ -6642,79 +6397,380 @@
       hideLoading();
     }
     
-    // Generate cashbill PDF
+    // Generate cashbill PDF - FIXED VERSION
     function generateCashbillPDF() {
       if (!currentViewingCashbill) {
         alert('No cashbill selected for PDF generation');
         return;
       }
       
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
+      try {
+        // Check if jsPDF is loaded
+        if (typeof window.jspdf === 'undefined' || typeof window.jspdf.jsPDF === 'undefined') {
+          // Fallback method if jsPDF is not available
+          generateCashbillPDFFallback();
+          return;
+        }
+        
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        // Set up document properties
+        doc.setProperties({
+          title: `Cashbill ${currentViewingCashbill.invoiceNumber}`,
+          subject: 'Cashbill',
+          author: systemSettings.companyName,
+          creator: 'PNE ARENA System'
+        });
+        
+        // Set smaller font sizes for better layout
+        const smallFontSize = 8;
+        const normalFontSize = 10;
+        const headerFontSize = 12;
+        const titleFontSize = 16;
+        
+        // Add company header with smaller font
+        doc.setFontSize(titleFontSize);
+        doc.setFont(undefined, 'bold');
+        doc.text(systemSettings.companyName, 105, 15, { align: 'center' });
+        
+        // Add company address
+        doc.setFontSize(smallFontSize);
+        doc.setFont(undefined, 'normal');
+        doc.text(systemSettings.companyAddress, 190, 15, { align: 'right' });
+        
+        // Add invoice title with smaller font
+        doc.setFontSize(headerFontSize);
+        doc.text('CASHBILL INVOICE', 105, 25, { align: 'center' });
+        
+        // Add invoice number with smaller font
+        doc.setFontSize(normalFontSize);
+        doc.text(`Invoice No: ${currentViewingCashbill.invoiceNumber}`, 20, 35);
+        
+        // Add date with dd/mm/yyyy format
+        const date = new Date(currentViewingCashbill.date);
+        const formattedDate = formatDateToDDMMYYYY(date);
+        doc.text(`Date: ${formattedDate}`, 20, 40);
+        
+        // Add customer info with smaller font
+        doc.setFont(undefined, 'bold');
+        doc.text('Bill To:', 20, 47);
+        doc.setFont(undefined, 'normal');
+        doc.text(currentViewingCashbill.customerName, 20, 52);
+        
+        // Add payment method and status with smaller font
+        doc.setFont(undefined, 'bold');
+        doc.text(`Payment Method: ${getPaymentMethodDisplayName(currentViewingCashbill.paymentMethod)}`, 20, 58);
+        doc.text(`Status: ${currentViewingCashbill.status === 'draft' ? 'Draft' : currentViewingCashbill.status === 'pending' ? 'Pending' : 'Committed'}`, 20, 63);
+        
+        // Add separator line
+        doc.setLineWidth(0.5);
+        doc.line(20, 70, 190, 70);
+        
+        // Add items table header with smaller font
+        doc.setFontSize(smallFontSize);
+        doc.setFont(undefined, 'bold');
+        const headers = ['Description', 'Qty', 'Unit Price', 'Tax %', 'Discount', 'Total'];
+        const headerPositions = [20, 70, 95, 115, 135, 155];
+        
+        headers.forEach((header, i) => {
+          doc.text(header, headerPositions[i], 75);
+        });
+        
+        // Add separator line after headers
+        doc.line(20, 78, 190, 78);
+        
+        // Add items with smaller font and compact spacing
+        let yPos = 83;
+        doc.setFont(undefined, 'normal');
+        
+        currentViewingCashbill.items.forEach(item => {
+          const itemTotal = item.quantity * item.unitPrice;
+          const itemTax = itemTotal * (item.taxRate / 100);
+          const itemTotalWithTax = itemTotal + itemTax - item.discount;
+          
+          // Add item row with compact spacing
+          doc.text(item.description, 20, yPos);
+          doc.text(item.quantity.toString(), headerPositions[1], yPos);
+          doc.text(`${systemSettings.currency}${item.unitPrice.toFixed(2)}`, headerPositions[2], yPos);
+          doc.text(item.taxRate.toString(), headerPositions[3], yPos);
+          doc.text(`${systemSettings.currency}${item.discount.toFixed(2)}`, headerPositions[4], yPos);
+          doc.text(`${systemSettings.currency}${itemTotalWithTax.toFixed(2)}`, headerPositions[5], yPos);
+          
+          yPos += 6; // Reduced spacing between items
+        });
+        
+        // Add totals section with smaller font
+        yPos += 8; // Add some space before totals
+        doc.setLineWidth(0.5);
+        doc.line(20, yPos, 190, yPos);
+        yPos += 8;
+        
+        // Add summary on the left side
+        doc.setFontSize(normalFontSize);
+        doc.setFont(undefined, 'bold');
+        doc.text('Subtotal:', 20, yPos);
+        doc.setFont(undefined, 'normal');
+        doc.text(`${systemSettings.currency}${currentViewingCashbill.subtotal.toFixed(2)}`, 160, yPos, { align: 'right' });
+        yPos += 5;
+        
+        doc.setFont(undefined, 'bold');
+        doc.text('Tax:', 20, yPos);
+        doc.setFont(undefined, 'normal');
+        doc.text(`${systemSettings.currency}${currentViewingCashbill.totalTax.toFixed(2)}`, 160, yPos, { align: 'right' });
+        yPos += 5;
+        
+        doc.setFont(undefined, 'bold');
+        doc.text('Discount:', 20, yPos);
+        doc.setFont(undefined, 'normal');
+        doc.text(`${systemSettings.currency}${currentViewingCashbill.totalDiscount.toFixed(2)}`, 160, yPos, { align: 'right' });
+        yPos += 5;
+        
+        // Add total with slightly larger font
+        doc.setFontSize(normalFontSize + 2);
+        doc.setFont(undefined, 'bold');
+        doc.text('Total:', 20, yPos);
+        doc.text(`${systemSettings.currency}${currentViewingCashbill.grandTotal.toFixed(2)}`, 160, yPos, { align: 'right' });
+        
+        // Add notes if any with smaller font
+        if (currentViewingCashbill.notes) {
+          yPos += 12;
+          doc.setFontSize(normalFontSize);
+          doc.setFont(undefined, 'bold');
+          doc.text('Notes:', 20, yPos);
+          yPos += 5;
+          doc.setFont(undefined, 'normal');
+          // Split long notes into multiple lines if needed
+          const noteLines = doc.splitTextToSize(currentViewingCashbill.notes, 170);
+          noteLines.forEach(line => {
+            doc.text(line, 20, yPos);
+            yPos += 4;
+          });
+        }
+        
+        // Add footer with smaller font
+        const pageCount = doc.internal.getNumberOfPages();
+        for (let i = 1; i <= pageCount; i++) {
+          doc.setPage(i);
+          doc.setFontSize(7);
+          doc.text(`Generated by ${systemSettings.companyName} System`, 105, 285, { align: 'center' });
+          doc.text(`Page ${i} of ${pageCount}`, 105, 288, { align: 'center' });
+        }
+        
+        // Save the PDF
+        doc.save(`${currentViewingCashbill.invoiceNumber.replace('#', '')}.pdf`);
+        
+        // Log activity
+        logActivity(currentUser.id, currentUser.name, 'Export Data', `Generated PDF for cashbill ${currentViewingCashbill.invoiceNumber}`);
+      } catch (error) {
+        console.error("Error generating PDF:", error);
+        // Fallback method if there's an error with jsPDF
+        generateCashbillPDFFallback();
+      }
+    }
+    
+    // Fallback method for PDF generation if jsPDF fails
+    function generateCashbillPDFFallback() {
+      if (!currentViewingCashbill) {
+        alert('No cashbill selected for PDF generation');
+        return;
+      }
       
-      // Company name at top center
-      doc.setFontSize(18);
-      doc.setFont(undefined, 'bold');
-      doc.text(systemSettings.companyName, doc.internal.pageSize.getWidth() / 2, 20, { align: 'center' });
+      // Create a new window with the cashbill details formatted for printing
+      const printWindow = window.open('', '_blank');
       
-      // Customer info on left, company address on right
-      doc.setFontSize(12);
-      doc.setFont(undefined, 'normal');
+      // Create HTML content for the cashbill
+      let htmlContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>${currentViewingCashbill.invoiceNumber}</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              margin: 20px;
+              font-size: 12px;
+            }
+            .header {
+              text-align: center;
+              margin-bottom: 20px;
+            }
+            .company-name {
+              font-size: 18px;
+              font-weight: bold;
+              margin-bottom: 5px;
+            }
+            .company-address {
+              font-size: 10px;
+            }
+            .invoice-title {
+              font-size: 16px;
+              font-weight: bold;
+              margin-bottom: 20px;
+            }
+            .invoice-info {
+              margin-bottom: 20px;
+            }
+            .invoice-info-row {
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 5px;
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-bottom: 20px;
+            }
+            th, td {
+              border: 1px solid #ddd;
+              padding: 8px;
+              text-align: left;
+            }
+            th {
+              background-color: #f2f2f2;
+            }
+            .totals {
+              margin-top: 20px;
+            }
+            .total-row {
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 5px;
+            }
+            .total-row.final {
+              font-weight: bold;
+              font-size: 14px;
+              border-top: 1px solid #ddd;
+              padding-top: 10px;
+              margin-top: 10px;
+            }
+            .notes {
+              margin-top: 20px;
+            }
+            .footer {
+              position: fixed;
+              bottom: 0;
+              left: 0;
+              right: 0;
+              text-align: center;
+              font-size: 10px;
+            }
+            @media print {
+              .no-print {
+                display: none;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <div class="company-name">${systemSettings.companyName}</div>
+            <div class="company-address">${systemSettings.companyAddress}</div>
+            <div class="invoice-title">CASHBILL INVOICE</div>
+          </div>
+          
+          <div class="invoice-info">
+            <div class="invoice-info-row">
+              <span><strong>Invoice No:</strong> ${currentViewingCashbill.invoiceNumber}</span>
+              <span><strong>Date:</strong> ${formatDateToDDMMYYYY(currentViewingCashbill.date)}</span>
+            </div>
+            <div class="invoice-info-row">
+              <span><strong>Bill To:</strong> ${currentViewingCashbill.customerName}</span>
+              <span><strong>Status:</strong> ${currentViewingCashbill.status === 'draft' ? 'Draft' : currentViewingCashbill.status === 'pending' ? 'Pending' : 'Committed'}</span>
+            </div>
+            <div class="invoice-info-row">
+              <span><strong>Payment Method:</strong> ${getPaymentMethodDisplayName(currentViewingCashbill.paymentMethod)}</span>
+              <span><strong>Created By:</strong> ${currentViewingCashbill.userName || (users.find(u => u.id === currentViewingCashbill.userId)?.name || 'Unknown')}</span>
+            </div>
+          </div>
+          
+          <table>
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Tax %</th>
+                <th>Discount</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+      `;
       
-      // Left column - customer info
-      const leftX = 20;
-      let leftY = 35;
-      doc.text(`Customer: ${currentViewingCashbill.customerName}`, leftX, leftY);
-      leftY += 8;
-      doc.text(`Invoice: ${currentViewingCashbill.invoiceNumber}`, leftX, leftY);
-      leftY += 8;
-      doc.text(`Date: ${new Date(currentViewingCashbill.date).toLocaleDateString()}`, leftX, leftY);
-      
-      // Right column - company address
-      const rightX = doc.internal.pageSize.getWidth() - 20;
-      let rightY = 35;
-      doc.text(systemSettings.companyAddress, rightX, rightY, { align: 'right' });
-      
-      // Separator line
-      doc.setLineWidth(0.5);
-      doc.line(20, 55, doc.internal.pageSize.getWidth() - 20, 55);
-      
-      // Items table
-      let tableY = 65;
-      
-      // Table headers
-      doc.setFont(undefined, 'bold');
-      doc.text('Description', 20, tableY);
-      doc.text('Qty', 100, tableY);
-      doc.text('Price', 130, tableY);
-      doc.text('Total', 160, tableY);
-      
-      tableY += 10;
-      
-      // Table content
-      doc.setFont(undefined, 'normal');
+      // Add items to the table
       currentViewingCashbill.items.forEach(item => {
         const itemTotal = item.quantity * item.unitPrice;
+        const itemTax = itemTotal * (item.taxRate / 100);
+        const itemTotalWithTax = itemTotal + itemTax - item.discount;
         
-        doc.text(item.description, 20, tableY, { maxWidth: 70 });
-        doc.text(item.quantity.toString(), 100, tableY);
-        doc.text(`${systemSettings.currency}${item.unitPrice.toFixed(2)}`, 130, tableY);
-        doc.text(`${systemSettings.currency}${itemTotal.toFixed(2)}`, 160, tableY);
-        
-        tableY += 8;
+        htmlContent += `
+          <tr>
+            <td>${item.description}</td>
+            <td>${item.quantity}</td>
+            <td>${systemSettings.currency}${item.unitPrice.toFixed(2)}</td>
+            <td>${item.taxRate}%</td>
+            <td>${systemSettings.currency}${item.discount.toFixed(2)}</td>
+            <td>${systemSettings.currency}${itemTotalWithTax.toFixed(2)}</td>
+          </tr>
+        `;
       });
       
-      // Total amount
-      tableY += 5;
-      doc.setLineWidth(0.2);
-      doc.line(20, tableY, 170, tableY);
-      tableY += 8;
+      // Add totals section
+      htmlContent += `
+            </tbody>
+          </table>
+          
+          <div class="totals">
+            <div class="total-row">
+              <span>Subtotal:</span>
+              <span>${systemSettings.currency}${currentViewingCashbill.subtotal.toFixed(2)}</span>
+            </div>
+            <div class="total-row">
+              <span>Tax:</span>
+              <span>${systemSettings.currency}${currentViewingCashbill.totalTax.toFixed(2)}</span>
+            </div>
+            <div class="total-row">
+              <span>Discount:</span>
+              <span>${systemSettings.currency}${currentViewingCashbill.totalDiscount.toFixed(2)}</span>
+            </div>
+            <div class="total-row final">
+              <span>Total Amount:</span>
+              <span>${systemSettings.currency}${currentViewingCashbill.grandTotal.toFixed(2)}</span>
+            </div>
+          </div>
+      `;
       
-      doc.setFont(undefined, 'bold');
-      doc.text(`Total: ${systemSettings.currency}${currentViewingCashbill.grandTotal.toFixed(2)}`, 160, tableY, { align: 'right' });
+      // Add notes if any
+      if (currentViewingCashbill.notes) {
+        htmlContent += `
+          <div class="notes">
+            <strong>Notes:</strong>
+            <p>${currentViewingCashbill.notes}</p>
+          </div>
+        `;
+      }
       
-      // Save the PDF
-      doc.save(`${currentViewingCashbill.invoiceNumber.replace('#', '')}.pdf`);
+      // Add footer
+      htmlContent += `
+          <div class="footer">
+            Generated by ${systemSettings.companyName} System
+          </div>
+          
+          <div class="no-print" style="margin-top: 20px; text-align: center;">
+            <button onclick="window.print(); window.close();" style="padding: 10px 20px; background: #000; color: white; border: none; border-radius: 4px; cursor: pointer;">Print</button>
+            <button onclick="window.close();" style="padding: 10px 20px; background: #f0f0f0; color: #000; border: none; border-radius: 4px; cursor: pointer; margin-left: 10px;">Close</button>
+          </div>
+        </body>
+        </html>
+      `;
+      
+      // Write the HTML content to the new window
+      printWindow.document.write(htmlContent);
+      printWindow.document.close();
+      
+      // Focus the new window and trigger print
+      printWindow.focus();
       
       // Log activity
       logActivity(currentUser.id, currentUser.name, 'Export Data', `Generated PDF for cashbill ${currentViewingCashbill.invoiceNumber}`);
@@ -7098,7 +7154,7 @@
         
         recentLogs.forEach(activity => {
           const date = new Date(activity.timestamp);
-          const formattedDate = date.toLocaleDateString();
+          const formattedDate = formatDateToDDMMYYYY(date);
           const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
           
           html += `
@@ -7136,7 +7192,7 @@
       let html = '';
       systemActivities.slice(0, 10).forEach(activity => {
         const date = new Date(activity.timestamp);
-        const formattedDate = date.toLocaleDateString();
+        const formattedDate = formatDateToDDMMYYYY(date);
         const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         
         html += `
@@ -7207,7 +7263,7 @@
             <td>${bill.invoiceNumber}</td>
             <td>${bill.customerName}</td>
             <td>${userName}</td>
-            <td>${new Date(bill.date).toLocaleDateString()}</td>
+            <td>${formatDateToDDMMYYYY(bill.date)}</td>
             <td>${systemSettings.currency}${totalAmount.toFixed(2)}</td>
             <td>${getPaymentMethodDisplayName(bill.paymentMethod)}</td>
             <td>${bill.status === 'draft' ? 'Draft' : bill.status === 'pending' ? 'Pending' : 'Committed'}</td>
@@ -7319,7 +7375,7 @@
       
       filteredCashbills.forEach(bill => {
         const user = users.find(u => u.id === bill.userId);
-        csv += `${bill.invoiceNumber},"${bill.customerName}",${user ? user.name : 'Unknown'},${new Date(bill.date).toLocaleDateString()},${(bill.subtotal || 0).toFixed(2)},${(bill.totalTax || 0).toFixed(2)},${(bill.totalDiscount || 0).toFixed(2)},${(bill.grandTotal || 0).toFixed(2)},${getPaymentMethodDisplayName(bill.paymentMethod)},${bill.status === 'draft' ? 'Draft' : bill.status === 'pending' ? 'Pending' : 'Committed'}\n`;
+        csv += `${bill.invoiceNumber},"${bill.customerName}",${user ? user.name : 'Unknown'},${formatDateToDDMMYYYY(bill.date)},${(bill.subtotal || 0).toFixed(2)},${(bill.totalTax || 0).toFixed(2)},${(bill.totalDiscount || 0).toFixed(2)},${(bill.grandTotal || 0).toFixed(2)},${getPaymentMethodDisplayName(bill.paymentMethod)},${bill.status === 'draft' ? 'Draft' : bill.status === 'pending' ? 'Pending' : 'Committed'}\n`;
       });
       
       const blob = new Blob([csv], { type: 'text/csv' });
@@ -7449,6 +7505,33 @@
         console.error("Error in loadData:", error);
         alert("Error loading data from server. Some features may not work properly.");
       }
+    }
+    
+    // Update notification list
+    function updateNotificationList() {
+      const notificationList = document.getElementById('notificationList');
+      
+      if (notifications.length === 0) {
+        notificationList.innerHTML = '<p>No notifications</p>';
+        return;
+      }
+      
+      let html = '';
+      notifications.forEach(notification => {
+        const date = new Date(notification.timestamp);
+        const formattedDate = formatDateToDDMMYYYY(date);
+        const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        html += `
+          <div class="notification-item">
+            <div class="notification-title">${notification.username} ${notification.action.toLowerCase()}</div>
+            <div class="notification-message">${notification.details || ''}</div>
+            <div class="notification-time">${formattedDate} ${formattedTime}</div>
+          </div>
+        `;
+      });
+      
+      notificationList.innerHTML = html;
     }
     
     // Keyboard shortcuts
